@@ -1,0 +1,9 @@
+Solids:
+s, s .001
+s, n .001
+Liquids:
+l, n .0001
+Gases:
+g, t .02
+g, s .001
+g, n .001

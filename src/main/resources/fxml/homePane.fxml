@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane fx:id="homePane" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #8a8a8a;" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rad.shipment.calculator.gui.HomePaneController">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints maxHeight="85.0" minHeight="31.0" prefHeight="85.0" valignment="CENTER" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="202.0" minHeight="161.0" prefHeight="189.0" valignment="CENTER" vgrow="SOMETIMES" />
+      <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
+      <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="85.0" prefHeight="85.0" valignment="CENTER" vgrow="SOMETIMES" />
+   </rowConstraints>
+   <children>
+      <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#homePaneHandler" prefHeight="30.0" prefWidth="90.0" text="ADD" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+      <Button fx:id="btnEdit" layoutX="145.0" layoutY="134.0" mnemonicParsing="false" onAction="#homePaneHandler" prefHeight="30.0" prefWidth="90.0" text="EDIT" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+      <Button fx:id="btnRemove" layoutX="10.0" layoutY="50.0" mnemonicParsing="false" onAction="#homePaneHandler" prefHeight="30.0" prefWidth="90.0" text="REMOVE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+      <TableView fx:id="tableView" GridPane.columnSpan="2147483647" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.rowSpan="3" GridPane.vgrow="ALWAYS">
+        <columns>
+          <TableColumn maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" text="C1" />
+          <TableColumn maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" text="C2" />
+            <TableColumn maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" text="C1" />
+            <TableColumn maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" text="C2" />
+            <TableColumn maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" text="C1" />
+        </columns>
+         <GridPane.margin>
+            <Insets left="15.0" right="15.0" />
+         </GridPane.margin>
+      </TableView>
+      <Button fx:id="btnCalculate" layoutX="356.0" layoutY="134.0" mnemonicParsing="false" onAction="#homePaneHandler" prefHeight="30.0" prefWidth="105.0" text="CALCULATE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+   </children>
+</GridPane>

@@ -1,0 +1,56 @@
+/*
+    Copyright (c) 2019 by Marc Pierre. All rights reserved.
+    Author: Marc Pierre, Marc.Pierre@student.uml.edu,
+    updated by Marc Pierre on July 6, 2019
+    Description: CSS to make menu pane look like it does
+*/
+
+/* Creating variables to hold values that show up multiple times*/
+* {
+    -fx-dark-background:  #232323;
+    -fx-grey-color: #8a8a8a;
+}
+
+/* GRID PANE */
+.root {
+    -fx-focus-traversable: false;
+    -fx-grid-lines-visible: false;
+    -fx-max-height: -1;
+    -fx-max-width: -1;
+    -fx-min-height: -1;
+    -fx-min-width: -1;
+    -fx-pref-height: 400;
+    -fx-pref-width: 600;
+    -fx-background-color: -fx-dark-background;
+    visibility: true;
+}
+
+.imgViewColorLogo { visibility: false; }
+
+.imgViewGreyLogo { visibility: true; }
+
+.separator:horizontal {
+    -fx-focus-traversable: false;
+    -fx-opacity: 0.29;
+    -fx-max-height: -1;
+    -fx-max-width: -1;
+    -fx-min-height: -1;
+    -fx-min-width: -1;
+    -fx-pref-height: -1;
+    -fx-pref-width: 400;
+    -fx-background-color: -fx-grey-color;
+}
+
+.menuBtn {
+    -fx-font: System 16px;
+    -fx-focus-traversable: true;
+    -fx-max-height: -1;
+    -fx-max-width: -1;
+    -fx-min-height: -1;
+    -fx-min-width: -1;
+    -fx-pref-height: 37;
+    -fx-pref-width: 65;
+    -fx-background-color: -fx-dark-background;
+    -fx-text-fill: -fx-grey-color;
+    visibility: true;
+}
