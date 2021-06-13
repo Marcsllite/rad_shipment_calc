@@ -1,0 +1,17 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "cSpell.words": [
+        "Baeldung",
+        "Mkyong",
+        "logr",
+        "sunos"
+    ],
+    "java.test.report.position": "currentView",
+    "java.test.report.showAfterExecution": "always",
+    "java.project.sourcePaths": [
+        "../target/generated-sources/annotations",
+        "src/main/java",
+        "src/test/java"
+    ],
+    "java.dependency.syncWithFolderExplorer": false
+}

@@ -1,0 +1,27 @@
+language: java
+
+jdk: 
+  - oraclejdk11
+
+sudo: false
+
+matrix:
+  include:
+    - os: linux
+      dist: xenial
+    - os: osx
+      osx_image: xcode11
+
+services:
+  - xvfb
+
+before_install:
+  - export DISPLAY=:99.0
+
+script: mvn clean javafx:run
+cache:
+  directories:
+  - $HOME/.m2
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash) -t CODECOV_TOKEN
