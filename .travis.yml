@@ -12,13 +12,8 @@ matrix:
     - os: osx
       osx_image: xcode11
 
-services:
-  - xvfb
+script: mvn clean verify
 
-before_install:
-  - export DISPLAY=:99.0
-
-script: mvn clean javafx:run
 cache:
   directories:
   - $HOME/.m2
