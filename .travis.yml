@@ -3,16 +3,21 @@ language: java
 jdk: 
   - oraclejdk11
 
-sudo: false
+services:
+  - xvfb
 
-matrix:
+jobs:
   include:
     - os: linux
       dist: xenial
     - os: osx
       osx_image: xcode11
 
-script: mvn clean verify
+before_install:
+  - export DISPLAY=:99.0
+
+script: 
+  - mvn clean verify
 
 cache:
   directories:

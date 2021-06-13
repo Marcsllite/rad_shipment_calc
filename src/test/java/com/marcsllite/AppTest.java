@@ -201,22 +201,21 @@ public class AppTest extends ApplicationTest {
     @Test
     public void setUpDefaultDirectory_MakeNewFolder() throws IOException {
         String name = App.getString("appMainFolder");
-        String dirName = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + name;
-        File directoryToBeDeleted = new File(dirName);
+        String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + name;
+        File directoryToBeDeleted = new File(path);
         
         Assert.assertTrue(deleteDirectory(directoryToBeDeleted));
         App.setDefaultDir(name);
-        Assert.assertEquals(dirName, App.getDefaultDir());
+        Assert.assertEquals(path, App.getDefaultDir());
     }
   
     @Test
     public void setUpDefaultDirectory_FolderAlreadyExists() throws IOException {
         String name = App.getString("appMainFolder");
         String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + name;
-        File directoryToBeDeleted = new File(path);
+        File toBeCreated = new File(path);
 
-        Assert.assertTrue(deleteDirectory(directoryToBeDeleted));
-        Assert.assertTrue((new File(path)).mkdirs());
+        Assert.assertTrue(toBeCreated.mkdirs() || toBeCreated.exists());
         App.setDefaultDir(name);
         Assert.assertEquals(path, App.getDefaultDir());
     }
