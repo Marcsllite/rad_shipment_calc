@@ -1,6 +1,6 @@
 # rad_shipment_calc
 
-[![Dev Build Status](https://travis-ci.com/Marcsllite/rad_shipment_calc.svg?branch=dev)](https://travis-ci.com/Marcsllite/rad_shipment_calc)
+[![Master Build Status](https://travis-ci.com/Marcsllite/rad_shipment_calc.svg?branch=master)](https://travis-ci.com/Marcsllite/rad_shipment_calc)
 [![Dev Code Coverage](https://codecov.io/gh/Marcsllite/rad_shipment_calc/branch/dev/graph/badge.svg?token=dosuKH89NM)](https://codecov.io/gh/Marcsllite/rad_shipment_calc)
 # Prerequisites
 
