@@ -3,6 +3,9 @@ language: java
 jdk: 
   - oraclejdk11
 
+services:
+  - xvfb
+
 jobs:
   include:
     - os: linux
@@ -10,7 +13,11 @@ jobs:
     - os: osx
       osx_image: xcode11
 
-script: mvn clean verify
+before_install:
+  - export DISPLAY=:99.0
+
+script: 
+  - mvn clean verify
 
 cache:
   directories:
