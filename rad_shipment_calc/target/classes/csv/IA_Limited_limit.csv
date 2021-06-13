@@ -1,0 +1,7 @@
+State,Form,Value
+solid,special,1.00e-02
+solid,normal,1.00e-02
+liquid,normal,1.00e-03
+gas,tritium,2.00e-02
+gas,special,1.00e-03
+gas,normal,1.00e-03

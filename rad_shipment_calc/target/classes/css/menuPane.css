@@ -1,0 +1,69 @@
+/*
+    Copyright (c) 2019 by Marc Pierre. All rights reserved.
+    Author: Marc Pierre, Marc.Pierre@student.uml.edu,
+    updated by Marc Pierre on October 23, 2019
+    Description: CSS to make menu pane look like it does
+*/
+
+/* Creating variables to hold values that show up multiple times*/
+* {
+    -fx-dark-color:  #232323;
+    -fx-grey-color: #8a8a8a;
+    -fx-white-color: #fff;
+    -fx-blue-color: #0469B1;
+}
+
+/* GRID PANE */
+.root {
+    -fx-pref-height: 500;
+    -fx-pref-width: 600;
+    -fx-background-color: -fx-dark-color;
+}
+
+.imgViewColorLogo { visibility: false; }
+
+.separator:horizontal {
+    -fx-focus-traversable: false;
+    -fx-opacity: 0.29;
+    -fx-pref-width: 400;
+    -fx-background-color: -fx-grey-color;
+    -fx-valignment: BOTTOM;
+}
+
+.menuBtn {
+    -fx-font-family: System;
+    -fx-font-style: normal;
+    -fx-font-weight: normal;
+    -fx-font-size: 16px;
+    -fx-background-color: -fx-dark-color;
+    -fx-text-fill: -fx-grey-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em;
+    -fx-background-insets: 0px 0px -1px 0px 0px 1px 2px;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+}
+
+.menuBtn:hover {
+    -fx-font-family: System;
+    -fx-font-style: normal;
+    -fx-font-weight: normal;
+    -fx-font-size: 16px;
+    -fx-background-color: -fx-dark-color;
+    -fx-text-fill: -fx-white-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em;
+    -fx-background-insets: 0px 0px -1px 0px 0px 1px 2px;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+}
+
+.label {
+    -fx-focus-traversable: false;
+    -fx-font-family: System;
+    -fx-font-style: normal;
+    -fx-font-weight: normal;
+    -fx-font-size: 14px;
+    -fx-text-alignment: CENTER;
+    -fx-text-fill: -fx-grey-color;
+}

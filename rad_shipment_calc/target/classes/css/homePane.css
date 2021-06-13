@@ -1,0 +1,116 @@
+/*
+    Copyright (c) 2019 by Marc Pierre. All rights reserved.
+    Author: Marc Pierre, Marc.Pierre@student.uml.edu,
+    updated by Marc Pierre on October 23, 2019
+    Description: CSS to make the home pane look like it does
+*/
+
+/* Creating variables to hold values that show up multiple times*/
+* {
+    -fx-dark-color:  #232323;
+    -fx-grey-color: #8a8a8a;
+    -fx-light-color: #dadada;
+    -fx-white-color: #fff;
+    -fx-blue-color: #0469B1;
+}
+
+/* GRID PANE */
+.root {
+    -fx-pref-height: 500;
+    -fx-pref-width: 600;
+    -fx-background-color: -fx-light-color;
+    -fx-padding: inherit;
+    -fx-background-insets: inherit;
+    -fx-background-radius: inherit;
+}
+
+.calculateBtn {
+    -fx-font-family: System;
+    -fx-font-style: normal;
+    -fx-font-weight: normal;
+    -fx-font-size: 14px;
+    -fx-background-color: -fx-blue-color;
+    -fx-text-fill: -fx-white-color;
+    -fx-border-color: -fx-blue-color;
+    /*-fx-background-color: -fx-white-color;*/
+    /*-fx-text-fill: -fx-blue-color;*/
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em;
+    -fx-background-insets: 0px 0px -1px 0px 0px 1px 2px;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-pref-height: 30;
+    -fx-pref-width: 105;
+}
+
+.calculateBtn:hover {
+    -fx-font-family: System;
+    -fx-font-style: normal;
+    -fx-font-weight: normal;
+    -fx-font-size: 14px;
+    -fx-background-color: -fx-white-color;
+    -fx-text-fill: -fx-blue-color;
+    -fx-border-color: -fx-blue-color;
+    /*-fx-background-color: -fx-blue-color;*/
+    /*-fx-text-fill: -fx-white-color;*/
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em;
+    -fx-background-insets: 0px 0px -1px 0px 0px 1px 2px;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-pref-height: 30;
+    -fx-pref-width: 105;
+}
+
+.topHomeBtns {
+    -fx-font-family: System;
+    -fx-font-style: normal;
+    -fx-font-weight: normal;
+    -fx-font-size: 14px;
+    -fx-background-color: -fx-blue-color;
+    -fx-text-fill: -fx-white-color;
+    -fx-border-color: -fx-blue-color;
+    /*-fx-background-color: -fx-white-color;*/
+    /*-fx-text-fill: -fx-blue-color;*/
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em;
+    -fx-background-insets: 0px 0px -1px 0px 0px 1px 2px;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-pref-height: 30;
+    -fx-pref-width: 90;
+}
+
+.topHomeBtns:hover {
+    -fx-font-family: System;
+    -fx-font-style: normal;
+    -fx-font-weight: normal;
+    -fx-font-size: 14px;
+    -fx-background-color: -fx-white-color;
+    -fx-text-fill: -fx-blue-color;
+    -fx-border-color: -fx-white-color;
+    /*-fx-background-color: -fx-blue-color;*/
+    /*-fx-text-fill: -fx-white-color;*/
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em;
+    -fx-background-insets: 0px 0px -1px 0px 0px 1px 2px;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-pref-height: 30;
+    -fx-pref-width: 90;
+}
+
+.tableColumn {
+    -fx-alignment: CENTER;
+}
+
+.separator:vertical {
+    -fx-max-width: 3;
+    -fx-min-width: 3;
+    -fx-orientation: vertical;
+    -fx-focus-traversable: false;
+    /*-fx-opacity: 0.29;*/
+    -fx-pref-height: 55;
+    -fx-background-color: -fx-grey-color;
+    -fx-valignment: BOTTOM;
+}

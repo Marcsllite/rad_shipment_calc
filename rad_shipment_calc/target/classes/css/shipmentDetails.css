@@ -1,0 +1,82 @@
+/*
+    Copyright (c) 2019 by Marc Pierre. All rights reserved.
+    Author: Marc Pierre, Marc.Pierre@student.uml.edu,
+    updated by Marc Pierre on October 23, 2019
+    Description: CSS to make the add window look like it does
+*/
+
+/* Creating variables to hold values that show up multiple times*/
+* {
+    -fx-dark-color:  #232323;
+    -fx-grey-color: #8a8a8a;
+    -fx-light-color: #dadada;
+    -fx-white-color: #fff;
+    -fx-blue-color: #0469B1;
+}
+
+/* STACK PANE */
+.root {
+    -fx-pref-height: 270;
+    -fx-pref-width: 450;
+    -fx-padding: inherit;
+    -fx-background-color: -fx-light-color;
+    -fx-background-insets: inherit;
+    -fx-background-radius: inherit;
+}
+
+HBox, VBox { -fx-alignment: CENTER; }
+
+.vBoxShipmentDetails {
+    -fx-padding: 15 0 15 0;
+    -fx-spacing: 15;
+}
+
+.hBoxShipmentDetails {
+    -fx-spacing: 10;
+}
+
+.shipmentDetailsTxt {
+    -fx-font-family: System;
+    -fx-font-style: normal;
+    -fx-font-weight: normal;
+    -fx-font-size: 14px;
+    -fx-fill: -fx-dark-color;
+    -fx-stroke-type: OUTSIDE;
+    -fx-stroke-width: 0;
+}
+
+.choiceBoxNSF {
+    -fx-pref-wdith: 275px;
+}
+
+.shipmentDetailsBtn {
+    -fx-font-family: System;
+    -fx-font-style: normal;
+    -fx-font-weight: normal;
+    -fx-font-size: 14px;
+    -fx-background-color: -fx-blue-color;
+    -fx-text-fill: -fx-white-color;
+    -fx-border-color: -fx-blue-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em;
+    -fx-background-insets: 0px 0px -1px 0px 0px 1px 2px;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-pref-width: 100;
+}
+
+.shipmentDetailsBtn:hover {
+    -fx-font-family: System;
+    -fx-font-style: normal;
+    -fx-font-weight: normal;
+    -fx-font-size: 14px;
+    -fx-background-color: -fx-white-color;
+    -fx-text-fill: -fx-blue-color;
+    -fx-border-color: -fx-white-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em;
+    -fx-background-insets: 0px 0px -1px 0px 0px 1px 2px;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-pref-width: 100;
+}
