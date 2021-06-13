@@ -3,7 +3,7 @@ language: java
 jdk: 
   - oraclejdk11
 
-matrix:
+jobs:
   include:
     - os: linux
       dist: xenial
