@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Properties;
@@ -78,7 +79,7 @@ public class App extends Application {
      * contents to a string
      *
      * @param resourceFilePath the relative path of the resource file to get the text of
-     * @return the contents of the file or teh empty string if errors occurred
+     * @return the contents of the file or the empty string if errors occurred
      */
     public static String getFileText(String resourceFilePath) throws InvalidParameterException {
         try {
@@ -203,6 +204,44 @@ public class App extends Application {
         return ret;
     }
 
+    /**
+     * Convenience function to get multiple Strings from the properties file
+     * that all start with the given listName
+     * 
+     * NOTE: all lists must be in the following format in the properties file
+     *          <entry key="{listName}">element1|element2|...</entry>
+     * where {listName} is the name for the list
+     * and a pipe (|) character separates the different elements from one another
+     * trailing pipe character will be ignored
+     *      
+     * Example: listName = "si", index = 0    
+     *      <entry key="siPrefixes">
+     *          Yotta (Y)|
+     *          Zetta (Z)|
+     *          ...
+     *      </entry>
+     *
+     * @param listName the properties key that all the list elements contain
+     * @return a list of all the values from the property entry
+     */
+    public static List<String> getList(String listName) {
+        List<String> ret = new ArrayList<>();
+
+        var str = getString(listName);
+        if(!str.isBlank()) {
+            // removing new line character, tab characters
+            // and spaces before and after 
+            str = str.trim().replaceAll("\\r\\n|\\r|\\n|\\t|", "");
+            ret = Arrays.asList(str.split("\\|"));
+            // removing white spaces around element
+            for(var i = 0; i < ret.size(); i++) {
+                ret.set(i, ret.get(i).trim());
+            }
+        }
+
+        return ret;
+    }
+
     /*/////////////////////////////////////////////////// SETTERS ////////////////////////////////////////////////////*/
 
     /**
@@ -243,6 +282,7 @@ public class App extends Application {
      * 
      * @param dirName the name of the default directory
      */
+    @SuppressWarnings("java:S112")
     protected static void setDefaultDir(String dirName) throws RuntimeException {
         if (dirName == null || dirName.isEmpty()) dirName = getString("appMainFolder"); 
         

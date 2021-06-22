@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.filechooser.FileSystemView;
 
@@ -149,6 +150,46 @@ public class AppTest extends ApplicationTest {
             new Object[] { "fakeKey", "" },
             new Object[] { "replacePropString_noText", "" },
             new Object[] { "mainPane", "UMass Lowell - Rad Shipment Calculator" }
+        };
+    }
+
+    @Test
+    @Parameters(method = "getList_data")
+    public void getListChecker(String listName, List<String> expected) {
+        Assert.assertEquals(expected, App.getList(listName));
+    }
+
+    private Object[] getList_data() {
+        return new Object[] { 
+            new Object[] { null, new ArrayList<String>()},
+            new Object[] { "", new ArrayList<String>()},
+            new Object[] { "fakeKey", new ArrayList<String>()},
+            new Object[] { "replacePropString_noText", new ArrayList<String>()},
+            new Object[] { "mainPane", new ArrayList<String>() {{
+                                            add("UMass Lowell - Rad Shipment Calculator"); 
+                                        }}},
+            new Object[] { "getList_TrailingDelimiters", new ArrayList<String>() {{
+                add("This");
+                add("List"); 
+                add("has"); 
+                add("trailing"); 
+                add("delimiters");
+            }}},
+            new Object[] { "getList_ProperList", new ArrayList<String>() {{
+                add("This");
+                add("is"); 
+                add("a"); 
+                add("proper"); 
+                add("list");
+            }}},
+            new Object[] { "getList_SpacesWithinElements", new ArrayList<String>() {{
+                add("element 1 has spaces");
+                add("element 2 does too");
+            }}},
+            new Object[] { "getList_SpacesAroundElements", new ArrayList<String>() {{
+                add("there are spaces around this element");
+                add("spaces around here too");
+            }}}
         };
     }
   
