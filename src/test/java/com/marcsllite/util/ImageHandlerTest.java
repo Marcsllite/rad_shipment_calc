@@ -4,8 +4,6 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.security.InvalidParameterException;
 
-import com.marcsllite.App;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -79,7 +77,7 @@ public class ImageHandlerTest extends ApplicationTest {
     })
     public void testGetShipmentImage(String color, String url) {
         Platform.runLater(() -> {
-            Image actual = ImageHandler.getShipmentImage(App.getString(color));
+            Image actual = ImageHandler.getShipmentImage(Util.getString(color));
             Assert.assertNotNull(actual);
             Assert.assertTrue(actual.getUrl().contains(url));
         });
@@ -109,7 +107,7 @@ public class ImageHandlerTest extends ApplicationTest {
     })
     public void testGetReferenceImage(String color, String url) {
         Platform.runLater(() -> {
-            Image actual = ImageHandler.getReferenceImage(App.getString(color));
+            Image actual = ImageHandler.getReferenceImage(Util.getString(color));
             Assert.assertNotNull(actual);
             Assert.assertTrue(actual.getUrl().contains(url));
         });

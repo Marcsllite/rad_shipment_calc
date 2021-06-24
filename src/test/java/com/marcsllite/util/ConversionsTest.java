@@ -7,8 +7,6 @@ import static org.junit.Assert.assertTrue;
 import java.security.InvalidParameterException;
 import java.util.List;
 
-import com.marcsllite.App;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -103,21 +101,21 @@ public class ConversionsTest {
 
     @Test
     public void testGetSiPrefixes() {
-        List<String> expected = App.getList("siPrefixes");
+        List<String> expected = Util.getList("siPrefixes");
 
         assertEquals(expected, Conversions.getSiPrefixes());
     }
 
     @Test
     public void testGetRadioactiveUnits() {
-        List<String> expected = App.getList("radioactiveUnits");
+        List<String> expected = Util.getList("radioactiveUnits");
 
         assertEquals(expected, Conversions.getRadioactiveUnits());
     }
 
     @Test
     public void testGetMassUnits() {
-        List<String> expected = App.getList("massUnits");
+        List<String> expected = Util.getList("massUnits");
 
         assertEquals(expected, Conversions.getMassUnits());
     }

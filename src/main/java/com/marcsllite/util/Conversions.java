@@ -14,8 +14,6 @@ import java.security.InvalidParameterException;
 
 import java.util.List;
 
-import com.marcsllite.App;
-
 public class Conversions {
     // Declaring variables
     private static final int BASE = 10;
@@ -43,9 +41,9 @@ public class Conversions {
     public static final int DEFAULT_RAD_INDEX = 1;
     public static final int DEFAULT_MASS_SI_INDEX = 10;
     public static final int DEFAULT_MASS_INDEX = 0;
-    private static final List<String> siPrefixes = App.getList("siPrefixes");
-    private static final List<String> radioactiveUnits = App.getList("radioactiveUnits");
-    private static final List<String> massUnits = App.getList("massUnits");
+    private static final List<String> siPrefixes = Util.getList("siPrefixes");
+    private static final List<String> radioactiveUnits = Util.getList("radioactiveUnits");
+    private static final List<String> massUnits = Util.getList("massUnits");
 
     private Conversions() {}
 

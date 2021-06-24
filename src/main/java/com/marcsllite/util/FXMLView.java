@@ -1,34 +1,32 @@
 package com.marcsllite.util;
 
-import com.marcsllite.App;
-
 import javafx.scene.image.Image;
 
 public enum FXMLView {
   MAIN {
-    public String getName() { return App.getString("AppName"); }
+    public String getName() { return Util.getString("AppName"); }
     
-    public String getTitle() { return App.getString("AppPane"); }
+    public String getTitle() { return Util.getString("AppPane"); }
     
-    public int getHeight() { return App.getInt("AppHeight"); }
+    public int getHeight() { return Util.getInt("AppHeight"); }
     
-    public int getWidth() { return App.getInt("AppWidth"); }
+    public int getWidth() { return Util.getInt("AppWidth"); }
     
-    public int getMaxHeight() { return App.getInt("maxAppHeight"); }
+    public int getMaxHeight() { return Util.getInt("maxAppHeight"); }
     
-    public int getMaxWidth() { return App.getInt("maxAppWidth"); }
+    public int getMaxWidth() { return Util.getInt("maxAppWidth"); }
     
     public String getFxmlLoc() { return "/fxml/App.fxml"; }
     
     public Image getIconImage() { return ImageHandler.getColorLogoBkgImage(); }
   }, MENU {
-    public String getName() { return App.getString("menuName"); }
+    public String getName() { return Util.getString("menuName"); }
     
-    public String getTitle() { return App.getString("menuPane"); }
+    public String getTitle() { return Util.getString("menuPane"); }
     
-    public int getHeight() { return App.getInt("menuHeight"); }
+    public int getHeight() { return Util.getInt("menuHeight"); }
     
-    public int getWidth() { return App.getInt("menuWidth"); }
+    public int getWidth() { return Util.getInt("menuWidth"); }
     
     public int getMaxHeight() { return getHeight(); }
     
@@ -38,13 +36,13 @@ public enum FXMLView {
     
     public Image getIconImage() { return ImageHandler.getColorLogoBkgImage(); }
   }, SUMMARY {
-    public String getName() { return App.getString("summaryName"); }
+    public String getName() { return Util.getString("summaryName"); }
     
-    public String getTitle() { return App.getString("summaryPane"); }
+    public String getTitle() { return Util.getString("summaryPane"); }
     
-    public int getHeight() { return App.getInt("summaryHeight"); }
+    public int getHeight() { return Util.getInt("summaryHeight"); }
     
-    public int getWidth() { return App.getInt("summaryWidth"); }
+    public int getWidth() { return Util.getInt("summaryWidth"); }
     
     public int getMaxHeight() { return getHeight(); }
     
@@ -54,13 +52,13 @@ public enum FXMLView {
     
     public Image getIconImage() { return ImageHandler.getColorLogoBkgImage(); }
   }, HOME {
-    public String getName() { return App.getString("homeName"); }
+    public String getName() { return Util.getString("homeName"); }
     
-    public String getTitle() { return App.getString("homePane"); }
+    public String getTitle() { return Util.getString("homePane"); }
     
-    public int getHeight() { return App.getInt("homeHeight"); }
+    public int getHeight() { return Util.getInt("homeHeight"); }
     
-    public int getWidth() { return App.getInt("homeWidth"); }
+    public int getWidth() { return Util.getInt("homeWidth"); }
     
     public int getMaxHeight() { return getHeight(); }
     
@@ -70,13 +68,13 @@ public enum FXMLView {
     
     public Image getIconImage() { return ImageHandler.getColorLogoBkgImage(); }
   }, REFERENCE {
-    public String getName() { return App.getString("referenceName"); }
+    public String getName() { return Util.getString("referenceName"); }
     
-    public String getTitle() { return App.getString("referencePane"); }
+    public String getTitle() { return Util.getString("referencePane"); }
     
-    public int getHeight() { return App.getInt("referenceHeight"); }
+    public int getHeight() { return Util.getInt("referenceHeight"); }
     
-    public int getWidth() { return App.getInt("referenceWidth"); }
+    public int getWidth() { return Util.getInt("referenceWidth"); }
     
     public int getMaxHeight() { return getHeight(); }
     
@@ -86,13 +84,13 @@ public enum FXMLView {
     
     public Image getIconImage() { return ImageHandler.getColorLogoBkgImage(); }
   }, ADD {
-    public String getName() { return App.getString("addName"); }
+    public String getName() { return Util.getString("addName"); }
     
-    public String getTitle() { return App.getString("addPane"); }
+    public String getTitle() { return Util.getString("addPane"); }
     
-    public int getHeight() { return App.getInt("modifyHeight"); }
+    public int getHeight() { return Util.getInt("modifyHeight"); }
     
-    public int getWidth() { return App.getInt("modifyWidth"); }
+    public int getWidth() { return Util.getInt("modifyWidth"); }
     
     public int getMaxHeight() { return getHeight(); }
     
@@ -102,13 +100,13 @@ public enum FXMLView {
     
     public Image getIconImage() { return ImageHandler.getColorLogoBkgImage(); }
   }, EDIT {
-    public String getName() { return App.getString("editName"); }
+    public String getName() { return Util.getString("editName"); }
     
-    public String getTitle() { return App.getString("editPane"); }
+    public String getTitle() { return Util.getString("editPane"); }
     
-    public int getHeight() { return App.getInt("modifyHeight"); }
+    public int getHeight() { return Util.getInt("modifyHeight"); }
     
-    public int getWidth() { return App.getInt("modifyWidth"); }
+    public int getWidth() { return Util.getInt("modifyWidth"); }
     
     public int getMaxHeight() { return getHeight(); }
     
@@ -118,13 +116,13 @@ public enum FXMLView {
     
     public Image getIconImage() { return ImageHandler.getColorLogoBkgImage(); }
   }, SHIPMENT_DETAILS {
-    public String getName() { return App.getString("shipmentName"); }
+    public String getName() { return Util.getString("shipmentName"); }
     
-    public String getTitle() { return App.getString("shipmentInfoPane"); }
+    public String getTitle() { return Util.getString("shipmentInfoPane"); }
     
-    public int getHeight() { return App.getInt("shipmentDetailsHeight"); }
+    public int getHeight() { return Util.getInt("shipmentDetailsHeight"); }
     
-    public int getWidth() { return App.getInt("shipmentDetailsWidth"); }
+    public int getWidth() { return Util.getInt("shipmentDetailsWidth"); }
     
     public int getMaxHeight() { return getHeight(); }
     

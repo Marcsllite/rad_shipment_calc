@@ -154,19 +154,19 @@ public class StageManagerTest extends ApplicationTest {
             RuntimeException except = Assert.assertThrows(
                 RuntimeException.class, () -> stageManager.logAndThrowException(errorMsg, exception)
             );
-            Assert.assertTrue(except.getMessage().contains(App.getString(expectedMsg)));
+            Assert.assertTrue(except.getMessage().contains(Util.getString(expectedMsg)));
         });
     }
   
     private Object[] logAndThrowException_data() {
-        Exception properException = new Exception(App.getString("properException"));
+        Exception properException = new Exception(Util.getString("properException"));
         return new Object[] {
             new Object[] { null, null, "defaultMessage" },
             new Object[] { "", null, "defaultMessage" },
-            new Object[] { App.getString("properMessage"), null,"properMessage" },
+            new Object[] { Util.getString("properMessage"), null,"properMessage" },
             new Object[] { null, properException, "defaultMessage" },
             new Object[] { "", properException, "defaultMessage" },
-            new Object[] { App.getString("properMessage"), properException, "properMessage" }
+            new Object[] { Util.getString("properMessage"), properException, "properMessage" }
         };
     }
 }

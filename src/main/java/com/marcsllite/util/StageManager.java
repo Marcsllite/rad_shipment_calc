@@ -3,8 +3,6 @@ package com.marcsllite.util;
 import java.security.InvalidParameterException;
 import java.util.Objects;
 
-import com.marcsllite.App;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -77,9 +75,10 @@ public class StageManager {
     return rootNode;
   }
   
+  @SuppressWarnings("java:S112")
   protected void logAndThrowException(String errorMsg, Exception exception) throws RuntimeException {
     if (errorMsg == null || errorMsg.isBlank())
-      errorMsg = App.getString("defaultMessage"); 
+      errorMsg = Util.getString("defaultMessage"); 
     if (exception == null) {
       logr.log(Level.FATAL, errorMsg);
     } else {
