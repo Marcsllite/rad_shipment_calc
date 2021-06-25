@@ -12,21 +12,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testfx.framework.junit.ApplicationTest;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 
 @RunWith(JUnitParamsRunner.class)
 public class AppTest extends ApplicationTest {
-    public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/fxml/primary.fxml"));
-        Parent root = (Parent)fxmlLoader.load();
-        stage.setScene(new Scene(root, 640, 480));
-        stage.show();
-    }
+    public void start(Stage stage) throws Exception { }
   
     private boolean deleteDirectory(File directoryToBeDeleted) throws IOException {
         File[] allContents = directoryToBeDeleted.listFiles();

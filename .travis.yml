@@ -15,6 +15,7 @@ jobs:
 
 before_install:
   - export DISPLAY=:99.0
+  - sudo apt-get -y install at-spi2-core
 
 script: 
   - mvn clean verify

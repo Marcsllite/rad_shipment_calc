@@ -32,10 +32,10 @@ public class Util {
      * 
      * @param path the path to the properties file
      */
-    protected static void setProp(String path) throws InvalidParameterException{
+    public static void setProp(String path) throws InvalidParameterException{
         try {
-            prop = new Properties();
-            prop.loadFromXML(new FileInputStream(path));
+            Util.prop = new Properties();
+            Util.prop.loadFromXML(new FileInputStream(path));
         } catch (IOException | NullPointerException e) {
             logr.catching(Level.FATAL, e);
             var ee = new InvalidParameterException("Failed to set properties from path: " + path);
@@ -58,11 +58,11 @@ public class Util {
      * @return properties object
      */
     public static Properties getProp() {
-        if(prop == null) {
-            setProp("src/main/resources/properties.xml");
+        if(Util.prop == null) {
+            Util.setProp("src/main/resources/properties.xml");
         }
 
-        return prop;
+        return Util.prop;
     }
 
     /**
@@ -175,7 +175,7 @@ public class Util {
      * @param searchString the string in which to search for the substring
      * @return a List of substrings to replace in the order they were found
      */
-    protected static List<String> parseStringsToReplace(String searchString) {
+    public static List<String> parseStringsToReplace(String searchString) {
         List<String> ret = new ArrayList<>();
 
         // making sure searchString is not null
