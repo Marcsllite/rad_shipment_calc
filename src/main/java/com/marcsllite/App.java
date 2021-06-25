@@ -26,7 +26,7 @@ public class App extends Application {
     private static String defaultDir;
     protected static StageManager stageManager;
 
-    public App() {
+    static {
         setDataFolder(Util.getCurrentOS());
         setDefaultDir(Util.getString("appMainFolder"));
     }

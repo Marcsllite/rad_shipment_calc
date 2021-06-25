@@ -24,6 +24,12 @@ public class Util {
     private static String os;
     private static Properties prop;
 
+    static {
+        String propertiesPath = "src/main/resources/properties.xml";
+        Util.setOs(Util.getCurrentOS());
+        Util.setProp(propertiesPath);
+    }
+
     private Util() {}
 
     /*/////////////////////////////////////////////////// SETTERS ////////////////////////////////////////////////////*/
@@ -71,11 +77,11 @@ public class Util {
      * @return the current operating system
      */
     public static String getOs() {
-        if (os == null) {
+        if (Util.os == null) {
             setOs(System.getProperty("os.name").toLowerCase());
         }
 
-        return os;
+        return Util.os;
     }
 
     /**
@@ -87,10 +93,10 @@ public class Util {
     public static String getCurrentOS(){
         String os = Util.getOs();
 
-        if (os.contains("win")) return getString("windows");
-        else if (os.contains("mac")) return getString("mac");
-        else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) return getString("unix");
-        else if (os.contains("sunos")) return getString("solaris");
+        if (os.contains("win")) return Util.getString("windows");
+        else if (os.contains("mac")) return Util.getString("mac");
+        else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) return Util.getString("unix");
+        else if (os.contains("sunos")) return Util.getString("solaris");
         else return getString("noSupport");
     }
 
