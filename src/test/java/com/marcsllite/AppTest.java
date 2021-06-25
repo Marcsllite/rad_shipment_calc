@@ -66,13 +66,13 @@ public class AppTest extends ApplicationTest {
     }
   
     @Test
-    @Parameters(method = "setUpDataFolder_data")
-    public void setUpDataFolderChecker(String osVersion, String expected) {
+    @Parameters(method = "setDataFolder_data")
+    public void setDataFolderChecker(String osVersion, String expected) {
         App.setDataFolder(Util.getString(osVersion));
         Assert.assertEquals(expected, App.getDataFolder());
     }
 
-    private Object[] setUpDataFolder_data() {
+    private Object[] setDataFolder_data() {
         String winExp = System.getProperty("user.home") + File.separator +
                             "AppData" + File.separator +
                             "Local" + File.separator +

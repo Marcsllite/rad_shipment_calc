@@ -30,12 +30,14 @@
         "logr",
         "noaop",
         "openjfx",
+        "oraclejdk",
         "sievert",
         "sieverts",
         "sisu",
         "sonatype",
         "sunos",
-        "valignment"
+        "valignment",
+        "xvfb"
     ],
     "java.test.report.position": "currentView",
     "java.test.report.showAfterExecution": "always",
