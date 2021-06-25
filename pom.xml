@@ -17,6 +17,7 @@
         <junit.version>4.13.2</junit.version>
         <junit.param.version>1.1.1</junit.param.version>
         <testfx.version>4.0.1-alpha</testfx.version>
+        <sonar.version>3.9.0.2155</sonar.version>
 
         <!-- Test Coverage -->
         <jacoco.percentages.min.instruct>0.85</jacoco.percentages.min.instruct>
@@ -26,6 +27,11 @@
         <jacoco.percentages.min.method>0.85</jacoco.percentages.min.method>
         <jacoco.missed.count.class>0</jacoco.missed.count.class>
     </properties>
+
+    <ciManagement>
+        <system>travis</system>
+        <url>https://travis-ci.com/github/Marcsllite/rad_shipment_calc</url>
+    </ciManagement>
 
     <dependencies>
         <dependency>
@@ -52,7 +58,7 @@
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>${jacoco.version}</version>
-        </dependency>
+        </dependency>        
 
         <!-- Test Dependencies -->
         <dependency>
@@ -80,6 +86,11 @@
         <outputDirectory>${basedir}/target/classes</outputDirectory>
         <testOutputDirectory>${basedir}/target/test-classes</testOutputDirectory>
         <plugins>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${sonar.version}</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -124,9 +135,6 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
-                        <configuration>
-                            <outputDirectory>target/jacoco-report</outputDirectory>
-                        </configuration>
                     </execution>
                     <execution>
                         <id>jacoco-check</id>
