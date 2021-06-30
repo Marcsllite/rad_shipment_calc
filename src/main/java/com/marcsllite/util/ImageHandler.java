@@ -5,7 +5,7 @@ import java.security.InvalidParameterException;
 
 import javafx.scene.image.Image;
 
-public class ImageHandler {
+public final class ImageHandler {
   public static Image getErrorImage() { return new Image("/images/error.png"); }
   public static Image getSuccessImage() { return new Image("/images/success.png"); }
   public static Image getMinusImage() { return new Image("/images/minus.png"); }

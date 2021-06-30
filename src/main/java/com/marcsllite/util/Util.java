@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Util {
+public final class Util {
     private static final Logger logr = LogManager.getLogger();
     private static String os;
     private static Properties prop;

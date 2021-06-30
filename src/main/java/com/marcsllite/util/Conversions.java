@@ -1,42 +1,46 @@
 package com.marcsllite.util;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.security.InvalidParameterException;
 
 /* source: REMM(Radiation Emergency Medical Management) 
  * https://www.remm.nlm.gov/radmeasurement.htm
  * #################|           SI Units            |      Common Units     |
- * Radioactive    |   becquerel           (Bq)    |   curie       (Ci)    |
+ * Radioactive      |   becquerel           (Bq)    |   curie       (Ci)    |
  * Absorbed Dose    |   gray                (Gy)    |   rad                 |
  * Dose Equivalent  |   sievert             (Sv)    |   rem                 |
  * Exposure         |   coulomb/kilogram    (C/kg)  |   roentgen    (R)     |
  * ##########################################################################
+ * 
+ * NOTE: Accuracy is set by context
  */
 
 import java.util.List;
 
-public class Conversions {
+public final class Conversions {
     // Declaring variables
-    private static final int BASE = 10;
-    private static final float YOTTA = (float)Math.pow(BASE, 24);   // Y
-    private static final float ZETTA = (float)Math.pow(BASE, 21);   // Z
-    private static final float EXA = (float)Math.pow(BASE, 18);   // E
-    private static final float PETA = (float)Math.pow(BASE, 15);   // P
-    private static final float TERA = (float)Math.pow(BASE, 12);   // T
-    private static final float GIGA = (float)Math.pow(BASE, 9);    // G
-    private static final float MEGA = (float)Math.pow(BASE, 6);    // M
-    private static final float KILO = (float)Math.pow(BASE, 3);    // k
-    private static final float HECTO = (float)Math.pow(BASE, 2);    // h
-    private static final float DEKA = (float)Math.pow(BASE, 1);    // da
-    private static final float DECI = (float)Math.pow(BASE, -1);   // d
-    private static final float CENTI = (float)Math.pow(BASE, -2);   // c
-    private static final float MILLI = (float)Math.pow(BASE, -3);   // m
-    private static final float MICRO = (float)Math.pow(BASE, -6);   // MICRO
-    private static final float NANO = (float)Math.pow(BASE, -9);   // n
-    private static final float PICO = (float)Math.pow(BASE, -12);  // p
-    private static final float FEMTO = (float)Math.pow(BASE, -15);  // f
-    private static final float ATTO = (float)Math.pow(BASE, -18);  // a
-    private static final float ZEPTO = (float)Math.pow(BASE, -21);  // z
-    private static final float YOCTO = (float)Math.pow(BASE, -24);  // y
+    public static final MathContext context = new MathContext(2);
+    private static final BigDecimal YOTTA = BigDecimal.TEN.pow(24, context);   // Y
+    private static final BigDecimal ZETTA = BigDecimal.TEN.pow(21, context);   // Z
+    private static final BigDecimal EXA = BigDecimal.TEN.pow(18, context);   // E
+    private static final BigDecimal PETA = BigDecimal.TEN.pow(15, context);   // P
+    private static final BigDecimal TERA = BigDecimal.TEN.pow(12, context);   // T
+    private static final BigDecimal GIGA = BigDecimal.TEN.pow(9, context);    // G
+    private static final BigDecimal MEGA = BigDecimal.TEN.pow(6, context);    // M
+    private static final BigDecimal KILO = BigDecimal.TEN.pow(3, context);    // k
+    private static final BigDecimal HECTO = BigDecimal.TEN.pow(2, context);    // h
+    private static final BigDecimal DEKA = BigDecimal.TEN.pow(1, context);    // da
+    private static final BigDecimal DECI = BigDecimal.TEN.pow(-1, context);   // d
+    private static final BigDecimal CENTI = BigDecimal.TEN.pow(-2, context);   // c
+    private static final BigDecimal MILLI = BigDecimal.TEN.pow(-3, context);   // m
+    private static final BigDecimal MICRO = BigDecimal.TEN.pow(-6, context);   // MICRO
+    private static final BigDecimal NANO = BigDecimal.TEN.pow(-9, context);   // n
+    private static final BigDecimal PICO = BigDecimal.TEN.pow(-12, context);  // p
+    private static final BigDecimal FEMTO = BigDecimal.TEN.pow(-15, context);  // f
+    private static final BigDecimal ATTO = BigDecimal.TEN.pow(-18, context);  // a
+    private static final BigDecimal ZEPTO = BigDecimal.TEN.pow(-21, context);  // z
+    private static final BigDecimal YOCTO = BigDecimal.TEN.pow(-24, context);  // y
     public static final int DEFAULT_RAD_SI_INDEX = 14;
     public static final int DEFAULT_RAD_INDEX = 1;
     public static final int DEFAULT_MASS_SI_INDEX = 10;
@@ -76,7 +80,7 @@ public class Conversions {
      * @param prefixIndex the index of the selected si prefix
      * @return the converted base value
      */
-    public static float convertToBase(float value, int prefixIndex) {
+    public static BigDecimal convertToBase(BigDecimal value, int prefixIndex) {
         switch(prefixIndex) {
             case 0:  // user selected yotta
                 return Conversions.yottaToBase(value);
@@ -130,7 +134,7 @@ public class Conversions {
      * @param siPrefix the current si prefix of the given value
      * @return the converted micro value
      */
-    public static float convertToMicro(float value, String siPrefix) {
+    public static BigDecimal convertToMicro(BigDecimal value, String siPrefix) {
         if(siPrefix == null || siPrefix.isBlank()) throw new InvalidParameterException("Invalid SI Prefix");
 
         switch(siPrefix) {
@@ -163,7 +167,7 @@ public class Conversions {
      * @param bq the becquerel value to be converted
      * @return the converted curie value
      */
-    public static float bqToCi(float bq) { return bq * (float)(2.7 * (float)Math.pow(BASE, -11)); }
+    public static BigDecimal bqToCi(BigDecimal bq) { return bq.multiply(BigDecimal.valueOf(2.7d).multiply(BigDecimal.TEN.pow(-11, context), context), context); }
 
     /**
      * Function to convert the given becquerel to becquerels
@@ -171,7 +175,7 @@ public class Conversions {
      * @param ci the curie value to be converted
      * @return the converted becquerel value
      */
-    public static float ciToBq(float ci) { return ci * (float)(3.7 * (float)Math.pow(BASE, BASE));}
+    public static BigDecimal ciToBq(BigDecimal ci) { return ci.multiply(BigDecimal.valueOf(3.7d).multiply(BigDecimal.TEN.pow(10, context), context), context);}
 
     /**
      * Function to convert the given gray to rads
@@ -179,7 +183,7 @@ public class Conversions {
      * @param gy the gray value to be converted
      * @return the converted rad value
      */
-    public static float gyToRad(float gy) { return gy * (float)Math.pow(BASE, 2); }
+    public static BigDecimal gyToRad(BigDecimal gy) { return gy.multiply(BigDecimal.TEN.pow(2, context), context); }
 
     /**
      * Function to convert the given rad to grays
@@ -187,7 +191,7 @@ public class Conversions {
      * @param rad the rad value to be converted
      * @return the converted gray value
      */
-    public static float radToGy(float rad) { return rad * (float)Math.pow(BASE, -2); }
+    public static BigDecimal radToGy(BigDecimal rad) { return rad.multiply(BigDecimal.TEN.pow(-2, context), context); }
 
     /**
      * Function to convert the given sievert to rems
@@ -195,7 +199,7 @@ public class Conversions {
      * @param sv the sievert value to be converted
      * @return the converted rem value
      */
-    public static float svToRem(float sv) { return sv * (float)Math.pow(BASE, 2); }
+    public static BigDecimal svToRem(BigDecimal sv) { return sv.multiply(BigDecimal.TEN.pow(2, context), context); }
 
     /**
      * Function to convert the given rem to sieverts
@@ -203,7 +207,7 @@ public class Conversions {
      * @param rem the rem value to be converted
      * @return the converted sievert value
      */
-    public static float remToSv(float rem) { return rem * (float)Math.pow(BASE, -2); }
+    public static BigDecimal remToSv(BigDecimal rem) { return rem.multiply(BigDecimal.TEN.pow(-2, context), context); }
 
     /**
      * Function to convert the given coulomb/kilogram to roentgens
@@ -211,7 +215,7 @@ public class Conversions {
      * @param ckg the coulomb/kilogram value to be converted
      * @return the converted roentgen value
      */
-    public static float ckgToR(float ckg) { return ckg * (float)(3.88 * (float)Math.pow(BASE, 3)); }
+    public static BigDecimal ckgToR(BigDecimal ckg) { return ckg.multiply(BigDecimal.valueOf(3.88d).multiply(BigDecimal.TEN.pow(3, context), context), context); }
 
     /**
      * Function to convert the given roentgen to coulombs/kilogram
@@ -219,7 +223,7 @@ public class Conversions {
      * @param r the roentgen value to be converted
      * @return the converted coulomb/kilogram value
      */
-    public static float rToCkg(float r) { return r * (float)(2.58 * (float)Math.pow(BASE, -4)); }
+    public static BigDecimal rToCkg(BigDecimal r) { return r.multiply(BigDecimal.valueOf(2.58d).multiply(BigDecimal.TEN.pow(-4, context), context), context); }
 
     /*/////////////////////////////////////////////////// HELPERS ////////////////////////////////////////////////////*/
     /**
@@ -228,7 +232,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the YOTTA unit value of the given _BASE
      */
-    public static float baseToYotta(float base) { return base * YOCTO; }
+    public static BigDecimal baseToYotta(BigDecimal base) { return base.multiply(YOCTO, context); }
 
     /**
      * Helper function to convert a _BASE unit value to a ZETTA unit value
@@ -236,7 +240,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the ZETTA unit value of the given _BASE
      */
-    public static float baseToZetta(float base) { return base * ZEPTO; }
+    public static BigDecimal baseToZetta(BigDecimal base) { return base.multiply(ZEPTO, context); }
 
     /**
      * Helper function to convert a _BASE unit value to a EXA unit value
@@ -244,7 +248,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the EXA unit value of the given _BASE
      */
-    public static float baseToExa(float base) { return base * ATTO; }
+    public static BigDecimal baseToExa(BigDecimal base) { return base.multiply(ATTO, context); }
 
     /**
      * Helper function to convert a _BASE unit value to a PETA unit value
@@ -252,7 +256,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the PETA unit value of the given _BASE
      */
-    public static float baseToPeta(float base) { return base * FEMTO; }
+    public static BigDecimal baseToPeta(BigDecimal base) { return base.multiply(FEMTO, context); }
 
     /**
      * Helper function to convert a _BASE unit value to a TERA unit value
@@ -260,7 +264,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the TERA unit value of the given _BASE
      */
-    public static float baseToTera(float base) { return base * PICO; }
+    public static BigDecimal baseToTera(BigDecimal base) { return base.multiply(PICO, context); }
 
     /**
      * Helper function to convert a _BASE unit value to a GIGA unit value
@@ -268,7 +272,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the GIGA unit value of the given _BASE
      */
-    public static float baseToGiga(float base) { return base * NANO; }
+    public static BigDecimal baseToGiga(BigDecimal base) { return base.multiply(NANO, context); }
 
     /**
      * Helper function to convert a _BASE unit value to a MEGA unit value
@@ -276,7 +280,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the MEGA unit value of the given _BASE
      */
-    public static float baseToMega(float base) { return base * MICRO; }
+    public static BigDecimal baseToMega(BigDecimal base) { return base.multiply(MICRO, context); }
 
     /**
      * Helper function to convert a _BASE unit value to a KILO unit value
@@ -284,7 +288,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the KILO unit value of the given _BASE
      */
-    public static float baseToKilo(float base) { return base * MILLI; }
+    public static BigDecimal baseToKilo(BigDecimal base) { return base.multiply(MILLI, context); }
 
     /**
      * Helper function to convert a _BASE unit value to a HECTO unit value
@@ -292,7 +296,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the HECTO unit value of the given _BASE
      */
-    public static float baseToHecto(float base) { return base * CENTI; }
+    public static BigDecimal baseToHecto(BigDecimal base) { return base.multiply(CENTI, context); }
 
     /**
      * Helper function to convert a _BASE unit value to a DEKA unit value
@@ -300,7 +304,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the DEKA unit value of the given _BASE
      */
-    public static float baseToDeka(float base) { return base * DECI; }
+    public static BigDecimal baseToDeka(BigDecimal base) { return base.multiply(DECI, context); }
 
     /**
      * Helper function to convert a _BASE unit value to a DECI unit value
@@ -308,7 +312,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the DECI unit value of the given _BASE
      */
-    public static float baseToDeci(float base) { return base * DEKA; }
+    public static BigDecimal baseToDeci(BigDecimal base) { return base.multiply(DEKA, context); }
 
     /**
      * Helper function to convert a _BASE unit value to a CENTI unit value
@@ -316,7 +320,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the CENTI unit value of the given _BASE
      */
-    public static float baseToCenti(float base) { return base * HECTO; }
+    public static BigDecimal baseToCenti(BigDecimal base) { return base.multiply(HECTO, context); }
 
     /**
      * Helper function to convert a _BASE unit value to a MILLI unit value
@@ -324,7 +328,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the MILLI unit value of the given _BASE
      */
-    public static float baseToMilli(float base) { return base * KILO; }
+    public static BigDecimal baseToMilli(BigDecimal base) { return base.multiply(KILO, context); }
 
     /**
      * Helper function to convert a _BASE unit value to a MICRO unit value
@@ -332,7 +336,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the MICRO unit value of the given _BASE
      */
-    public static float baseToMicro(float base) { return base * MEGA; }
+    public static BigDecimal baseToMicro(BigDecimal base) { return base.multiply(MEGA, context); }
 
     /**
      * Helper function to convert a _BASE unit value to a NANO unit value
@@ -340,7 +344,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the NANO unit value of the given _BASE
      */
-    public static float baseToNano(float base) { return base * GIGA; }
+    public static BigDecimal baseToNano(BigDecimal base) { return base.multiply(GIGA, context); }
 
     /**
      * Helper function to convert a _BASE unit value to a PICO unit value
@@ -348,7 +352,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the PICO unit value of the given _BASE
      */
-    public static float baseToPico(float base) { return base * TERA; }
+    public static BigDecimal baseToPico(BigDecimal base) { return base.multiply(TERA, context); }
 
     /**
      * Helper function to convert a _BASE unit value to a FEMTO unit value
@@ -356,7 +360,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the FEMTO unit value of the given _BASE
      */
-    public static float baseToFemto(float base) { return base * PETA; }
+    public static BigDecimal baseToFemto(BigDecimal base) { return base.multiply(PETA, context); }
 
     /**
      * Helper function to convert a _BASE unit value to a ATTO unit value
@@ -364,7 +368,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the ATTO unit value of the given _BASE
      */
-    public static float baseToAtto(float base) { return base * EXA; }
+    public static BigDecimal baseToAtto(BigDecimal base) { return base.multiply(EXA, context); }
 
     /**
      * Helper function to convert a _BASE unit value to a ZEPTO unit value
@@ -372,7 +376,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the ZEPTO unit value of the given _BASE
      */
-    public static float baseToZepto(float base) { return base * ZETTA; }
+    public static BigDecimal baseToZepto(BigDecimal base) { return base.multiply(ZETTA, context); }
 
     /**
      * Helper function to convert a _BASE unit value to a YOCTO unit value
@@ -380,7 +384,7 @@ public class Conversions {
      * @param base the value of the _BASE to be converted
      * @return the YOCTO unit value of the given _BASE
      */
-    public static float baseToYocto(float base) { return base * YOTTA; }
+    public static BigDecimal baseToYocto(BigDecimal base) { return base.multiply(YOTTA, context); }
 
     /**
      * Helper function to convert a YOTTA unit value to a _BASE unit value
@@ -388,7 +392,7 @@ public class Conversions {
      * @param yotta the YOTTA unit value to be converted
      * @return the _BASE unit value of the given YOTTA
      */
-    public static float yottaToBase(float yotta) { return yotta * Conversions.YOTTA; }
+    public static BigDecimal yottaToBase(BigDecimal yotta) { return yotta.multiply(YOTTA, context); }
 
     /**
      * Helper function to convert a ZETTA unit value to a _BASE unit value
@@ -396,7 +400,7 @@ public class Conversions {
      * @param zetta the ZETTA unit value to be converted
      * @return the _BASE unit value of the given ZETTA
      */
-    public static float zettaToBase(float zetta) { return zetta * Conversions.ZETTA; }
+    public static BigDecimal zettaToBase(BigDecimal zetta) { return zetta.multiply(ZETTA, context); }
 
     /**
      * Helper function to convert a EXA unit value to a _BASE unit value
@@ -404,7 +408,7 @@ public class Conversions {
      * @param exa the EXA unit value to be converted
      * @return the _BASE unit value of the given EXA
      */
-    public static float exaToBase(float exa) { return exa * Conversions.EXA; }
+    public static BigDecimal exaToBase(BigDecimal exa) { return exa.multiply(EXA, context); }
 
     /**
      * Helper function to convert a PETA unit value to a _BASE unit value
@@ -412,7 +416,7 @@ public class Conversions {
      * @param peta the PETA unit value to be converted
      * @return the _BASE unit value of the given PETA
      */
-    public static float petaToBase(float peta) { return peta * Conversions.PETA; }
+    public static BigDecimal petaToBase(BigDecimal peta) { return peta.multiply(PETA, context); }
 
     /**
      * Helper function to convert a TERA unit value to a _BASE unit value
@@ -420,7 +424,7 @@ public class Conversions {
      * @param tera the TERA unit value to be converted
      * @return the _BASE unit value of the given TERA
      */
-    public static float teraToBase(float tera) { return tera * Conversions.TERA; }
+    public static BigDecimal teraToBase(BigDecimal tera) { return tera.multiply(TERA, context); }
 
     /**
      * Helper function to convert a GIGA unit value to a _BASE unit value
@@ -428,7 +432,7 @@ public class Conversions {
      * @param giga the GIGA unit value to be converted
      * @return the _BASE unit value of the given GIGA
      */
-    public static float gigaToBase(float giga) { return giga * Conversions.GIGA; }
+    public static BigDecimal gigaToBase(BigDecimal giga) { return giga.multiply(GIGA, context); }
 
     /**
      * Helper function to convert a MEGA unit value to a _BASE unit value
@@ -436,7 +440,7 @@ public class Conversions {
      * @param mega the MEGA unit value to be converted
      * @return the _BASE unit value of the given MEGA
      */
-    public static float megaToBase(float mega) { return mega * Conversions.MEGA; }
+    public static BigDecimal megaToBase(BigDecimal mega) { return mega.multiply(MEGA, context); }
 
     /**
      * Helper function to convert a KILO unit value to a _BASE unit value
@@ -444,7 +448,7 @@ public class Conversions {
      * @param kilo the KILO unit value to be converted
      * @return the _BASE unit value of the given KILO
      */
-    public static float kiloToBase(float kilo) { return kilo * Conversions.KILO; }
+    public static BigDecimal kiloToBase(BigDecimal kilo) { return kilo.multiply(KILO, context); }
 
     /**
      * Helper function to convert a HECTO unit value to a _BASE unit value
@@ -452,7 +456,7 @@ public class Conversions {
      * @param hecto the HECTO unit value to be converted
      * @return the _BASE unit value of the given HECTO
      */
-    public static float hectoToBase(float hecto) { return hecto * Conversions.HECTO; }
+    public static BigDecimal hectoToBase(BigDecimal hecto) { return hecto.multiply(HECTO, context); }
 
     /**
      * Helper function to convert a DEKA unit value to a _BASE unit value
@@ -460,7 +464,7 @@ public class Conversions {
      * @param deka the DEKA unit value to be converted
      * @return the _BASE unit value of the given DEKA
      */
-    public static float dekaToBase(float deka) { return deka * Conversions.DEKA; }
+    public static BigDecimal dekaToBase(BigDecimal deka) { return deka.multiply(DEKA, context); }
 
     /**
      * Helper function to convert a DECI unit value to a _BASE unit value
@@ -468,7 +472,7 @@ public class Conversions {
      * @param deci the DECI unit value to be converted
      * @return the _BASE unit value of the given DECI
      */
-    public static float deciToBase(float deci) { return deci * Conversions.DECI; }
+    public static BigDecimal deciToBase(BigDecimal deci) { return deci.multiply(DECI, context); }
 
     /**
      * Helper function to convert a CENTI unit value to a _BASE unit value
@@ -476,7 +480,7 @@ public class Conversions {
      * @param centi the CENTI unit value to be converted
      * @return the _BASE unit value of the given CENTI
      */
-    public static float centiToBase(float centi) { return centi * Conversions.CENTI; }
+    public static BigDecimal centiToBase(BigDecimal centi) { return centi.multiply(CENTI, context); }
 
     /**
      * Helper function to convert a MILLI unit value to a _BASE unit value
@@ -484,7 +488,7 @@ public class Conversions {
      * @param milli the MILLI unit value to be converted
      * @return the _BASE unit value of the given MILLI
      */
-    public static float milliToBase(float milli) { return milli * Conversions.MILLI; }
+    public static BigDecimal milliToBase(BigDecimal milli) { return milli.multiply(MILLI, context); }
 
     /**
      * Helper function to convert a MICRO unit value to a _BASE unit value
@@ -492,7 +496,7 @@ public class Conversions {
      * @param micro the MICRO unit value to be converted
      * @return the _BASE unit value of the given MICRO
      */
-    public static float microToBase(float micro) { return micro * Conversions.MICRO; }
+    public static BigDecimal microToBase(BigDecimal micro) { return micro.multiply(MICRO, context); }
 
     /**
      * Helper function to convert a NANO unit value to a _BASE unit value
@@ -500,7 +504,7 @@ public class Conversions {
      * @param nano the NANO unit value to be converted
      * @return the _BASE unit value of the given NANO
      */
-    public static float nanoToBase(float nano) { return nano * Conversions.NANO; }
+    public static BigDecimal nanoToBase(BigDecimal nano) { return nano.multiply(NANO, context); }
 
     /**
      * Helper function to convert a PICO unit value to a _BASE unit value
@@ -508,7 +512,7 @@ public class Conversions {
      * @param pico the PICO unit value to be converted
      * @return the _BASE unit value of the given PICO
      */
-    public static float picoToBase(float pico) { return pico * Conversions.PICO; }
+    public static BigDecimal picoToBase(BigDecimal pico) { return pico.multiply(PICO, context); }
 
     /**
      * Helper function to convert a FEMTO unit value to a _BASE unit value
@@ -516,7 +520,7 @@ public class Conversions {
      * @param femto the FEMTO unit value to be converted
      * @return the _BASE unit value of the given FEMTO
      */
-    public static float femtoToBase(float femto) { return femto * Conversions.FEMTO; }
+    public static BigDecimal femtoToBase(BigDecimal femto) { return femto.multiply(FEMTO, context); }
 
     /**
      * Helper function to convert a ATTO unit value to a _BASE unit value
@@ -524,7 +528,7 @@ public class Conversions {
      * @param atto the ATTO unit value to be converted
      * @return the _BASE unit value of the given ATTO
      */
-    public static float attoToBase(float atto) { return atto * Conversions.ATTO; }
+    public static BigDecimal attoToBase(BigDecimal atto) { return atto.multiply(ATTO, context); }
 
     /**
      * Helper function to convert a ZEPTO unit value to a _BASE unit value
@@ -532,7 +536,7 @@ public class Conversions {
      * @param zepto the ZEPTO unit value to be converted
      * @return the _BASE unit value of the given ZEPTO
      */
-    public static float zeptoToBase(float zepto) { return zepto * Conversions.ZEPTO; }
+    public static BigDecimal zeptoToBase(BigDecimal zepto) { return zepto.multiply(ZEPTO, context); }
 
     /**
      * Helper function to convert a YOCTO unit value to a _BASE unit value
@@ -540,5 +544,5 @@ public class Conversions {
      * @param yocto the YOCTO unit value to be converted
      * @return the _BASE unit value of the given YOCTO
      */
-    public static float yoctoToBase(float yocto) { return yocto * Conversions.YOCTO; }
+    public static BigDecimal yoctoToBase(BigDecimal yocto) { return yocto.multiply(YOCTO, context); }
 }

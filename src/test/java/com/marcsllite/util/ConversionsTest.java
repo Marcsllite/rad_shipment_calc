@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.security.InvalidParameterException;
 import java.util.List;
 
@@ -15,7 +17,8 @@ import junitparams.Parameters;
 
 @RunWith(JUnitParamsRunner.class)
 public class ConversionsTest {
-    float toBeConverted = 1.0f;
+    BigDecimal toBeConverted = BigDecimal.valueOf(7.5d);
+    MathContext mc = Conversions.context;
 
     @Parameters(method = "convertToMicroException_data")
     public void testConvertToMicroExceptionChecker(String siPrefix, String message) {
@@ -37,65 +40,65 @@ public class ConversionsTest {
 
     @Test
     @Parameters(method = "convertToMicro_data")
-    public void testConvertToMicroChecker(String siPrefix, float expected) {
-        assertEquals(expected, Conversions.convertToMicro(toBeConverted, siPrefix), 0.0001f);
+    public void testConvertToMicroChecker(String siPrefix, BigDecimal expected) {
+        assertEquals(expected, Conversions.convertToMicro(toBeConverted, siPrefix));
     }
 
     private Object[] convertToMicro_data() {
         return new Object[] {
-            new Object[] {"Yotta (Y)", 1.0e30f},
-            new Object[] {"Zetta (Z)", 1.0e27f},
-            new Object[] {"Exa (E)", 1.0e24f},
-            new Object[] {"Peta (P)", 1.0e21f},
-            new Object[] {"Tera (T)", 1.0e18f},
-            new Object[] {"Giga (G)", 1.0e15f},
-            new Object[] {"Mega (M)", 1.0e12f},
-            new Object[] {"Kilo (k)", 1.0e9f},
-            new Object[] {"Hecto (h)", 1.0e8f},
-            new Object[] {"Deka (da)", 1.0e7f},
-            new Object[] {"Deci (d)", 1.0e5f},
-            new Object[] {"Centi (c)", 1.0e4f},
-            new Object[] {"Milli (m)", 1.0e3f},
-            new Object[] {"Nano (n)", 1.0e-3f},
-            new Object[] {"Pico (p)", 1.0e-6f},
-            new Object[] {"Femto (f)", 1.0e-9f},
-            new Object[] {"Atto (a)", 1.0e-12f},
-            new Object[] {"Zepto (z)", 1.0e-15f},
-            new Object[] {"Yocto (y)", 1.0e-18f},
+            new Object[] {"Yotta (Y)", toBeConverted.multiply(BigDecimal.TEN.pow(30, mc), mc)},
+            new Object[] {"Zetta (Z)", toBeConverted.multiply(BigDecimal.TEN.pow(27, mc), mc)},
+            new Object[] {"Exa (E)", toBeConverted.multiply(BigDecimal.TEN.pow(24, mc), mc)},
+            new Object[] {"Peta (P)", toBeConverted.multiply(BigDecimal.TEN.pow(21, mc), mc)},
+            new Object[] {"Tera (T)", toBeConverted.multiply(BigDecimal.TEN.pow(18, mc), mc)},
+            new Object[] {"Giga (G)", toBeConverted.multiply(BigDecimal.TEN.pow(15, mc), mc)},
+            new Object[] {"Mega (M)", toBeConverted.multiply(BigDecimal.TEN.pow(12, mc), mc)},
+            new Object[] {"Kilo (k)", toBeConverted.multiply(BigDecimal.TEN.pow(9, mc), mc)},
+            new Object[] {"Hecto (h)", toBeConverted.multiply(BigDecimal.TEN.pow(8, mc), mc)},
+            new Object[] {"Deka (da)", toBeConverted.multiply(BigDecimal.TEN.pow(7, mc), mc)},
+            new Object[] {"Deci (d)", toBeConverted.multiply(BigDecimal.TEN.pow(5, mc), mc)},
+            new Object[] {"Centi (c)", toBeConverted.multiply(BigDecimal.TEN.pow(4, mc), mc)},
+            new Object[] {"Milli (m)", toBeConverted.multiply(BigDecimal.TEN.pow(3, mc), mc)},
+            new Object[] {"Nano (n)", toBeConverted.multiply(BigDecimal.TEN.pow(-3, mc), mc)},
+            new Object[] {"Pico (p)", toBeConverted.multiply(BigDecimal.TEN.pow(-6, mc), mc)},
+            new Object[] {"Femto (f)", toBeConverted.multiply(BigDecimal.TEN.pow(-9, mc), mc)},
+            new Object[] {"Atto (a)", toBeConverted.multiply(BigDecimal.TEN.pow(-12, mc), mc)},
+            new Object[] {"Zepto (z)", toBeConverted.multiply(BigDecimal.TEN.pow(-15, mc), mc)},
+            new Object[] {"Yocto (y)", toBeConverted.multiply(BigDecimal.TEN.pow(-18, mc), mc)},
             new Object[] {"fakePrefix", toBeConverted}
         };
     }
 
     @Test
     @Parameters(method = "convertToBase_data")
-    public void convertToBaseChecker(float value, int prefixIndex, float expected) {
-        assertEquals(expected, Conversions.convertToBase(value, prefixIndex), 0f);
+    public void convertToBaseChecker(BigDecimal value, int prefixIndex, BigDecimal expected) {
+        assertEquals(expected, Conversions.convertToBase(value, prefixIndex));
     }
 
     private Object[] convertToBase_data() {
         return new Object[] {
             new Object[] {toBeConverted, -1, toBeConverted},
-            new Object[] {1f, 0, 1.0e24f},
-            new Object[] {1f, 1, 1.0e21f},
-            new Object[] {1f, 2, 1.0e18f},
-            new Object[] {1f, 3, 1.0e15f},
-            new Object[] {1f, 4, 1.0e12f},
-            new Object[] {1f, 5, 1.0e9f},
-            new Object[] {1f, 6, 1.0e6f},
-            new Object[] {1f, 7, 1.0e3f},
-            new Object[] {1f, 8, 1.0e2f},
-            new Object[] {1f, 9, 1.0e1f},
-            new Object[] {1f, 10, toBeConverted},
-            new Object[] {1f, 11, 1.0e-1f},
-            new Object[] {1f, 12, 1.0e-2f},
-            new Object[] {1f, 13, 1.0e-3f},
-            new Object[] {1f, 14, 1.0e-6f},
-            new Object[] {1f, 15, 1.0e-9f},
-            new Object[] {1f, 16, 1.0e-12f},
-            new Object[] {1f, 17, 1.0e-15f},
-            new Object[] {1f, 18, 1.0e-18f},
-            new Object[] {1f, 19, 1.0e-21f},
-            new Object[] {1f, 20, 1.0e-24f}
+            new Object[] {toBeConverted, 0, toBeConverted.multiply(BigDecimal.TEN.pow(24, mc), mc)},
+            new Object[] {toBeConverted, 1, toBeConverted.multiply(BigDecimal.TEN.pow(21, mc), mc)},
+            new Object[] {toBeConverted, 2, toBeConverted.multiply(BigDecimal.TEN.pow(18, mc), mc)},
+            new Object[] {toBeConverted, 3, toBeConverted.multiply(BigDecimal.TEN.pow(15), mc)},
+            new Object[] {toBeConverted, 4, toBeConverted.multiply(BigDecimal.TEN.pow(12), mc)},
+            new Object[] {toBeConverted, 5, toBeConverted.multiply(BigDecimal.TEN.pow(9), mc)},
+            new Object[] {toBeConverted, 6, toBeConverted.multiply(BigDecimal.TEN.pow(6), mc)},
+            new Object[] {toBeConverted, 7, toBeConverted.multiply(BigDecimal.TEN.pow(3), mc)},
+            new Object[] {toBeConverted, 8, toBeConverted.multiply(BigDecimal.TEN.pow(2), mc)},
+            new Object[] {toBeConverted, 9, toBeConverted.multiply(BigDecimal.TEN.pow(1), mc)},
+            new Object[] {toBeConverted, 10, toBeConverted},
+            new Object[] {toBeConverted, 11, toBeConverted.multiply(BigDecimal.TEN.pow(-1, mc), mc)},
+            new Object[] {toBeConverted, 12, toBeConverted.multiply(BigDecimal.TEN.pow(-2, mc), mc)},
+            new Object[] {toBeConverted, 13, toBeConverted.multiply(BigDecimal.TEN.pow(-3, mc), mc)},
+            new Object[] {toBeConverted, 14, toBeConverted.multiply(BigDecimal.TEN.pow(-6, mc), mc)},
+            new Object[] {toBeConverted, 15, toBeConverted.multiply(BigDecimal.TEN.pow(-9, mc), mc)},
+            new Object[] {toBeConverted, 16, toBeConverted.multiply(BigDecimal.TEN.pow(-12, mc), mc)},
+            new Object[] {toBeConverted, 17, toBeConverted.multiply(BigDecimal.TEN.pow(-15, mc), mc)},
+            new Object[] {toBeConverted, 18, toBeConverted.multiply(BigDecimal.TEN.pow(-18, mc), mc)},
+            new Object[] {toBeConverted, 19, toBeConverted.multiply(BigDecimal.TEN.pow(-21, mc), mc)},
+            new Object[] {toBeConverted, 20, toBeConverted.multiply(BigDecimal.TEN.pow(-24, mc), mc)}
         };
     }
 
@@ -122,385 +125,385 @@ public class ConversionsTest {
 
     @Test
     public void testBqToCi() {
-        float expected = 2.7e-11f;
-        float actual = Conversions.bqToCi(1);
+        BigDecimal expected = BigDecimal.valueOf(2.7).multiply(BigDecimal.TEN.pow(-11, mc), mc);
+        BigDecimal actual = Conversions.bqToCi(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testCiToBq() {
-        float expected = 3.7e10f;
-        float actual = Conversions.ciToBq(1);
+        BigDecimal expected = BigDecimal.valueOf(3.7).multiply(BigDecimal.TEN.pow(10, mc), mc);
+        BigDecimal actual = Conversions.ciToBq(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testGyToRad() {
-        float expected = 1.0e2f;
-        float actual = Conversions.gyToRad(1);
+        BigDecimal expected = BigDecimal.TEN.pow(2, mc);
+        BigDecimal actual = Conversions.gyToRad(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testRadToGy() {
-        float expected = 1.0e-2f;
-        float actual = Conversions.radToGy(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-2, mc);
+        BigDecimal actual = Conversions.radToGy(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testSvToRem() {
-        float expected = 1.0e2f;
-        float actual = Conversions.svToRem(1);
+        BigDecimal expected = BigDecimal.TEN.pow(2, mc);
+        BigDecimal actual = Conversions.svToRem(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testRemToSv() {
-        float expected = 1.0e-2f;
-        float actual = Conversions.remToSv(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-2, mc);
+        BigDecimal actual = Conversions.remToSv(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testCkgToR() {
-        float expected = 3.88e3f;
-        float actual = Conversions.ckgToR(1);
+        BigDecimal expected = BigDecimal.valueOf(3.88).multiply(BigDecimal.TEN.pow(3, mc), mc);
+        BigDecimal actual = Conversions.ckgToR(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testRToCkg() {
-        float expected = 2.58e-4f;
-        float actual = Conversions.rToCkg(1);
+        BigDecimal expected = BigDecimal.valueOf(2.58).multiply(BigDecimal.TEN.pow(-4, mc), mc);
+        BigDecimal actual = Conversions.rToCkg(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToYotta() {
-        float expected = 1.0e-24f;
-        float actual = Conversions.baseToYotta(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-24, mc);
+        BigDecimal actual = Conversions.baseToYotta(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToZetta() {
-        float expected = 1.0e-21f;
-        float actual = Conversions.baseToZetta(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-21, mc);
+        BigDecimal actual = Conversions.baseToZetta(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToExa() {
-        float expected = 1.0e-18f;
-        float actual = Conversions.baseToExa(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-18, mc);
+        BigDecimal actual = Conversions.baseToExa(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToPeta() {
-        float expected = 1.0e-15f;
-        float actual = Conversions.baseToPeta(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-15, mc);
+        BigDecimal actual = Conversions.baseToPeta(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToTera() {
-        float expected = 1.0e-12f;
-        float actual = Conversions.baseToTera(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-12, mc);
+        BigDecimal actual = Conversions.baseToTera(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToGiga() {
-        float expected = 1.0e-9f;
-        float actual = Conversions.baseToGiga(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-9, mc);
+        BigDecimal actual = Conversions.baseToGiga(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToMega() {
-        float expected = 1.0e-6f;
-        float actual = Conversions.baseToMega(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-6, mc);
+        BigDecimal actual = Conversions.baseToMega(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToKilo() {
-        float expected = 1.0e-3f;
-        float actual = Conversions.baseToKilo(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-3, mc);
+        BigDecimal actual = Conversions.baseToKilo(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToHecto() {
-        float expected = 1.0e-2f;
-        float actual = Conversions.baseToHecto(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-2, mc);
+        BigDecimal actual = Conversions.baseToHecto(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToDeka() {
-        float expected = 1.0e-1f;
-        float actual = Conversions.baseToDeka(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-1, mc);
+        BigDecimal actual = Conversions.baseToDeka(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToDeci() {
-        float expected = 1.0e1f;
-        float actual = Conversions.baseToDeci(1);
+        BigDecimal expected = BigDecimal.TEN.pow(1, mc);
+        BigDecimal actual = Conversions.baseToDeci(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToCenti() {
-        float expected = 1.0e2f;
-        float actual = Conversions.baseToCenti(1);
+        BigDecimal expected = BigDecimal.TEN.pow(2, mc);
+        BigDecimal actual = Conversions.baseToCenti(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToMilli() {
-        float expected = 1.0e3f;
-        float actual = Conversions.baseToMilli(1);
+        BigDecimal expected = BigDecimal.TEN.pow(3, mc);
+        BigDecimal actual = Conversions.baseToMilli(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToMicro() {
-        float expected = 1.0e6f;
-        float actual = Conversions.baseToMicro(1);
+        BigDecimal expected = BigDecimal.TEN.pow(6, mc);
+        BigDecimal actual = Conversions.baseToMicro(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToNano() {
-        float expected = 1.0e9f;
-        float actual = Conversions.baseToNano(1);
+        BigDecimal expected = BigDecimal.TEN.pow(9, mc);
+        BigDecimal actual = Conversions.baseToNano(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToPico() {
-        float expected = 1.0e12f;
-        float actual = Conversions.baseToPico(1);
+        BigDecimal expected = BigDecimal.TEN.pow(12, mc);
+        BigDecimal actual = Conversions.baseToPico(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToFemto() {
-        float expected = 1.0e15f;
-        float actual = Conversions.baseToFemto(1);
+        BigDecimal expected = BigDecimal.TEN.pow(15, mc);
+        BigDecimal actual = Conversions.baseToFemto(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToAtto() {
-        float expected = 1.0e18f;
-        float actual = Conversions.baseToAtto(1);
+        BigDecimal expected = BigDecimal.TEN.pow(18, mc);
+        BigDecimal actual = Conversions.baseToAtto(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToZepto() {
-        float expected = 1.0e21f;
-        float actual = Conversions.baseToZepto(1);
+        BigDecimal expected = BigDecimal.TEN.pow(21, mc);
+        BigDecimal actual = Conversions.baseToZepto(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testBaseToYocto() {
-        float expected = 1.0e24f;
-        float actual = Conversions.baseToYocto(1);
+        BigDecimal expected = BigDecimal.TEN.pow(24, mc);
+        BigDecimal actual = Conversions.baseToYocto(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testYottaToBase() {
-        float expected = 1.0e24f;
-        float actual = Conversions.yottaToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(24, mc);
+        BigDecimal actual = Conversions.yottaToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testZettaToBase() {
-        float expected = 1.0e21f;
-        float actual = Conversions.zettaToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(21, mc);
+        BigDecimal actual = Conversions.zettaToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testExaToBase() {
-        float expected = 1.0e18f;
-        float actual = Conversions.exaToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(18, mc);
+        BigDecimal actual = Conversions.exaToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testPetaToBase() {
-        float expected = 1.0e15f;
-        float actual = Conversions.petaToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(15, mc);
+        BigDecimal actual = Conversions.petaToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testTeraToBase() {
-        float expected = 1.0e12f;
-        float actual = Conversions.teraToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(12, mc);
+        BigDecimal actual = Conversions.teraToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testGigaToBase() {
-        float expected = 1.0e9f;
-        float actual = Conversions.gigaToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(9, mc);
+        BigDecimal actual = Conversions.gigaToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testMegaToBase() {
-        float expected = 1.0e6f;
-        float actual = Conversions.megaToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(6, mc);
+        BigDecimal actual = Conversions.megaToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testKiloToBase() {
-        float expected = 1.0e3f;
-        float actual = Conversions.kiloToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(3, mc);
+        BigDecimal actual = Conversions.kiloToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testHectoToBase() {
-        float expected = 1.0e2f;
-        float actual = Conversions.hectoToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(2, mc);
+        BigDecimal actual = Conversions.hectoToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testDekaToBase() {
-        float expected = 1.0e1f;
-        float actual = Conversions.dekaToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(1, mc);
+        BigDecimal actual = Conversions.dekaToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testDeciToBase() {
-        float expected = 1.0e-1f;
-        float actual = Conversions.deciToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-1, mc);
+        BigDecimal actual = Conversions.deciToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testCentiToBase() {
-        float expected = 1.0e-2f;
-        float actual = Conversions.centiToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-2, mc);
+        BigDecimal actual = Conversions.centiToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testMilliToBase() {
-        float expected = 1.0e-3f;
-        float actual = Conversions.milliToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-3, mc);
+        BigDecimal actual = Conversions.milliToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testMicroToBase() {
-        float expected = 1.0e-6f;
-        float actual = Conversions.microToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-6, mc);
+        BigDecimal actual = Conversions.microToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testNanoToBase() {
-        float expected = 1.0e-9f;
-        float actual = Conversions.nanoToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-9, mc);
+        BigDecimal actual = Conversions.nanoToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testPicoToBase() {
-        float expected = 1.0e-12f;
-        float actual = Conversions.picoToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-12, mc);
+        BigDecimal actual = Conversions.picoToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testFemtoToBase() {
-        float expected = 1.0e-15f;
-        float actual = Conversions.femtoToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-15, mc);
+        BigDecimal actual = Conversions.femtoToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testAttoToBase() {
-        float expected = 1.0e-18f;
-        float actual = Conversions.attoToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-18, mc);
+        BigDecimal actual = Conversions.attoToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testZeptoToBase() {
-        float expected = 1.0e-21f;
-        float actual = Conversions.zeptoToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-21, mc);
+        BigDecimal actual = Conversions.zeptoToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testYoctoToBase() {
-        float expected = 1.0e-24f;
-        float actual = Conversions.yoctoToBase(1);
+        BigDecimal expected = BigDecimal.TEN.pow(-24, mc);
+        BigDecimal actual = Conversions.yoctoToBase(BigDecimal.ONE);
 
-        assertEquals(expected, actual, 0);
+        assertEquals(expected, actual);
     }
 }
