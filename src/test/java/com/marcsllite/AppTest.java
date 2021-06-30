@@ -37,6 +37,7 @@ public class AppTest extends ApplicationTest {
         String name = Util.getString("appMainFolder");
 
         assumeNotNull(name);
+        assumeFalse(name.isBlank());
 
         String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + name;
         File directoryToBeDeleted = new File(path);
@@ -51,6 +52,7 @@ public class AppTest extends ApplicationTest {
         String name = Util.getString("appMainFolder");
 
         assumeNotNull(name);
+        assumeFalse(name.isBlank());
 
         String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + name;
         File toBeCreated = new File(path);
@@ -64,6 +66,7 @@ public class AppTest extends ApplicationTest {
     @Parameters(method = "setDefaultDirException_data")
     public void setDefaultDirExceptionChecker(String dirName, String expected) {
         assumeNotNull(Util.getString("appMainFolder"));
+        assumeFalse(Util.getString("appMainFolder").isBlank());
 
         App.setDefaultDir(dirName);
         Assert.assertEquals(expected, App.getDefaultDir());
@@ -82,6 +85,9 @@ public class AppTest extends ApplicationTest {
     public void setDataFolderChecker(String osVersion, String expected) {
         assumeNotNull(Util.getString(osVersion));
         assumeNotNull(Util.getString("appFolderName"));
+
+        assumeFalse(Util.getString(osVersion).isBlank());
+        assumeFalse(Util.getString("appFolderName").isBlank());
 
         App.setDataFolder(Util.getString(osVersion));
         Assert.assertEquals(expected, App.getDataFolder());
