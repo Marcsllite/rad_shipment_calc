@@ -3,6 +3,8 @@ package com.marcsllite.util;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeNotNull;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -106,6 +108,9 @@ public class ConversionsTest {
     public void testGetSiPrefixes() {
         List<String> expected = Util.getList("siPrefixes");
 
+        assumeNotNull(expected);
+        assumeFalse(expected.isEmpty());
+
         assertEquals(expected, Conversions.getSiPrefixes());
     }
 
@@ -113,12 +118,18 @@ public class ConversionsTest {
     public void testGetRadioactiveUnits() {
         List<String> expected = Util.getList("radioactiveUnits");
 
+        assumeNotNull(expected);
+        assumeFalse(expected.isEmpty());
+
         assertEquals(expected, Conversions.getRadioactiveUnits());
     }
 
     @Test
     public void testGetMassUnits() {
         List<String> expected = Util.getList("massUnits");
+
+        assumeNotNull(expected);
+        assumeFalse(expected.isEmpty());
 
         assertEquals(expected, Conversions.getMassUnits());
     }

@@ -1,10 +1,16 @@
 package com.marcsllite.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeNotNull;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.security.InvalidParameterException;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testfx.framework.junit.ApplicationTest;
@@ -22,44 +28,44 @@ public class ImageHandlerTest extends ApplicationTest {
     @Test
     public void testGetErrorImage() throws MalformedURLException {
         Image actual = ImageHandler.getErrorImage();
-        Assert.assertNotNull(actual);
-        Assert.assertTrue(actual.getUrl().contains("/images/error.png"));
+        assertNotNull(actual);
+        assertTrue(actual.getUrl().contains("/images/error.png"));
     }
   
     @Test
     public void testGetSuccessImage() {
         Image actual = ImageHandler.getSuccessImage();
-        Assert.assertNotNull(actual);
-        Assert.assertTrue(actual.getUrl().contains("/images/success.png"));
+        assertNotNull(actual);
+        assertTrue(actual.getUrl().contains("/images/success.png"));
     }
   
     @Test
     public void testGetMinusImage() {
         Image actual = ImageHandler.getMinusImage();
-        Assert.assertNotNull(actual);
-        Assert.assertTrue(actual.getUrl().contains("/images/minus.png"));
+        assertNotNull(actual);
+        assertTrue(actual.getUrl().contains("/images/minus.png"));
     }
   
     @Test
     public void testGetColorLogoBkgImage() {
         Image actual = ImageHandler.getColorLogoBkgImage();
-        Assert.assertNotNull(actual);
-        Assert.assertTrue(actual.getUrl().contains("/images/color_UMass_logo_background.png"));
+        assertNotNull(actual);
+        assertTrue(actual.getUrl().contains("/images/color_UMass_logo_background.png"));
     }
   
     @Test
     public void testGetColorLogoBkgPath() {
         String expected = System.getProperty("user.dir") + File.separator + "color_UMass_logo_background.png";
-        Assert.assertEquals(expected, ImageHandler.getColorLogoBkgPath());
+        assertEquals(expected, ImageHandler.getColorLogoBkgPath());
     }
   
     @Test
     @Parameters(method = "testGetShipmentImageException_data")
     public void testGetShipmentImageExceptionChecker(String color, String message) {
-        InvalidParameterException exception = Assert.assertThrows(
+        InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> ImageHandler.getShipmentImage(color)
         );
-        Assert.assertTrue(exception.getMessage().contains(message));
+        assertTrue(exception.getMessage().contains(message));
     }
   
     private Object[] testGetShipmentImageException_data() {
@@ -77,19 +83,24 @@ public class ImageHandlerTest extends ApplicationTest {
     })
     public void testGetShipmentImage(String color, String url) {
         Platform.runLater(() -> {
-            Image actual = ImageHandler.getShipmentImage(Util.getString(color));
-            Assert.assertNotNull(actual);
-            Assert.assertTrue(actual.getUrl().contains(url));
+            String c = Util.getString(color);
+            
+            assumeNotNull(c);
+            assumeFalse(c.isEmpty());
+
+            Image actual = ImageHandler.getShipmentImage(c);
+            assertNotNull(actual);
+            assertTrue(actual.getUrl().contains(url));
         });
     }
   
     @Test
     @Parameters(method = "testGetReferenceImageException_data")
     public void testGetReferenceImageExceptionChecker(String color, String message) {
-        InvalidParameterException exception = Assert.assertThrows(
+        InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> ImageHandler.getReferenceImage(color)
         );
-        Assert.assertTrue(exception.getMessage().contains(message));
+        assertTrue(exception.getMessage().contains(message));
     }
   
     private Object[] testGetReferenceImageException_data() {
@@ -107,9 +118,14 @@ public class ImageHandlerTest extends ApplicationTest {
     })
     public void testGetReferenceImage(String color, String url) {
         Platform.runLater(() -> {
-            Image actual = ImageHandler.getReferenceImage(Util.getString(color));
-            Assert.assertNotNull(actual);
-            Assert.assertTrue(actual.getUrl().contains(url));
+            String c = Util.getString(color);
+            
+            assumeNotNull(c);
+            assumeFalse(c.isEmpty());
+
+            Image actual = ImageHandler.getReferenceImage(c);
+            assertNotNull(actual);
+            assertTrue(actual.getUrl().contains(url));
         });
     }
 }

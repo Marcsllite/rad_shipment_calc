@@ -1,11 +1,17 @@
 package com.marcsllite.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeNotNull;
+
 import com.marcsllite.App;
 import com.marcsllite.PrimaryController;
 import com.marcsllite.SecondaryController;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +28,8 @@ public class StageManagerTest extends ApplicationTest {
     private Object[] data() {
         return new Object[] {
             new Object[] { FXMLView.PRIMARY },
-            new Object[] { FXMLView.SECONDARY }
+            new Object[] { FXMLView.SECONDARY },
+            new Object[] { FXMLView.TEST }
         };
     }
   
@@ -44,10 +51,10 @@ public class StageManagerTest extends ApplicationTest {
     public void switchScene_NullView() {
         Platform.runLater(() -> {
             StageManager stageManager = new StageManager(new Stage());
-            RuntimeException exception = Assert.assertThrows(
+            RuntimeException exception = assertThrows(
                 RuntimeException.class, () -> stageManager.switchScene(null)
             );
-            Assert.assertTrue(exception.getMessage().contains("FXML View is null"));
+            assertTrue(exception.getMessage().contains("FXML View is null"));
         });
     }
 
@@ -59,30 +66,40 @@ public class StageManagerTest extends ApplicationTest {
             stageManager.switchScene(view);
             Stage stage = stageManager.getPrimaryStage();
 
-            Assert.assertEquals(view.getWidth(), stage.getScene().getWidth(), 0.0D);
-            Assert.assertEquals(view.getHeight(), stage.getScene().getHeight(), 0.0D);
-            Assert.assertEquals(view.getWidth(), stage.getMinWidth(), 0.0D);
-            Assert.assertEquals(view.getHeight(), stage.getMinHeight(), 0.0D);
-            Assert.assertEquals(view.getMaxWidth(), stage.getMaxWidth(), 0.0D);
-            Assert.assertEquals(view.getMaxHeight(), stage.getMaxHeight(), 0.0D);
+            assertEquals(view.getName(), stage.getTitle());
+            assertEquals(view.getWidth(), stage.getScene().getWidth(), 0.0D);
+            assertEquals(view.getHeight(), stage.getScene().getHeight(), 0.0D);
+            assertEquals(view.getWidth(), stage.getMinWidth(), 0.0D);
+            assertEquals(view.getHeight(), stage.getMinHeight(), 0.0D);
+            assertEquals(view.getMaxWidth(), stage.getMaxWidth(), 0.0D);
+            assertEquals(view.getMaxHeight(), stage.getMaxHeight(), 0.0D);
         });
     }
   
     @Test
-    public void getController_AppFxml() {
+    public void getController_PrimaryFxml() {
         Platform.runLater(() -> {
             StageManager stageManager = new StageManager(new Stage());
             stageManager.switchScene(FXMLView.PRIMARY);
-            Assert.assertEquals(PrimaryController.class, stageManager.getController().getClass());
+            assertEquals(PrimaryController.class, stageManager.getController().getClass());
         });
     }
   
     @Test
-    public void getController_MenuFxml() {
+    public void getController_SeconaryFxml() {
         Platform.runLater(() -> {
             StageManager stageManager = new StageManager(new Stage());
             stageManager.switchScene(FXMLView.SECONDARY);
-            Assert.assertEquals(SecondaryController.class, stageManager.getController().getClass());
+            assertEquals(SecondaryController.class, stageManager.getController().getClass());
+        });
+    }
+
+    @Test
+    public void getController_TestFxml() {
+        Platform.runLater(() -> {
+            StageManager stageManager = new StageManager(new Stage());
+            stageManager.switchScene(FXMLView.SECONDARY);
+            assertEquals(SecondaryController.class, stageManager.getController().getClass());
         });
     }
   
@@ -90,10 +107,10 @@ public class StageManagerTest extends ApplicationTest {
     public void show_NullView() {
         Platform.runLater(() -> {
             StageManager stageManager = new StageManager(new Stage());
-            RuntimeException exception = Assert.assertThrows(
+            RuntimeException exception = assertThrows(
                 RuntimeException.class, () -> stageManager.show(null)
             );
-            Assert.assertTrue(exception.getMessage().contains("FXML View is null"));
+            assertTrue(exception.getMessage().contains("FXML View is null"));
         });
     }
   
@@ -102,10 +119,10 @@ public class StageManagerTest extends ApplicationTest {
         Platform.runLater(() -> {
             StageManager stageManager = new StageManager(new Stage());
             FXMLView view = FXMLView.TEST;
-            RuntimeException exception = Assert.assertThrows(
+            RuntimeException exception = assertThrows(
                 RuntimeException.class, () -> stageManager.show(view)
             );
-            Assert.assertTrue(exception.getMessage().contains("Unable to show scene titled " + view.getTitle()));
+            assertTrue(exception.getMessage().contains("Unable to show scene titled " + view.getTitle()));
         });
     }
   
@@ -117,8 +134,8 @@ public class StageManagerTest extends ApplicationTest {
             stageManager.show(view);
             Stage stage = stageManager.getPrimaryStage();
 
-            Assert.assertEquals(view.getTitle(), stage.getTitle());
-            Assert.assertNotNull(stage.getIcons());
+            assertEquals(view.getTitle(), stage.getTitle());
+            assertNotNull(stage.getIcons());
         });
     }
   
@@ -126,10 +143,10 @@ public class StageManagerTest extends ApplicationTest {
     public void loadViewNodeHierarchy_NullView() {
         Platform.runLater(() -> {
             StageManager stageManager = new StageManager(new Stage());
-            RuntimeException exception = Assert.assertThrows(
+            RuntimeException exception = assertThrows(
                 RuntimeException.class, () -> stageManager.loadViewNodeHierarchy(null)
             );
-            Assert.assertTrue(exception.getMessage().contains("FXML View is null"));
+            assertTrue(exception.getMessage().contains("FXML View is null"));
         });
     }
   
@@ -138,10 +155,10 @@ public class StageManagerTest extends ApplicationTest {
         Platform.runLater(() -> {
             StageManager stageManager = new StageManager(new Stage());
             FXMLView view = FXMLView.TEST;
-            RuntimeException exception = Assert.assertThrows(
+            RuntimeException exception = assertThrows(
                 RuntimeException.class, () -> stageManager.loadViewNodeHierarchy(view)
             );
-            Assert.assertTrue(exception.getMessage().contains("Unable to load FXML view " + view.getFxmlName()));
+            assertTrue(exception.getMessage().contains("Unable to load FXML view " + view.getFxmlName()));
             
         });
     }
@@ -151,22 +168,31 @@ public class StageManagerTest extends ApplicationTest {
     public void logAndThrowException_NullMsg_NullException(String errorMsg, Exception exception, String expectedMsg) {
         Platform.runLater(() -> {
             StageManager stageManager = new StageManager(new Stage());
-            RuntimeException except = Assert.assertThrows(
+            RuntimeException except = assertThrows(
                 RuntimeException.class, () -> stageManager.logAndThrowException(errorMsg, exception)
             );
-            Assert.assertTrue(except.getMessage().contains(Util.getString(expectedMsg)));
+            assertTrue(except.getMessage().contains(Util.getString(expectedMsg)));
         });
     }
   
     private Object[] logAndThrowException_data() {
-        Exception properException = new Exception(Util.getString("properException"));
+        String eMsg = Util.getString("properException");
+        String propMsg = Util.getString("properMessage");
+
+        assumeNotNull(eMsg);
+        assumeFalse(eMsg.isBlank());
+
+        assumeNotNull(propMsg);
+        assumeFalse(propMsg.isBlank());
+
+        Exception properException = new Exception(eMsg);
         return new Object[] {
             new Object[] { null, null, "defaultMessage" },
             new Object[] { "", null, "defaultMessage" },
-            new Object[] { Util.getString("properMessage"), null,"properMessage" },
+            new Object[] { propMsg, null,"properMessage" },
             new Object[] { null, properException, "defaultMessage" },
             new Object[] { "", properException, "defaultMessage" },
-            new Object[] { Util.getString("properMessage"), properException, "properMessage" }
+            new Object[] { propMsg, properException, "properMessage" }
         };
     }
 }
