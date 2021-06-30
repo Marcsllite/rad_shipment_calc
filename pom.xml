@@ -7,6 +7,10 @@
     <artifactId>rad_shipment_calc</artifactId>
     <version>1.0.0</version>
 
+    <prerequisites>
+        <maven>3.6.3</maven>
+    </prerequisites>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11.0.2</maven.compiler.source>
@@ -18,6 +22,7 @@
         <junit.param.version>1.1.1</junit.param.version>
         <testfx.version>4.0.1-alpha</testfx.version>
         <sonar.version>3.9.0.2155</sonar.version>
+        <surefire.version>3.0.0-M5</surefire.version>
 
         <!-- Test Coverage -->
         <jacoco.percentages.min.instruct>0.85</jacoco.percentages.min.instruct>
@@ -90,6 +95,11 @@
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>${sonar.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
