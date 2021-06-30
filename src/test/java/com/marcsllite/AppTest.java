@@ -1,5 +1,9 @@
 package com.marcsllite;
 
+import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeNotNull;
+import static org.junit.Assume.assumeTrue;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -31,6 +35,9 @@ public class AppTest extends ApplicationTest {
     @Test
     public void setDefaultDir_MakeNewFolder() throws IOException {
         String name = Util.getString("appMainFolder");
+
+        assumeNotNull(name);
+
         String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + name;
         File directoryToBeDeleted = new File(path);
         
@@ -42,6 +49,9 @@ public class AppTest extends ApplicationTest {
     @Test
     public void setDefaultDir_FolderAlreadyExists() throws IOException {
         String name = Util.getString("appMainFolder");
+
+        assumeNotNull(name);
+
         String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + name;
         File toBeCreated = new File(path);
 
@@ -58,6 +68,8 @@ public class AppTest extends ApplicationTest {
     }
   
     private Object[] setDefaultDirException_data() {
+        assumeNotNull(Util.getString("appMainFolder"));
+
         String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + Util.getString("appMainFolder");
         return new Object[] {
             new Object[] { null, path },
@@ -68,14 +80,15 @@ public class AppTest extends ApplicationTest {
     @Test
     @Parameters(method = "setDataFolder_data")
     public void setDataFolderChecker(String osVersion, String expected) {
+        assumeNotNull(Util.getString(osVersion));
+
         App.setDataFolder(Util.getString(osVersion));
-        System.out.println("Util.getString(osVersion): " + Util.getString(osVersion));
         Assert.assertEquals(expected, App.getDataFolder());
     }
 
     private Object[] setDataFolder_data() {
-        System.out.println("System.getProperty(\"user.home\"): " + System.getProperty("user.home"));
-        System.out.println("Util.getString(\"appFolderName\"): " + Util.getString("appFolderName"));
+        assumeNotNull(Util.getString("appFolderName"));
+
         String winExp = System.getProperty("user.home") + File.separator +
                             "AppData" + File.separator +
                             "Local" + File.separator +
