@@ -51,13 +51,13 @@ public class AppTest extends ApplicationTest {
     }
   
     @Test
-    @Parameters(method = "setDefaultDir_data")
+    @Parameters(method = "setDefaultDirException_data")
     public void setDefaultDirChecker(String dirName, String expected) {
         App.setDefaultDir(dirName);
         Assert.assertEquals(expected, App.getDefaultDir());
     }
   
-    private Object[] setDefaultDir_data() {
+    private Object[] setDefaultDirException_data() {
         String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + Util.getString("appMainFolder");
         return new Object[] {
             new Object[] { null, path },
@@ -69,10 +69,13 @@ public class AppTest extends ApplicationTest {
     @Parameters(method = "setDataFolder_data")
     public void setDataFolderChecker(String osVersion, String expected) {
         App.setDataFolder(Util.getString(osVersion));
+        System.out.println("Util.getString(osVersion): " + Util.getString(osVersion));
         Assert.assertEquals(expected, App.getDataFolder());
     }
 
     private Object[] setDataFolder_data() {
+        System.out.println("System.getProperty(\"user.home\"): " + System.getProperty("user.home"));
+        System.out.println("Util.getString(\"appFolderName\"): " + Util.getString("appFolderName"));
         String winExp = System.getProperty("user.home") + File.separator +
                             "AppData" + File.separator +
                             "Local" + File.separator +
