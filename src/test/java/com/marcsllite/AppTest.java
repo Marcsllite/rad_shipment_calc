@@ -62,29 +62,34 @@ public class AppTest extends ApplicationTest {
         assertEquals(path, App.getDefaultDir());
     }
   
+    String mainName = Util.getString("appMainFolder");
+
     @Test
     @Parameters(method = "setDefaultDirException_data")
     public void setDefaultDirExceptionChecker(String dirName, String expected) {
+        assumeNotNull(mainName);
+        assumeFalse(mainName.isBlank());
+        
         App.setDefaultDir(dirName);
         assertEquals(expected, App.getDefaultDir());
     }
   
     private Object[] setDefaultDirException_data() {
-        String name = Util.getString("appMainFolder");
-
-        assumeNotNull(name);
-        assumeFalse(name.isBlank());
-
-        String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + name;
+        String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + mainName;
         return new Object[] {
             new Object[] { null, path },
             new Object[] { "", path }
         };
     }
+
+    String folderName = Util.getString("appFolderName");
   
     @Test
     @Parameters(method = "setDataFolder_data")
     public void setDataFolderChecker(String osVersion, String expected) {
+        assumeNotNull(folderName);
+        assumeFalse(folderName.isBlank());
+        
         String os = Util.getString(osVersion);
         
         if(osVersion != null && !osVersion.isBlank()) {
@@ -97,18 +102,13 @@ public class AppTest extends ApplicationTest {
     }
 
     private Object[] setDataFolder_data() {
-        String name = Util.getString("appFolderName");
-
-        assumeNotNull(name);
-        assumeFalse(name.isBlank());
-
         String winExp = System.getProperty("user.home") + File.separator +
                             "AppData" + File.separator +
                             "Local" + File.separator +
-                            name + File.separator +
+                            folderName + File.separator +
                             "logs";
         String otherExp = System.getProperty("user.home") + File.separator +
-                            name + File.separator +
+                            folderName + File.separator +
                             "logs";
         return new Object[] {
             new Object[] { "windows", winExp },

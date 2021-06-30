@@ -162,30 +162,35 @@ public class StageManagerTest extends ApplicationTest {
             
         });
     }
+
+    String propEx = Util.getString("properException");
+    String propMsg = Util.getString("properMessage");
   
     @Test
     @Parameters(method = "logAndThrowException_data")
     public void logAndThrowException_NullMsg_NullException(String errorMsg, Exception exception, String expectedMsg) {
         Platform.runLater(() -> {
+            assumeNotNull(propEx);
+            assumeFalse(propEx.isBlank());
+
+            assumeNotNull(propMsg);
+            assumeFalse(propMsg.isBlank());
+
             StageManager stageManager = new StageManager(new Stage());
             RuntimeException except = assertThrows(
                 RuntimeException.class, () -> stageManager.logAndThrowException(errorMsg, exception)
             );
-            assertTrue(except.getMessage().contains(Util.getString(expectedMsg)));
+            String eMsg = Util.getString(expectedMsg);
+
+            assumeNotNull(eMsg);
+            assumeFalse(eMsg.isBlank());
+
+            assertTrue(except.getMessage().contains(eMsg));
         });
     }
   
     private Object[] logAndThrowException_data() {
-        String eMsg = Util.getString("properException");
-        String propMsg = Util.getString("properMessage");
-
-        assumeNotNull(eMsg);
-        assumeFalse(eMsg.isBlank());
-
-        assumeNotNull(propMsg);
-        assumeFalse(propMsg.isBlank());
-
-        Exception properException = new Exception(eMsg);
+        Exception properException = new Exception(propEx);
         return new Object[] {
             new Object[] { null, null, "defaultMessage" },
             new Object[] { "", null, "defaultMessage" },
