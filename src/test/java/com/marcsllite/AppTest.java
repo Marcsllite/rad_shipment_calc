@@ -1,6 +1,7 @@
 package com.marcsllite;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeNotNull;
@@ -22,7 +23,9 @@ import junitparams.Parameters;
 
 @RunWith(JUnitParamsRunner.class)
 public class AppTest extends ApplicationTest {
-    public void start(Stage stage) throws Exception { }
+    App app = new App();
+
+    public void start(Stage stage) throws Exception { app.start(stage); }
   
     private boolean deleteDirectory(File directoryToBeDeleted) throws IOException {
         File[] allContents = directoryToBeDeleted.listFiles();
@@ -32,6 +35,17 @@ public class AppTest extends ApplicationTest {
         return directoryToBeDeleted.delete();
     }
   
+    @Test
+    public void setDefaultDir_InvalidName() throws IOException {
+        String name ="?.*.*.?";
+
+        RuntimeException exception = assertThrows(
+            RuntimeException.class, () -> App.setDefaultDir(name)
+        );
+        
+        assertTrue(exception.getMessage().contains("Failed to set up default directory"));
+    }
+
     @Test
     public void setDefaultDir_MakeNewFolder() throws IOException {
         String name ="Default Dir";

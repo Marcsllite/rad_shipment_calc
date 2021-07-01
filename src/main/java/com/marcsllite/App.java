@@ -65,13 +65,13 @@ public class App extends Application {
         String name = String.valueOf(FileSystemView.getFileSystemView().getDefaultDirectory().getPath()) + File.separator + dirName;
         var toBeCreated = new File(name);
         
-        if (toBeCreated.exists() || toBeCreated.mkdirs()) {
-            logr.info("%s directory was created", name);
-            defaultDir = name;
-        } else {
+        if (!toBeCreated.exists() && !toBeCreated.mkdirs()) {
             var e = new RuntimeException("Failed to set up default directory");
             logr.throwing(Level.FATAL, e);
             throw e;
+        } else {
+            logr.info("%s directory was created", name);
+            defaultDir = name;
         }
     }
 
