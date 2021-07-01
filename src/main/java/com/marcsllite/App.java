@@ -86,7 +86,10 @@ public class App extends Application {
     protected static void setDataFolder(String currentOS) {
         String dirLoc = null;
 
-        if(Util.getString("windows").equals(currentOS)) {
+        if(currentOS == null ||  currentOS.isBlank()) {
+            dataFolder = null;
+            return;
+        } else if(Util.getString("windows").equals(currentOS)) {
             dirLoc = System.getProperty("user.home") + File.separator +
                     "AppData" + File.separator +
                     "Local" + File.separator +
