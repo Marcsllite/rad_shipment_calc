@@ -64,7 +64,7 @@ public class AppTest extends ApplicationTest {
     }
   
     private Object[] setDefaultDirException_data() {
-        String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + "Shipment Calculator";
+        String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + Util.getString("appMainFolder");
         return new Object[] {
             new Object[] { null, path },
             new Object[] { "", path }
@@ -76,19 +76,21 @@ public class AppTest extends ApplicationTest {
     @Test
     @Parameters(method = "setDataFolder_data")
     public void setDataFolderChecker(String osVersion, String expected) {
+        assumeNotNull(folderName);
+        assumeFalse(folderName.isBlank());
+
         App.setDataFolder(osVersion);
         assertEquals(expected, App.getDataFolder());
     }
 
     private Object[] setDataFolder_data() {
-        String name = "UMass Lowell Radiation Safety";
         String winExp = System.getProperty("user.home") + File.separator +
                             "AppData" + File.separator +
                             "Local" + File.separator +
-                            name + File.separator +
+                            folderName + File.separator +
                             "logs";
         String otherExp = System.getProperty("user.home") + File.separator +
-                            name + File.separator +
+                            folderName + File.separator +
                             "logs";
         return new Object[] {
             new Object[] { "Windows", winExp },
