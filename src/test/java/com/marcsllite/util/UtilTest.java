@@ -10,19 +10,13 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.marcsllite.App;
-
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
 
 import org.junit.Test;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.testfx.framework.junit.ApplicationTest;
 
@@ -33,19 +27,6 @@ import junitparams.Parameters;
 @RunWith(JUnitParamsRunner.class)
 public class UtilTest extends ApplicationTest {
     public void start(Stage arg0) throws Exception {}
-
-    Application app;
-
-    @Before
-    public void beforeEachTest() throws Exception {
-        ApplicationTest.launch(App.class, new String[0]);
-    }
-  
-    @After
-    public void afterEachTest() throws Exception {
-        release(new KeyCode[0]);
-        release(new MouseButton[0]);
-    }
 
     @Test
     @Parameters(method = "setPropException_data")

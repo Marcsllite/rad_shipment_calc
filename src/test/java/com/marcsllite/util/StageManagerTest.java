@@ -7,20 +7,14 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeNotNull;
 
-import com.marcsllite.App;
 import com.marcsllite.PrimaryController;
 import com.marcsllite.SecondaryController;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 
 import javafx.application.Platform;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -36,18 +30,6 @@ public class StageManagerTest extends ApplicationTest {
     }
   
     public void start(Stage stage) throws Exception {}
-  
-    @Before
-    public void beforeEachTest() throws Exception {
-        ApplicationTest.launch(App.class, new String[0]);
-    }
-  
-    @After
-    public void afterEachTest() throws Exception {
-        FxToolkit.hideStage();
-        release(new KeyCode[0]);
-        release(new MouseButton[0]);
-    }
   
     @Test
     public void switchScene_NullView() {
