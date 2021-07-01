@@ -37,7 +37,7 @@ public class AppTest extends ApplicationTest {
   
     @Test
     public void setDefaultDir_InvalidName() throws IOException {
-        String name ="?.*.*.?";
+        String name ="?.\"*.*.?";
 
         RuntimeException exception = assertThrows(
             RuntimeException.class, () -> App.setDefaultDir(name)
