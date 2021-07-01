@@ -34,10 +34,7 @@ public class AppTest extends ApplicationTest {
   
     @Test
     public void setDefaultDir_MakeNewFolder() throws IOException {
-        String name = Util.getString("appMainFolder");
-
-        assumeNotNull(name);
-        assumeFalse(name.isBlank());
+        String name ="Default Dir";
 
         String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + name;
         File directoryToBeDeleted = new File(path);
@@ -49,10 +46,7 @@ public class AppTest extends ApplicationTest {
   
     @Test
     public void setDefaultDir_FolderAlreadyExists() throws IOException {
-        String name = Util.getString("appMainFolder");
-
-        assumeNotNull(name);
-        assumeFalse(name.isBlank());
+        String name ="Default Dir";
 
         String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + name;
         File toBeCreated = new File(path);
@@ -61,21 +55,16 @@ public class AppTest extends ApplicationTest {
         App.setDefaultDir(name);
         assertEquals(path, App.getDefaultDir());
     }
-  
-    String mainName = Util.getString("appMainFolder");
 
     @Test
     @Parameters(method = "setDefaultDirException_data")
     public void setDefaultDirExceptionChecker(String dirName, String expected) {
-        assumeNotNull(mainName);
-        assumeFalse(mainName.isBlank());
-        
         App.setDefaultDir(dirName);
         assertEquals(expected, App.getDefaultDir());
     }
   
     private Object[] setDefaultDirException_data() {
-        String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + mainName;
+        String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + "Shipment Calculator";
         return new Object[] {
             new Object[] { null, path },
             new Object[] { "", path }
@@ -87,34 +76,25 @@ public class AppTest extends ApplicationTest {
     @Test
     @Parameters(method = "setDataFolder_data")
     public void setDataFolderChecker(String osVersion, String expected) {
-        assumeNotNull(folderName);
-        assumeFalse(folderName.isBlank());
-        
-        String os = Util.getString(osVersion);
-        
-        if(osVersion != null && !osVersion.isBlank()) {
-            assumeNotNull(os);
-            assumeFalse(os.isBlank());
-        }
-
-        App.setDataFolder(os);
+        App.setDataFolder(osVersion);
         assertEquals(expected, App.getDataFolder());
     }
 
     private Object[] setDataFolder_data() {
+        String name = "UMass Lowell Radiation Safety";
         String winExp = System.getProperty("user.home") + File.separator +
                             "AppData" + File.separator +
                             "Local" + File.separator +
-                            folderName + File.separator +
+                            name + File.separator +
                             "logs";
         String otherExp = System.getProperty("user.home") + File.separator +
-                            folderName + File.separator +
+                            name + File.separator +
                             "logs";
         return new Object[] {
-            new Object[] { "windows", winExp },
-            new Object[] { "mac", otherExp },
-            new Object[] { "unix", otherExp },
-            new Object[] { "solaris", otherExp },
+            new Object[] { "Windows", winExp },
+            new Object[] { "MAC", otherExp },
+            new Object[] { "Unix", otherExp },
+            new Object[] { "Solaris", otherExp },
             new Object[] { null, null },
             new Object[] { "", null }
         };

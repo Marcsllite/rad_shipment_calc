@@ -70,7 +70,7 @@ public class StageManagerTest extends ApplicationTest {
     }
   
     @Test
-    public void getController_SeconaryFxml() {
+    public void getController_SecondaryFxml() {
         Platform.runLater(() -> {
             StageManager stageManager = new StageManager(new Stage());
             stageManager.switchScene(FXMLView.SECONDARY);

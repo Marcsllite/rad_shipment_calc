@@ -19,6 +19,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javafx.event.EventHandler;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.input.KeyCode;
 
