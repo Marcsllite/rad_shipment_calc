@@ -44,7 +44,7 @@ public class StageManager {
     show(view);
   }
   
-  public <T> T getController() { return (T) this.fxmlLoader.getController(); }
+  public <T> T getController() { return this.fxmlLoader.getController(); }
   
   protected void show(FXMLView view) throws RuntimeException {
     if (view == null)

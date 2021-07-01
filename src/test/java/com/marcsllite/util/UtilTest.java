@@ -1,6 +1,8 @@
 package com.marcsllite.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
@@ -8,7 +10,19 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.marcsllite.App;
+
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBase;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
+
 import org.junit.Test;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.testfx.framework.junit.ApplicationTest;
 
@@ -19,6 +33,19 @@ import junitparams.Parameters;
 @RunWith(JUnitParamsRunner.class)
 public class UtilTest extends ApplicationTest {
     public void start(Stage arg0) throws Exception {}
+
+    Application app;
+
+    @Before
+    public void beforeEachTest() throws Exception {
+        ApplicationTest.launch(App.class, new String[0]);
+    }
+  
+    @After
+    public void afterEachTest() throws Exception {
+        release(new KeyCode[0]);
+        release(new MouseButton[0]);
+    }
 
     @Test
     @Parameters(method = "setPropException_data")
@@ -220,5 +247,104 @@ public class UtilTest extends ApplicationTest {
             new Object[] { "invalid/path", "" },
             new Object[] { "/text/test.txt", "This File is For Testing A Main Function\n" }
         };
+    }
+
+    @Test
+    public void fireBtnOnEnter_NullBtn() {
+        InvalidParameterException exception = assertThrows(
+            InvalidParameterException.class, () -> Util.fireBtnOnEnter(null)
+        );
+        assertTrue(exception.getMessage().contains("button base cannot be null"));
+    }
+
+    ButtonBase btnBase;
+    Button btn2;
+    SimpleStringProperty stringProperty;
+
+    @Test
+    public void fireBtnOnEnter_SpaceKey_Focused() {
+        Platform.runLater(() -> {
+            stringProperty = new SimpleStringProperty();
+            btnBase = new Button();
+
+            btnBase.setOnAction(
+                (event) -> stringProperty.set("button was fired")
+            );
+
+            Util.fireBtnOnEnter(btnBase);
+
+            btnBase.requestFocus();
+
+            press(KeyCode.SPACE);
+
+            assertNotNull(btnBase.getOnKeyPressed());
+            assertNull(stringProperty.get());
+        });
+    }
+
+    @Test
+    public void fireBtnOnEnter_SpaceKey_NotFocused() {
+        Platform.runLater(() -> {
+            stringProperty = new SimpleStringProperty();
+            btnBase = new Button();
+            btn2 = new Button();
+
+            btnBase.setOnAction(
+                (event) -> stringProperty.set("button was fired")
+            );
+
+            Util.fireBtnOnEnter(btnBase);
+            
+            btn2.requestFocus();
+            
+            press(KeyCode.SPACE);
+
+            assertNotNull(btnBase.getOnKeyPressed());
+            assertNull(stringProperty.get());
+        });
+    }
+
+    @Test
+    public void fireBtnOnEnter_EnterKey_Focused() {
+        Platform.runLater(() -> {
+            stringProperty = new SimpleStringProperty();
+            btnBase = new Button();
+
+            String msg = "button was fired";
+            btnBase.setOnAction(
+                (event) -> stringProperty.set("button was fired")
+            );
+
+            Util.fireBtnOnEnter(btnBase);
+
+            btnBase.requestFocus();
+        
+            press(KeyCode.ENTER);
+
+            assertNotNull(btnBase.getOnKeyPressed());
+            assertEquals(msg, stringProperty.get());
+        });
+    }
+
+    @Test
+    public void fireBtnOnEnter_EnterKey_NotFocused() {
+        Platform.runLater(() -> {
+            stringProperty = new SimpleStringProperty();
+            btnBase = new Button();
+            btn2 = new Button();
+
+            btnBase.setOnAction(
+                (event) -> stringProperty.set("button was fired")
+            );
+
+            Util.fireBtnOnEnter(btnBase);
+
+            btn2.requestFocus();
+
+            press(KeyCode.ENTER);
+
+            assertNotNull(btnBase.getOnKeyPressed());
+            assertNull(stringProperty.get());
+        });
     }
 }

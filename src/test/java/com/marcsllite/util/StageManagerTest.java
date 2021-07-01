@@ -19,6 +19,8 @@ import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 
 import javafx.application.Platform;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -43,8 +45,8 @@ public class StageManagerTest extends ApplicationTest {
     @After
     public void afterEachTest() throws Exception {
         FxToolkit.hideStage();
-        release(new javafx.scene.input.KeyCode[0]);
-        release(new javafx.scene.input.MouseButton[0]);
+        release(new KeyCode[0]);
+        release(new MouseButton[0]);
     }
   
     @Test

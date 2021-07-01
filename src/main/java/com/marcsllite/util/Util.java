@@ -19,6 +19,9 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javafx.scene.control.ButtonBase;
+import javafx.scene.input.KeyCode;
+
 public final class Util {
     private static final Logger logr = LogManager.getLogger();
     private static String os;
@@ -267,5 +270,33 @@ public final class Util {
         }
 
         return ret;
+    }
+
+    /**
+     * Helper function to allow the given buttonBase to be fired
+     * when the enter key is pressed and the buttonBase is in focus
+     * 
+     * Valid ButtonBases:
+     *      MenuBarButton
+     *      IndicatorButton
+     *      Button
+     *      CheckBox
+     *      Hyperlink
+     *      MenuButton
+     *      RadioButton
+     *      SplitMenuButton
+     *      ToggleButton
+     *
+     * @param btnBase the btnBase to add the listener to
+     */
+    public static void fireBtnOnEnter(ButtonBase btnBase) throws InvalidParameterException {
+        if(btnBase == null) throw new InvalidParameterException("button base cannot be null");
+
+        btnBase.setOnKeyPressed(
+            event -> {
+                if(event.getCode() == KeyCode.ENTER && btnBase.isFocused())
+                    btnBase.fire();
+            }
+        );
     }
 }
