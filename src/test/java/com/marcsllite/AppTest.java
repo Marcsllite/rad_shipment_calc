@@ -74,6 +74,20 @@ public class AppTest extends ApplicationTest {
     String folderName = Util.getString("appFolderName");
   
     @Test
+    @Parameters(method = "setDataFolderException_data")
+    public void setDataFolderExceptionChecker(String osVersion, String expected) {
+        App.setDataFolder(osVersion);
+        assertEquals(expected, App.getDataFolder());
+    }
+
+    private Object[] setDataFolderException_data() {
+        return new Object[] {
+            new Object[] { null, null },
+            new Object[] { "", null }
+        };
+    }
+
+    @Test
     @Parameters(method = "setDataFolder_data")
     public void setDataFolderChecker(String osVersion, String expected) {
         assumeNotNull(folderName);
@@ -96,9 +110,7 @@ public class AppTest extends ApplicationTest {
             new Object[] { "Windows", winExp },
             new Object[] { "MAC", otherExp },
             new Object[] { "Unix", otherExp },
-            new Object[] { "Solaris", otherExp },
-            new Object[] { null, null },
-            new Object[] { "", null }
+            new Object[] { "Solaris", otherExp }
         };
     }
 }
