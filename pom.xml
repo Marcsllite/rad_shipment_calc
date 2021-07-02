@@ -25,7 +25,7 @@
         <!-- Test Coverage -->
         <jacoco.percentages.min.instruct>0.85</jacoco.percentages.min.instruct>
         <jacoco.percentages.min.line>0.85</jacoco.percentages.min.line>
-        <jacoco.percentages.min.branch>0.85</jacoco.percentages.min.branch>
+        <jacoco.percentages.min.branch>0.80</jacoco.percentages.min.branch>
         <jacoco.percentages.min.complex>0.85</jacoco.percentages.min.complex>
         <jacoco.percentages.min.method>0.85</jacoco.percentages.min.method>
         <jacoco.missed.count.class>0</jacoco.missed.count.class>
