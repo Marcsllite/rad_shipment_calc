@@ -3,6 +3,7 @@ package com.marcsllite;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeNotNull;
 
@@ -40,9 +41,7 @@ public class AppTest extends ApplicationTest {
         String os = System.getProperty("os.name").toLowerCase();
 
         // linux has no bad names
-        assumeFalse(os.contains("nix"));
-        assumeFalse(os.contains("nux"));
-        assumeFalse(os.contains("aix"));
+        assumeTrue(os.contains("win"));
 
         String name ="?.\"*.*.?";
 
