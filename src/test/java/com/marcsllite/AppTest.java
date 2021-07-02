@@ -37,6 +37,13 @@ public class AppTest extends ApplicationTest {
   
     @Test
     public void setDefaultDir_InvalidName() throws IOException {
+        String os = System.getProperty("os.name").toLowerCase();
+
+        // linux has no bad names
+        assumeFalse(os.contains("nix"));
+        assumeFalse(os.contains("nux"));
+        assumeFalse(os.contains("aix"));
+
         String name ="?.\"*.*.?";
 
         RuntimeException exception = assertThrows(
