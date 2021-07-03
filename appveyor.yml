@@ -39,7 +39,9 @@ environment:
 
 # build cache to preserve files/folders between builds
 cache:
-
+  - C:\maven\ -> pom.xml
+  - C:\Users\appveyor\.m2\ -> pom.xml
+  - $HOME/.m2 -> pom.xml
 
 # enable service required for build/tests
 services:
@@ -54,6 +56,7 @@ platform: Any CPU
 # build Configuration, i.e. Debug, Release, etc.
 configuration: Debug
 
+build:
   # MSBuild verbosity level
   verbosity: detailed
 
@@ -63,7 +66,7 @@ before_build:
 # to run your custom scripts instead of automatic MSBuild
 build_script:
   - mvn clean verify
-  
+
 # scripts to run after build (working directory and environment changes are persisted from the previous steps)
 after_build:
 
