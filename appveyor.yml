@@ -17,95 +17,119 @@ only_commits:
   message: /build/                # Start a new build if message contains 'build'
   author: marcsllite@gmail.com        # Start a new build for commit of given user
 
-# Maximum number of concurrent jobs for the project
-max_jobs: 1
-
 #---------------------------------#
 #    environment configuration    #
 #---------------------------------#
 
-image:
-  - Visual Studio 2019
-  - Ubuntu
-  - macOS
-
 # environment variables
 environment:
-  # this is how to set encrypted variable. Go to "Settings" -> "Encrypt YAML" page in account menu to encrypt data.
   my_variable:
     secure: SikYTKBlWZ9T6Ep9yw85sLN3+5ryqKyc8YzjTZgnK5adhMWMPvme0gMrLTgtG8ah
+  matrix:
+    - job_name: Windows build
+      appveyor_build_worker_image: Visual Studio 2019
 
+    - job_name: Linux build
+      appveyor_build_worker_image: Ubuntu
 
+    - job_name: Mac build
+      appveyor_build_worker_image: macOs
 
-# build cache to preserve files/folders between builds
-cache:
-  - C:\maven\ -> pom.xml
-  - C:\Users\appveyor\.m2\ -> pom.xml
-  - $HOME/.m2 -> pom.xml
+matrix:
+  fast_finish: true
 
-# enable service required for build/tests
-services:
+for:
+  # WINDOWS BUILD #
+  -
+    matrix:
+      only:
+        - job_name: Windows build
+    
+    install:
+
+    build:
+      verbosity: detailed
+
+    build_script:
+      - cmd: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+
+    test_script:
+      - cmd: mvn clean verify
+
+    on_success:
+      - cmd: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe 
+            -Outfile codecov.exe 
+            .\codecov.exe
+
+    on_failure:
+      - cmd: mvn clean verify -e -X
+
+    cache:
+      - C:\maven\ -> pom.xml
+      - C:\Users\appveyor\.m2\ -> pom.xml
+  
+  # LINUX BUILD #
+  -
+    matrix:
+      only:
+        - job_name: Linux build
+        
+    install:
+
+    build_script:
+      - sh: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+
+    test_script:
+      - sh: mvn clean verify
+
+    on_success:
+      - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov 
+            chmod +x codecov
+            ./codecov
+
+    on_failure:
+      - sh: mvn clean verify -e -X
+
+    cache:
+      - $HOME/.m2 -> pom.xml
+  
+  # MAC BUILD #
+  -
+    matrix:
+      only:
+        - job_name: Mac build
+    
+    install:
+
+    build_script:
+      - sh: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+
+    test_script:
+      - sh: mvn clean verify
+
+    on_success:
+      - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov
+            chmod +x codecov 
+            ./codecov
+    
+    on_failure:
+      - sh: mvn clean verify -e -X
+
+    cache:
+      - $HOME/.m2 -> pom.xml
 
 #---------------------------------#
 #       build configuration       #
 #---------------------------------#
 
-# build platform, i.e. x86, x64, Any CPU. This setting is optional.
-platform: Any CPU
-
 # build Configuration, i.e. Debug, Release, etc.
 configuration: Debug
-
-build:
-  # MSBuild verbosity level
-  verbosity: detailed
-
-# scripts to run before build
-before_build:
-
-# to run your custom scripts instead of automatic MSBuild
-build_script:
-  - mvn clean verify
-
-# scripts to run after build (working directory and environment changes are persisted from the previous steps)
-after_build:
-
-# scripts to run *after* solution is built and *before* automatic packaging occurs (web apps, NuGet packages, Azure Cloud Services)
-before_package:
-
-#---------------------------------#
-#       tests configuration       #
-#---------------------------------#
-
-# scripts to run before tests (working directory and environment changes are persisted from the previous steps such as "before_build")
-before_test:
-
-# to run your custom scripts instead of automatic tests
-test_script:
-
-# scripts to run after tests
-after_test:
 
 #---------------------------------#
 #     deployment configuration    #
 #---------------------------------#
 
-# to disable deployment
 deploy: off
-
-#---------------------------------#
-#        global handlers          #
-#---------------------------------#
-
-# on successful build
-on_success:
-  - bash <(curl -s https://codecov.io/bash)
-
-# on build failure
-on_failure:
-
-# after build failure or success
-on_finish:
 
 #---------------------------------#
 #         notifications           #
@@ -117,6 +141,4 @@ notifications:
   - provider: Email
     to:
       - marcsllite@gmail.com
-    subject: 'Build {{status}}'                  # optional
-    message: "{{message}}, {{commitId}}, ..."    # optional
     on_build_status_changed: true
