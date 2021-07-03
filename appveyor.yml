@@ -61,10 +61,7 @@ for:
       - set PATH=%JDK_HOME%;%JDK_HOME%\bin;%PATH%
 
     build_script:
-      - cmd: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-
-    test_script:
-      - cmd: mvn clean verify -e -X
+      - cmd: mvn clean verify
 
     on_success:
       - cmd: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe 
