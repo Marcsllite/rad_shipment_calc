@@ -46,7 +46,7 @@ for:
         - job_name: Windows build
     
     install:
-      ps: choco install -y jdk11 && choco install maven --version=3.6.3
+      ps: choco install -y jdk11;  choco install maven --version=3.6.3
 
     build_script:
       - cmd: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
