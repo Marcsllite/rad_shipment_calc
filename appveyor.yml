@@ -45,8 +45,8 @@ for:
       only:
         - job_name: Windows build
     
-    install:
-      ps: choco install -y openjdk11; refreshenv; choco install maven --version=3.6.3
+    init:
+      ps: choco install -y openjdk11; refreshenv; choco install maven --version=3.6.3; refreshenv
 
     build_script:
       - cmd: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
@@ -60,7 +60,7 @@ for:
             .\codecov.exe
 
     cache:
-      - C:\maven\ -> pom.xml
+      - C:\ProgramData\chocolatey\lib\maven -> pom.xml
       - C:\Users\appveyor\.m2\ -> pom.xml
   
   # LINUX BUILD #
