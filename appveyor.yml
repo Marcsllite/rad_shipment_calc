@@ -46,7 +46,10 @@ for:
         - job_name: Windows build
     
     init:
-      ps: choco install -y openjdk11; refreshenv; choco install maven --version=3.6.3; refreshenv
+      ps: choco install -y openjdk11; 
+          C:\ProgramData\chocolatey\bin\RefreshEnv;
+          choco upgrade -y maven --version=3.6.3;
+          C:\ProgramData\chocolatey\bin\RefreshEnv
 
     build_script:
       - cmd: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
