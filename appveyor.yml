@@ -28,6 +28,8 @@ environment:
   matrix:
     - job_name: Windows build
       appveyor_build_worker_image: Visual Studio 2019
+      JDK_11: C:\Program Files\OpenJDK\openjdk-11.0.11_9
+      MAVEN_363: C:\ProgramData\chocolatey\lib\maven
 
     - job_name: Linux build
       appveyor_build_worker_image: Ubuntu
@@ -51,6 +53,13 @@ for:
           choco upgrade -y maven --version=3.6.3;
           C:\ProgramData\chocolatey\bin\RefreshEnv
 
+    install:
+      - set JDK_HOME=%JDK_11%
+      # JAVA_HOME is used by Maven
+      - set JAVA_HOME=%JDK_11%
+      - set MAVEN_HOME=%MAVEN_363%
+      - set PATH=%JDK_HOME%;%JDK_HOME%\bin;%PATH%
+
     build_script:
       - cmd: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
@@ -63,8 +72,8 @@ for:
             .\codecov.exe
 
     cache:
-      - C:\ProgramData\chocolatey\lib\maven -> pom.xml
-      - C:\Users\appveyor\.m2\ -> pom.xml
+      - '%MAVEN_HOME% -> pom.xml'
+      - '%UserProfile%\.m2 -> pom.xml'
   
   # LINUX BUILD #
   -
