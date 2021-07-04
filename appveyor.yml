@@ -79,7 +79,7 @@ for:
         - job_name: Linux build
 
     install:
-      - sh: ls /usr/lib/jvm 
+      - sh: sudo update-alternatives --config java
 
     build: off
 
