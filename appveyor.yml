@@ -61,7 +61,7 @@ for:
 
     test_script:
       - ps: $wc = New-Object 'System.Net.WebClient';
-            $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path $env:APPVEYOR_BUILD_FOLDER\target\site\jacoco.xml))
+            $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\target\site\jacoco\jacoco.xml))
 
     on_success:
       - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
@@ -78,7 +78,7 @@ for:
         - job_name: Linux build
 
     install:
-      - sh: sudo update-java-alternatives -s $LINUX_JDK &&
+      - sh: update-java-alternatives -s $LINUX_JDK &&
             export JAVA_HOME=/usr/lib/jvm/$LINUX_JDK/ &&
             export PATH=$PATH:$JAVA_HOME
 
