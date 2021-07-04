@@ -67,7 +67,7 @@ for:
 
     on_success:
       - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
-            .\codecov.exe -t %CODECOV_TOKEN%
+            .\codecov.exe -t $CODECOV_TOKEN
 
     cache:
       - '%MAVEN_HOME% -> pom.xml'
