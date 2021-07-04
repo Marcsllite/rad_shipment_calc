@@ -33,11 +33,11 @@ environment:
     - job_name: Linux build
       appveyor_build_worker_image: Ubuntu2004
 
-    - job_name: Windows build
-      appveyor_build_worker_image: Visual Studio 2019
+    # - job_name: Windows build
+    #   appveyor_build_worker_image: Visual Studio 2019
 
-    - job_name: Mac build
-      appveyor_build_worker_image: macOs
+    # - job_name: Mac build
+    #   appveyor_build_worker_image: macOs
 
 matrix:
   fast_finish: true
@@ -79,7 +79,8 @@ for:
 
     install:
       - sh: java -version && mvn -v &&
-            update-alternatives --list java
+            update-alternatives --set java /usr/lib/jvm/java-11-openjdk-amd64/bin/java &&
+            java -version
 
     build: off
 
