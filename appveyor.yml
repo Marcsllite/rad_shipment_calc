@@ -81,7 +81,6 @@ for:
     install:
       - sh: java -version &&
             sudo update-alternatives --set java /usr/lib/jvm/$LINUX_JDK/bin/java &&
-            sudo update-java-alternatives -s $LINUX_JDK &&
             export JAVA_HOME=/usr/lib/jvm/$LINUX_JDK/ &&
             export PATH=$PATH:$JAVA_HOME
             java -version
