@@ -81,7 +81,6 @@ for:
       - sh: java -version &&
             export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 &&
             sudo update-alternatives --set java $JAVA_HOME/bin/java &&
-            export PATH=$JAVA_HOME/bin:$PATH
             java -version
 
     build: off
