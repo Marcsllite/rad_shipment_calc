@@ -25,7 +25,6 @@ only_commits:
 environment:
   MAVEN_VERSION: 3.6.3
   WIN_JDK: C:\Program Files\Java\jdk11
-  LINUX_JDK: java-11-openjdk-amd64
   GITHUB_TOKEN:
     secure: SikYTKBlWZ9T6Ep9yw85sLN3+5ryqKyc8YzjTZgnK5adhMWMPvme0gMrLTgtG8ah
   CODECOV_TOKEN:
@@ -80,9 +79,9 @@ for:
 
     install:
       - sh: java -version &&
-            sudo update-alternatives --set java /usr/lib/jvm/$LINUX_JDK/bin/java &&
-            export JAVA_HOME=/usr/lib/jvm/$LINUX_JDK/ &&
-            export PATH=$PATH:$JAVA_HOME
+            export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 &&
+            sudo update-alternatives --set java $JAVA_HOME/bin/java &&
+            export PATH=$JAVA_HOME:$JAVA_HOME/bin:$PATH
             java -version
 
     build: off
