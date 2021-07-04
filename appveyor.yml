@@ -33,11 +33,11 @@ environment:
     - job_name: Linux build
       appveyor_build_worker_image: Ubuntu2004
 
-    # - job_name: Windows build
-    #   appveyor_build_worker_image: Visual Studio 2019
+    - job_name: Windows build
+      appveyor_build_worker_image: Visual Studio 2019
 
-    # - job_name: Mac build
-    #   appveyor_build_worker_image: macOs
+    - job_name: Mac build
+      appveyor_build_worker_image: macOs
 
 matrix:
   fast_finish: true
@@ -86,21 +86,17 @@ for:
     # test_script:
     #   - sh: |
     #       find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
-
+    
     # on_success:
     #   - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov &&
     #         chmod +x codecov &&
     #         ./codecov -t $CODECOV_TOKEN
 
-    cache:
-      - $HOME/.m2 -> pom.xml
+    # cache:
+    #   - $HOME/.m2 -> pom.xml
   
   # MAC BUILD #
   # -
-  #   matrix:
-  #     only:
-  #       - job_name: Mac build
--
   #   matrix:
   #     only:
   #       - job_name: Mac build
@@ -114,17 +110,6 @@ for:
   #   test_script:
   #     - sh: |
   #         find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
-
-  #   on_success:
-  #     - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov &&
-  #           chmod +x codecov &&
-  #           ./codecov -t $CODECOV_TOKEN
-
-  #   cache:
-  #     - $HOME/.m2 -> pom.xml
-  #     - sh: |
-  #         find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
-
   #   on_success:
   #     - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov &&
   #           chmod +x codecov &&
