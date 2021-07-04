@@ -61,7 +61,7 @@ for:
 
     test_script:
       - ps: $wc = New-Object 'System.Net.WebClient';
-            $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\target\site\jacoco.xml))
+            $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path $env:APPVEYOR_BUILD_FOLDER\target\site\jacoco.xml))
 
     on_success:
       - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
@@ -104,7 +104,7 @@ for:
 
     install:
       sh: export JAVA_HOME=`/usr/libexec/java_home -v 11` &&
-          brew install maven@3.6.3
+          brew install maven
 
     build_script:
       - sh: mvn clean verify
