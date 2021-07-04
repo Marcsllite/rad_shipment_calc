@@ -30,11 +30,11 @@ environment:
   CODECOV_TOKEN:
     secure: zQd1mZd+Bl9Ev/rUgtx5eozOVW79Hcpp2+a8U01ij4hESsUrYJIuK29ZPmlmS3ql
   matrix:
-    - job_name: Windows build
-      appveyor_build_worker_image: Visual Studio 2019
-
     - job_name: Linux build
       appveyor_build_worker_image: Ubuntu2004
+
+    - job_name: Windows build
+      appveyor_build_worker_image: Visual Studio 2019
 
     - job_name: Mac build
       appveyor_build_worker_image: macOs
@@ -79,8 +79,12 @@ for:
 
     stack: jdk 11
 
-    build_script:
-      - sh: mvn clean verify
+    install:
+      - sh: sudo apt update && sudo apt upgrade &&
+            java -v &&
+            maven -v
+
+    build: off
 
     test_script:
       - sh: |
