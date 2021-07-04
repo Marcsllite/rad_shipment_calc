@@ -79,7 +79,7 @@ for:
         - job_name: Linux build
 
     install:
-      - sh: java -version
+      - sh: ls usr/lib/jvm 
 
     build: off
 
