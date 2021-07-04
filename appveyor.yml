@@ -68,8 +68,7 @@ matrix:
   fast_finish: false
 
 install:
-    - sh: sudo update-alternatives --set java $JAVA_HOME/bin/java && 
-          sudo apt update && 
+    - sh: sudo apt update && 
           sudo apt install -y default-jdk && 
           java -version &&
           javac -version &&
@@ -112,27 +111,27 @@ build: off
   #     only:
   #       - job_name: Linux build
 
-    # install:
-    #   - sh: sudo update-alternatives --set java $JAVA_HOME/bin/java && 
-    #         sudo apt update && 
-    #         sudo apt install -y default-jdk && 
-    #         java -version &&
-    #         javac -version &&
-    #         echo $JAVA_HOME
+  #   install:
+  #     - sh: sudo update-alternatives --set java $JAVA_HOME/bin/java && 
+  #           sudo apt update && 
+  #           sudo apt install -y default-jdk && 
+  #           java -version &&
+  #           javac -version &&
+  #           echo $JAVA_HOME
 
-    # build: off
+  #   build: off
 
-    # test_script:
-    #   - sh: |
-    #       find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
+  #   test_script:
+  #     - sh: |
+  #         find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
     
-    # on_success:
-    #   - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov &&
-    #         chmod +x codecov &&
-    #         ./codecov -t $CODECOV_TOKEN
+  #   on_success:
+  #     - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov &&
+  #           chmod +x codecov &&
+  #           ./codecov -t $CODECOV_TOKEN
 
-    # cache:
-    #   - $HOME/.m2 -> pom.xml
+  #   cache:
+  #     - $HOME/.m2 -> pom.xml
   
   # MAC BUILD #
   # -
