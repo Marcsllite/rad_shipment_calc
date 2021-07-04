@@ -62,7 +62,7 @@ for:
     test_script:
       - ps: $wc = New-Object 'System.Net.WebClient';
             foreach($file in get-childItem $env:APPVEYOR_BUILD_FOLDER/target/surefire-reports -include TEST-*.xml -name) { `
-              $name = (get-item $file).FullName `
+              $name = (get-item $file).FullName; `
               $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path .\target\site\jacoco\$name)); }
 
     on_success:
@@ -80,7 +80,7 @@ for:
         - job_name: Linux build
 
     install:
-      - sh: sudo apt-get install openjdk-11-jdk
+      - sh: sudo apt-get -y install openjdk-11-jdk
 
     build_script:
       - sh: mvn clean verify
