@@ -25,7 +25,7 @@ only_commits:
 environment:
   MAVEN_VERSION: 3.6.3
   WIN_JDK: C:\Program Files\Java\jdk11
-  LINUX_JDK: java-1.11.0-openjdk-amd64
+  LINUX_JDK: java-11-openjdk-amd64
   GITHUB_TOKEN:
     secure: SikYTKBlWZ9T6Ep9yw85sLN3+5ryqKyc8YzjTZgnK5adhMWMPvme0gMrLTgtG8ah
   CODECOV_TOKEN:
@@ -62,8 +62,7 @@ for:
     test_script:
       - ps: $wc = New-Object 'System.Net.WebClient';
             foreach($file in get-childItem $env:APPVEYOR_BUILD_FOLDER/target/surefire-reports -include TEST-*.xml -name) { `
-              $name = (get-item $file).FullName; `
-              $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path .\target\site\jacoco\$name)); }
+              $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path .\target\site\jacoco\$file)); }
 
     on_success:
       - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
@@ -80,7 +79,10 @@ for:
         - job_name: Linux build
 
     install:
-      - sh: sudo apt-get -y install openjdk-11-jdk
+      - sh: sudo apt-get -y install openjdk-11-jdk &&
+            sudo update-java-alternatives -s $LINUX_JDK &&
+            export JAVA_HOME=/usr/lib/jvm/$LINUX_JDK/ &&
+            export PATH=$PATH:$JAVA_HOME
 
     build_script:
       - sh: mvn clean verify
