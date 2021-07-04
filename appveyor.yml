@@ -78,15 +78,16 @@ for:
         - job_name: Linux build
 
     install:
-      - sh: update-java-alternatives -s $LINUX_JDK &&
-            export JAVA_HOME=/usr/lib/jvm/$LINUX_JDK/ &&
-            export PATH=$PATH:$JAVA_HOME
+      - sh: update-java-alternatives -l
+      # - sh: sudo update-java-alternatives -s $LINUX_JDK &&
+      #       export JAVA_HOME=/usr/lib/jvm/$LINUX_JDK/ &&
+      #       export PATH=$PATH:$JAVA_HOME
 
     build_script:
       - sh: mvn clean verify
 
     test_script:
-      - sh: curl -v -F 'file=@target\site\jacoco.xml' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
+      - sh: curl -v -F 'file=@target\site\jacoco\jacoco.xml' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
 
     on_success:
       - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov 
@@ -103,14 +104,13 @@ for:
         - job_name: Mac build
 
     install:
-      sh: export JAVA_HOME=`/usr/libexec/java_home -v 11` &&
-          brew install maven
+      sh: brew install maven; export DISPLAY=:99.0
 
     build_script:
       - sh: mvn clean verify
 
     test_script:
-      - sh: curl -v -F 'file=@target\site\jacoco.xml' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
+      - sh: curl -v -F 'file=@target\site\jacoco\jacoco.xml' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
 
     on_success:
       - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov
