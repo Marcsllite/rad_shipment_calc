@@ -80,9 +80,11 @@ for:
 
     install:
       - sh: sudo update-alternatives --set java $JAVA_HOME/bin/java && 
-            sudo apt -y update && 
+            sudo apt update && 
             sudo apt install -y default-jdk && 
-            java -version
+            java -version &&
+            javac -version &&
+            echo $JAVA_HOME
 
     build: off
 
