@@ -23,15 +23,15 @@ only_commits:
 
 # environment variables
 environment:
-  my_variable:
+  MAVEN_VERSION: 3.6.3
+  WIN_JDK: C:\Program Files\Java\jdk11
+  GITHUB_TOKEN:
     secure: SikYTKBlWZ9T6Ep9yw85sLN3+5ryqKyc8YzjTZgnK5adhMWMPvme0gMrLTgtG8ah
   CODECOV_TOKEN:
     secure: zQd1mZd+Bl9Ev/rUgtx5eozOVW79Hcpp2+a8U01ij4hESsUrYJIuK29ZPmlmS3ql
   matrix:
     - job_name: Windows build
       appveyor_build_worker_image: Visual Studio 2019
-      JDK_11: C:\Program Files\OpenJDK\openjdk-11.0.11_9
-      MAVEN_363: C:\ProgramData\chocolatey\lib\maven
 
     - job_name: Linux build
       appveyor_build_worker_image: Ubuntu
@@ -42,28 +42,21 @@ environment:
 matrix:
   fast_finish: false
 
+build_script:
+      - cmd: mvn clean verify
+
 for:
   # WINDOWS BUILD #
   -
     matrix:
       only:
         - job_name: Windows build
-    
-    init:
-      ps: choco install -y openjdk11; 
-          C:\ProgramData\chocolatey\bin\RefreshEnv;
-          choco upgrade -y maven --version=3.6.3;
-          C:\ProgramData\chocolatey\bin\RefreshEnv
 
     install:
-      - set JDK_HOME=%JDK_11%
+      - set JDK_HOME=%WIN_JDK%
       # JAVA_HOME is used by Maven
-      - set JAVA_HOME=%JDK_11%
-      - set MAVEN_HOME=%MAVEN_363%
+      - set JAVA_HOME=%WIN_JDK%
       - set PATH=%JDK_HOME%;%JDK_HOME%\bin;%PATH%
-
-    build_script:
-      - cmd: mvn clean verify
 
     on_success:
       - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
@@ -78,14 +71,9 @@ for:
     matrix:
       only:
         - job_name: Linux build
-        
+
     install:
-
-    build_script:
-      - sh: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-
-    test_script:
-      - sh: mvn clean verify -e -X
+      - sh: update-java-alternatives --list
 
     on_success:
       - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov 
@@ -100,17 +88,9 @@ for:
     matrix:
       only:
         - job_name: Mac build
-    
-    init:
 
     install:
-      cmd: /usr/libexec/java_home -V 11.0.2
-
-    build_script:
-      - sh: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-
-    test_script:
-      - sh: mvn clean verify -e -X
+      sh: /usr/libexec/java_home -V
 
     on_success:
       - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov
