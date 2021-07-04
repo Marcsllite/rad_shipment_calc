@@ -78,8 +78,8 @@ for:
         - job_name: Linux build
 
     install:
-      - sh: java -version && mvn -v &&
-            update-alternatives --set java /usr/lib/jvm/java-11-openjdk-amd64/bin/java &&
+      - sh: java -version &&
+            sudo update-alternatives --set java /usr/lib/jvm/java-11-openjdk-amd64/bin/java &&
             java -version
 
     build: off
