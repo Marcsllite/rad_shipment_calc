@@ -81,8 +81,8 @@ for:
 
     install:
       - sh: sudo apt update -y && sudo apt upgrade -y &&
-            java -v &&
-            maven -v
+            java -version &&
+            mvn -v
 
     build: off
 
