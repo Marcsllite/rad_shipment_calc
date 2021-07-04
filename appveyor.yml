@@ -32,6 +32,7 @@ environment:
   matrix:
     - job_name: Linux build
       appveyor_build_worker_image: Ubuntu2004
+      JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64
 
     # - job_name: Windows build
     #   appveyor_build_worker_image: Visual Studio 2019
@@ -77,7 +78,6 @@ for:
       only:
         - job_name: Linux build
 
-    JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64
     install:
       - sh: java -version
 
