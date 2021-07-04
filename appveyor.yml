@@ -47,13 +47,12 @@ for:
       only:
         - job_name: Windows build
     
-    init:
+    install:
       ps: choco install -y openjdk11; 
           C:\ProgramData\chocolatey\bin\RefreshEnv;
           choco upgrade -y maven --version=3.6.3;
           C:\ProgramData\chocolatey\bin\RefreshEnv
-
-    install:
+          
       - set JDK_HOME=%JDK_11%
       # JAVA_HOME is used by Maven
       - set JAVA_HOME=%JDK_11%
