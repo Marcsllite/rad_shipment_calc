@@ -62,7 +62,7 @@ for:
     test_script:
       - ps: $wc = New-Object 'System.Net.WebClient';
             foreach($file in get-childItem $env:APPVEYOR_BUILD_FOLDER/target/surefire-reports -include TEST-*.xml -name) { `
-              $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", $file); }
+              $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (get-item $file).FullName); }
 
     on_success:
       - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
@@ -93,7 +93,7 @@ for:
     on_success:
       - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov 
             chmod +x codecov
-            ./codecov
+            ./codecov -t $CODECOV_TOKEN
 
     cache:
       - $HOME/.m2 -> pom.xml
@@ -105,7 +105,7 @@ for:
         - job_name: Mac build
 
     install:
-      sh: brew install maven; export DISPLAY=:99.0
+      sh: brew install maven
 
     build_script:
       - sh: mvn clean verify
@@ -117,7 +117,7 @@ for:
     on_success:
       - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov
             chmod +x codecov 
-            ./codecov
+            ./codecov -t $CODECOV_TOKEN
 
     cache:
       - $HOME/.m2 -> pom.xml
