@@ -35,6 +35,7 @@
         "jacoco",
         "javadoc",
         "javafx",
+        "libexec",
         "logr",
         "noaop",
         "openjdk",

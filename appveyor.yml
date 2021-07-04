@@ -25,6 +25,8 @@ only_commits:
 environment:
   my_variable:
     secure: SikYTKBlWZ9T6Ep9yw85sLN3+5ryqKyc8YzjTZgnK5adhMWMPvme0gMrLTgtG8ah
+  CODECOV_TOKEN:
+    secure: zQd1mZd+Bl9Ev/rUgtx5eozOVW79Hcpp2+a8U01ij4hESsUrYJIuK29ZPmlmS3ql
   matrix:
     - job_name: Windows build
       appveyor_build_worker_image: Visual Studio 2019
@@ -64,9 +66,8 @@ for:
       - cmd: mvn clean verify
 
     on_success:
-      - cmd: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe 
-            -Outfile codecov.exe 
-            .\codecov.exe
+      - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
+            .\codecov.exe -t %CODECOV_TOKEN%
 
     cache:
       - '%MAVEN_HOME% -> pom.xml'
