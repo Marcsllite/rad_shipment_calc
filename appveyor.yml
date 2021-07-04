@@ -80,7 +80,7 @@ for:
     stack: jdk 11
 
     install:
-      - sh: sudo apt update && sudo apt upgrade &&
+      - sh: sudo apt update -y && sudo apt upgrade -y &&
             java -v &&
             maven -v
 
