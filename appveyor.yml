@@ -62,7 +62,8 @@ for:
     test_script:
       - ps: $wc = New-Object 'System.Net.WebClient';
             foreach($file in get-childItem $env:APPVEYOR_BUILD_FOLDER/target/surefire-reports -include TEST-*.xml -name) { `
-              $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (get-item $file).FullName); }
+              $name = (get-item $file).FullName `
+              $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path .\target\site\jacoco\$name)); }
 
     on_success:
       - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
@@ -79,9 +80,7 @@ for:
         - job_name: Linux build
 
     install:
-      - sh: sudo update-java-alternatives -s $LINUX_JDK &&
-            export JAVA_HOME=/usr/lib/jvm/$LINUX_JDK/ &&
-            export PATH=$PATH:$JAVA_HOME
+      - sh: sudo apt-get install openjdk-11-jdk
 
     build_script:
       - sh: mvn clean verify
@@ -91,8 +90,8 @@ for:
           find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
 
     on_success:
-      - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov 
-            chmod +x codecov
+      - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov &&
+            chmod +x codecov &&
             ./codecov -t $CODECOV_TOKEN
 
     cache:
@@ -115,8 +114,8 @@ for:
           find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
 
     on_success:
-      - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov
-            chmod +x codecov 
+      - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov &&
+            chmod +x codecov &&
             ./codecov -t $CODECOV_TOKEN
 
     cache:
