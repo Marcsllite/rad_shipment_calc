@@ -25,7 +25,6 @@ only_commits:
 environment:
   MAVEN_VERSION: 3.6.3
   WIN_JDK: C:\Program Files\Java\jdk11
-  LINUX_JDK: java-11-openjdk-amd64
   GITHUB_TOKEN:
     secure: SikYTKBlWZ9T6Ep9yw85sLN3+5ryqKyc8YzjTZgnK5adhMWMPvme0gMrLTgtG8ah
   CODECOV_TOKEN:
@@ -35,13 +34,13 @@ environment:
       appveyor_build_worker_image: Visual Studio 2019
 
     - job_name: Linux build
-      appveyor_build_worker_image: Ubuntu
+      appveyor_build_worker_image: Ubuntu2004
 
     - job_name: Mac build
       appveyor_build_worker_image: macOs
 
 matrix:
-  fast_finish: false
+  fast_finish: true
 
 for:
   # WINDOWS BUILD #
@@ -78,10 +77,7 @@ for:
       only:
         - job_name: Linux build
 
-    install:
-      - sh: sudo add-apt-repository ppa:linuxuprising/java &&
-            sudo apt update &&
-            sudo apt -y install oracle-java11-set-default-local
+    stack: jdk 11
 
     build_script:
       - sh: mvn clean verify
