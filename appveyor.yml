@@ -25,6 +25,7 @@ only_commits:
 environment:
   MAVEN_VERSION: 3.6.3
   WIN_JDK: C:\Program Files\Java\jdk11
+  LINUX_JDK: java-1.11.0-openjdk-amd64
   GITHUB_TOKEN:
     secure: SikYTKBlWZ9T6Ep9yw85sLN3+5ryqKyc8YzjTZgnK5adhMWMPvme0gMrLTgtG8ah
   CODECOV_TOKEN:
@@ -42,9 +43,6 @@ environment:
 matrix:
   fast_finish: false
 
-build_script:
-      - cmd: mvn clean verify
-
 for:
   # WINDOWS BUILD #
   -
@@ -57,6 +55,13 @@ for:
       # JAVA_HOME is used by Maven
       - set JAVA_HOME=%WIN_JDK%
       - set PATH=%JDK_HOME%;%JDK_HOME%\bin;%PATH%
+
+    build_script:
+      - cmd: mvn clean verify
+
+    test_scipt:
+      - ps: $wc = New-Object 'System.Net.WebClient'
+      - ps: $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\target\site\jacoco.xml))
 
     on_success:
       - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
@@ -73,7 +78,15 @@ for:
         - job_name: Linux build
 
     install:
-      - sh: update-java-alternatives --list
+      - sh: sudo update-java-alternatives -s $LINUX_JDK &&
+            export JAVA_HOME=/usr/lib/jvm/$LINUX_JDK/ &&
+            export PATH=$PATH:$JAVA_HOME
+
+    build_script:
+      - sh: mvn clean verify
+
+    test_script:
+      - sh: curl -v -F 'file=@target\site\jacoco.xml' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
 
     on_success:
       - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov 
@@ -90,7 +103,14 @@ for:
         - job_name: Mac build
 
     install:
-      sh: /usr/libexec/java_home -V
+      sh: export JAVA_HOME=`/usr/libexec/java_home -v 11`
+      sh: brew install maven@3.6.3
+
+    build_script:
+      - sh: mvn clean verify
+
+    test_script:
+      - sh: curl -v -F 'file=@target\site\jacoco.xml' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
 
     on_success:
       - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov
