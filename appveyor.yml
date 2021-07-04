@@ -61,7 +61,8 @@ for:
 
     test_script:
       - ps: $wc = New-Object 'System.Net.WebClient';
-            $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\target\site\jacoco\jacoco.xml))
+            foreach($file in get-children $env:APPVEYOR_BUILD_FOLDER/target/surefire-reports -include TEST-*.xml -name) { `
+              $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", $file); }
 
     on_success:
       - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
@@ -87,7 +88,8 @@ for:
       - sh: mvn clean verify
 
     test_script:
-      - sh: curl -v -F 'file=@target\site\jacoco\jacoco.xml' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
+      - sh: |
+          find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
 
     on_success:
       - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov 
@@ -110,7 +112,8 @@ for:
       - sh: mvn clean verify
 
     test_script:
-      - sh: curl -v -F 'file=@target\site\jacoco\jacoco.xml' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
+      - sh: |
+          find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
 
     on_success:
       - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov
