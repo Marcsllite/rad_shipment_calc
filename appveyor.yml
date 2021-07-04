@@ -62,7 +62,7 @@ for:
     test_script:
       - ps: $wc = New-Object 'System.Net.WebClient';
             foreach($file in get-childItem $env:APPVEYOR_BUILD_FOLDER/target/surefire-reports -include TEST-*.xml -name) { `
-              $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path .\target\site\jacoco\$file)); }
+              $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path .\target\surefire-reports\$file)); }
 
     on_success:
       - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
@@ -80,9 +80,7 @@ for:
 
     install:
       - sh: sudo apt-get -y install openjdk-11-jdk &&
-            sudo update-java-alternatives -s $LINUX_JDK &&
-            export JAVA_HOME=/usr/lib/jvm/$LINUX_JDK/ &&
-            export PATH=$PATH:$JAVA_HOME
+            sudo update-java-alternatives -l
 
     build_script:
       - sh: mvn clean verify
