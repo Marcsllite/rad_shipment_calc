@@ -59,9 +59,9 @@ for:
     build_script:
       - cmd: mvn clean verify
 
-    test_scipt:
-      - ps: $wc = New-Object 'System.Net.WebClient'
-      - ps: $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\target\site\jacoco.xml))
+    test_script:
+      - ps: $wc = New-Object 'System.Net.WebClient';
+            $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\target\site\jacoco.xml))
 
     on_success:
       - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
@@ -103,8 +103,8 @@ for:
         - job_name: Mac build
 
     install:
-      sh: export JAVA_HOME=`/usr/libexec/java_home -v 11`
-      sh: brew install maven@3.6.3
+      sh: export JAVA_HOME=`/usr/libexec/java_home -v 11` &&
+          brew install maven@3.6.3
 
     build_script:
       - sh: mvn clean verify
