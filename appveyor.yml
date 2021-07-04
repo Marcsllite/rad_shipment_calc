@@ -79,8 +79,9 @@ for:
         - job_name: Linux build
 
     install:
-      - sh: sudo apt-get -y install openjdk-11-jdk &&
-            sudo update-java-alternatives -l
+      - sh: sudo add-apt-repository ppa:linuxuprising/java &&
+            sudo apt update &&
+            sudo apt install oracle-java11-set-default
 
     build_script:
       - sh: mvn clean verify
