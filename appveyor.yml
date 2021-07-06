@@ -68,11 +68,15 @@ matrix:
   fast_finish: false
 
 install:
-    - sh: sudo apt update && 
+    - sh: echo using $appveyor_build_worker_image &&
+          sudo apt update && 
           sudo apt install -y default-jdk && 
           java -version &&
           javac -version &&
-          echo $JAVA_HOME
+          echo JAVA_HOME is $JAVA_HOME &&
+          export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::") &&
+          export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:jre/bin/java::") &&
+          echo JAVA_HOME is $JAVA_HOME
 
 build: off
 
