@@ -25,38 +25,31 @@ only_commits:
 environment:
   MAVEN_VERSION: 3.6.3
   WIN_JDK: C:\Program Files\Java\jdk11
+  LINUX_JDK: /usr/lib/jvm/java-1.11.0-openjdk-amd64
   GITHUB_TOKEN:
     secure: SikYTKBlWZ9T6Ep9yw85sLN3+5ryqKyc8YzjTZgnK5adhMWMPvme0gMrLTgtG8ah
   CODECOV_TOKEN:
     secure: zQd1mZd+Bl9Ev/rUgtx5eozOVW79Hcpp2+a8U01ij4hESsUrYJIuK29ZPmlmS3ql
   matrix:
-    - job_name: Linux build 0
-      appveyor_build_worker_image: Ubuntu1604
-      JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64
-
-    - job_name: Linux build 1
+    - job_name: Linux build Ubuntu
       appveyor_build_worker_image: Ubuntu
-      JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64
-
-    - job_name: Linux build 2
-      appveyor_build_worker_image: Ubuntu2004
-      JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64
-
-    - job_name: Linux build 3
-      appveyor_build_worker_image: Previous Ubuntu
-      JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64
+      java_select: 0
     
-    - job_name: Linux build 4
-      appveyor_build_worker_image: Previous Ubuntu1604
-      JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64
+    - job_name: Linux build Ubuntu2004
+      appveyor_build_worker_image: Ubuntu2004
+      java_select: 0
 
-    - job_name: Linux build 5
+    - job_name: Linux build Previous Ubuntu
+      appveyor_build_worker_image: Previous Ubuntu
+      java_select: 0
+
+    - job_name: Linux build Previous Ubuntu1804
       appveyor_build_worker_image: Previous Ubuntu1804
-      JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64
+      java_select: 0
 
-    - job_name: Linux build 6
+    - job_name: Linux build Previous Ubuntu2004
       appveyor_build_worker_image: Previous Ubuntu2004
-      JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64
+      java_select: 0
 
     # - job_name: Windows build
     #   appveyor_build_worker_image: Visual Studio 2019
@@ -68,9 +61,7 @@ matrix:
   fast_finish: false
 
 install:
-    - sh: echo using $appveyor_build_worker_image &&
-          update-java-alternatives --list &&
-          sudo update-alternatives --config java &&
+    - sh: echo $java_select | sudo update-alternatives --config java &&
           java -version &&
           echo JAVA_HOME is $JAVA_HOME &&
           export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::") &&
