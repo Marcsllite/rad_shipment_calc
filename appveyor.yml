@@ -59,14 +59,13 @@ environment:
 
 matrix:
   fast_finish: false
-
+    
 install:
-    - sh: java -version &&
-          echo JAVA_HOME is $JAVA_HOME &&
-          echo $java_select | sudo update-alternatives --config java &&
-          java -version &&
-          echo JAVA_HOME is $JAVA_HOME &&
-          mvn -v
+  - sh: sudo update-alternatives --remove "java" "/usr/lib/jvm/java-11-openjdk-amd64/bin/java" &&
+        sudo update-alternatives --remove "javac" "/usr/lib/jvm/java-11-openjdk-amd64/bin/javac" &&
+        sudo update-alternatives --remove "javaws" "/usr/lib/jvm/java-11-openjdk-amd64/bin/javaws" &&
+        sudo apt update && sudo apt install openjdk-11-jdk &&
+        java -version
 
 build: off
 
