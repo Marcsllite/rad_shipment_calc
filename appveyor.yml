@@ -64,8 +64,6 @@ install:
     - sh: java -version &&
           echo JAVA_HOME is $JAVA_HOME &&
           echo $java_select | sudo update-alternatives --config java &&
-          export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::") &&
-          export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:jre/bin/java::") &&
           java -version &&
           echo JAVA_HOME is $JAVA_HOME &&
           mvn -v
