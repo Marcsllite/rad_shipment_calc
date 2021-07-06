@@ -61,11 +61,7 @@ matrix:
   fast_finish: false
     
 install:
-  - sh: sudo update-alternatives --remove "java" "/usr/lib/jvm/java-11-openjdk-amd64/bin/java" &&
-        sudo update-alternatives --remove "javac" "/usr/lib/jvm/java-11-openjdk-amd64/bin/javac" &&
-        sudo update-alternatives --remove "javaws" "/usr/lib/jvm/java-11-openjdk-amd64/bin/javaws" &&
-        sudo apt update && sudo apt install -y openjdk-11-jdk &&
-        java -version
+  - sh: set JAVA_HOME=$LINUX_JDK && mvn -v
 
 build: off
 
