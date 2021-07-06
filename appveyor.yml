@@ -71,8 +71,6 @@ install:
     - sh: echo using $appveyor_build_worker_image &&
           update-java-alternatives --list &&
           sudo update-alternatives --config java &&
-          # sudo apt update && 
-          # sudo apt install -y default-jdk && 
           java -version &&
           echo JAVA_HOME is $JAVA_HOME &&
           export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::") &&
