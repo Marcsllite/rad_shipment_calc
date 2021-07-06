@@ -61,7 +61,10 @@ matrix:
   fast_finish: false
     
 install:
-  - sh: set JAVA_HOME=$LINUX_JDK && mvn -v
+  - sh: sudo rm -r /usr/lib/jvm/* && 
+        sudo apt update && 
+        sudo apt install -y openjdk-11-jdk && 
+        java -version
 
 build: off
 
