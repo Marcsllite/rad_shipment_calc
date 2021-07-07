@@ -80,7 +80,7 @@ for:
         - job_name: Linux build
 
     build_script:
-      - sh: mvn clean verify
+      - sh: mvn clean verify -e -X
 
     test_script:
       - sh: |
