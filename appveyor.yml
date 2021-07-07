@@ -25,7 +25,6 @@ only_commits:
 environment:
   MAVEN_VERSION: 3.6.3
   WIN_JDK: C:\Program Files\Java\jdk11
-  stack: jdk 11
   GITHUB_TOKEN:
     secure: SikYTKBlWZ9T6Ep9yw85sLN3+5ryqKyc8YzjTZgnK5adhMWMPvme0gMrLTgtG8ah
   CODECOV_TOKEN:
@@ -39,6 +38,8 @@ environment:
 
     - job_name: Mac build
       appveyor_build_worker_image: macOs
+
+stack: jdk 11
 
 matrix:
   fast_finish: false
