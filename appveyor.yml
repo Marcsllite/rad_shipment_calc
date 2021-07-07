@@ -25,127 +25,98 @@ only_commits:
 environment:
   MAVEN_VERSION: 3.6.3
   WIN_JDK: C:\Program Files\Java\jdk11
-  # LINUX_JDK: /usr/lib/jvm/java-1.11.0-openjdk-amd64
   GITHUB_TOKEN:
     secure: SikYTKBlWZ9T6Ep9yw85sLN3+5ryqKyc8YzjTZgnK5adhMWMPvme0gMrLTgtG8ah
   CODECOV_TOKEN:
     secure: zQd1mZd+Bl9Ev/rUgtx5eozOVW79Hcpp2+a8U01ij4hESsUrYJIuK29ZPmlmS3ql
   matrix:
-    - job_name: Linux build Ubuntu
-      appveyor_build_worker_image: Ubuntu
-      java_select: 1
-    
-    - job_name: Linux build Ubuntu2004
+    - job_name: Windows build
+      appveyor_build_worker_image: Visual Studio 2019
+
+    - job_name: Linux build
       appveyor_build_worker_image: Ubuntu2004
-      java_select: 1
 
-    - job_name: Linux build Previous Ubuntu
-      appveyor_build_worker_image: Previous Ubuntu
-      java_select: 1
-
-    - job_name: Linux build Previous Ubuntu1804
-      appveyor_build_worker_image: Previous Ubuntu1804
-      java_select: 1
-
-    - job_name: Linux build Previous Ubuntu2004
-      appveyor_build_worker_image: Previous Ubuntu2004
-      java_select: 1
-
-    # - job_name: Windows build
-    #   appveyor_build_worker_image: Visual Studio 2019
-
-    # - job_name: Mac build
-    #   appveyor_build_worker_image: macOs
+    - job_name: Mac build
+      appveyor_build_worker_image: macOs
 
 matrix:
   fast_finish: false
 
-stack: jdk 11
-
-install:
-  - sh: sudo apt update && java -version
-
-build: off
-
-# for:
+for:
   # WINDOWS BUILD #
-  # -
-  #   matrix:
-  #     only:
-  #       - job_name: Windows build
+  -
+    matrix:
+      only:
+        - job_name: Windows build
 
-  #   install:
-  #     - set JDK_HOME=%WIN_JDK%
-  #     # JAVA_HOME is used by Maven
-  #     - set JAVA_HOME=%WIN_JDK%
-  #     - set PATH=%JDK_HOME%;%JDK_HOME%\bin;%PATH%
+    install:
+      - set JDK_HOME=%WIN_JDK%
+      # JAVA_HOME is used by Maven
+      - set JAVA_HOME=%WIN_JDK%
+      - set PATH=%JDK_HOME%;%JDK_HOME%\bin;%PATH%
 
-  #   build_script:
-  #     - cmd: mvn clean verify
+    build_script:
+      - cmd: mvn clean verify
 
-  #   test_script:
-  #     - ps: $wc = New-Object 'System.Net.WebClient';
-  #           foreach($file in get-childItem $env:APPVEYOR_BUILD_FOLDER/target/surefire-reports -include TEST-*.xml -name) { `
-  #             $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path .\target\surefire-reports\$file)); }
+    test_script:
+      - ps: $wc = New-Object 'System.Net.WebClient';
+            foreach($file in get-childItem $env:APPVEYOR_BUILD_FOLDER/target/surefire-reports -include TEST-*.xml -name) { `
+              $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path .\target\surefire-reports\$file)); }
 
-  #   on_success:
-  #     - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
-  #           .\codecov.exe -t $CODECOV_TOKEN
+    on_success:
+      - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
+            .\codecov.exe -t $CODECOV_TOKEN
 
-  #   cache:
-  #     - '%MAVEN_HOME% -> pom.xml'
-  #     - '%UserProfile%\.m2 -> pom.xml'
+    cache:
+      - '%MAVEN_HOME% -> pom.xml'
+      - '%UserProfile%\.m2 -> pom.xml'
   
   # LINUX BUILD #
-  # -
-  #   matrix:
-  #     only:
-  #       - job_name: Linux build
-
-  #   install:
-  #     - sh: sudo update-alternatives --set java $JAVA_HOME/bin/java && 
-  #           sudo apt update && 
-  #           sudo apt install -y default-jdk && 
-  #           java -version &&
-  #           javac -version &&
-  #           echo $JAVA_HOME
-
-  #   build: off
-
-  #   test_script:
-  #     - sh: |
-  #         find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
+  -
+    matrix:
+      only:
+        - job_name: Linux build
     
-  #   on_success:
-  #     - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov &&
-  #           chmod +x codecov &&
-  #           ./codecov -t $CODECOV_TOKEN
+    stack: jdk 11
 
-  #   cache:
-  #     - $HOME/.m2 -> pom.xml
+    build_script:
+      - sh: mvn clean verify
+
+    test_script:
+      - sh: |
+          find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
+    
+    on_success:
+      - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov &&
+            chmod +x codecov &&
+            ./codecov -t $CODECOV_TOKEN
+
+    cache:
+      - $HOME/.m2 -> pom.xml
   
   # MAC BUILD #
-  # -
-  #   matrix:
-  #     only:
-  #       - job_name: Mac build
+  -
+    matrix:
+      only:
+        - job_name: Mac build
 
-  #   install:
-  #     sh: brew install maven
+    install:
+      sh: brew install maven
 
-  #   build_script:
-  #     - sh: mvn clean verify
+    build_script:
+      - sh: mvn clean verify
 
-  #   test_script:
-  #     - sh: |
-  #         find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
-  #   on_success:
-  #     - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov &&
-  #           chmod +x codecov &&
-  #           ./codecov -t $CODECOV_TOKEN
+    test_script:
+      - sh: |
+          find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
+    
+    on_success:
+      - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov &&
+            chmod +x codecov &&
+            ./codecov -t $CODECOV_TOKEN
 
-  #   cache:
-  #     - $HOME/.m2 -> pom.xml
+    cache:
+      - $HOME/.m2 -> pom.xml
 
 #---------------------------------#
 #       build configuration       #
