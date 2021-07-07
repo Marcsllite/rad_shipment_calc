@@ -79,6 +79,9 @@ for:
       only:
         - job_name: Linux build
 
+    install:
+      - sh: sudo apt update && mvn -v
+
     build_script:
       - sh: mvn clean verify
 
