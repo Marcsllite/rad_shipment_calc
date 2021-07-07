@@ -79,9 +79,6 @@ for:
       only:
         - job_name: Linux build
 
-    install:
-      - sh: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-
     build_script:
       - sh: mvn clean verify
 
