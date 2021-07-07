@@ -25,7 +25,7 @@ only_commits:
 environment:
   MAVEN_VERSION: 3.6.3
   WIN_JDK: C:\Program Files\Java\jdk11
-  LINUX_JDK: /usr/lib/jvm/java-1.11.0-openjdk-amd64
+  # LINUX_JDK: /usr/lib/jvm/java-1.11.0-openjdk-amd64
   GITHUB_TOKEN:
     secure: SikYTKBlWZ9T6Ep9yw85sLN3+5ryqKyc8YzjTZgnK5adhMWMPvme0gMrLTgtG8ah
   CODECOV_TOKEN:
@@ -59,12 +59,11 @@ environment:
 
 matrix:
   fast_finish: false
-    
+
+stack: jdk 11
+
 install:
-  - sh: sudo rm -r /usr/lib/jvm/* && 
-        sudo apt update && 
-        sudo apt install -y openjdk-11-jdk && 
-        java -version
+  - sh: sudo apt update && java -version
 
 build: off
 
