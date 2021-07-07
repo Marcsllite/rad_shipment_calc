@@ -39,7 +39,7 @@ environment:
     # - job_name: Mac build
     #   appveyor_build_worker_image: macOs
 
-stack: jdk 12
+stack: jdk 11
 
 matrix:
   fast_finish: false
@@ -85,7 +85,9 @@ for:
             sudo update-alternatives --install /usr/bin/mvn mvn /opt/apache-maven-3.6.3/bin/mvn 363
 
     build_script:
-      - sh: mvn clean verify -e -X
+      - sh: |
+            unset JAVA_TOOL_OPTIONS &&
+            mvn clean verify -e -X
 
     test_script:
       - sh: |
