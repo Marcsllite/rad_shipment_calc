@@ -80,7 +80,7 @@ for:
         - job_name: Linux build
 
     install:
-      - sh: unset JAVA_TOOL_OPTIONS
+      - sh: sudo apt-get remove jayatana
 
     build_script:
       - sh: mvn clean verify
@@ -120,13 +120,6 @@ for:
 
   #   cache:
   #     - $HOME/.m2 -> pom.xml
-
-#---------------------------------#
-#       build configuration       #
-#---------------------------------#
-
-# build Configuration, i.e. Debug, Release, etc.
-configuration: Debug
 
 #---------------------------------#
 #     deployment configuration    #
