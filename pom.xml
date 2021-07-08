@@ -99,6 +99,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.version}</version>
+                <configuration>
+                    <excludes>
+                      <exclude>UtilTest.java</exclude>
+                    </excludes>
+                  </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
