@@ -82,7 +82,7 @@ for:
     build_script:
       - sh: |
             unset JAVA_TOOL_OPTIONS &&
-            mvn surefire:test
+            mvn clean test
 
     test_script:
       - sh: |
