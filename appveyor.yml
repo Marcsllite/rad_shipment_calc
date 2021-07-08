@@ -35,6 +35,7 @@ environment:
 
     - job_name: Linux build
       appveyor_build_worker_image: Ubuntu2004
+      appveyor_build_worker_cloud: gce
 
     # - job_name: Mac build
     #   appveyor_build_worker_image: macOs
