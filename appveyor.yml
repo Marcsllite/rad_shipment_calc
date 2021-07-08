@@ -87,7 +87,7 @@ for:
     build_script:
       - sh: |
             unset JAVA_TOOL_OPTIONS &&
-            mvn clean verify -e -X
+            mvn clean verify
 
     test_script:
       - sh: |
