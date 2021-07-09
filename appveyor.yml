@@ -55,7 +55,12 @@ for:
       - set JDK_HOME=%WIN_JDK%
       # JAVA_HOME is used by Maven
       - set JAVA_HOME=%WIN_JDK%
-      - set PATH=%JDK_clean verify
+      - set PATH=%JDK_HOME%;%JDK_HOME%\bin;%PATH%
+
+    build_script:
+      - cmd: mvn clean verify
+      
+    test_script:
       - ps: $wc = New-Object 'System.Net.WebClient';
             foreach($file in get-childItem $env:APPVEYOR_BUILD_FOLDER/target/surefire-reports -include TEST-*.xml -name) { `
               $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path .\target\surefire-reports\$file)); }
