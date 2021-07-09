@@ -30,14 +30,14 @@ environment:
   CODECOV_TOKEN:
     secure: zQd1mZd+Bl9Ev/rUgtx5eozOVW79Hcpp2+a8U01ij4hESsUrYJIuK29ZPmlmS3ql
   matrix:
-    # - job_name: Windows build
-    #   appveyor_build_worker_image: Visual Studio 2019
+    - job_name: Windows build
+      appveyor_build_worker_image: Visual Studio 2019
+
+    - job_name: Mac build
+      appveyor_build_worker_image: macOs
 
     - job_name: Linux build
       appveyor_build_worker_image: Ubuntu2004
-
-    # - job_name: Mac build
-    #   appveyor_build_worker_image: macOs
 
 stack: jdk 11
 
@@ -46,36 +46,57 @@ matrix:
 
 for:
   # WINDOWS BUILD #
-  # -
-  #   matrix:
-  #     only:
-  #       - job_name: Windows build
+  -
+    matrix:
+      only:
+        - job_name: Windows build
 
-  #   install:
-  #     - set JDK_HOME=%WIN_JDK%
-  #     # JAVA_HOME is used by Maven
-  #     - set JAVA_HOME=%WIN_JDK%
-  #     - set PATH=%JDK_clean verify
-  #     - ps: $wc = New-Object 'System.Net.WebClient';
-  #           foreach($file in get-childItem $env:APPVEYOR_BUILD_FOLDER/target/surefire-reports -include TEST-*.xml -name) { `
-  #             $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path .\target\surefire-reports\$file)); }
+    install:
+      - set JDK_HOME=%WIN_JDK%
+      # JAVA_HOME is used by Maven
+      - set JAVA_HOME=%WIN_JDK%
+      - set PATH=%JDK_clean verify
+      - ps: $wc = New-Object 'System.Net.WebClient';
+            foreach($file in get-childItem $env:APPVEYOR_BUILD_FOLDER/target/surefire-reports -include TEST-*.xml -name) { `
+              $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path .\target\surefire-reports\$file)); }
 
-  #   on_success:
-  #     - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
-  #           .\codecov.exe -t $CODECOV_TOKEN
+    on_success:
+      - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
+            .\codecov.exe -t $CODECOV_TOKEN
 
-  #   cache:
-  #     - '%MAVEN_HOME% -> pom.xml'
-  #     - '%UserProfile%\.m2 -> pom.xml'
-  
+    cache:
+      - '%MAVEN_HOME% -> pom.xml'
+      - '%UserProfile%\.m2 -> pom.xml'
+
+  # MAC BUILD #
+  -
+    matrix:
+      only:
+        - job_name: Mac build
+
+    install:
+      sh: brew install maven
+
+    build_script:
+      - sh: mvn clean verify
+
+    test_script:
+      - sh: |
+          find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
+    
+    on_success:
+      - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov &&
+            chmod +x codecov &&
+            ./codecov -t $CODECOV_TOKEN
+
+    cache:
+      - $HOME/.m2 -> pom.xml
+      
   # LINUX BUILD #
   -
     matrix:
       only:
         - job_name: Linux build
-
-    init:
-      - sh: export DISPLAY=:99.0
 
     install:
       - sh: wget https://www-us.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz -P /tmp &&
@@ -85,7 +106,7 @@ for:
     build_script:
       - sh: |
             unset JAVA_TOOL_OPTIONS &&
-            mvn clean test
+            mvn clean verify
 
     test_script:
       - sh: |
@@ -98,30 +119,6 @@ for:
 
     cache:
       - $HOME/.m2 -> pom.xml
-  
-  # MAC BUILD #
-  # -
-  #   matrix:
-  #     only:
-  #       - job_name: Mac build
-
-  #   install:
-  #     sh: brew install maven
-
-  #   build_script:
-  #     - sh: mvn clean verify
-
-  #   test_script:
-  #     - sh: |
-  #         find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
-    
-  #   on_success:
-  #     - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov &&
-  #           chmod +x codecov &&
-  #           ./codecov -t $CODECOV_TOKEN
-
-  #   cache:
-  #     - $HOME/.m2 -> pom.xml
 
 #---------------------------------#
 #     deployment configuration    #
