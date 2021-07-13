@@ -15,6 +15,7 @@ branches:
 # Including commits with particular message or from specific user
 only_commits:
   message: /build/                # Start a new build if message contains 'build'
+  author: marcsllite@gmail.com   
 
 #---------------------------------#
 #    environment configuration    #
