@@ -53,8 +53,6 @@ public class StageManagerTest {
             Stage stage = stageManager.getPrimaryStage();
 
             assertEquals(view.getTitle(), stage.getTitle());
-            assertEquals(view.getWidth(), stage.getScene().getWidth(), 0.0D);
-            assertEquals(view.getHeight(), stage.getScene().getHeight(), 0.0D);
             assertEquals(view.getWidth(), stage.getMinWidth(), 0.0D);
             assertEquals(view.getHeight(), stage.getMinHeight(), 0.0D);
             assertEquals(view.getMaxWidth(), stage.getMaxWidth(), 0.0D);

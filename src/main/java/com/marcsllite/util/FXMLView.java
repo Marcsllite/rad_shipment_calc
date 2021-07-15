@@ -18,20 +18,20 @@ public enum FXMLView {
     public String getFxmlLoc() { return "/fxml/test.fxml"; }
   };
   
-  private final int HEIGHT = 480;
-  private final int WIDTH = 640;
+  private final double HEIGHT = 480.0;
+  private final double WIDTH = 640.0;
 
   public abstract String getName();
   
   public String getTitle() { return getName() + " Page"; }
   
-  public int getHeight() { return HEIGHT; }
+  public double getHeight() { return HEIGHT; }
     
-  public int getWidth() { return WIDTH; }
+  public double getWidth() { return WIDTH; }
   
-  public int getMaxHeight() { return getHeight(); }
+  public double getMaxHeight() { return getHeight(); }
     
-  public int getMaxWidth() { return getWidth(); }
+  public double getMaxWidth() { return getWidth(); }
   
   public String getFxmlName() {
     return getFxmlLoc().replace("/fxml/", "");
