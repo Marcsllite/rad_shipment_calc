@@ -1,11 +1,10 @@
 package com.marcsllite;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeTrue;
-import static org.junit.Assume.assumeFalse;
-import static org.junit.Assume.assumeNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,20 +13,13 @@ import javax.swing.filechooser.FileSystemView;
 
 import com.marcsllite.util.Util;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.testfx.framework.junit.ApplicationTest;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import javafx.stage.Stage;
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
-
-@RunWith(JUnitParamsRunner.class)
-public class AppTest extends ApplicationTest {
-    App app = new App();
-
-    public void start(Stage stage) throws Exception { app.start(stage); }
-  
+public class AppTest {
+    final static String folderName = Util.getString("appFolderName");
+    
     private boolean deleteDirectory(File directoryToBeDeleted) throws IOException {
         File[] allContents = directoryToBeDeleted.listFiles();
         if (allContents != null)
@@ -40,7 +32,7 @@ public class AppTest extends ApplicationTest {
     public void setDefaultDir_InvalidName() throws IOException {
         String os = System.getProperty("os.name").toLowerCase();
 
-        // linux has no bad names
+        // linux and Mac have no bad names
         assumeTrue(os.contains("win"));
 
         String name ="?.\"*.*.?";
@@ -76,14 +68,19 @@ public class AppTest extends ApplicationTest {
         assertEquals(path, App.getDefaultDir());
     }
 
-    @Test
-    @Parameters(method = "setDefaultDirException_data")
+    @ParameterizedTest
+    @MethodSource("setDefaultDirException_data")
     public void setDefaultDirExceptionChecker(String dirName, String expected) {
+        String name = Util.getString("appMainFolder");
+
+        assumeFalse(name == null);
+        assumeFalse(name.isBlank());
+
         App.setDefaultDir(dirName);
         assertEquals(expected, App.getDefaultDir());
     }
   
-    private Object[] setDefaultDirException_data() {
+    private static Object[] setDefaultDirException_data() {
         String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + Util.getString("appMainFolder");
         return new Object[] {
             new Object[] { null, path },
@@ -91,33 +88,31 @@ public class AppTest extends ApplicationTest {
         };
     }
 
-    String folderName = Util.getString("appFolderName");
-  
-    @Test
-    @Parameters(method = "setDataFolderException_data")
+    @ParameterizedTest
+    @MethodSource("setDataFolderException_data")
     public void setDataFolderExceptionChecker(String osVersion, String expected) {
         App.setDataFolder(osVersion);
         assertEquals(expected, App.getDataFolder());
     }
 
-    private Object[] setDataFolderException_data() {
+    private static Object[] setDataFolderException_data() {
         return new Object[] {
             new Object[] { null, null },
             new Object[] { "", null }
         };
     }
 
-    @Test
-    @Parameters(method = "setDataFolder_data")
+    @ParameterizedTest
+    @MethodSource("setDataFolder_data")
     public void setDataFolderChecker(String osVersion, String expected) {
-        assumeNotNull(folderName);
+        assumeFalse(folderName == null);
         assumeFalse(folderName.isBlank());
 
         App.setDataFolder(osVersion);
         assertEquals(expected, App.getDataFolder());
     }
 
-    private Object[] setDataFolder_data() {
+    private static Object[] setDataFolder_data() {
         String winExp = System.getProperty("user.home") + File.separator +
                             "AppData" + File.separator +
                             "Local" + File.separator +

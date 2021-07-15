@@ -15,11 +15,12 @@
         <maven.compiler.version>3.8.0</maven.compiler.version>
         <javafx.maven.plugin.version>0.0.6</javafx.maven.plugin.version>
         <javafx.version>11.0.2</javafx.version>
+        <mockito.version>3.11.2</mockito.version>
         <log4j.version>2.14.1</log4j.version>
         <jacoco.version>0.8.7</jacoco.version>
-        <junit.version>4.13.2</junit.version>
-        <junit.param.version>1.1.1</junit.param.version>
-        <testfx.version>4.0.1-alpha</testfx.version>
+        <junit.version>5.8.0-M1</junit.version>
+        <assertj.version>3.20.2</assertj.version>
+        <testfx.version>4.0.15-alpha</testfx.version>
         <sonar.version>3.9.0.2155</sonar.version>
         <surefire.version>3.0.0-M5</surefire.version>
 
@@ -33,8 +34,8 @@
     </properties>
 
     <ciManagement>
-        <system>travis</system>
-        <url>https://travis-ci.com/github/Marcsllite/rad_shipment_calc</url>
+        <system>appveyor</system>
+        <url>https://ci.appveyor.com/project/Marcsllite/rad-shipment-calc</url>
     </ciManagement>
 
     <dependencies>
@@ -66,21 +67,44 @@
 
         <!-- Test Dependencies -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${mockito.version}</version>
+          </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testfx</groupId>
-            <artifactId>testfx-junit</artifactId>
+            <artifactId>testfx-junit5</artifactId>
             <version>${testfx.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>pl.pragmatists</groupId>
-            <artifactId>JUnitParams</artifactId>
-            <version>${junit.param.version}</version>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -98,6 +122,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${surefire.version}</version>
             </plugin>
             <plugin>

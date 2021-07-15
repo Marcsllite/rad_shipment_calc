@@ -1,49 +1,145 @@
 package com.marcsllite.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.testfx.api.FxRobot;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
+import org.testfx.util.WaitForAsyncUtils;
+
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.input.KeyCode;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.testfx.framework.junit.ApplicationTest;
-
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
 
-@RunWith(JUnitParamsRunner.class)
-public class UtilTest extends ApplicationTest {
-    public void start(Stage arg0) throws Exception {}
+public class UtilTest {
 
-    @Test
-    @Parameters(method = "setPropException_data")
+    @Nested
+    @DisplayName("Util Class UI Tests")
+    @ExtendWith(ApplicationExtension.class)
+    @TestInstance(Lifecycle.PER_CLASS) 
+    class UtilTestUI {
+        Stage stage;
+        ButtonBase btnBase;
+        Button btn2;
+        VBox vBox;
+        SimpleStringProperty stringProp;
+        String msg = "button was fired";
+
+        @Start
+        public void start(Stage stage) throws Exception {
+            this.stage = stage;
+        }
+
+        @BeforeEach
+        void setup() {
+            Platform.runLater(() -> {
+                btnBase = new Button("Button Base");
+                btn2 = new Button("Button 2");
+                stringProp = new SimpleStringProperty();
+
+                btnBase.setOnAction( 
+                    (event) -> stringProp.set("button was fired")
+                );
+
+                vBox = new VBox(10, btnBase, btn2);
+
+                stage.setScene(new Scene(vBox, 100, 100));
+                stage.show();
+            });
+            WaitForAsyncUtils.waitForFxEvents();
+        }
+        
+        @Test
+        public void fireBtnOnEnter_SpaceKey_Focused(FxRobot robot) {
+            Platform.runLater(() -> {
+                Util.fireBtnOnEnter(btnBase);
+
+                btnBase.requestFocus();
+
+                robot.press(KeyCode.SPACE).release(KeyCode.SPACE);
+
+                assertNotNull(btnBase.getOnKeyPressed());
+                assertNull(stringProp.get());
+            });
+        }
+
+        @Test
+        public void fireBtnOnEnter_SpaceKey_NotFocused(FxRobot robot) {
+            Platform.runLater(() -> {
+                Util.fireBtnOnEnter(btnBase);
+                
+                btn2.requestFocus();
+                
+                robot.press(KeyCode.SPACE).release(KeyCode.SPACE);
+
+                assertNotNull(btnBase.getOnKeyPressed());
+                assertNull(stringProp.get());
+            });
+        }
+
+        @Test
+        public void fireBtnOnEnter_EnterKey_Focused(FxRobot robot) {
+            Util.fireBtnOnEnter(btnBase);
+
+            btnBase.requestFocus();
+        
+            robot.press(KeyCode.ENTER).release(KeyCode.ENTER);
+                                            
+            assertNotNull(btnBase.getOnKeyPressed());
+            assumeTrue(btnBase.isFocused());
+            assertEquals(msg, stringProp.get());
+        }
+
+        @Test 
+        public void fireBtnOnEnter_EnterKey_NotFocused(FxRobot robot) {
+            Platform.runLater(() -> {
+                Util.fireBtnOnEnter(btnBase);
+
+                btn2.requestFocus();
+
+                robot.press(KeyCode.ENTER).release(KeyCode.ENTER);
+
+                assertNotNull(btnBase.getOnKeyPressed());
+                assertNull(stringProp.get());
+            });
+        }
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {"invalid/path"})
     public void setPropExceptionChecker(String path) {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> Util.setProp(path)
         );
         
         assertTrue(exception.getMessage().contains("Failed to set properties from path: " + path));
-    }
-  
-    private Object[] setPropException_data() {
-        return new Object[] { 
-            new Object[] { null },
-            new Object[] { "" },
-            new Object[] { "invalid/path" }
-        };
     }
   
     @Test
@@ -53,8 +149,8 @@ public class UtilTest extends ApplicationTest {
         assertEquals(expected, Util.getOs());
     }
 
-    @Test
-    @Parameters({
+    @ParameterizedTest
+    @CsvSource({
         "win, windows",
         "mac, mac",
         "nix, unix",
@@ -74,8 +170,8 @@ public class UtilTest extends ApplicationTest {
         Util.parseStringsToReplace(null));
     }
   
-    @Test
-    @Parameters(method = "replacePropString_data")
+    @ParameterizedTest
+    @MethodSource("replacePropString_data")
     public void replacePropStringChecker(String key, String expected, String[] replacement) {
         if (replacement != null) {
             switch (replacement.length) {
@@ -98,7 +194,7 @@ public class UtilTest extends ApplicationTest {
         } 
     }
   
-    private Object[] replacePropString_data() {
+    private static Object[] replacePropString_data() {
         return new Object[] { 
             new Object[] { null, "", new String[] { null } },
             new Object[] { "", "", new String[] { "" } },
@@ -136,13 +232,13 @@ public class UtilTest extends ApplicationTest {
         };
     }
   
-    @Test
-    @Parameters(method = "getString_data")
+    @ParameterizedTest
+    @MethodSource("getString_data")
     public void getStringChecker(String propName, String expected) {
         assertEquals(expected, Util.getString(propName));
     }
   
-    private Object[] getString_data() {
+    private static Object[] getString_data() {
         return new Object[] { 
             new Object[] { null, "" },
             new Object[] { "", "" },
@@ -152,13 +248,13 @@ public class UtilTest extends ApplicationTest {
         };
     }
 
-    @Test
-    @Parameters(method = "getList_data")
+    @ParameterizedTest
+    @MethodSource("getList_data")
     public void getListChecker(String listName, List<String> expected) {
         assertEquals(expected, Util.getList(listName));
     }
 
-    private Object[] getList_data() {
+    private static Object[] getList_data() {
         return new Object[] { 
             new Object[] { null, new ArrayList<String>()},
             new Object[] { "", new ArrayList<String>()},
@@ -192,8 +288,8 @@ public class UtilTest extends ApplicationTest {
         };
     }
   
-    @Test
-    @Parameters({"fakeKey", "replacePropString_noReplacements"})
+    @ParameterizedTest
+    @CsvSource({"fakeKey", "replacePropString_noReplacements"})
     public void getIntExceptionChecker(String propName) {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> Util.getInt(propName)
@@ -201,13 +297,13 @@ public class UtilTest extends ApplicationTest {
         assertTrue(exception.getMessage().contains("Value is not a number"));
     }
   
-    @Test
-    @Parameters(method = "getInt_data")
+    @ParameterizedTest
+    @MethodSource("getInt_data")
     public void getIntChecker(String propName, int expected) {
         assertEquals(expected, Util.getInt(propName));
     }
   
-    private Object[] getInt_data() {
+    private static Object[] getInt_data() {
         return new Object[] { 
             new Object[] { null, Integer.MIN_VALUE },
             new Object[] { "", Integer.MIN_VALUE },
@@ -215,13 +311,13 @@ public class UtilTest extends ApplicationTest {
         };
     }
   
-    @Test
-    @Parameters(method = "getFileText_data")
+    @ParameterizedTest
+    @MethodSource("getFileText_data")
     public void getFileTextChecker(String file, String expected) {
         assertEquals(expected, Util.getFileText(file));
     }
   
-    private Object[] getFileText_data() {
+    private static Object[] getFileText_data() {
         return new Object[] {
             new Object[] { null, "" },
             new Object[] { "", "" },
@@ -236,96 +332,5 @@ public class UtilTest extends ApplicationTest {
             InvalidParameterException.class, () -> Util.fireBtnOnEnter(null)
         );
         assertTrue(exception.getMessage().contains("button base cannot be null"));
-    }
-
-    ButtonBase btnBase;
-    Button btn2;
-    SimpleStringProperty stringProperty;
-
-    @Test
-    public void fireBtnOnEnter_SpaceKey_Focused() {
-        Platform.runLater(() -> {
-            stringProperty = new SimpleStringProperty();
-            btnBase = new Button();
-
-            btnBase.setOnAction(
-                (event) -> stringProperty.set("button was fired")
-            );
-
-            Util.fireBtnOnEnter(btnBase);
-
-            btnBase.requestFocus();
-
-            press(KeyCode.SPACE);
-
-            assertNotNull(btnBase.getOnKeyPressed());
-            assertNull(stringProperty.get());
-        });
-    }
-
-    @Test
-    public void fireBtnOnEnter_SpaceKey_NotFocused() {
-        Platform.runLater(() -> {
-            stringProperty = new SimpleStringProperty();
-            btnBase = new Button();
-            btn2 = new Button();
-
-            btnBase.setOnAction(
-                (event) -> stringProperty.set("button was fired")
-            );
-
-            Util.fireBtnOnEnter(btnBase);
-            
-            btn2.requestFocus();
-            
-            press(KeyCode.SPACE);
-
-            assertNotNull(btnBase.getOnKeyPressed());
-            assertNull(stringProperty.get());
-        });
-    }
-
-    @Test
-    public void fireBtnOnEnter_EnterKey_Focused() {
-        Platform.runLater(() -> {
-            stringProperty = new SimpleStringProperty();
-            btnBase = new Button();
-
-            String msg = "button was fired";
-            btnBase.setOnAction(
-                (event) -> stringProperty.set("button was fired")
-            );
-
-            Util.fireBtnOnEnter(btnBase);
-
-            btnBase.requestFocus();
-        
-            press(KeyCode.ENTER);
-
-            assertNotNull(btnBase.getOnKeyPressed());
-            assertEquals(msg, stringProperty.get());
-        });
-    }
-
-    @Test
-    public void fireBtnOnEnter_EnterKey_NotFocused() {
-        Platform.runLater(() -> {
-            stringProperty = new SimpleStringProperty();
-            btnBase = new Button();
-            btn2 = new Button();
-
-            btnBase.setOnAction(
-                (event) -> stringProperty.set("button was fired")
-            );
-
-            Util.fireBtnOnEnter(btnBase);
-
-            btn2.requestFocus();
-
-            press(KeyCode.ENTER);
-
-            assertNotNull(btnBase.getOnKeyPressed());
-            assertNull(stringProperty.get());
-        });
     }
 }

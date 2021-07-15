@@ -1,32 +1,28 @@
 package com.marcsllite.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeFalse;
-import static org.junit.Assume.assumeNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.security.InvalidParameterException;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.testfx.framework.junit.ApplicationTest;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.testfx.framework.junit5.ApplicationExtension;
 
-import javafx.application.Platform;
 import javafx.scene.image.Image;
-import javafx.stage.Stage;
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
 
-@RunWith(JUnitParamsRunner.class)
-public class ImageHandlerTest extends ApplicationTest {
-    public void start(Stage arg0) throws Exception {}
-  
+@ExtendWith(ApplicationExtension.class)
+public class ImageHandlerTest {
     @Test
-    public void testGetErrorImage() throws MalformedURLException {
+    public void testGetErrorImage() throws MalformedURLException { 
         Image actual = ImageHandler.getErrorImage();
         assertNotNull(actual);
         assertTrue(actual.getUrl().contains("/images/error.png"));
@@ -59,8 +55,8 @@ public class ImageHandlerTest extends ApplicationTest {
         assertEquals(expected, ImageHandler.getColorLogoBkgPath());
     }
   
-    @Test
-    @Parameters(method = "testGetShipmentImageException_data")
+    @ParameterizedTest
+    @MethodSource("invalidColor_data")
     public void testGetShipmentImageExceptionChecker(String color, String message) {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> ImageHandler.getShipmentImage(color)
@@ -68,34 +64,32 @@ public class ImageHandlerTest extends ApplicationTest {
         assertTrue(exception.getMessage().contains(message));
     }
   
-    private Object[] testGetShipmentImageException_data() {
+    private static Object[] invalidColor_data() {
         return new Object[] {
             new Object[] { null, "The color cannot be null" },
             new Object[] { "fakeColor", "Invalid color" }
         };
     }
   
-    @Test
-    @Parameters({
+    @ParameterizedTest
+    @CsvSource({
         "umlBlue, /images/color_single_box.png",
         "defaultWhite, /images/white_single_box.png",
         "defaultGrey, /images/grey_single_box.png"
     })
     public void testGetShipmentImage(String color, String url) {
-        Platform.runLater(() -> {
-            String c = Util.getString(color);
-            
-            assumeNotNull(c);
-            assumeFalse(c.isEmpty());
+        String c = Util.getString(color);
+        
+        assumeFalse(c == null);
+        assumeFalse(c.isEmpty());
 
-            Image actual = ImageHandler.getShipmentImage(c);
-            assertNotNull(actual);
-            assertTrue(actual.getUrl().contains(url));
-        });
+        Image actual = ImageHandler.getShipmentImage(c);
+        assertNotNull(actual);
+        assertTrue(actual.getUrl().contains(url));
     }
   
-    @Test
-    @Parameters(method = "testGetReferenceImageException_data")
+    @ParameterizedTest
+    @MethodSource("invalidColor_data")
     public void testGetReferenceImageExceptionChecker(String color, String message) {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> ImageHandler.getReferenceImage(color)
@@ -103,29 +97,20 @@ public class ImageHandlerTest extends ApplicationTest {
         assertTrue(exception.getMessage().contains(message));
     }
   
-    private Object[] testGetReferenceImageException_data() {
-        return new Object[] {
-            new Object[] { null, "The color cannot be null" },
-            new Object[] { "fakeColor", "Invalid color" }
-        };
-    }
-  
-    @Test
-    @Parameters({
+    @ParameterizedTest
+    @CsvSource({
         "umlBlue, /images/color_paper.png",
         "defaultWhite, /images/white_paper.png",
         "defaultGrey, /images/grey_paper.png"
     })
     public void testGetReferenceImage(String color, String url) {
-        Platform.runLater(() -> {
-            String c = Util.getString(color);
-            
-            assumeNotNull(c);
-            assumeFalse(c.isEmpty());
+        String c = Util.getString(color);
+        
+        assumeFalse(c == null);
+        assumeFalse(c.isEmpty());
 
-            Image actual = ImageHandler.getReferenceImage(c);
-            assertNotNull(actual);
-            assertTrue(actual.getUrl().contains(url));
-        });
+        Image actual = ImageHandler.getReferenceImage(c);
+        assertNotNull(actual);
+        assertTrue(actual.getUrl().contains(url));
     }
 }

@@ -1,36 +1,33 @@
 package com.marcsllite.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeFalse;
-import static org.junit.Assume.assumeNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.security.InvalidParameterException;
 import java.util.List;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
-
-@RunWith(JUnitParamsRunner.class)
 public class ConversionsTest {
-    BigDecimal toBeConverted = BigDecimal.valueOf(7.5d);
-    MathContext mc = Conversions.context;
+    final static BigDecimal toBeConverted = BigDecimal.valueOf(7.5d);
+    final static MathContext mc = Conversions.context;
 
-    @Parameters(method = "convertToMicroException_data")
-    public void testConvertToMicroExceptionChecker(String siPrefix, String message) {
+    @ParameterizedTest(name = "Convert 7.5({0}) to micro = {1}")
+    @MethodSource("convertToMicroException_data")
+    void testConvertToMicroExceptionChecker(String siPrefix, String message) {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> Conversions.convertToMicro(toBeConverted, siPrefix)
         );
         assertTrue(exception.getMessage().contains(message));
     }
 
-    private Object[] convertToMicroException_data() {
+    private static Object[] convertToMicroException_data() {
         String message = "Invalid SI Prefix";
 
         return new Object[] {
@@ -40,13 +37,13 @@ public class ConversionsTest {
         };
     }
 
-    @Test
-    @Parameters(method = "convertToMicro_data")
-    public void testConvertToMicroChecker(String siPrefix, BigDecimal expected) {
+    @ParameterizedTest(name = "Convert 7.5{0} to micro = {1}")
+    @MethodSource("convertToMicro_data")
+    void testConvertToMicroChecker(String siPrefix, BigDecimal expected) {
         assertEquals(expected, Conversions.convertToMicro(toBeConverted, siPrefix));
     }
 
-    private Object[] convertToMicro_data() {
+    private static Object[] convertToMicro_data() {
         return new Object[] {
             new Object[] {"Yotta (Y)", toBeConverted.multiply(BigDecimal.TEN.pow(30, mc), mc)},
             new Object[] {"Zetta (Z)", toBeConverted.multiply(BigDecimal.TEN.pow(27, mc), mc)},
@@ -71,13 +68,13 @@ public class ConversionsTest {
         };
     }
 
-    @Test
-    @Parameters(method = "convertToBase_data")
-    public void convertToBaseChecker(BigDecimal value, int prefixIndex, BigDecimal expected) {
+    @ParameterizedTest(name = "Index: {1}, Convert {0} to base = {3}")
+    @MethodSource("convertToBase_data")
+    void testConvertToBaseChecker(BigDecimal value, int prefixIndex, BigDecimal expected) {
         assertEquals(expected, Conversions.convertToBase(value, prefixIndex));
     }
 
-    private Object[] convertToBase_data() {
+    private static Object[] convertToBase_data() {
         return new Object[] {
             new Object[] {toBeConverted, -1, toBeConverted},
             new Object[] {toBeConverted, 0, toBeConverted.multiply(BigDecimal.TEN.pow(24, mc), mc)},
@@ -105,37 +102,37 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testGetSiPrefixes() {
+    void testGetSiPrefixes() {
         List<String> expected = Util.getList("siPrefixes");
 
-        assumeNotNull(expected);
+        assumeFalse(expected == null);
         assumeFalse(expected.isEmpty());
 
         assertEquals(expected, Conversions.getSiPrefixes());
     }
 
     @Test
-    public void testGetRadioactiveUnits() {
+    void testGetRadioactiveUnits() {
         List<String> expected = Util.getList("radioactiveUnits");
 
-        assumeNotNull(expected);
+        assumeFalse(expected == null);
         assumeFalse(expected.isEmpty());
 
         assertEquals(expected, Conversions.getRadioactiveUnits());
     }
 
     @Test
-    public void testGetMassUnits() {
+    void testGetMassUnits() {
         List<String> expected = Util.getList("massUnits");
 
-        assumeNotNull(expected);
+        assumeFalse(expected == null);
         assumeFalse(expected.isEmpty());
 
         assertEquals(expected, Conversions.getMassUnits());
     }
 
     @Test
-    public void testBqToCi() {
+    void testBqToCi() {
         BigDecimal expected = BigDecimal.valueOf(2.7).multiply(BigDecimal.TEN.pow(-11, mc), mc);
         BigDecimal actual = Conversions.bqToCi(BigDecimal.ONE);
 
@@ -143,7 +140,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testCiToBq() {
+    void testCiToBq() {
         BigDecimal expected = BigDecimal.valueOf(3.7).multiply(BigDecimal.TEN.pow(10, mc), mc);
         BigDecimal actual = Conversions.ciToBq(BigDecimal.ONE);
 
@@ -151,7 +148,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testGyToRad() {
+    void testGyToRad() {
         BigDecimal expected = BigDecimal.TEN.pow(2, mc);
         BigDecimal actual = Conversions.gyToRad(BigDecimal.ONE);
 
@@ -159,7 +156,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testRadToGy() {
+    void testRadToGy() {
         BigDecimal expected = BigDecimal.TEN.pow(-2, mc);
         BigDecimal actual = Conversions.radToGy(BigDecimal.ONE);
 
@@ -167,7 +164,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testSvToRem() {
+    void testSvToRem() {
         BigDecimal expected = BigDecimal.TEN.pow(2, mc);
         BigDecimal actual = Conversions.svToRem(BigDecimal.ONE);
 
@@ -175,7 +172,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testRemToSv() {
+    void testRemToSv() {
         BigDecimal expected = BigDecimal.TEN.pow(-2, mc);
         BigDecimal actual = Conversions.remToSv(BigDecimal.ONE);
 
@@ -183,7 +180,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testCkgToR() {
+    void testCkgToR() {
         BigDecimal expected = BigDecimal.valueOf(3.88).multiply(BigDecimal.TEN.pow(3, mc), mc);
         BigDecimal actual = Conversions.ckgToR(BigDecimal.ONE);
 
@@ -191,7 +188,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testRToCkg() {
+    void testRToCkg() {
         BigDecimal expected = BigDecimal.valueOf(2.58).multiply(BigDecimal.TEN.pow(-4, mc), mc);
         BigDecimal actual = Conversions.rToCkg(BigDecimal.ONE);
 
@@ -199,7 +196,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToYotta() {
+    void testBaseToYotta() {
         BigDecimal expected = BigDecimal.TEN.pow(-24, mc);
         BigDecimal actual = Conversions.baseToYotta(BigDecimal.ONE);
 
@@ -207,7 +204,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToZetta() {
+    void testBaseToZetta() {
         BigDecimal expected = BigDecimal.TEN.pow(-21, mc);
         BigDecimal actual = Conversions.baseToZetta(BigDecimal.ONE);
 
@@ -215,7 +212,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToExa() {
+    void testBaseToExa() {
         BigDecimal expected = BigDecimal.TEN.pow(-18, mc);
         BigDecimal actual = Conversions.baseToExa(BigDecimal.ONE);
 
@@ -223,7 +220,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToPeta() {
+    void testBaseToPeta() {
         BigDecimal expected = BigDecimal.TEN.pow(-15, mc);
         BigDecimal actual = Conversions.baseToPeta(BigDecimal.ONE);
 
@@ -231,7 +228,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToTera() {
+    void testBaseToTera() {
         BigDecimal expected = BigDecimal.TEN.pow(-12, mc);
         BigDecimal actual = Conversions.baseToTera(BigDecimal.ONE);
 
@@ -239,7 +236,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToGiga() {
+    void testBaseToGiga() {
         BigDecimal expected = BigDecimal.TEN.pow(-9, mc);
         BigDecimal actual = Conversions.baseToGiga(BigDecimal.ONE);
 
@@ -247,7 +244,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToMega() {
+    void testBaseToMega() {
         BigDecimal expected = BigDecimal.TEN.pow(-6, mc);
         BigDecimal actual = Conversions.baseToMega(BigDecimal.ONE);
 
@@ -255,7 +252,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToKilo() {
+    void testBaseToKilo() {
         BigDecimal expected = BigDecimal.TEN.pow(-3, mc);
         BigDecimal actual = Conversions.baseToKilo(BigDecimal.ONE);
 
@@ -263,7 +260,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToHecto() {
+    void testBaseToHecto() {
         BigDecimal expected = BigDecimal.TEN.pow(-2, mc);
         BigDecimal actual = Conversions.baseToHecto(BigDecimal.ONE);
 
@@ -271,7 +268,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToDeka() {
+    void testBaseToDeka() {
         BigDecimal expected = BigDecimal.TEN.pow(-1, mc);
         BigDecimal actual = Conversions.baseToDeka(BigDecimal.ONE);
 
@@ -279,7 +276,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToDeci() {
+    void testBaseToDeci() {
         BigDecimal expected = BigDecimal.TEN.pow(1, mc);
         BigDecimal actual = Conversions.baseToDeci(BigDecimal.ONE);
 
@@ -287,7 +284,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToCenti() {
+    void testBaseToCenti() {
         BigDecimal expected = BigDecimal.TEN.pow(2, mc);
         BigDecimal actual = Conversions.baseToCenti(BigDecimal.ONE);
 
@@ -295,7 +292,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToMilli() {
+    void testBaseToMilli() {
         BigDecimal expected = BigDecimal.TEN.pow(3, mc);
         BigDecimal actual = Conversions.baseToMilli(BigDecimal.ONE);
 
@@ -303,7 +300,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToMicro() {
+    void testBaseToMicro() {
         BigDecimal expected = BigDecimal.TEN.pow(6, mc);
         BigDecimal actual = Conversions.baseToMicro(BigDecimal.ONE);
 
@@ -311,7 +308,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToNano() {
+    void testBaseToNano() {
         BigDecimal expected = BigDecimal.TEN.pow(9, mc);
         BigDecimal actual = Conversions.baseToNano(BigDecimal.ONE);
 
@@ -319,7 +316,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToPico() {
+    void testBaseToPico() {
         BigDecimal expected = BigDecimal.TEN.pow(12, mc);
         BigDecimal actual = Conversions.baseToPico(BigDecimal.ONE);
 
@@ -327,7 +324,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToFemto() {
+    void testBaseToFemto() {
         BigDecimal expected = BigDecimal.TEN.pow(15, mc);
         BigDecimal actual = Conversions.baseToFemto(BigDecimal.ONE);
 
@@ -335,7 +332,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToAtto() {
+    void testBaseToAtto() {
         BigDecimal expected = BigDecimal.TEN.pow(18, mc);
         BigDecimal actual = Conversions.baseToAtto(BigDecimal.ONE);
 
@@ -343,7 +340,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToZepto() {
+    void testBaseToZepto() {
         BigDecimal expected = BigDecimal.TEN.pow(21, mc);
         BigDecimal actual = Conversions.baseToZepto(BigDecimal.ONE);
 
@@ -351,7 +348,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testBaseToYocto() {
+    void testBaseToYocto() {
         BigDecimal expected = BigDecimal.TEN.pow(24, mc);
         BigDecimal actual = Conversions.baseToYocto(BigDecimal.ONE);
 
@@ -359,7 +356,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testYottaToBase() {
+    void testYottaToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(24, mc);
         BigDecimal actual = Conversions.yottaToBase(BigDecimal.ONE);
 
@@ -367,7 +364,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testZettaToBase() {
+    void testZettaToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(21, mc);
         BigDecimal actual = Conversions.zettaToBase(BigDecimal.ONE);
 
@@ -375,7 +372,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testExaToBase() {
+    void testExaToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(18, mc);
         BigDecimal actual = Conversions.exaToBase(BigDecimal.ONE);
 
@@ -383,7 +380,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testPetaToBase() {
+    void testPetaToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(15, mc);
         BigDecimal actual = Conversions.petaToBase(BigDecimal.ONE);
 
@@ -391,7 +388,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testTeraToBase() {
+    void testTeraToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(12, mc);
         BigDecimal actual = Conversions.teraToBase(BigDecimal.ONE);
 
@@ -399,7 +396,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testGigaToBase() {
+    void testGigaToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(9, mc);
         BigDecimal actual = Conversions.gigaToBase(BigDecimal.ONE);
 
@@ -407,7 +404,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testMegaToBase() {
+    void testMegaToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(6, mc);
         BigDecimal actual = Conversions.megaToBase(BigDecimal.ONE);
 
@@ -415,7 +412,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testKiloToBase() {
+    void testKiloToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(3, mc);
         BigDecimal actual = Conversions.kiloToBase(BigDecimal.ONE);
 
@@ -423,7 +420,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testHectoToBase() {
+    void testHectoToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(2, mc);
         BigDecimal actual = Conversions.hectoToBase(BigDecimal.ONE);
 
@@ -431,7 +428,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testDekaToBase() {
+    void testDekaToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(1, mc);
         BigDecimal actual = Conversions.dekaToBase(BigDecimal.ONE);
 
@@ -439,7 +436,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testDeciToBase() {
+    void testDeciToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(-1, mc);
         BigDecimal actual = Conversions.deciToBase(BigDecimal.ONE);
 
@@ -447,7 +444,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testCentiToBase() {
+    void testCentiToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(-2, mc);
         BigDecimal actual = Conversions.centiToBase(BigDecimal.ONE);
 
@@ -455,7 +452,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testMilliToBase() {
+    void testMilliToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(-3, mc);
         BigDecimal actual = Conversions.milliToBase(BigDecimal.ONE);
 
@@ -463,7 +460,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testMicroToBase() {
+    void testMicroToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(-6, mc);
         BigDecimal actual = Conversions.microToBase(BigDecimal.ONE);
 
@@ -471,7 +468,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testNanoToBase() {
+    void testNanoToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(-9, mc);
         BigDecimal actual = Conversions.nanoToBase(BigDecimal.ONE);
 
@@ -479,7 +476,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testPicoToBase() {
+    void testPicoToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(-12, mc);
         BigDecimal actual = Conversions.picoToBase(BigDecimal.ONE);
 
@@ -487,7 +484,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testFemtoToBase() {
+    void testFemtoToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(-15, mc);
         BigDecimal actual = Conversions.femtoToBase(BigDecimal.ONE);
 
@@ -495,7 +492,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testAttoToBase() {
+    void testAttoToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(-18, mc);
         BigDecimal actual = Conversions.attoToBase(BigDecimal.ONE);
 
@@ -503,7 +500,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testZeptoToBase() {
+    void testZeptoToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(-21, mc);
         BigDecimal actual = Conversions.zeptoToBase(BigDecimal.ONE);
 
@@ -511,7 +508,7 @@ public class ConversionsTest {
     }
 
     @Test
-    public void testYoctoToBase() {
+    void testYoctoToBase() {
         BigDecimal expected = BigDecimal.TEN.pow(-24, mc);
         BigDecimal actual = Conversions.yoctoToBase(BigDecimal.ONE);
 
