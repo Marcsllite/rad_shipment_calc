@@ -105,9 +105,6 @@ for:
       only:
         - job_name: Linux build
 
-    init:
-      - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
-
     # install:
     #   - sh: wget https://www-us.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz -P /tmp &&
     #         sudo tar xf /tmp/apache-maven-*.tar.gz -C /opt && 
@@ -117,6 +114,7 @@ for:
       - sh: |
             unset JAVA_TOOL_OPTIONS && 
             mvn clean verify
+      - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
 
     test_script:
       - sh: |
