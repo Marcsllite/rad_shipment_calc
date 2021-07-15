@@ -9,7 +9,10 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -22,6 +25,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.testfx.api.FxRobot;
+import org.testfx.api.FxToolkit;
 import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
@@ -42,7 +46,7 @@ public class UtilTest {
     @ExtendWith(ApplicationExtension.class)
     @TestInstance(Lifecycle.PER_CLASS) 
     class UtilTestUI {
-        // Stage stage;
+        Stage stage; 
         ButtonBase btnBase;
         Button btn2;
         VBox vBox;
@@ -51,6 +55,7 @@ public class UtilTest {
 
         @Start
         public void start(Stage stage) throws Exception {
+            this.stage = stage;
             btnBase = new Button(btnTxt);
             btn2 = new Button("Button 2");
 
@@ -60,35 +65,42 @@ public class UtilTest {
 
             vBox = new VBox(10, btnBase, btn2);
 
-            stage.setScene(new Scene(vBox, 100, 100));
-            stage.show();
+            this.stage.setScene(new Scene(vBox, 100, 100));
+            this.stage.show();
+        }
+        
+        @AfterEach
+        void tearDown() throws TimeoutException{
+            FxToolkit.hideStage();
         }
 
         @Test
-        public void fireBtnOnEnter_SpaceKey_Focused(FxRobot robot) {
+        public void fireBtnOnEnter_OtherKey_Focused(FxRobot robot) {
             Platform.runLater(() -> {
                 Util.fireBtnOnEnter(btnBase);
 
                 btnBase.requestFocus();
 
-                robot.press(KeyCode.SPACE).release(KeyCode.SPACE);
+                robot.press(KeyCode.A).release(KeyCode.A);
 
                 assertNotNull(btnBase.getOnKeyPressed());
+                assumeTrue(btnBase.isFocused());
             });
             WaitForAsyncUtils.waitForFxEvents();
             Assertions.assertThat(btnBase).hasText(btnTxt);
         }
 
         @Test
-        public void fireBtnOnEnter_SpaceKey_NotFocused(FxRobot robot) {
+        public void fireBtnOnEnter_OtherKey_NotFocused(FxRobot robot) {
             Platform.runLater(() -> {
                 Util.fireBtnOnEnter(btnBase);
                 
                 btn2.requestFocus();
                 
-                robot.press(KeyCode.SPACE).release(KeyCode.SPACE);
+                robot.press(KeyCode.A).release(KeyCode.A);
 
                 assertNotNull(btnBase.getOnKeyPressed());
+                assumeTrue(btn2.isFocused());
             });
             WaitForAsyncUtils.waitForFxEvents();
             Assertions.assertThat(btnBase).hasText(btnTxt);
@@ -120,6 +132,7 @@ public class UtilTest {
                 robot.press(KeyCode.ENTER).release(KeyCode.ENTER);
 
                 assertNotNull(btnBase.getOnKeyPressed());
+                assumeTrue(btn2.isFocused());
             });
             WaitForAsyncUtils.waitForFxEvents();
             Assertions.assertThat(btnBase).hasText(btnTxt);

@@ -274,7 +274,7 @@ public final class Util {
 
     /**
      * Helper function to allow the given buttonBase to be fired
-     * when the enter key is pressed and the buttonBase is in focus
+     * when the enter/space key is pressed and the buttonBase is in focus
      * 
      * Valid ButtonBases:
      *      MenuBarButton
@@ -294,8 +294,10 @@ public final class Util {
 
         btnBase.setOnKeyPressed(
             event -> {
-                if(event.getCode() == KeyCode.ENTER && btnBase.isFocused())
+                if(event.getCode().equals(KeyCode.ENTER)) {
                     btnBase.fire();
+                    event.consume();
+                }
             }
         );
     }
