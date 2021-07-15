@@ -113,8 +113,8 @@ for:
     build_script:
       - sh: |
             unset JAVA_TOOL_OPTIONS && 
+            curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e - &&
             mvn clean verify
-      - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
 
     test_script:
       - sh: |
