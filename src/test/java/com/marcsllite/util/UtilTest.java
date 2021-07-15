@@ -2,7 +2,6 @@ package com.marcsllite.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -11,7 +10,6 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -24,12 +22,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.testfx.api.FxRobot;
+import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
@@ -44,37 +42,28 @@ public class UtilTest {
     @ExtendWith(ApplicationExtension.class)
     @TestInstance(Lifecycle.PER_CLASS) 
     class UtilTestUI {
-        Stage stage;
+        // Stage stage;
         ButtonBase btnBase;
         Button btn2;
         VBox vBox;
-        SimpleStringProperty stringProp;
+        String btnTxt = "Button Base";
         String msg = "button was fired";
 
         @Start
         public void start(Stage stage) throws Exception {
-            this.stage = stage;
+            btnBase = new Button(btnTxt);
+            btn2 = new Button("Button 2");
+
+            btnBase.setOnAction( 
+                (event) -> btnBase.setText(msg)
+            );
+
+            vBox = new VBox(10, btnBase, btn2);
+
+            stage.setScene(new Scene(vBox, 100, 100));
+            stage.show();
         }
 
-        @BeforeEach
-        void setup() {
-            Platform.runLater(() -> {
-                btnBase = new Button("Button Base");
-                btn2 = new Button("Button 2");
-                stringProp = new SimpleStringProperty();
-
-                btnBase.setOnAction( 
-                    (event) -> stringProp.set("button was fired")
-                );
-
-                vBox = new VBox(10, btnBase, btn2);
-
-                stage.setScene(new Scene(vBox, 100, 100));
-                stage.show();
-            });
-            WaitForAsyncUtils.waitForFxEvents();
-        }
-        
         @Test
         public void fireBtnOnEnter_SpaceKey_Focused(FxRobot robot) {
             Platform.runLater(() -> {
@@ -85,8 +74,9 @@ public class UtilTest {
                 robot.press(KeyCode.SPACE).release(KeyCode.SPACE);
 
                 assertNotNull(btnBase.getOnKeyPressed());
-                assertNull(stringProp.get());
             });
+            WaitForAsyncUtils.waitForFxEvents();
+            Assertions.assertThat(btnBase).hasText(btnTxt);
         }
 
         @Test
@@ -99,21 +89,25 @@ public class UtilTest {
                 robot.press(KeyCode.SPACE).release(KeyCode.SPACE);
 
                 assertNotNull(btnBase.getOnKeyPressed());
-                assertNull(stringProp.get());
             });
+            WaitForAsyncUtils.waitForFxEvents();
+            Assertions.assertThat(btnBase).hasText(btnTxt);
         }
 
         @Test
         public void fireBtnOnEnter_EnterKey_Focused(FxRobot robot) {
-            Util.fireBtnOnEnter(btnBase);
+            Platform.runLater(() -> {
+                Util.fireBtnOnEnter(btnBase);
 
-            btnBase.requestFocus();
-        
-            robot.press(KeyCode.ENTER).release(KeyCode.ENTER);
-                                            
-            assertNotNull(btnBase.getOnKeyPressed());
-            assumeTrue(btnBase.isFocused());
-            assertEquals(msg, stringProp.get());
+                btnBase.requestFocus();
+            
+                robot.press(KeyCode.ENTER).release(KeyCode.ENTER);
+                                                
+                assertNotNull(btnBase.getOnKeyPressed());
+                assumeTrue(btnBase.isFocused());
+            });
+            WaitForAsyncUtils.waitForFxEvents();
+            Assertions.assertThat(btnBase).hasText(msg);
         }
 
         @Test 
@@ -126,8 +120,9 @@ public class UtilTest {
                 robot.press(KeyCode.ENTER).release(KeyCode.ENTER);
 
                 assertNotNull(btnBase.getOnKeyPressed());
-                assertNull(stringProp.get());
             });
+            WaitForAsyncUtils.waitForFxEvents();
+            Assertions.assertThat(btnBase).hasText(btnTxt);
         }
     }
 
