@@ -2,6 +2,7 @@ package com.marcsllite.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -26,12 +27,12 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
-import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
@@ -50,13 +51,13 @@ public class UtilTest {
         ButtonBase btnBase;
         Button btn2;
         VBox vBox;
-        String btnTxt = "Button Base";
+        SimpleStringProperty stringProp;
         String msg = "button was fired";
 
         @Start
         public void start(Stage stage) throws Exception {
             this.stage = stage;
-            btnBase = new Button(btnTxt);
+            btnBase = new Button("Button Base");
             btn2 = new Button("Button 2");
 
             btnBase.setOnAction( 
@@ -67,6 +68,25 @@ public class UtilTest {
 
             this.stage.setScene(new Scene(vBox, 100, 100));
             this.stage.show();
+        }
+
+        @BeforeEach
+        void setup() {
+            Platform.runLater(() -> {
+                btnBase = new Button("Button Base");
+                btn2 = new Button("Button 2");
+                stringProp = new SimpleStringProperty();
+
+                btnBase.setOnAction( 
+                    (event) -> stringProp.set("button was fired")
+                );
+
+                vBox = new VBox(10, btnBase, btn2);
+
+                stage.setScene(new Scene(vBox, 100, 100));
+                stage.show();
+            });
+            WaitForAsyncUtils.waitForFxEvents();
         }
         
         @AfterEach
@@ -87,7 +107,7 @@ public class UtilTest {
                 assumeTrue(btnBase.isFocused());
             });
             WaitForAsyncUtils.waitForFxEvents();
-            Assertions.assertThat(btnBase).hasText(btnTxt);
+            assertNull(stringProp.get());
         }
 
         @Test
@@ -101,9 +121,8 @@ public class UtilTest {
 
                 assertNotNull(btnBase.getOnKeyPressed());
                 assumeTrue(btn2.isFocused());
+                assertNull(stringProp.get());
             });
-            WaitForAsyncUtils.waitForFxEvents();
-            Assertions.assertThat(btnBase).hasText(btnTxt);
         }
 
         @Test
@@ -119,7 +138,7 @@ public class UtilTest {
                 assumeTrue(btnBase.isFocused());
             });
             WaitForAsyncUtils.waitForFxEvents();
-            Assertions.assertThat(btnBase).hasText(msg);
+            assertEquals(msg, stringProp.get());
         }
 
         @Test 
@@ -133,9 +152,8 @@ public class UtilTest {
 
                 assertNotNull(btnBase.getOnKeyPressed());
                 assumeTrue(btn2.isFocused());
+                assertNull(stringProp.get());
             });
-            WaitForAsyncUtils.waitForFxEvents();
-            Assertions.assertThat(btnBase).hasText(btnTxt);
         }
     }
 
