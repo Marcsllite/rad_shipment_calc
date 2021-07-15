@@ -106,16 +106,15 @@ for:
       only:
         - job_name: Linux build
 
-    init:
-      - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
+    # init:
+    #   - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
 
     install:
       - sh: wget https://www-us.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz -P /tmp &&
             sudo tar xf /tmp/apache-maven-*.tar.gz -C /opt && 
             sudo update-alternatives --install /usr/bin/mvn mvn /opt/apache-maven-3.6.3/bin/mvn 363
-      - sh: sudo apt-get install xvfb &&
-            export DISPLAY=:99.0 &&
-            sh -e /etc/init.d/xvfb start
+      - sh: Xvfb :99 &
+            export DISPLAY=:99
 
     build_script:
       - sh: mvn clean verify
