@@ -40,7 +40,7 @@ environment:
 
     - job_name: Linux build
       appveyor_build_worker_image: Ubuntu2004
-      _JAVA_OPTIONS: "-Dtestfx.robot=awt -Dtestfx.awt.scale=true
+      _JAVA_OPTIONS: "-Dtestfx.robot=awt -Dtestfx.awt.scale=true"
 
 stack: jdk 11
 
@@ -67,7 +67,7 @@ for:
   #     - ps: $wc = New-Object 'System.Net.WebClient';
   #           foreach($file in get-childItem $env:APPVEYOR_BUILD_FOLDER/target/surefire-reports -include TEST-*.xml -name) { `
   #             $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path .\target\surefire-reports\$file)); }
-
+  #
   #   on_success:
   #     - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
   #           .\codecov.exe -t $CODECOV_TOKEN
