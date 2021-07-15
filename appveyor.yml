@@ -64,9 +64,6 @@ for:
 
     build_script:
       - cmd: mvn clean verify
-
-    build:
-      verbosity: detailed
       
     test_script:
       - ps: $wc = New-Object 'System.Net.WebClient';
@@ -92,9 +89,6 @@ for:
 
     build_script:
       - sh: mvn clean verify
-
-    build:
-      verbosity: detailed
 
     test_script:
       - sh: |
@@ -126,9 +120,6 @@ for:
 
     build_script:
       - sh: mvn clean verify
-
-    build:
-      verbosity: detailed
 
     test_script:
       - sh: |
