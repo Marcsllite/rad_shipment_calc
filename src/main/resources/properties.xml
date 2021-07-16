@@ -21,23 +21,22 @@
     <entry key="summaryReport">Rad Shipment Calculator - Summary Report</entry>
     <entry key="summaryReportName">Summary Report Page</entry>
 
-<!--     
-    <list name="natures">
-        <val default="true">Regular</val>
-        <val>Instrument</val>
-        <val>Article</val>
-    </list>
+    <entry key="natures">
+        Regular|
+        Instrument|
+        Article
+    </entry>
 
-    <list name="states">
-        <val default="true">Solid</val>
-        <val>Liquid</val>
-        <val>Gas</val>
-    </list>
+    <entry key="states">
+        Solid|
+        Liquid|
+        Gas
+    </entry>
 
-    <list name="forms">
-        <val>Special</val>
-        <val default="true">Normal</val>
-    </list> -->
+    <entry key="forms">
+        Normal|
+        Special
+    </entry> 
 
     <!-- Operating Systems -->
     <entry key="windows">Windows</entry>
@@ -68,6 +67,41 @@
     <entry key="umlBlue">\#0469B1</entry>
     <entry key="defaultWhite">\#fff</entry>
     <entry key="defaultGrey">\#8a8a8a</entry>
+
+    <!-- SI Prefixes -->
+    <entry key="siPrefixes">
+        Yotta (Y)|
+        Zetta (Z)|
+        Exa (E)|
+        Peta (P)|
+        Tera (T)|
+        Giga (G)|
+        Mega (M)|
+        Kilo (k)|
+        Hecto (h)|
+        Deka (da)|
+        ----|
+        Deci (d)|
+        Centi (c)|
+        Milli (m)|
+        Micro (\u00B5)|
+        Nano (n)|
+        Pico (p)|
+        Femto (f)|
+        Atto (a)|
+        Zepto (z)|
+        Yocto (y)
+    </entry>
+
+    <entry key="radioactiveUnits">
+        Becquerel (Bq)|
+        Curie (Ci)
+    </entry>
+
+    <entry key="massUnits">
+        grams|
+        liters
+    </entry>
 
     <!-- misc -->
     <entry key="appFolderName">UMass Lowell Radiation Safety</entry>
@@ -220,4 +254,8 @@
     <entry key="replacePropString_threeReplacements">This string contains {0}, {1}, {2} replacements</entry>
     <entry key="replacePropString_oneSameReplacements">This string contains a replacement here: {0}, and the same replacement here: {0}</entry>
     <entry key="replacePropString_twoSameReplacements">First: {0}, Second: {1}, Third: {0}, Fourth: {1}</entry>
+    <entry key="getList_TrailingDelimiters">This|List|has|trailing|delimiters||||</entry>
+    <entry key="getList_SpacesWithinElements">element 1 has spaces|element 2 does too</entry>
+    <entry key="getList_SpacesAroundElements">     there are spaces around this element    |   spaces around here too    </entry>
+    <entry key="getList_ProperList">This|is|a|proper|list</entry>
 </properties>

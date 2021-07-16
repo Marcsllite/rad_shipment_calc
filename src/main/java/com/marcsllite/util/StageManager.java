@@ -3,8 +3,6 @@ package com.marcsllite.util;
 import java.security.InvalidParameterException;
 import java.util.Objects;
 
-import com.marcsllite.App;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,8 +31,10 @@ public class StageManager {
   }
   
   public void switchScene(FXMLView view) {
-    if (view == null)
-      throw new InvalidParameterException(NULL_ERROR); 
+    if (view == null) {
+      throw new InvalidParameterException(NULL_ERROR);
+    }
+    
     Parent root = loadViewNodeHierarchy(view);
     this.primaryStage.setScene(new Scene(root, view.getWidth(), view.getHeight()));
     this.primaryStage.setMinWidth(view.getWidth());
@@ -46,11 +46,13 @@ public class StageManager {
     show(view);
   }
   
-  public <T> T getController() { return (T) this.fxmlLoader.getController(); }
+  public <T> T getController() { return this.fxmlLoader.getController(); }
   
   protected void show(FXMLView view) throws RuntimeException {
-    if (view == null)
-      throw new InvalidParameterException(NULL_ERROR); 
+    if (view == null) {
+      throw new InvalidParameterException(NULL_ERROR);
+    }
+
     this.primaryStage.setTitle(view.getTitle());
     this.primaryStage.getIcons().add(view.getIconImage());
     this.primaryStage.centerOnScreen();
@@ -63,8 +65,10 @@ public class StageManager {
   }
   
   protected Parent loadViewNodeHierarchy(FXMLView view) throws RuntimeException {
-    if (view == null)
-      throw new InvalidParameterException(NULL_ERROR); 
+    if (view == null) {
+      throw new InvalidParameterException(NULL_ERROR);
+    }
+
     Parent rootNode = null;
     try {
       this.fxmlLoader = new FXMLLoader(getClass().getResource(view.getFxmlLoc()));
@@ -77,9 +81,12 @@ public class StageManager {
     return rootNode;
   }
   
+  @SuppressWarnings("java:S112")
   protected void logAndThrowException(String errorMsg, Exception exception) throws RuntimeException {
-    if (errorMsg == null || errorMsg.isBlank())
-      errorMsg = App.getString("defaultMessage"); 
+    if (errorMsg == null || errorMsg.isBlank()) {
+      errorMsg = Util.getString("defaultMessage");
+    } 
+    
     if (exception == null) {
       logr.log(Level.FATAL, errorMsg);
     } else {

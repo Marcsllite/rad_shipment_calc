@@ -15,6 +15,7 @@ jobs:
 
 before_install:
   - export DISPLAY=:99.0
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get -y install at-spi2-core; fi
 
 script: 
   - mvn clean verify
@@ -24,4 +25,4 @@ cache:
   - $HOME/.m2
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash) -t CODECOV_TOKEN
+  - bash <(curl -s https://codecov.io/bash)
