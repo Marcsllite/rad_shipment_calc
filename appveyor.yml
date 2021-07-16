@@ -5,7 +5,6 @@
 # version format
 version: 1.0.{build}-{branch}
 
-
 # branches to build
 branches:
   # whitelist
@@ -44,9 +43,6 @@ environment:
       _JAVA_OPTIONS: "-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw"
 
 stack: jdk 11
-
-matrix:
-  fast_finish: false
 
 for:
   # WINDOWS BUILD #
@@ -106,9 +102,6 @@ for:
     matrix:
       only:
         - job_name: Linux build
-
-    # init:
-    #   - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
 
     install:
       - sh: wget https://www-us.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz -P /tmp &&
