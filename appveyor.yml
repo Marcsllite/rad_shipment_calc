@@ -10,6 +10,7 @@ branches:
   # whitelist
   only:
     - dev
+    - master
 
 # Including commits with particular message or from specific user
 only_commits:
