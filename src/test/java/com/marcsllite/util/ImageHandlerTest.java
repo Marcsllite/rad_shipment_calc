@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.security.InvalidParameterException;
 
 import org.junit.jupiter.api.Test;
@@ -20,44 +19,44 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import javafx.scene.image.Image;
 
 @ExtendWith(ApplicationExtension.class)
-public class ImageHandlerTest {
+class ImageHandlerTest {
     @Test
-    public void testGetErrorImage() throws MalformedURLException { 
+    void testGetErrorImage() { 
         Image actual = ImageHandler.getErrorImage();
         assertNotNull(actual);
         assertTrue(actual.getUrl().contains("/images/error.png"));
     }
   
     @Test
-    public void testGetSuccessImage() {
+    void testGetSuccessImage() {
         Image actual = ImageHandler.getSuccessImage();
         assertNotNull(actual);
         assertTrue(actual.getUrl().contains("/images/success.png"));
     }
   
     @Test
-    public void testGetMinusImage() {
+    void testGetMinusImage() {
         Image actual = ImageHandler.getMinusImage();
         assertNotNull(actual);
         assertTrue(actual.getUrl().contains("/images/minus.png"));
     }
   
     @Test
-    public void testGetColorLogoBkgImage() {
+    void testGetColorLogoBkgImage() {
         Image actual = ImageHandler.getColorLogoBkgImage();
         assertNotNull(actual);
         assertTrue(actual.getUrl().contains("/images/color_UMass_logo_background.png"));
     }
   
     @Test
-    public void testGetColorLogoBkgPath() {
+    void testGetColorLogoBkgPath() {
         String expected = System.getProperty("user.dir") + File.separator + "color_UMass_logo_background.png";
         assertEquals(expected, ImageHandler.getColorLogoBkgPath());
     }
   
     @ParameterizedTest
     @MethodSource("invalidColor_data")
-    public void testGetShipmentImageExceptionChecker(String color, String message) {
+    void testGetShipmentImageExceptionChecker(String color, String message) {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> ImageHandler.getShipmentImage(color)
         );
@@ -77,7 +76,7 @@ public class ImageHandlerTest {
         "defaultWhite, /images/white_single_box.png",
         "defaultGrey, /images/grey_single_box.png"
     })
-    public void testGetShipmentImage(String color, String url) {
+    void testGetShipmentImage(String color, String url) {
         String c = Util.getString(color);
         
         assumeFalse(c == null);
@@ -90,7 +89,7 @@ public class ImageHandlerTest {
   
     @ParameterizedTest
     @MethodSource("invalidColor_data")
-    public void testGetReferenceImageExceptionChecker(String color, String message) {
+    void testGetReferenceImageExceptionChecker(String color, String message) {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> ImageHandler.getReferenceImage(color)
         );
@@ -103,7 +102,7 @@ public class ImageHandlerTest {
         "defaultWhite, /images/white_paper.png",
         "defaultGrey, /images/grey_paper.png"
     })
-    public void testGetReferenceImage(String color, String url) {
+    void testGetReferenceImage(String color, String url) {
         String c = Util.getString(color);
         
         assumeFalse(c == null);

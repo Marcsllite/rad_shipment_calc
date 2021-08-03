@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class ConversionsTest {
+class ConversionsTest {
     final static BigDecimal toBeConverted = BigDecimal.valueOf(7.5d);
     final static MathContext mc = Conversions.context;
 

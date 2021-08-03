@@ -24,7 +24,7 @@ public class App extends Application {
     private static final Logger logr = LogManager.getLogger();
     private static String dataFolder;
     private static String defaultDir;
-    protected static StageManager stageManager;
+    private StageManager stageManager;
 
     static {
         setDataFolder(Util.getCurrentOS());
@@ -39,7 +39,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
         setStageManager(stage);
-        stageManager.switchScene(FXMLView.PRIMARY);
+        stageManager.show(FXMLView.MAIN);
     }
 
     /*/////////////////////////////////////////////////// SETTERS ////////////////////////////////////////////////////*/
@@ -49,7 +49,7 @@ public class App extends Application {
      * 
      * @param stage the root stage
      */
-    static void setStageManager(Stage stage) {
+    private void setStageManager(Stage stage) {
         stageManager = new StageManager(stage);
     }
 
@@ -119,7 +119,7 @@ public class App extends Application {
      *
      * @return the StageManager
      */
-    public static StageManager getStageManager() { return stageManager; }
+    public StageManager getStageManager() { return stageManager; }
 
     /**
      * Getter function to get the main folder where logging data resides

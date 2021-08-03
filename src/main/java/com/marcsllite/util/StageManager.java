@@ -1,5 +1,6 @@
 package com.marcsllite.util;
 
+import java.net.URL;
 import java.security.InvalidParameterException;
 import java.util.Objects;
 
@@ -17,17 +18,23 @@ public class StageManager {
   private static final Logger logr = LogManager.getLogger();
   
   private final Stage primaryStage;
-  
-  private FXMLLoader fxmlLoader;
+  private final ControllerFactory factory;
+  private FXMLView curView;
   
   private static final String NULL_ERROR = "FXML View is null";
   
   public StageManager(Stage stage) {
-    this.primaryStage = stage;
+    primaryStage = stage;
+    factory = new ControllerFactory();
+    curView = null;
   }
   
   public Stage getPrimaryStage() {
-    return this.primaryStage;
+    return primaryStage;
+  }
+
+  public FXMLView getCurrentView() {
+    return curView;
   }
   
   public void switchScene(FXMLView view) {
@@ -36,32 +43,31 @@ public class StageManager {
     }
     
     Parent root = loadViewNodeHierarchy(view);
-    this.primaryStage.setScene(new Scene(root, view.getWidth(), view.getHeight()));
-    this.primaryStage.setMinWidth(view.getWidth());
-    this.primaryStage.setMinHeight(view.getHeight());
-    this.primaryStage.setMaxWidth(view.getMaxWidth());
-    this.primaryStage.setMaxHeight(view.getMaxHeight());
-    this.primaryStage.setFullScreen(false);
-    this.primaryStage.setMaximized(false);
-    show(view);
+    primaryStage.setScene(new Scene(root, view.getWidth(), view.getHeight()));
+    primaryStage.setMinWidth(view.getWidth());
+    primaryStage.setMinHeight(view.getHeight());
+    primaryStage.setMaxWidth(view.getMaxWidth());
+    primaryStage.setMaxHeight(view.getMaxHeight());
+    primaryStage.setFullScreen(false);
+    primaryStage.setMaximized(false);
+    primaryStage.setTitle(view.getTitle());
+    primaryStage.getIcons().add(view.getIconImage());
+    primaryStage.centerOnScreen();
   }
   
-  public <T> T getController() { return this.fxmlLoader.getController(); }
-  
-  protected void show(FXMLView view) throws RuntimeException {
+  public void show(FXMLView view) throws RuntimeException {
     if (view == null) {
       throw new InvalidParameterException(NULL_ERROR);
     }
 
-    this.primaryStage.setTitle(view.getTitle());
-    this.primaryStage.getIcons().add(view.getIconImage());
-    this.primaryStage.centerOnScreen();
     try {
-      this.primaryStage.show();
+      switchScene(view);
+      primaryStage.show();
     } catch (Exception exception) {
-      logAndThrowException("Unable to show scene titled " + view.getTitle(), exception);
+      logAndThrowException("Unable to show " + view.getName() + " scene", exception);
       Platform.exit();
-    } 
+    }
+    curView = view;
   }
   
   protected Parent loadViewNodeHierarchy(FXMLView view) throws RuntimeException {
@@ -70,9 +76,9 @@ public class StageManager {
     }
 
     Parent rootNode = null;
+    URL location = getClass().getResource(view.getFxmlLoc());
     try {
-      this.fxmlLoader = new FXMLLoader(getClass().getResource(view.getFxmlLoc()));
-      rootNode = (Parent)this.fxmlLoader.load();
+      rootNode = (Parent) FXMLLoader.load(location, null, null, factory);
       Objects.requireNonNull(rootNode, "A Root FXML node must not be null");
     } catch (Exception exception) {
       logAndThrowException("Unable to load FXML view " + view.getFxmlName(), exception);

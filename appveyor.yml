@@ -10,6 +10,7 @@ branches:
   # whitelist
   only:
     - dev
+    - master
 
 # Including commits with particular message or from specific user
 only_commits:
@@ -104,6 +105,7 @@ for:
         - job_name: Linux build
 
     install:
+      - sh: "sudo apt-get -y install libcanberra-gtk-module"
       - sh: wget https://www-us.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz -P /tmp &&
             sudo tar xf /tmp/apache-maven-*.tar.gz -C /opt && 
             sudo update-alternatives --install /usr/bin/mvn mvn /opt/apache-maven-3.6.3/bin/mvn 363

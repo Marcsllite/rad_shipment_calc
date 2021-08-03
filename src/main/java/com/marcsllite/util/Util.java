@@ -1,7 +1,6 @@
 package com.marcsllite.util;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -24,13 +23,13 @@ import javafx.scene.input.KeyCode;
 
 public final class Util {
     private static final Logger logr = LogManager.getLogger();
+    private static final String PROP_NAME = "properties.xml";
     private static String os;
     private static Properties prop;
 
     static {
-        String propertiesPath = "src/main/resources/properties.xml";
         Util.setOs(Util.getCurrentOS());
-        Util.setProp(propertiesPath);
+        Util.setProp(PROP_NAME);
     }
 
     private Util() {}
@@ -44,7 +43,9 @@ public final class Util {
     public static void setProp(String path) throws InvalidParameterException{
         try {
             Util.prop = new Properties();
-            Util.prop.loadFromXML(new FileInputStream(path));
+            var loader = ClassLoader.getSystemClassLoader();
+            InputStream stream = loader.getResourceAsStream(path);
+            Util.prop.loadFromXML(stream);
         } catch (IOException | NullPointerException e) {
             logr.catching(Level.FATAL, e);
             var ee = new InvalidParameterException("Failed to set properties from path: " + path);
@@ -68,7 +69,7 @@ public final class Util {
      */
     public static Properties getProp() {
         if(Util.prop == null) {
-            Util.setProp("src/main/resources/properties.xml");
+            Util.setProp(PROP_NAME);
         }
 
         return Util.prop;
@@ -212,19 +213,19 @@ public final class Util {
     }
 
     /**
-     * Convenience function to get the integer value at the specified key in the project's property file
+     * Convenience function to get the double value at the specified key in the project's property file
      *
      * @param key a key in the projects property file
-     * @return the integer value at that key
+     * @return the double value at that key
      */
-    public static int getInt(String key) {
-        int ret = Integer.MIN_VALUE;
+    public static double getDouble(String key) {
+        double ret = Double.MIN_VALUE;
 
         if(key == null || key.isBlank()) return ret;
 
         // checking if the key exists in the property file and parsing value if it exists
         try {
-            ret = Integer.parseInt(getString(key));
+            ret = Double.parseDouble(getString(key));
         } catch (NumberFormatException ee) {
             logr.catching(Level.DEBUG, ee);
             var e = new InvalidParameterException("Value is not a number");

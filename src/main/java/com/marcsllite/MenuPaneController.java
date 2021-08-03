@@ -1,0 +1,272 @@
+package com.marcsllite;
+
+import java.security.InvalidParameterException;
+
+import com.marcsllite.util.BaseController;
+import com.marcsllite.util.ImageHandler;
+import com.marcsllite.util.Util;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+
+public class MenuPaneController extends BaseController {
+    // Declaring FXML objects
+    @FXML protected GridPane menuPane;
+    @FXML protected ImageView imgViewColorLogo;
+    @FXML protected ImageView imgViewGreyLogo;
+    @FXML protected Button btnShipment;
+    @FXML protected ImageView imgViewShipment;
+    @FXML protected Button btnReference;
+    @FXML protected ImageView imgViewReference;
+
+    private static final Logger logr = LogManager.getLogger();
+    private final String CURRENT_COLOR;  // color to make the button corresponding to the current page
+    private final String IDLE_COLOR;  // color to make idle buttons
+    private final String HOVER_COLOR;  // color to make buttons when mouse is hovering over
+    private int currentBtn;  // variable to know what page the user is currently on
+                              // 0 = Shipment, 1 = Reference
+
+    public MenuPaneController() {
+        CURRENT_COLOR = Util.getString("umlBlue");
+        IDLE_COLOR = Util.getString("defaultGrey");
+        HOVER_COLOR = Util.getString("defaultWhite");
+    }
+
+    /**
+     * FXML Function to initialize GUI (run when the menuPane.fxml file is loaded by the FXMLLoader)
+     */
+    @Override
+    public void initialize() {
+        mouseLogoExit(); 
+        mouseShipmentExit();
+        mouseReferenceExit();
+
+        setCurrentButton(btnShipment);
+    }
+
+    @Override
+    public void show() {
+        menuPane.setVisible(true);
+        menuPane.toFront();
+    }
+
+    @Override
+    public void hide() {
+        menuPane.setVisible(false);
+        menuPane.toBack();
+    }
+
+    /*///////////////////////////////////////////// MENU PANE CONTROLLER /////////////////////////////////////////////*/
+
+    /**
+     * FXML function to handle any menu button pressed
+     *
+     * @param event the action performed
+     */
+    @FXML protected void menuPaneHandler(ActionEvent event) throws InvalidParameterException {
+        if(event == null) {
+            var e = new InvalidParameterException("action event cannot be null");
+            logr.throwing(e);
+            throw e;
+        }
+
+        else if(event.getSource() == btnShipment) {
+            shipmentBtnHandler();
+        } else if(event.getSource() == btnReference) {
+            referenceBtnHandler();
+        }
+    }
+
+    /*/////////////////////////////////////////////////// HELPERS ////////////////////////////////////////////////////*/
+
+    /**
+     * Helper function to handle the UMass Lowell logo being pressed
+     */
+    @FXML protected void logoImgViewHandler(){
+        logr.info("User clicked the UMass logo in the menu pane");
+
+        // Util.navigateToLink("https://www.uml.edu/");  // navigating to UMass Lowell website
+    }
+
+    /**
+     * Helper function to handle the shipment button being pressed
+     */
+    protected void shipmentBtnHandler(){
+        // checking if user is already on the Shipment page
+        if(getCurrentBtn() != 0) {
+            setCurrentButton(btnShipment);  // setting the current button
+            main.showHomePane();
+        }
+    }
+
+    /**
+     * Helper function to handle the reference button being pressed
+     */
+    protected void referenceBtnHandler(){
+        // checking if user is already on the Shipment page
+        if(getCurrentBtn() != 1) {
+            setCurrentButton(btnReference);  // setting the current button
+            main.showReferencePane();
+        }
+    }
+
+    /**
+     * Helper function to mark the button that corresponds to the page the user is currently viewing
+     *
+     * @param btnCurrent the menu button that corresponds with the current page the user is on
+     */
+    protected void setCurrentButton(Button btnCurrent) throws InvalidParameterException {
+        // marking the given button
+        if(btnCurrent == null) {
+            var e = new InvalidParameterException("The current button cannot be null"); 
+            logr.throwing(e);
+            throw e;
+        }
+
+        // un-marking previous button
+        unsetCurrentButton();
+
+        if(btnCurrent.equals(btnShipment)) {
+            setButtonColor(btnShipment, CURRENT_COLOR);  // setting the single button and icon to be the current color
+            currentBtn = 0;  // noting that the Shipment button is marked
+            logr.info("Navigated to %s page.", btnShipment.getText());
+        } else if(btnCurrent.equals(btnReference)) {
+            setButtonColor(btnReference, CURRENT_COLOR);  // setting the multiple button and icon to be the current color
+            currentBtn = 1;  // noting that the Reference button is marked
+            logr.info("Navigated to %s page.", btnReference.getText());
+        }
+    }
+
+    /**
+     * Helper function to un-mark the previously marked button
+     */
+    protected void unsetCurrentButton() {
+        currentBtn = (int) Util.getDouble("defaultInt");
+
+        // changing the color of the buttons to the idle color
+        setButtonColor(btnShipment, IDLE_COLOR);  // setting the single button and icon to be the current color
+        setButtonColor(btnReference, IDLE_COLOR);  // setting the multiple button and icon to be the current color
+    }
+
+    /**
+     * Helper function to change the color of the given menu button text and icon
+     *
+     * @param btnMenu the menu button to set the color for
+     * @param color the color to set the menu button and icon
+     */
+    protected void setButtonColor(Button btnMenu, String color) throws InvalidParameterException {
+        var errMsg = "";
+        
+        // making sure user is giving valid values
+        if(btnMenu == null) {
+            errMsg = "The menu button cannot be null; ";
+        }
+        if(color == null || color.isBlank()) {
+            errMsg = errMsg.concat("The color cannot be null or blank;");
+        }
+
+        if(!errMsg.isBlank()) {
+            var e = new InvalidParameterException(errMsg);
+            logr.throwing(e);
+            throw e;
+        } else {
+            if(btnShipment.equals(btnMenu)) {
+                btnShipment.setTextFill(Color.web(color));  // changing Shipment button text color
+                imgViewShipment.setImage(ImageHandler.getShipmentImage(color));  // changing icon color
+            } else if(btnReference.equals(btnMenu)) {
+                btnReference.setTextFill(Color.web(color));  // changing Reference button text color
+                imgViewReference.setImage(ImageHandler.getReferenceImage(color));  // changing icon color
+            }
+        }
+            
+    }
+
+    /**
+     * FXML function to handle mouse hovering over UMass Lowell logo
+     */
+    @FXML protected void mouseLogoEnter(){
+        imgViewColorLogo.setVisible(false);  // hiding colored logo
+        imgViewGreyLogo.toFront();  // bringing grey logo to front
+        imgViewGreyLogo.setVisible(true);  // showing grey logo
+    }
+
+    /**
+     * FXML function to handle mouse leaving UMass Lowell logo
+     */
+    @FXML protected void mouseLogoExit(){
+        imgViewGreyLogo.setVisible(false);  // hiding grey logo
+        imgViewColorLogo.toFront();  // bringing colored logo to front
+        imgViewColorLogo.setVisible(true);  // showing colored logo
+    }
+
+    /**
+     * FXML function to handle mouse hovering over single button
+     */
+    @FXML protected void mouseShipmentEnter(){ setButtonColor(btnShipment, HOVER_COLOR); }
+
+    /**
+     * FXML function to handle mouse leaving single button
+     */
+    @FXML protected void mouseShipmentExit(){
+        if(getCurrentBtn() == 0) {
+            setButtonColor(btnShipment, CURRENT_COLOR);
+        } else {
+            setButtonColor(btnShipment, IDLE_COLOR);
+        }
+    }
+
+    /**
+     * FXML function to handle mouse hovering over multiple button
+     */
+    @FXML protected void mouseReferenceEnter(){ setButtonColor(btnReference, HOVER_COLOR); }
+
+    /**
+     * FXML function to handle mouse leaving multiple button
+     */
+    @FXML protected void mouseReferenceExit(){
+        if(getCurrentBtn() == 1) {
+            setButtonColor(btnReference, CURRENT_COLOR);
+        } else {
+            setButtonColor(btnReference, IDLE_COLOR);
+        }
+    }
+
+    /*/////////////////////////////////////////////////// GETTERS ////////////////////////////////////////////////////*/
+
+    /**
+     * Getter function to get the current menu button
+     *      0: Shipment Page Button
+     *      1: ReferencePage Button
+     *
+     * @return the current button in integer form
+     */
+    public int getCurrentBtn() { return currentBtn; }
+
+    /**
+     * Getter function to get the color that the current menu button should be
+     *
+     * @return the color of the current menu button
+     */
+    public String getCurrentColor() { return CURRENT_COLOR; }
+
+    /**
+     * Getter function to get the color that idle menu buttons should be
+     *
+     * @return the color of idle menu buttons
+     */
+    public String getIdleColor() { return IDLE_COLOR; }
+
+    /**
+     * Getter function to get the color of the menu buttons when the mouse is hovering over them
+     *
+     * @return the color of the menu buttons when the mouse is hovering over them
+     */
+    public String getHoverColor() { return HOVER_COLOR; }
+}

@@ -40,7 +40,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class UtilTest {
+class UtilTest {
 
     @Nested
     @DisplayName("Util Class UI Tests")
@@ -57,21 +57,10 @@ public class UtilTest {
         @Start
         public void start(Stage stage) throws Exception {
             this.stage = stage;
-            btnBase = new Button("Button Base");
-            btn2 = new Button("Button 2");
-
-            btnBase.setOnAction( 
-                (event) -> btnBase.setText(msg)
-            );
-
-            vBox = new VBox(10, btnBase, btn2);
-
-            this.stage.setScene(new Scene(vBox, 100, 100));
-            this.stage.show();
         }
-
+        
         @BeforeEach
-        void setup() {
+        public void setUp() {
             Platform.runLater(() -> {
                 btnBase = new Button("Button Base");
                 btn2 = new Button("Button 2");
@@ -88,20 +77,25 @@ public class UtilTest {
             });
             WaitForAsyncUtils.waitForFxEvents();
         }
-        
+
         @AfterEach
-        void tearDown() throws TimeoutException{
+        public void tearDown() throws TimeoutException {
             FxToolkit.hideStage();
+            btnBase = null;
+            btn2 = null;
+            stringProp = null;
+            vBox = null;
         }
 
         @Test
-        public void fireBtnOnEnter_OtherKey_Focused(FxRobot robot) {
+        void fireBtnOnEnter_OtherKey_Focused(FxRobot robot) {
             Platform.runLater(() -> {
                 Util.fireBtnOnEnter(btnBase);
 
                 btnBase.requestFocus();
 
                 robot.press(KeyCode.A).release(KeyCode.A);
+                WaitForAsyncUtils.waitForFxEvents();
 
                 assertNotNull(btnBase.getOnKeyPressed());
                 assumeTrue(btnBase.isFocused());
@@ -111,28 +105,31 @@ public class UtilTest {
         }
 
         @Test
-        public void fireBtnOnEnter_OtherKey_NotFocused(FxRobot robot) {
+        void fireBtnOnEnter_OtherKey_NotFocused(FxRobot robot) {
             Platform.runLater(() -> {
                 Util.fireBtnOnEnter(btnBase);
                 
                 btn2.requestFocus();
                 
                 robot.press(KeyCode.A).release(KeyCode.A);
+                WaitForAsyncUtils.waitForFxEvents();
 
                 assertNotNull(btnBase.getOnKeyPressed());
                 assumeTrue(btn2.isFocused());
                 assertNull(stringProp.get());
             });
+            WaitForAsyncUtils.waitForFxEvents();
         }
 
         @Test
-        public void fireBtnOnEnter_EnterKey_Focused(FxRobot robot) {
+        void fireBtnOnEnter_EnterKey_Focused(FxRobot robot) {
             Platform.runLater(() -> {
                 Util.fireBtnOnEnter(btnBase);
 
                 btnBase.requestFocus();
             
                 robot.press(KeyCode.ENTER).release(KeyCode.ENTER);
+                WaitForAsyncUtils.waitForFxEvents();
                                                 
                 assertNotNull(btnBase.getOnKeyPressed());
                 assumeTrue(btnBase.isFocused());
@@ -142,25 +139,27 @@ public class UtilTest {
         }
 
         @Test 
-        public void fireBtnOnEnter_EnterKey_NotFocused(FxRobot robot) {
+        void fireBtnOnEnter_EnterKey_NotFocused(FxRobot robot) {
             Platform.runLater(() -> {
                 Util.fireBtnOnEnter(btnBase);
 
                 btn2.requestFocus();
 
                 robot.press(KeyCode.ENTER).release(KeyCode.ENTER);
+                WaitForAsyncUtils.waitForFxEvents();
 
                 assertNotNull(btnBase.getOnKeyPressed());
                 assumeTrue(btn2.isFocused());
                 assertNull(stringProp.get());
             });
+            WaitForAsyncUtils.waitForFxEvents();
         }
     }
 
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {"invalid/path"})
-    public void setPropExceptionChecker(String path) {
+    void setPropExceptionChecker(String path) {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> Util.setProp(path)
         );
@@ -169,7 +168,7 @@ public class UtilTest {
     }
   
     @Test
-    public void getOs_NullOS() {
+    void getOs_NullOS() {
         String expected = System.getProperty("os.name").toLowerCase();
         Util.setOs(null);
         assertEquals(expected, Util.getOs());
@@ -185,20 +184,20 @@ public class UtilTest {
         "sunos, solaris",
         "none, noSupport"
     })
-    public void getCurrentOSChecker(String osName, String expected) {
+    void getCurrentOSChecker(String osName, String expected) {
         Util.setOs(osName);
         assertEquals(Util.getString(expected), Util.getCurrentOS());
     }
   
     @Test
-    public void parseStringToReplace() {
+    void parseStringToReplace() {
         assertEquals(new ArrayList<String>(), 
         Util.parseStringsToReplace(null));
     }
   
     @ParameterizedTest
     @MethodSource("replacePropString_data")
-    public void replacePropStringChecker(String key, String expected, String[] replacement) {
+    void replacePropStringChecker(String key, String expected, String[] replacement) {
         if (replacement != null) {
             switch (replacement.length) {
                 case 1:
@@ -260,7 +259,7 @@ public class UtilTest {
   
     @ParameterizedTest
     @MethodSource("getString_data")
-    public void getStringChecker(String propName, String expected) {
+    void getStringChecker(String propName, String expected) {
         assertEquals(expected, Util.getString(propName));
     }
   
@@ -276,7 +275,7 @@ public class UtilTest {
 
     @ParameterizedTest
     @MethodSource("getList_data")
-    public void getListChecker(String listName, List<String> expected) {
+    void getListChecker(String listName, List<String> expected) {
         assertEquals(expected, Util.getList(listName));
     }
 
@@ -316,30 +315,30 @@ public class UtilTest {
   
     @ParameterizedTest
     @CsvSource({"fakeKey", "replacePropString_noReplacements"})
-    public void getIntExceptionChecker(String propName) {
+    void getIntExceptionChecker(String propName) {
         InvalidParameterException exception = assertThrows(
-            InvalidParameterException.class, () -> Util.getInt(propName)
+            InvalidParameterException.class, () -> Util.getDouble(propName)
         );
         assertTrue(exception.getMessage().contains("Value is not a number"));
     }
   
     @ParameterizedTest
-    @MethodSource("getInt_data")
-    public void getIntChecker(String propName, int expected) {
-        assertEquals(expected, Util.getInt(propName));
+    @MethodSource("getNumber_data")
+    void getNumberChecker(String propName, double expected) {
+        assertEquals(expected, Util.getDouble(propName));
     }
   
-    private static Object[] getInt_data() {
+    private static Object[] getNumber_data() {
         return new Object[] { 
-            new Object[] { null, Integer.MIN_VALUE },
-            new Object[] { "", Integer.MIN_VALUE },
-            new Object[] { "mainWidth", 600 }
+            new Object[] { null, Double.MIN_VALUE },
+            new Object[] { "", Double.MIN_VALUE },
+            new Object[] { "mainWidth", 600.0 }
         };
     }
   
     @ParameterizedTest
     @MethodSource("getFileText_data")
-    public void getFileTextChecker(String file, String expected) {
+    void getFileTextChecker(String file, String expected) {
         assertEquals(expected, Util.getFileText(file));
     }
   
@@ -353,7 +352,7 @@ public class UtilTest {
     }
 
     @Test
-    public void fireBtnOnEnter_NullBtn() {
+    void fireBtnOnEnter_NullBtn() {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> Util.fireBtnOnEnter(null)
         );
