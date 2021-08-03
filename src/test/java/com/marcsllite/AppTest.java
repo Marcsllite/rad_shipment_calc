@@ -96,7 +96,7 @@ class AppTest {
         String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + name;
         File directoryToBeDeleted = new File(path);
         
-        assertTrue(deleteDirectory(directoryToBeDeleted));
+        assumeTrue(deleteDirectory(directoryToBeDeleted));
         App.setDefaultDir(name);
         assertEquals(path, App.getDefaultDir());
     }
@@ -108,7 +108,7 @@ class AppTest {
         String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + name;
         File toBeCreated = new File(path);
 
-        assertTrue(toBeCreated.mkdirs() || toBeCreated.exists());
+        assumeTrue(toBeCreated.mkdirs() || toBeCreated.exists());
         App.setDefaultDir(name);
         assertEquals(path, App.getDefaultDir());
     }

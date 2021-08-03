@@ -31,9 +31,12 @@ import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.api.FxRobot;
+import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
+import org.testfx.util.WaitForAsyncUtils;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -53,6 +56,7 @@ class MenuPaneControllerTest {
     @ExtendWith(MockitoExtension.class)
     @ExtendWith(ApplicationExtension.class)
     class MenuPaneControllerTestUI {
+        Stage stage;
         GridPane menuPane;
         ImageView imgViewColor;
         ImageView imgViewGrey;
@@ -63,12 +67,17 @@ class MenuPaneControllerTest {
 
         @Start
         public void start(Stage stage) {
-            stageManager = new StageManager(stage);
-            stageManager.show(FXMLView.MENU);
+            this.stage = stage;
         }
 
         @BeforeEach
         public void setUp(FxRobot robot) {
+            Platform.runLater(() -> {
+                stageManager = new StageManager(stage);
+                stageManager.show(FXMLView.MENU);
+            });
+            WaitForAsyncUtils.waitForFxEvents();
+
             c = spy(MenuPaneController.class);
             
             menuPane = robot.lookup(FXIds.MENU_PANE).queryAs(GridPane.class);
@@ -92,7 +101,12 @@ class MenuPaneControllerTest {
 
         @AfterEach
         public void tearDown(FxRobot robot) throws TimeoutException {
+            FxToolkit.hideStage();
+            robot.release(new KeyCode[0]);
+            robot.release(new MouseButton[0]);
+
             c = null;
+            stageManager = null;
             menuPane = null;
             imgViewColor = null;
             imgViewGrey = null;
@@ -100,8 +114,6 @@ class MenuPaneControllerTest {
             imgViewShip = null;
             btnRef = null;
             imgViewRef = null;
-            robot.release(new KeyCode[0]);
-            robot.release(new MouseButton[0]);
         }
 
         @Test
