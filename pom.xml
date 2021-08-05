@@ -8,7 +8,7 @@
     <version>1.0.0</version>
 
     <properties>
-        <argLine>-Djdk.gtk.version=2 -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw</argLine>
+        <argLine>-Djdk.gtk.version=2</argLine>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11.0.2</maven.compiler.source>
         <maven.compiler.target>11.0.2</maven.compiler.target>

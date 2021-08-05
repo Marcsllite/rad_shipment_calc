@@ -16,6 +16,7 @@ import com.marcsllite.util.FXMLView;
 import com.marcsllite.util.Util;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -32,6 +33,15 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 
 class AppTest {
+    @BeforeAll
+        public static void init() {
+            System.setProperty("testfx.robot", "glass");
+            System.setProperty("testfx.headless", "true");
+            System.setProperty("prism.order", "sw");
+            System.setProperty("prism.text", "t2k");
+            System.setProperty("java.awt.headless", "true");
+        }
+
     @Nested
     @DisplayName("App Class UI Tests")
     @ExtendWith(ApplicationExtension.class)

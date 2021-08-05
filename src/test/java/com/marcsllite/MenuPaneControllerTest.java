@@ -21,6 +21,7 @@ import com.marcsllite.util.StageManager;
 import com.marcsllite.util.Util;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -34,9 +35,7 @@ import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-import org.testfx.util.WaitForAsyncUtils;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -51,12 +50,20 @@ class MenuPaneControllerTest {
     StageManager stageManager;
     MenuPaneController c;
 
+    @BeforeAll
+    public static void init() {
+        System.setProperty("testfx.robot", "glass");
+        System.setProperty("testfx.headless", "true");
+        System.setProperty("prism.order", "sw");
+        System.setProperty("prism.text", "t2k");
+        System.setProperty("java.awt.headless", "true");
+    }
+
     @Nested
     @DisplayName("Menu Pane Controller UI Tests")
     @ExtendWith(MockitoExtension.class)
     @ExtendWith(ApplicationExtension.class)
     class MenuPaneControllerTestUI {
-        Stage stage;
         GridPane menuPane;
         ImageView imgViewColor;
         ImageView imgViewGrey;
@@ -67,17 +74,12 @@ class MenuPaneControllerTest {
 
         @Start
         public void start(Stage stage) {
-            this.stage = stage;
+            stageManager = new StageManager(stage);
+            stageManager.show(FXMLView.MENU);
         }
 
         @BeforeEach
         public void setUp(FxRobot robot) {
-            Platform.runLater(() -> {
-                stageManager = new StageManager(stage);
-                stageManager.show(FXMLView.MENU);
-            });
-            WaitForAsyncUtils.waitForFxEvents();
-
             c = spy(MenuPaneController.class);
             
             menuPane = robot.lookup(FXIds.MENU_PANE).queryAs(GridPane.class);

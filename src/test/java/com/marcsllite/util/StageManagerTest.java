@@ -10,6 +10,7 @@ import java.security.InvalidParameterException;
 import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,21 +33,24 @@ class StageManagerTest {
     static String propMsg = Util.getString("properMessage");
     static String eMsgDefault = Util.getString("defaultMessage");
     static String eMsgProp = Util.getString("properMessage");
-    Stage stage;
     StageManager stageManager;
 
     @Start
     public void start(Stage stage) throws Exception {
-        this.stage = stage;
-        
+        stageManager = new StageManager(stage);
+    }
+
+    @BeforeAll
+    public static void init() {
+        System.setProperty("testfx.robot", "glass");
+        System.setProperty("testfx.headless", "true");
+        System.setProperty("prism.order", "sw");
+        System.setProperty("prism.text", "t2k");
+        System.setProperty("java.awt.headless", "true");
     }
 
     @BeforeEach
     public void setUp() {
-        Platform.runLater(() -> {
-            stageManager = new StageManager(stage);
-        });
-        WaitForAsyncUtils.waitForFxEvents();
         propEx = Util.getString("properException");
         propMsg = Util.getString("properMessage");
         eMsgDefault = Util.getString("defaultMessage");
