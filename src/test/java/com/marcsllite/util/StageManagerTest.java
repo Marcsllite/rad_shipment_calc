@@ -10,7 +10,6 @@ import java.security.InvalidParameterException;
 import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,15 +37,6 @@ class StageManagerTest {
     @Start
     public void start(Stage stage) throws Exception {
         stageManager = new StageManager(stage);
-    }
-
-    @BeforeAll
-    public static void init() {
-        System.setProperty("testfx.robot", "glass");
-        System.setProperty("testfx.headless", "true");
-        System.setProperty("prism.order", "sw");
-        System.setProperty("prism.text", "t2k");
-        System.setProperty("java.awt.headless", "true");
     }
 
     @BeforeEach

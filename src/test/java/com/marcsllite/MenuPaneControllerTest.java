@@ -21,7 +21,6 @@ import com.marcsllite.util.StageManager;
 import com.marcsllite.util.Util;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -49,15 +48,6 @@ import javafx.stage.Stage;
 class MenuPaneControllerTest {
     StageManager stageManager;
     MenuPaneController c;
-
-    @BeforeAll
-    public static void init() {
-        System.setProperty("testfx.robot", "glass");
-        System.setProperty("testfx.headless", "true");
-        System.setProperty("prism.order", "sw");
-        System.setProperty("prism.text", "t2k");
-        System.setProperty("java.awt.headless", "true");
-    }
 
     @Nested
     @DisplayName("Menu Pane Controller UI Tests")

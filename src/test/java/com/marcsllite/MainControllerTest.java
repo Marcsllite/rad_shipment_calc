@@ -10,7 +10,6 @@ import java.util.concurrent.TimeoutException;
 import com.marcsllite.util.BaseController;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -23,15 +22,6 @@ import org.testfx.util.WaitForAsyncUtils;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 class MainControllerTest {
-    @BeforeAll
-    public static void init() {
-        System.setProperty("testfx.robot", "glass");
-        System.setProperty("testfx.headless", "true");
-        System.setProperty("prism.order", "sw");
-        System.setProperty("prism.text", "t2k");
-        System.setProperty("java.awt.headless", "true");
-    }
-
     @Nested
     @DisplayName("Main Controller UI Tests")
     @ExtendWith(ApplicationExtension.class)
