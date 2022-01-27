@@ -205,7 +205,7 @@ public final class Util {
      * @param key a key in the projects property file
      * @return the value at that key
      */
-    public static String getString(String key){
+    public static String getString(String key) {
         if(key == null || key.isBlank()) return "";
 
         String ret = Util.getProp().getProperty(key);
@@ -223,12 +223,14 @@ public final class Util {
 
         if(key == null || key.isBlank()) return ret;
 
+        String value = getString(key);
+
         // checking if the key exists in the property file and parsing value if it exists
         try {
-            ret = Double.parseDouble(getString(key));
+            ret = Double.parseDouble(value);
         } catch (NumberFormatException ee) {
             logr.catching(Level.DEBUG, ee);
-            var e = new InvalidParameterException("Value is not a number");
+            var e = new InvalidParameterException(value + "is not a number");
             logr.throwing(e);
             throw e;
         }

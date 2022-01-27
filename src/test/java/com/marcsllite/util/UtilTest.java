@@ -319,7 +319,7 @@ class UtilTest {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> Util.getDouble(propName)
         );
-        assertTrue(exception.getMessage().contains("Value is not a number"));
+        assertTrue(exception.getMessage().contains("is not a number"));
     }
   
     @ParameterizedTest
