@@ -33,15 +33,6 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 
 class AppTest {
-    @BeforeAll
-        public static void init() {
-            System.setProperty("testfx.robot", "glass");
-            System.setProperty("testfx.headless", "true");
-            System.setProperty("prism.order", "sw");
-            System.setProperty("prism.text", "t2k");
-            System.setProperty("java.awt.headless", "true");
-        }
-
     @Nested
     @DisplayName("App Class UI Tests")
     @ExtendWith(ApplicationExtension.class)
@@ -165,7 +156,7 @@ class AppTest {
     }
 
     private static Object[] setDataFolder_data() {
-        String folderName = Util.getString("appFolderName");
+        String folderName = Util.getString("appFolderName");  // no access to util class
         String winExp = System.getProperty("user.home") + File.separator +
                             "AppData" + File.separator +
                             "Local" + File.separator +
