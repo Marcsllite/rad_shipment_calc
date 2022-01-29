@@ -43,7 +43,7 @@ public final class Util {
     public static void setProp(String path) throws InvalidParameterException{
         try {
             Util.prop = new Properties();
-            var loader = ClassLoader.getSystemClassLoader();
+            var loader = Thread.currentThread().getContextClassLoader();
             InputStream stream = loader.getResourceAsStream(path);
             Util.prop.loadFromXML(stream);
         } catch (IOException | NullPointerException e) {
