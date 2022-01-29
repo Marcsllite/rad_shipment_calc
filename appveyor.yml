@@ -23,8 +23,10 @@ only_commits:
 
 # environment variables
 environment:
-  # APPVEYOR_SSH_KEY: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDGx6AiZps++og4I04DyhDXp6ExBV68jkrGzqvWw9mqu03vHW4KIglXjiTm+WXb0wkpisiQCmnQLXYh6QgMzgA24QZ8PZS8KTzqqb/5xlAl4HoIu4yTXzi/cxfc0+WqjpSRRfC1GPD2OXsXvfufzl3RDKV6YeYaetVpYuc+OZpCsuDm01c6mKmwuzK0+QaaQKL3MLLwYdLNm0XIRatvXuEwiDl4IlEAwLMJqVCs/+JFxThSSt95VuLG2HrGdwQ4jCi2mK28Udw1u/ae5SPDSz1KhfoBZqv03kfAJmzjYZ9Ro4NMPQVCz26jYHYWHOKcP0CfQre6VaZBDF6CeM3sR2vcrb+oDmL+UYDHyVVMQlhuklU5CJhd9BQKqYonJPCWynVNVgN6vght8gTERRSL956ywSj/RKQNPISTf2zRTCfR0uK6AT33ZEQXDkJ0B8F0tIkz4V672KjJaQT6fDS/grOV4/SxaEKrKHauOcDAOHhLXDKRcpM2Ne1yAh7kiP7BgG0= marcsllite@marcsllte-linux
-  # APPVEYOR_SSH_BLOCK: true
+  # Linux Debugging
+  APPVEYOR_SSH_BLOCK: true
+  # Mac Debugging
+  APPVEYOR_VNC_BLOCK: true
   MAVEN_VERSION: 3.6.3
   WIN_JDK: C:\Program Files\Java\jdk11
   GITHUB_TOKEN:
@@ -47,32 +49,32 @@ stack: jdk 11
 
 for:
   # WINDOWS BUILD #
-  -
-    matrix:
-      only:
-        - job_name: Windows build
+  # -
+  #   matrix:
+  #     only:
+  #       - job_name: Windows build
 
-    install:
-      - set JDK_HOME=%WIN_JDK%
-      # JAVA_HOME is used by Maven
-      - set JAVA_HOME=%WIN_JDK%
-      - set PATH=%JDK_HOME%;%JDK_HOME%\bin;%PATH%
+  #   install:
+  #     - set JDK_HOME=%WIN_JDK%
+  #     # JAVA_HOME is used by Maven
+  #     - set JAVA_HOME=%WIN_JDK%
+  #     - set PATH=%JDK_HOME%;%JDK_HOME%\bin;%PATH%
 
-    build_script:
-      - cmd: mvn clean verify
+  #   build_script:
+  #     - cmd: mvn clean verify
       
-    test_script:
-      - ps: $wc = New-Object 'System.Net.WebClient';
-            foreach($file in get-childItem $env:APPVEYOR_BUILD_FOLDER/target/surefire-reports -include TEST-*.xml -name) { `
-              $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path .\target\surefire-reports\$file)); }
+  #   test_script:
+  #     - ps: $wc = New-Object 'System.Net.WebClient';
+  #           foreach($file in get-childItem $env:APPVEYOR_BUILD_FOLDER/target/surefire-reports -include TEST-*.xml -name) { `
+  #             $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path .\target\surefire-reports\$file)); }
   
-    on_success:
-      - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
-            .\codecov.exe -t $CODECOV_TOKEN
+  #   on_success:
+  #     - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
+  #           .\codecov.exe -t $CODECOV_TOKEN
 
-    cache:
-      - '%MAVEN_HOME% -> pom.xml'
-      - '%UserProfile%\.m2 -> pom.xml'
+  #   cache:
+  #     - '%MAVEN_HOME% -> pom.xml'
+  #     - '%UserProfile%\.m2 -> pom.xml'
 
   # MAC BUILD #
   -
@@ -84,7 +86,7 @@ for:
       - sh: brew install maven
 
     build_script:
-      # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
+      - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-vnc.sh' | bash -e -
       - sh: mvn clean verify
 
     test_script:
@@ -114,7 +116,7 @@ for:
             export DISPLAY=:99
 
     build_script:
-      # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
+      - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
       - sh: mvn clean verify
 
     test_script:
