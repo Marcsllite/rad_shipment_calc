@@ -31,6 +31,7 @@ buildNumber.properties
 ########
 # Java #
 ########
+.classpath
 # Compiled class file
 *.class
 # Log file
