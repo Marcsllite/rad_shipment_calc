@@ -37,9 +37,9 @@ environment:
      - job_name: Windows build
        appveyor_build_worker_image: Visual Studio 2019
 
-    - job_name: Mac build
-      appveyor_build_worker_image: macOs
-      _JAVA_OPTIONS: "-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.text=tk2"
+     - job_name: Mac build
+       appveyor_build_worker_image: macOs
+       _JAVA_OPTIONS: "-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.text=tk2"
 
      - job_name: Linux build
        appveyor_build_worker_image: Ubuntu2004
@@ -77,7 +77,7 @@ for:
        - '%UserProfile%\.m2 -> pom.xml'
 
   # MAC BUILD #
-  -
+   -
     matrix:
       only:
         - job_name: Mac build
