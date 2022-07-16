@@ -1,20 +1,16 @@
 package com.marcsllite;
 
-import java.io.File;
-
-import javax.swing.filechooser.FileSystemView;
-
 import com.marcsllite.util.FXMLView;
 import com.marcsllite.util.StageManager;
 import com.marcsllite.util.Util;
-
+import javafx.application.Application;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
-
+import javax.swing.filechooser.FileSystemView;
+import java.io.File;
 
 /**
  * JavaFX App
@@ -62,7 +58,7 @@ public class App extends Application {
     public static void setDefaultDir(String dirName) throws RuntimeException {
         if (dirName == null || dirName.isEmpty()) dirName = Util.getString("appMainFolder"); 
         
-        String name = String.valueOf(FileSystemView.getFileSystemView().getDefaultDirectory().getPath()) + File.separator + dirName;
+        String name = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + dirName;
         var toBeCreated = new File(name);
         
         if (!toBeCreated.exists() && !toBeCreated.mkdirs()) {

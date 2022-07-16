@@ -1,12 +1,10 @@
 package com.marcsllite;
 
 import com.marcsllite.util.BaseController;
-
+import javafx.fxml.FXML;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import javafx.fxml.FXML;
 
 public class MainController {
     // DECLARING FXML CONTROLLERS

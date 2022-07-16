@@ -18,7 +18,7 @@
         <javafx.version>11.0.2</javafx.version>
         <mockito.version>3.11.2</mockito.version>
         <log4j.version>2.17.1</log4j.version>
-        <jacoco.version>0.8.7</jacoco.version>
+        <jacoco.version>0.8.8</jacoco.version>
         <junit.version>5.8.0-M1</junit.version>
         <assertj.version>3.20.2</assertj.version>
         <testfx.version>4.0.15-alpha</testfx.version>
@@ -50,7 +50,12 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
-        </dependency>      
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>

@@ -1,25 +1,18 @@
 package com.marcsllite;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.security.InvalidParameterException;
-import java.util.concurrent.TimeoutException;
-
 import com.marcsllite.util.FXIds;
 import com.marcsllite.util.FXMLView;
 import com.marcsllite.util.StageManager;
 import com.marcsllite.util.Util;
-
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,15 +28,20 @@ import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
-import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
-import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.stage.Stage;
+import java.security.InvalidParameterException;
+import java.util.concurrent.TimeoutException;
+
+import static junit.framework.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class MenuPaneControllerTest {
     StageManager stageManager;
@@ -108,235 +106,235 @@ class MenuPaneControllerTest {
             imgViewRef = null;
         }
 
-        @Test
-        void testMenuPaneHandler_NullEventSource() {
-            ActionEvent event = mock(ActionEvent.class);
+         @Test
+         void testMenuPaneHandler_NullEventSource() {
+             ActionEvent event = mock(ActionEvent.class);
 
-            when(event.getSource()).thenReturn(null);
+             when(event.getSource()).thenReturn(null);
 
-            c.menuPaneHandler(event);
+             c.menuPaneHandler(event);
 
-            verify(c, times(0)).shipmentBtnHandler();
-            verify(c, times(0)).referenceBtnHandler();
-        }
+             verify(c, times(0)).shipmentBtnHandler();
+             verify(c, times(0)).referenceBtnHandler();
+         }
 
-        @Test
-        void testMenuPaneHandler_ShipmentEvent() {
-            ActionEvent event = mock(ActionEvent.class);
+         @Test
+         void testMenuPaneHandler_ShipmentEvent() {
+             ActionEvent event = mock(ActionEvent.class);
             
-            when(event.getSource()).thenReturn(btnShip);
-            doNothing().when(c).shipmentBtnHandler();
+             when(event.getSource()).thenReturn(btnShip);
+             doNothing().when(c).shipmentBtnHandler();
             
-            c.menuPaneHandler(event);
+             c.menuPaneHandler(event);
 
-            verify(c, times(1)).shipmentBtnHandler();
-        }
+             verify(c, times(1)).shipmentBtnHandler();
+         }
 
-        @Test
-        void testMenuPaneHandler_ReferenceEvent() {
-            ActionEvent event = mock(ActionEvent.class);
+         @Test
+         void testMenuPaneHandler_ReferenceEvent() {
+             ActionEvent event = mock(ActionEvent.class);
 
-            when(event.getSource()).thenReturn(btnRef);
-            doNothing().when(c).referenceBtnHandler();
+             when(event.getSource()).thenReturn(btnRef);
+             doNothing().when(c).referenceBtnHandler();
             
-            c.menuPaneHandler(event);
-            verify(c, times(1)).referenceBtnHandler();
-        }
+             c.menuPaneHandler(event);
+             verify(c, times(1)).referenceBtnHandler();
+         }
 
-        @Test
-        void testMouseShipmentEnter(FxRobot robot) {
-            robot.moveTo(FXIds.BTN_SHIPMENT);
+         @Test
+         void testMouseShipmentEnter(FxRobot robot) {
+             robot.moveTo(FXIds.BTN_SHIPMENT);
 
-            Paint exp = Color.web(c.getHoverColor());
+             Paint exp = Color.web(c.getHoverColor());
 
-            assertEquals(exp, btnShip.getTextFill());
-        }
+             assertEquals(exp, btnShip.getTextFill());
+         }
 
-        @Test
-        void testMouseShipmentExit_Current() {
-            when(c.getCurrentBtn()).thenReturn(0);
+         @Test
+         void testMouseShipmentExit_Current() {
+             when(c.getCurrentBtn()).thenReturn(0);
 
-            c.mouseShipmentExit();
+             c.mouseShipmentExit();
 
-            Paint exp = Color.web(c.getCurrentColor());
+             Paint exp = Color.web(c.getCurrentColor());
 
-            assertEquals(exp, btnShip.getTextFill());
-        }
+             assertEquals(exp, btnShip.getTextFill());
+         }
 
-        @Test
-        void testMouseShipmentExit_NotCurrent() {
-            when(c.getCurrentBtn()).thenReturn(1);
+         @Test
+         void testMouseShipmentExit_NotCurrent() {
+             when(c.getCurrentBtn()).thenReturn(1);
 
-            c.mouseShipmentExit();
+             c.mouseShipmentExit();
 
-            Paint exp = Color.web(c.getIdleColor());
+             Paint exp = Color.web(c.getIdleColor());
 
-            assertEquals(exp, btnShip.getTextFill());
-        }
+             assertEquals(exp, btnShip.getTextFill());
+         }
 
-        @Test
-        void testMouseReferenceEnter(FxRobot robot) {
-            robot.moveTo(FXIds.BTN_REFERENCE);
+         @Test
+         void testMouseReferenceEnter(FxRobot robot) {
+             robot.moveTo(FXIds.BTN_REFERENCE);
 
-            Paint exp = Color.web(c.getHoverColor());
+             Paint exp = Color.web(c.getHoverColor());
 
-            assertEquals(exp, btnRef.getTextFill());
-        }
+             assertEquals(exp, btnRef.getTextFill());
+         }
 
-        @Test
-        void testMouseReferenceExit_Current() {
-            when(c.getCurrentBtn()).thenReturn(1);
+         @Test
+         void testMouseReferenceExit_Current() {
+             when(c.getCurrentBtn()).thenReturn(1);
 
-            c.mouseReferenceExit();
+             c.mouseReferenceExit();
 
-            Paint exp = Color.web(c.getCurrentColor());
+             Paint exp = Color.web(c.getCurrentColor());
 
-            assertEquals(exp, btnRef.getTextFill());
-        }
+             assertEquals(exp, btnRef.getTextFill());
+         }
 
-        @Test
-        void testMouseReferenceExit_NotCurrent(FxRobot robot) {
-            when(c.getCurrentBtn()).thenReturn(0);
+         @Test
+         void testMouseReferenceExit_NotCurrent(FxRobot robot) {
+             when(c.getCurrentBtn()).thenReturn(0);
 
-            c.mouseReferenceExit();
+             c.mouseReferenceExit();
 
-            Paint exp = Color.web(c.getIdleColor());
+             Paint exp = Color.web(c.getIdleColor());
 
-            assertEquals(exp, btnRef.getTextFill());
-        }
+             assertEquals(exp, btnRef.getTextFill());
+         }
 
-        @Test
-        void testSetCurrentButton_Ship() {
-            c.setCurrentButton(btnShip);
+         @Test
+         void testSetCurrentButton_Ship() {
+             c.setCurrentButton(btnShip);
 
-            String curColor = c.getIdleColor();
+             String curColor = c.getIdleColor();
 
-            assumeFalse(curColor == null);
-            assumeFalse(curColor.isBlank());
+             assumeFalse(curColor == null);
+             assumeFalse(curColor.isBlank());
 
-            verify(c, times(1)).setButtonColor(btnShip, curColor);
-            assertEquals(0, c.getCurrentBtn());
-        }
+             verify(c, times(1)).setButtonColor(btnShip, curColor);
+             assertEquals(0, c.getCurrentBtn());
+         }
 
-        @Test
-        void testSetCurrentButton_Ref() {
-            c.setCurrentButton(btnRef);
+         @Test
+         void testSetCurrentButton_Ref() {
+             c.setCurrentButton(btnRef);
 
-            String curColor = c.getIdleColor();
+             String curColor = c.getIdleColor();
 
-            assumeFalse(curColor == null);
-            assumeFalse(curColor.isBlank());
+             assumeFalse(curColor == null);
+             assumeFalse(curColor.isBlank());
 
-            verify(c, times(1)).setButtonColor(btnRef, curColor);
-            assertEquals(1, c.getCurrentBtn());
-        }
+             verify(c, times(1)).setButtonColor(btnRef, curColor);
+             assertEquals(1, c.getCurrentBtn());
+         }
 
-        @Test
-        void testShipmentBtnHandler_NotCurrent() {
-            when(c.getCurrentBtn()).thenReturn(1);
+         @Test
+         void testShipmentBtnHandler_NotCurrent() {
+             when(c.getCurrentBtn()).thenReturn(1);
 
-            c.shipmentBtnHandler();
+             c.shipmentBtnHandler();
 
-            verify(c, times(1)).setCurrentButton(btnShip);
-        }
+             verify(c, times(1)).setCurrentButton(btnShip);
+         }
 
-        @Test
-        void testReferenceBtnHandler_NotCurrent() {
-            when(c.getCurrentBtn()).thenReturn(0);
+         @Test
+         void testReferenceBtnHandler_NotCurrent() {
+             when(c.getCurrentBtn()).thenReturn(0);
 
-            c.referenceBtnHandler();
+             c.referenceBtnHandler();
 
-            verify(c, times(1)).setCurrentButton(btnRef);
-        }
+             verify(c, times(1)).setCurrentButton(btnRef);
+         }
 
-        @Test
-        void testUnsetCurrentButton() {
-            c.unsetCurrentButton();
+         @Test
+         void testUnsetCurrentButton() {
+             c.unsetCurrentButton();
 
-            String curColor = c.getIdleColor();
+             String curColor = c.getIdleColor();
 
-            assumeFalse(curColor == null);
-            assumeFalse(curColor.isBlank());
+             assumeFalse(curColor == null);
+             assumeFalse(curColor.isBlank());
 
-            verify(c, times(1)).setButtonColor(btnShip, curColor);
-            verify(c, times(1)).setButtonColor(btnRef, curColor);
-            assertEquals(-2, c.getCurrentBtn());
-        }
+             verify(c, times(1)).setButtonColor(btnShip, curColor);
+             verify(c, times(1)).setButtonColor(btnRef, curColor);
+             assertEquals(-2, c.getCurrentBtn());
+         }
 
-        @Test
-        void testSetButtonColor_BtnShip_NullColor() {
-            InvalidParameterException ex = assertThrows(
-                InvalidParameterException.class, 
-                () -> c.setButtonColor(btnShip, null)
-            );
-            assertTrue(ex.getMessage().contains("The color cannot be null or blank"));
-        }
+         @Test
+         void testSetButtonColor_BtnShip_NullColor() {
+             InvalidParameterException ex = assertThrows(
+                 InvalidParameterException.class,
+                 () -> c.setButtonColor(btnShip, null)
+             );
+             assertTrue(ex.getMessage().contains("The color cannot be null or blank"));
+         }
 
-        @Test
-        void testSetButtonColor_BtnShip_ProperColor() {
-            String color = c.getCurrentColor();
+         @Test
+         void testSetButtonColor_BtnShip_ProperColor() {
+             String color = c.getCurrentColor();
 
-            c.setButtonColor(btnShip, color);
+             c.setButtonColor(btnShip, color);
 
-            Paint expPaint = Color.web(color);
+             Paint expPaint = Color.web(color);
 
-            assertEquals(expPaint, btnShip.getTextFill());
-        }
+             assertEquals(expPaint, btnShip.getTextFill());
+         }
 
-        @Test
-        void testSetButtonColor_BtnRef_ProperColor() {
-            String color = c.getCurrentColor();
+         @Test
+         void testSetButtonColor_BtnRef_ProperColor() {
+             String color = c.getCurrentColor();
 
-            c.setButtonColor(btnRef, color);
+             c.setButtonColor(btnRef, color);
 
-            Paint expPaint = Color.web(color);
+             Paint expPaint = Color.web(color);
 
-            assertEquals(expPaint, btnRef.getTextFill());
-        }
+             assertEquals(expPaint, btnRef.getTextFill());
+         }
 
-        @Test
-        void testMouseLogoEnter(FxRobot robot) {
-            c.imgViewColorLogo.setVisible(true);
-            c.imgViewGreyLogo.setVisible(false);
+         @Test
+         void testMouseLogoEnter(FxRobot robot) {
+             c.imgViewColorLogo.setVisible(true);
+             c.imgViewGreyLogo.setVisible(false);
             
-            robot.moveTo(imgViewColor);
+             robot.moveTo(imgViewColor);
 
-            assertFalse(imgViewColor.isVisible());
-            assertTrue(imgViewGrey.isVisible());
-        }
+             assertFalse(imgViewColor.isVisible());
+             assertTrue(imgViewGrey.isVisible());
+         }
 
-        @Test
-        void testMouseLogoExit() {
-            c.imgViewColorLogo.setVisible(false);
-            c.imgViewGreyLogo.setVisible(true);
+         @Test
+         void testMouseLogoExit() {
+             c.imgViewColorLogo.setVisible(false);
+             c.imgViewGreyLogo.setVisible(true);
             
-            c.mouseLogoExit();
+             c.mouseLogoExit();
 
-            assertTrue(imgViewColor.isVisible());
-            assertFalse(imgViewGrey.isVisible());
-        }
+             assertTrue(imgViewColor.isVisible());
+             assertFalse(imgViewGrey.isVisible());
+         }
 
-        @Test
-        void testHide(FxRobot robot) {
-            GridPane pane = robot.lookup(FXIds.MENU_PANE).queryAs(GridPane.class);
-            c.menuPane = pane;
+         @Test
+         void testHide(FxRobot robot) {
+             GridPane pane = robot.lookup(FXIds.MENU_PANE).queryAs(GridPane.class);
+             c.menuPane = pane;
 
-            assertTrue(pane.isVisible());
+             assertTrue(pane.isVisible());
 
-            c.hide();
+             c.hide();
 
-            assertFalse(pane.isVisible());
-        }
+             assertFalse(pane.isVisible());
+         }
 
-        @Test
-        void testShow(FxRobot robot) {
-            GridPane pane = robot.lookup(FXIds.MENU_PANE).queryAs(GridPane.class);
-            c.menuPane = pane;
-            c.menuPane.setVisible(false);
+         @Test
+         void testShow(FxRobot robot) {
+             GridPane pane = robot.lookup(FXIds.MENU_PANE).queryAs(GridPane.class);
+             c.menuPane = pane;
+             c.menuPane.setVisible(false);
 
-            c.show();
-            assertTrue(pane.isVisible());
-        }
+             c.show();
+             assertTrue(pane.isVisible());
+         }
     }
 
     @BeforeEach
@@ -389,7 +387,6 @@ class MenuPaneControllerTest {
     void testGetCurrentColor() {
         String exp = Util.getString("umlBlue");
 
-        assumeFalse(exp == null);
         assumeFalse(exp.isBlank());
 
         assertEquals(exp, c.getCurrentColor());
@@ -399,7 +396,6 @@ class MenuPaneControllerTest {
     void testGetHoverColor() {
         String exp = Util.getString("defaultWhite");
 
-        assumeFalse(exp == null);
         assumeFalse(exp.isBlank());
 
         assertEquals(exp, c.getHoverColor());
@@ -407,9 +403,8 @@ class MenuPaneControllerTest {
 
     @Test
     void testGetIdleColor() {
-        String exp = Util.getString("defaultGrey");
+        String exp = Util.getString("de faultGrey");
 
-        assumeFalse(exp == null);
         assumeFalse(exp.isBlank());
 
         assertEquals(exp, c.getIdleColor());

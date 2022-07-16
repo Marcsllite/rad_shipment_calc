@@ -4,7 +4,6 @@ import com.marcsllite.MainController;
 import com.marcsllite.MenuPaneController;
 import com.marcsllite.PrimaryController;
 import com.marcsllite.SecondaryController;
-
 import javafx.util.Callback;
 
 public class ControllerFactory implements Callback<Class<?>, Object> {

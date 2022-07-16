@@ -1,14 +1,7 @@
 package com.marcsllite.util;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
-
-import java.security.InvalidParameterException;
-import java.util.concurrent.TimeoutException;
-
+import javafx.application.Platform;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,8 +15,14 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
-import javafx.application.Platform;
-import javafx.stage.Stage;
+import java.security.InvalidParameterException;
+import java.util.concurrent.TimeoutException;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 @ExtendWith(ApplicationExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -35,7 +34,7 @@ class StageManagerTest {
     StageManager stageManager;
 
     @Start
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         stageManager = new StageManager(stage);
     }
 
@@ -65,26 +64,26 @@ class StageManagerTest {
         assertTrue(exception.getMessage().contains("FXML View is null"));
     }
 
-    @ParameterizedTest
-    @EnumSource(value = FXMLView.class, names = {"TEST"}, mode = EnumSource.Mode.EXCLUDE)
-    void testSwitchSceneChecker(FXMLView view) {
-        Platform.runLater(() -> {
-            stageManager.switchScene(view);
-            Stage stage = stageManager.getPrimaryStage();
-            WaitForAsyncUtils.waitForFxEvents();
+     @ParameterizedTest
+     @EnumSource(value = FXMLView.class, names = {"TEST"}, mode = EnumSource.Mode.EXCLUDE)
+     void testSwitchSceneChecker(FXMLView view) {
+         Platform.runLater(() -> {
+             stageManager.switchScene(view);
+             Stage stage = stageManager.getPrimaryStage();
+             WaitForAsyncUtils.waitForFxEvents();
 
-            // assertEquals(view, stageManager.getCurrentView());
-            assertEquals(view.getTitle(), stage.getTitle());
-            assertEquals(view.getWidth(), stage.getMinWidth(), 0.0D);
-            assertEquals(view.getHeight(), stage.getMinHeight(), 0.0D);
-            assertEquals(view.getMaxWidth(), stage.getMaxWidth(), 0.0D);
-            assertEquals(view.getMaxHeight(), stage.getMaxHeight(), 0.0D);
-            assertFalse(stage.isFullScreen());
-            assertFalse(stage.isMaximized());
-            assertFalse(stage.getIcons().isEmpty());
-        });
-        WaitForAsyncUtils.waitForFxEvents();
-    }
+             // assertEquals(view, stageManager.getCurrentView());
+             assertEquals(view.getTitle(), stage.getTitle());
+             assertEquals(view.getWidth(), stage.getMinWidth(), 0.0D);
+             assertEquals(view.getHeight(), stage.getMinHeight(), 0.0D);
+             assertEquals(view.getMaxWidth(), stage.getMaxWidth(), 0.0D);
+             assertEquals(view.getMaxHeight(), stage.getMaxHeight(), 0.0D);
+             assertFalse(stage.isFullScreen());
+             assertFalse(stage.isMaximized());
+             assertFalse(stage.getIcons().isEmpty());
+         });
+         WaitForAsyncUtils.waitForFxEvents();
+     }
 
     @Test
     void testShow_NullView() {
@@ -103,18 +102,18 @@ class StageManagerTest {
         assertTrue(exception.getMessage().contains("Unable to show " + view.getName() + " scene"));
     }
 
-    @ParameterizedTest
-    @EnumSource(value = FXMLView.class, names = {"TEST"}, mode = EnumSource.Mode.EXCLUDE)
-    void testShowChecker(FXMLView view) {
-        Platform.runLater(() -> {
-            stageManager.show(view);
-            Stage stage = stageManager.getPrimaryStage();
-            WaitForAsyncUtils.waitForFxEvents();
+     @ParameterizedTest
+     @EnumSource(value = FXMLView.class, names = {"TEST"}, mode = EnumSource.Mode.EXCLUDE)
+     void testShowChecker(FXMLView view) {
+         Platform.runLater(() -> {
+             stageManager.show(view);
+             Stage stage = stageManager.getPrimaryStage();
+             WaitForAsyncUtils.waitForFxEvents();
 
-            assertEquals(view.getTitle(), stage.getTitle());
-        });
-        WaitForAsyncUtils.waitForFxEvents();
-    }
+             assertEquals(view.getTitle(), stage.getTitle());
+         });
+         WaitForAsyncUtils.waitForFxEvents();
+     }
 
     @Test
     void testLoadViewNodeHierarchy_NullView() {

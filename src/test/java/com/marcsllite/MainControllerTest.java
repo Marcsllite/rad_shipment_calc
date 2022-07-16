@@ -1,14 +1,13 @@
 package com.marcsllite;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.concurrent.TimeoutException;
-
 import com.marcsllite.util.BaseController;
-
+import com.marcsllite.util.ControllerFactory;
+import com.marcsllite.util.FXMLView;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -19,16 +18,28 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
-import javafx.application.Platform;
-import javafx.stage.Stage;
+import java.net.URL;
+import java.util.Objects;
+import java.util.concurrent.TimeoutException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class MainControllerTest {
     @Nested
     @DisplayName("Main Controller UI Tests")
     @ExtendWith(ApplicationExtension.class)
     class MainControllerTestUI {
+        final FXMLView view = FXMLView.MAIN;
+        
         @Start
         public void start(Stage stage) throws Exception {
-            new App().start(stage);
+            URL loc = getClass().getResource(view.getFxmlLoc());
+            Parent root = FXMLLoader.load(Objects.requireNonNull(loc), null, null, new ControllerFactory());
+            stage.setScene(new Scene(root, view.getWidth(), view.getHeight()));
+            stage.show();
         }
 
         @AfterEach
@@ -36,25 +47,25 @@ class MainControllerTest {
             FxToolkit.hideStage();
         }
 
-        @Test
-        void testShowHomePane() {
-            Platform.runLater(() -> {
-                MainController.getInstance().showHomePane();
-                WaitForAsyncUtils.waitForFxEvents();
+         @Test
+         void testShowHomePane() {
+             Platform.runLater(() -> {
+                 MainController.getInstance().showHomePane();
+                 WaitForAsyncUtils.waitForFxEvents();
 
-                assertTrue(MainController.getInstance().getHomePaneController().homePane.isVisible());
-            });
-        }
+                 assertTrue(MainController.getInstance().getHomePaneController().homePane.isVisible());
+             });
+         }
 
-        @Test
-        void testShowReferencePane() {
-            Platform.runLater(() -> {
-                MainController.getInstance().showReferencePane();
-                WaitForAsyncUtils.waitForFxEvents();
+         @Test
+         void testShowReferencePane() {
+             Platform.runLater(() -> {
+                 MainController.getInstance().showReferencePane();
+                 WaitForAsyncUtils.waitForFxEvents();
 
-                assertTrue(MainController.getInstance().getReferencePaneController().referencePane.isVisible());
-            });
-        }
+                 assertTrue(MainController.getInstance().getReferencePaneController().referencePane.isVisible());
+             });
+         }
     }
 
     @Test

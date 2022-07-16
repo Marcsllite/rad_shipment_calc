@@ -1,20 +1,19 @@
 package com.marcsllite;
 
-import java.security.InvalidParameterException;
-
 import com.marcsllite.util.BaseController;
 import com.marcsllite.util.ImageHandler;
 import com.marcsllite.util.Util;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.security.InvalidParameterException;
+import java.util.Objects;
 
 public class MenuPaneController extends BaseController {
     // Declaring FXML objects
@@ -178,10 +177,10 @@ public class MenuPaneController extends BaseController {
             throw e;
         } else {
             if(btnShipment.equals(btnMenu)) {
-                btnShipment.setTextFill(Color.web(color));  // changing Shipment button text color
+                btnShipment.setTextFill(Color.web(Objects.requireNonNull(color)));  // changing Shipment button text color
                 imgViewShipment.setImage(ImageHandler.getShipmentImage(color));  // changing icon color
             } else if(btnReference.equals(btnMenu)) {
-                btnReference.setTextFill(Color.web(color));  // changing Reference button text color
+                btnReference.setTextFill(Color.web(Objects.requireNonNull(color)));  // changing Reference button text color
                 imgViewReference.setImage(ImageHandler.getReferenceImage(color));  // changing icon color
             }
         }

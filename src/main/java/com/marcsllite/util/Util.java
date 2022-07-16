@@ -1,5 +1,12 @@
 package com.marcsllite.util;
 
+import com.marcsllite.App;
+import javafx.scene.control.ButtonBase;
+import javafx.scene.input.KeyCode;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,17 +16,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.MissingResourceException;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.regex.Pattern;
-
-import com.marcsllite.App;
-
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import javafx.scene.control.ButtonBase;
-import javafx.scene.input.KeyCode;
 
 public final class Util {
     private static final Logger logr = LogManager.getLogger();
@@ -43,7 +42,7 @@ public final class Util {
     public static void setProp(String path) throws InvalidParameterException{
         try {
             Util.prop = new Properties();
-            var loader = Thread.currentThread().getContextClassLoader();
+            var loader = ClassLoader.getSystemClassLoader();
             InputStream stream = loader.getResourceAsStream(path);
             Util.prop.loadFromXML(stream);
         } catch (IOException | NullPointerException e) {
@@ -57,7 +56,7 @@ public final class Util {
     /**
      * Set the current operating system
      * 
-     * @param path the current operating system
+     * @param os the current operating system
      */
     public static void setOs(String os) { Util.os = os; }
 
@@ -89,7 +88,7 @@ public final class Util {
     }
 
     /**
-     * @author Mkyong.com https://www.mkyong.com/java/how-to-detect-os-in-java-systemgetpropertyosname/
+     * @author Mkyong.com <a href="https://www.mkyong.com/java/how-to-detect-os-in-java-systemgetpropertyosname/">...</a>
      * Convenience function to figure out the current operating system
      *
      * @return the current operating system
@@ -105,7 +104,7 @@ public final class Util {
     }
 
     /**
-     * @author Alvin Alexander https://alvinalexander.com/blog/post/java/read-text-file-from-jar-file
+     * @author Alvin Alexander <a href="https://alvinalexander.com/blog/post/java/read-text-file-from-jar-file">...</a>
      * Convenience function to open the given file and return its
      * contents to a string
      *
@@ -121,7 +120,7 @@ public final class Util {
             } 
 
             InputStream is = App.class.getResourceAsStream(resourceFilePath);  // getResourceAsStream() may throw NullPointerException
-            var isr = new InputStreamReader(is);
+            var isr = new InputStreamReader(Objects.requireNonNull(is));
             var br = new BufferedReader(isr);
             var sb = new StringBuilder();
             String line;
@@ -169,7 +168,7 @@ public final class Util {
 
         // if newValues is null or was omitted, return value from properties file
         if (newValues != null && newValues.length != 0 && newValues[0] != null && !replacements.isEmpty()) {
-            int loopCount = (newValues.length > replacements.size()) ? replacements.size() : newValues.length;
+            int loopCount = Math.min(newValues.length, replacements.size());
             for (var i = 0; i < loopCount; i++) {
                 propString = propString.replace(replacements.get(i), newValues[i]); 
             }
@@ -202,7 +201,7 @@ public final class Util {
     /**
      * Convenience function to get the value at the specified key in the project's property file
      *
-     * @param key a key in the projects property file
+     * @param key a key in the project's property file
      * @return the value at that key
      */
     public static String getString(String key) {
@@ -215,7 +214,7 @@ public final class Util {
     /**
      * Convenience function to get the double value at the specified key in the project's property file
      *
-     * @param key a key in the projects property file
+     * @param key a key in the project's property file
      * @return the double value at that key
      */
     public static double getDouble(String key) {

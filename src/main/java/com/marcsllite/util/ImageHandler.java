@@ -1,9 +1,9 @@
 package com.marcsllite.util;
 
+import javafx.scene.image.Image;
+
 import java.io.File;
 import java.security.InvalidParameterException;
-
-import javafx.scene.image.Image;
 
 public final class ImageHandler {
   public static Image getErrorImage() { return new Image("/images/error.png"); }

@@ -1,14 +1,6 @@
 package com.marcsllite.util;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
-
-import java.io.File;
-import java.security.InvalidParameterException;
-
+import javafx.scene.image.Image;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,7 +8,14 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.testfx.framework.junit5.ApplicationExtension;
 
-import javafx.scene.image.Image;
+import java.io.File;
+import java.security.InvalidParameterException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 @ExtendWith(ApplicationExtension.class)
 class ImageHandlerTest {
@@ -78,8 +77,7 @@ class ImageHandlerTest {
     })
     void testGetShipmentImage(String color, String url) {
         String c = Util.getString(color);
-        
-        assumeFalse(c == null);
+
         assumeFalse(c.isEmpty());
 
         Image actual = ImageHandler.getShipmentImage(c);
@@ -104,8 +102,7 @@ class ImageHandlerTest {
     })
     void testGetReferenceImage(String color, String url) {
         String c = Util.getString(color);
-        
-        assumeFalse(c == null);
+
         assumeFalse(c.isEmpty());
 
         Image actual = ImageHandler.getReferenceImage(c);

@@ -1,18 +1,17 @@
 package com.marcsllite.util;
 
-import java.net.URL;
-import java.security.InvalidParameterException;
-import java.util.Objects;
-
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.net.URL;
+import java.security.InvalidParameterException;
+import java.util.Objects;
 
 public class StageManager {
   private static final Logger logr = LogManager.getLogger();
@@ -78,7 +77,7 @@ public class StageManager {
     Parent rootNode = null;
     URL location = getClass().getResource(view.getFxmlLoc());
     try {
-      rootNode = (Parent) FXMLLoader.load(location, null, null, factory);
+      rootNode = FXMLLoader.load(Objects.requireNonNull(location), null, null, factory);
       Objects.requireNonNull(rootNode, "A Root FXML node must not be null");
     } catch (Exception exception) {
       logAndThrowException("Unable to load FXML view " + view.getFxmlName(), exception);

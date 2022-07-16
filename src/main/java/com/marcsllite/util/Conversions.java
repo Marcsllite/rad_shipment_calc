@@ -3,22 +3,20 @@ package com.marcsllite.util;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.security.InvalidParameterException;
-
-/* source: REMM(Radiation Emergency Medical Management) 
- * https://www.remm.nlm.gov/radmeasurement.htm
- * #################|           SI Units            |      Common Units     |
- * Radioactive      |   becquerel           (Bq)    |   curie       (Ci)    |
- * Absorbed Dose    |   gray                (Gy)    |   rad                 |
- * Dose Equivalent  |   sievert             (Sv)    |   rem                 |
- * Exposure         |   coulomb/kilogram    (C/kg)  |   roentgen    (R)     |
- * ##########################################################################
- * 
- * NOTE: Accuracy is set by context
- */
-
 import java.util.List;
 
 public final class Conversions {
+    /* source: REMM(Radiation Emergency Medical Management)
+     * https://www.remm.nlm.gov/radmeasurement.htm
+     * #################|           SI Units            |      Common Units     |
+     * Radioactive      |   becquerel           (Bq)    |   curie       (Ci)    |
+     * Absorbed Dose    |   gray                (Gy)    |   rad                 |
+     * Dose Equivalent  |   sievert             (Sv)    |   rem                 |
+     * Exposure         |   coulomb/kilogram    (C/kg)  |   roentgen    (R)     |
+     * ##########################################################################
+     *
+     * NOTE: Accuracy is set by context
+     */
     // Declaring variables
     public static final MathContext context = new MathContext(2);
     private static final BigDecimal YOTTA = BigDecimal.TEN.pow(24, context);   // Y
