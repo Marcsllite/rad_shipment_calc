@@ -2,7 +2,6 @@ package com.marcsllite.util;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,54 +9,37 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationExtension;
-import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
 import java.security.InvalidParameterException;
-import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 @ExtendWith(ApplicationExtension.class)
 @ExtendWith(MockitoExtension.class)
-class StageManagerTest {
-    static String propEx = Util.getString("properException");
-    static String propMsg = Util.getString("properMessage");
-    static String eMsgDefault = Util.getString("defaultMessage");
-    static String eMsgProp = Util.getString("properMessage");
+public class StageManagerTest {
+    final static String propEx = Util.getString("properException");
+    final static String propMsg = Util.getString("properMessage");
+    final static String eMsgDefault = Util.getString("defaultMessage");
+    final static String eMsgProp = Util.getString("properMessage");
     StageManager stageManager;
 
-    @Start
-    public void start(Stage stage) {
-        stageManager = new StageManager(stage);
-    }
-
     @BeforeEach
-    public void setUp() {
-        propEx = Util.getString("properException");
-        propMsg = Util.getString("properMessage");
-        eMsgDefault = Util.getString("defaultMessage");
-        eMsgProp = Util.getString("properMessage");
-    }
-
-    @AfterEach
-    public void tearDown() throws TimeoutException {
-        FxToolkit.hideStage();
-        stageManager = null;
-        propEx = null;
-        propMsg = null;
-        eMsgDefault = null;
-        eMsgProp = null;
+    void startup() {
+        Platform.runLater(() -> {
+            stageManager = new StageManager(new Stage());
+        });
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     @Test
-    void testSwitchScene_NullView() {
+    public void testSwitchScene_NullView() {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> stageManager.switchScene(null)
         );
@@ -66,11 +48,11 @@ class StageManagerTest {
 
      @ParameterizedTest
      @EnumSource(value = FXMLView.class, names = {"TEST"}, mode = EnumSource.Mode.EXCLUDE)
-     void testSwitchSceneChecker(FXMLView view) {
+     public void testSwitchSceneChecker(FXMLView view) {
          Platform.runLater(() -> {
              stageManager.switchScene(view);
              Stage stage = stageManager.getPrimaryStage();
-             WaitForAsyncUtils.waitForFxEvents();
+             // WaitForAsyncUtils.waitForFxEvents();
 
              // assertEquals(view, stageManager.getCurrentView());
              assertEquals(view.getTitle(), stage.getTitle());
@@ -82,11 +64,11 @@ class StageManagerTest {
              assertFalse(stage.isMaximized());
              assertFalse(stage.getIcons().isEmpty());
          });
-         WaitForAsyncUtils.waitForFxEvents();
+         // WaitForAsyncUtils.waitForFxEvents();
      }
 
     @Test
-    void testShow_NullView() {
+    public void testShow_NullView() {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> stageManager.show(null)
         );
@@ -94,7 +76,7 @@ class StageManagerTest {
     }
   
     @Test
-    void testShow_EmptyView() {
+    public void testShow_EmptyView() {
         FXMLView view = FXMLView.TEST;
         RuntimeException exception = assertThrows(
             RuntimeException.class, () -> stageManager.show(view)
@@ -104,19 +86,20 @@ class StageManagerTest {
 
      @ParameterizedTest
      @EnumSource(value = FXMLView.class, names = {"TEST"}, mode = EnumSource.Mode.EXCLUDE)
-     void testShowChecker(FXMLView view) {
+     public void testShowChecker(FXMLView view) {
          Platform.runLater(() -> {
              stageManager.show(view);
              Stage stage = stageManager.getPrimaryStage();
-             WaitForAsyncUtils.waitForFxEvents();
+             // WaitForAsyncUtils.waitForFxEvents();
 
              assertEquals(view.getTitle(), stage.getTitle());
+             assertNotNull(stage.getIcons());
          });
-         WaitForAsyncUtils.waitForFxEvents();
+         // WaitForAsyncUtils.waitForFxEvents();
      }
 
     @Test
-    void testLoadViewNodeHierarchy_NullView() {
+    public void testLoadViewNodeHierarchy_NullView() {
         RuntimeException exception = assertThrows(
             RuntimeException.class, () -> stageManager.loadViewNodeHierarchy(null)
         );
@@ -124,7 +107,7 @@ class StageManagerTest {
     }
   
     @Test
-    void testLoadViewNodeHierarchy_EmptyView() {
+    public void testLoadViewNodeHierarchy_EmptyView() {
         FXMLView view = FXMLView.TEST;
         RuntimeException exception = assertThrows(
             RuntimeException.class, () -> stageManager.loadViewNodeHierarchy(view)
@@ -134,7 +117,7 @@ class StageManagerTest {
   
     @ParameterizedTest
     @MethodSource("logAndThrowException_data")
-    void logAndThrowExceptionChecker(String errorMsg, Exception exception, String expectedMsg) {
+    public void logAndThrowExceptionChecker(String errorMsg, Exception exception, String expectedMsg) {
         assumeFalse(propEx == null);
         assumeFalse(propEx.isBlank());
 

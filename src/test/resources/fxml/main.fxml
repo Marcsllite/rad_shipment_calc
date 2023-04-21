@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<GridPane prefHeight="850.0" prefWidth="950.0" styleClass="root" stylesheets="@../css/main.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.marcsllite.MainController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="215.0" minWidth="157.0" prefWidth="215.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="245.0" prefWidth="225.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="245.0" prefWidth="225.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="245.0" prefWidth="225.0" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints vgrow="SOMETIMES" />
+        <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+    </rowConstraints>
+    <fx:include fx:id="menuPane"  source="menuPane.fxml" GridPane.halignment="CENTER" GridPane.rowSpan="2147483647" GridPane.valignment="TOP" />
+    <fx:include fx:id="referencePane"  source="secondary.fxml" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowSpan="2147483647" />
+    <fx:include fx:id="homePane" source="primary.fxml" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.hgrow="ALWAYS" GridPane.rowSpan="2147483647" />
+</GridPane>

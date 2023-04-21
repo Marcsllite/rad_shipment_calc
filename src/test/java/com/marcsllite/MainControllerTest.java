@@ -27,11 +27,11 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class MainControllerTest {
+public class MainControllerTest {
     @Nested
     @DisplayName("Main Controller UI Tests")
     @ExtendWith(ApplicationExtension.class)
-    class MainControllerTestUI {
+    public class MainControllerTestUI {
         final FXMLView view = FXMLView.MAIN;
         
         @Start
@@ -47,29 +47,29 @@ class MainControllerTest {
             FxToolkit.hideStage();
         }
 
-         @Test
-         void testShowHomePane() {
-             Platform.runLater(() -> {
-                 MainController.getInstance().showHomePane();
-                 WaitForAsyncUtils.waitForFxEvents();
+        @Test
+        public void testShowHomePane() {
+         Platform.runLater(() -> {
+             MainController.getInstance().showHomePane();
+             WaitForAsyncUtils.waitForFxEvents();
 
-                 assertTrue(MainController.getInstance().getHomePaneController().homePane.isVisible());
-             });
-         }
+             assertTrue(MainController.getInstance().getHomePaneController().homePane.isVisible());
+         });
+        }
 
-         @Test
-         void testShowReferencePane() {
-             Platform.runLater(() -> {
-                 MainController.getInstance().showReferencePane();
-                 WaitForAsyncUtils.waitForFxEvents();
+        @Test
+        public void testShowReferencePane() {
+         Platform.runLater(() -> {
+             MainController.getInstance().showReferencePane();
+             WaitForAsyncUtils.waitForFxEvents();
 
-                 assertTrue(MainController.getInstance().getReferencePaneController().referencePane.isVisible());
-             });
-         }
+             assertTrue(MainController.getInstance().getReferencePaneController().referencePane.isVisible());
+         });
+        }
     }
 
     @Test
-    void testRegisterController_NullParam() {
+    public void testRegisterController_NullParam() {
         MainController controller = MainController.getInstance();
         IllegalArgumentException exception = assertThrows(
             IllegalArgumentException.class, () -> controller.registerController(null)
@@ -78,7 +78,7 @@ class MainControllerTest {
     }
 
     @Test
-    void testRegisterController_BaseController() {
+    public void testRegisterController_BaseController() {
         BaseController controller = new BaseController(){
             @Override
             public void show() {}
@@ -95,7 +95,7 @@ class MainControllerTest {
     }
 
     @Test
-    void testRegisterController_MenuPaneController() {
+    public void testRegisterController_MenuPaneController() {
         MenuPaneController controller = new MenuPaneController();
         
         MainController.getInstance().registerController(controller);
@@ -104,7 +104,7 @@ class MainControllerTest {
     }
 
     @Test
-    void testRegisterController_HomePaneController() {
+    public void testRegisterController_HomePaneController() {
         PrimaryController controller = new PrimaryController();
         
         MainController.getInstance().registerController(controller);
@@ -113,7 +113,7 @@ class MainControllerTest {
     }
 
     @Test
-    void testRegisterController_ReferencePaneController() {
+    public void testRegisterController_ReferencePaneController() {
         SecondaryController controller = new SecondaryController();
         
         MainController.getInstance().registerController(controller);

@@ -43,7 +43,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class MenuPaneControllerTest {
+public class MenuPaneControllerTest {
     StageManager stageManager;
     MenuPaneController c;
 
@@ -51,7 +51,7 @@ class MenuPaneControllerTest {
     @DisplayName("Menu Pane Controller UI Tests")
     @ExtendWith(MockitoExtension.class)
     @ExtendWith(ApplicationExtension.class)
-    class MenuPaneControllerTestUI {
+    public class MenuPaneControllerTestUI {
         GridPane menuPane;
         ImageView imgViewColor;
         ImageView imgViewGrey;
@@ -107,7 +107,7 @@ class MenuPaneControllerTest {
         }
 
          @Test
-         void testMenuPaneHandler_NullEventSource() {
+         public void testMenuPaneHandler_NullEventSource() {
              ActionEvent event = mock(ActionEvent.class);
 
              when(event.getSource()).thenReturn(null);
@@ -119,7 +119,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testMenuPaneHandler_ShipmentEvent() {
+         public void testMenuPaneHandler_ShipmentEvent() {
              ActionEvent event = mock(ActionEvent.class);
             
              when(event.getSource()).thenReturn(btnShip);
@@ -131,7 +131,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testMenuPaneHandler_ReferenceEvent() {
+         public void testMenuPaneHandler_ReferenceEvent() {
              ActionEvent event = mock(ActionEvent.class);
 
              when(event.getSource()).thenReturn(btnRef);
@@ -142,7 +142,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testMouseShipmentEnter(FxRobot robot) {
+         public void testMouseShipmentEnter(FxRobot robot) {
              robot.moveTo(FXIds.BTN_SHIPMENT);
 
              Paint exp = Color.web(c.getHoverColor());
@@ -151,7 +151,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testMouseShipmentExit_Current() {
+         public void testMouseShipmentExit_Current() {
              when(c.getCurrentBtn()).thenReturn(0);
 
              c.mouseShipmentExit();
@@ -162,7 +162,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testMouseShipmentExit_NotCurrent() {
+         public void testMouseShipmentExit_NotCurrent() {
              when(c.getCurrentBtn()).thenReturn(1);
 
              c.mouseShipmentExit();
@@ -173,7 +173,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testMouseReferenceEnter(FxRobot robot) {
+         public void testMouseReferenceEnter(FxRobot robot) {
              robot.moveTo(FXIds.BTN_REFERENCE);
 
              Paint exp = Color.web(c.getHoverColor());
@@ -182,7 +182,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testMouseReferenceExit_Current() {
+         public void testMouseReferenceExit_Current() {
              when(c.getCurrentBtn()).thenReturn(1);
 
              c.mouseReferenceExit();
@@ -193,7 +193,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testMouseReferenceExit_NotCurrent(FxRobot robot) {
+         public void testMouseReferenceExit_NotCurrent(FxRobot robot) {
              when(c.getCurrentBtn()).thenReturn(0);
 
              c.mouseReferenceExit();
@@ -204,7 +204,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testSetCurrentButton_Ship() {
+         public void testSetCurrentButton_Ship() {
              c.setCurrentButton(btnShip);
 
              String curColor = c.getIdleColor();
@@ -217,7 +217,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testSetCurrentButton_Ref() {
+         public void testSetCurrentButton_Ref() {
              c.setCurrentButton(btnRef);
 
              String curColor = c.getIdleColor();
@@ -230,7 +230,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testShipmentBtnHandler_NotCurrent() {
+         public void testShipmentBtnHandler_NotCurrent() {
              when(c.getCurrentBtn()).thenReturn(1);
 
              c.shipmentBtnHandler();
@@ -239,7 +239,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testReferenceBtnHandler_NotCurrent() {
+         public void testReferenceBtnHandler_NotCurrent() {
              when(c.getCurrentBtn()).thenReturn(0);
 
              c.referenceBtnHandler();
@@ -248,7 +248,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testUnsetCurrentButton() {
+         public void testUnsetCurrentButton() {
              c.unsetCurrentButton();
 
              String curColor = c.getIdleColor();
@@ -262,7 +262,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testSetButtonColor_BtnShip_NullColor() {
+         public void testSetButtonColor_BtnShip_NullColor() {
              InvalidParameterException ex = assertThrows(
                  InvalidParameterException.class,
                  () -> c.setButtonColor(btnShip, null)
@@ -271,7 +271,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testSetButtonColor_BtnShip_ProperColor() {
+         public void testSetButtonColor_BtnShip_ProperColor() {
              String color = c.getCurrentColor();
 
              c.setButtonColor(btnShip, color);
@@ -282,7 +282,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testSetButtonColor_BtnRef_ProperColor() {
+         public void testSetButtonColor_BtnRef_ProperColor() {
              String color = c.getCurrentColor();
 
              c.setButtonColor(btnRef, color);
@@ -293,7 +293,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testMouseLogoEnter(FxRobot robot) {
+         public void testMouseLogoEnter(FxRobot robot) {
              c.imgViewColorLogo.setVisible(true);
              c.imgViewGreyLogo.setVisible(false);
             
@@ -304,7 +304,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testMouseLogoExit() {
+         public void testMouseLogoExit() {
              c.imgViewColorLogo.setVisible(false);
              c.imgViewGreyLogo.setVisible(true);
             
@@ -315,7 +315,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testHide(FxRobot robot) {
+         public void testHide(FxRobot robot) {
              GridPane pane = robot.lookup(FXIds.MENU_PANE).queryAs(GridPane.class);
              c.menuPane = pane;
 
@@ -327,7 +327,7 @@ class MenuPaneControllerTest {
          }
 
          @Test
-         void testShow(FxRobot robot) {
+         public void testShow(FxRobot robot) {
              GridPane pane = robot.lookup(FXIds.MENU_PANE).queryAs(GridPane.class);
              c.menuPane = pane;
              c.menuPane.setVisible(false);
@@ -345,7 +345,7 @@ class MenuPaneControllerTest {
     @ParameterizedTest
     @NullSource
     @EmptySource
-    void testSetButtonColor_NullBtn_InvalidColor(String color) {
+    public void testSetButtonColor_NullBtn_InvalidColor(String color) {
         InvalidParameterException ex = assertThrows(
             InvalidParameterException.class, 
             () -> c.setButtonColor(null, color)
@@ -355,7 +355,7 @@ class MenuPaneControllerTest {
     }
 
     @Test
-    void testSetButtonColor_NullBtn_ProperColor() {
+    public void testSetButtonColor_NullBtn_ProperColor() {
         String color = c.getCurrentColor();
         InvalidParameterException ex = assertThrows(
             InvalidParameterException.class, 
@@ -365,7 +365,7 @@ class MenuPaneControllerTest {
     }
 
     @Test
-    void testSetCurrentButton_NullParam() {
+    public void testSetCurrentButton_NullParam() {
         InvalidParameterException ex = assertThrows(
             InvalidParameterException.class, 
             () -> c.setCurrentButton(null)
@@ -374,7 +374,7 @@ class MenuPaneControllerTest {
     }
 
     @Test
-    void testMenuPaneHandler_NullParam() {
+    public void testMenuPaneHandler_NullParam() {
         InvalidParameterException ex = assertThrows(
             InvalidParameterException.class, 
             () -> c.menuPaneHandler(null)
@@ -384,7 +384,7 @@ class MenuPaneControllerTest {
     }
 
     @Test
-    void testGetCurrentColor() {
+    public void testGetCurrentColor() {
         String exp = Util.getString("umlBlue");
 
         assumeFalse(exp.isBlank());
@@ -393,7 +393,7 @@ class MenuPaneControllerTest {
     }
 
     @Test
-    void testGetHoverColor() {
+    public void testGetHoverColor() {
         String exp = Util.getString("defaultWhite");
 
         assumeFalse(exp.isBlank());
@@ -402,7 +402,7 @@ class MenuPaneControllerTest {
     }
 
     @Test
-    void testGetIdleColor() {
+    public void testGetIdleColor() {
         String exp = Util.getString("de faultGrey");
 
         assumeFalse(exp.isBlank());

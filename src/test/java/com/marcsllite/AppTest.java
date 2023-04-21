@@ -4,7 +4,6 @@ import com.marcsllite.util.FXMLView;
 import com.marcsllite.util.Util;
 import javafx.application.Platform;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -12,14 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationExtension;
-import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
-import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -27,39 +23,30 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-class AppTest {
+public class AppTest {
     @Nested
     @DisplayName("App Class UI Tests")
     @ExtendWith(ApplicationExtension.class)
-    class AppTestUI {
+    public class AppTestUI {
         Stage stage;
         App app;
-
-        @Start
-        public void start(Stage stage) {
-            this.stage = stage;
-        }
 
         @BeforeEach
         public void setUp() {
             app = new App();
+            stage = new Stage();
         }
 
-        @AfterEach
-        public void tearDown() throws TimeoutException {
-            FxToolkit.hideStage();
-            app = null;
+        @Test
+        public void testStart() {
+         Platform.runLater(() -> {
+             app.start(stage);
+         });
+            WaitForAsyncUtils.waitForFxEvents();
+            assertEquals(FXMLView.MAIN, app.getStageManager().getCurrentView());
         }
-
-         @Test
-         void testStart() {
-             Platform.runLater(() -> {
-                 app.start(stage);
-                 WaitForAsyncUtils.waitForFxEvents();
-                 assertEquals(FXMLView.MAIN, app.getStageManager().getCurrentView());
-             });
-         }
     }
+    final static String folderName = Util.getString("appFolderName");
 
     private boolean deleteDirectory(File directoryToBeDeleted) {
         File[] allContents = directoryToBeDeleted.listFiles();
@@ -72,7 +59,7 @@ class AppTest {
     }
   
     @Test
-    void testSetDefaultDir_InvalidName() {
+   public void testSetDefaultDir_InvalidName() {
         String os = System.getProperty("os.name").toLowerCase();
 
         // linux and Mac have no bad names
@@ -88,7 +75,7 @@ class AppTest {
     }
 
     @Test
-    void testSetDefaultDir_MakeNewFolder() {
+   public void testSetDefaultDir_MakeNewFolder() {
         String name ="Default Dir";
 
         String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + name;
@@ -100,7 +87,7 @@ class AppTest {
     }
   
     @Test
-    void testSetDefaultDir_FolderAlreadyExists() {
+   public void testSetDefaultDir_FolderAlreadyExists() {
         String name ="Default Dir";
 
         String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + name;
@@ -113,7 +100,7 @@ class AppTest {
 
     @ParameterizedTest
     @MethodSource("testSetDefaultDirException_data")
-    void testSetDefaultDirExceptionChecker(String dirName, String expected) {
+   public void testSetDefaultDirExceptionChecker(String dirName, String expected) {
         String name = Util.getString("appMainFolder");
 
         assumeFalse(name.isBlank());
@@ -132,7 +119,7 @@ class AppTest {
 
     @ParameterizedTest
     @MethodSource("setDataFolderException_data")
-    void setDataFolderExceptionChecker(String osVersion, String expected) {
+    public void setDataFolderExceptionChecker(String osVersion, String expected) {
         App.setDataFolder(osVersion);
         assertEquals(expected, App.getDataFolder());
     }
@@ -146,13 +133,16 @@ class AppTest {
 
      @ParameterizedTest
      @MethodSource("setDataFolder_data")
-     void setDataFolderChecker(String osVersion, String expected) {
-         App.setDataFolder(osVersion);
+     public void setDataFolderChecker(String osVersion, String expected) {
+         assumeFalse(folderName == null);
+         assumeFalse(folderName.isBlank());
+
+        App.setDataFolder(osVersion);
          assertEquals(expected, App.getDataFolder());
      }
 
     private static Object[] setDataFolder_data() {
-        String folderName = Util.getString("appFolderName");  // no access to util class
+        //String folderName = Util.getString("appFolderName");  // no access to util class
         String winExp = System.getProperty("user.home") + File.separator +
                             "AppData" + File.separator +
                             "Local" + File.separator +
