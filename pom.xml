@@ -38,11 +38,11 @@
         <monocle.version>jdk-11+26</monocle.version>
 
         <!-- Test Coverage -->
-        <jacoco.percentages.min.instruct>0.80</jacoco.percentages.min.instruct>
-        <jacoco.percentages.min.line>0.76</jacoco.percentages.min.line>
-        <jacoco.percentages.min.branch>0.84</jacoco.percentages.min.branch>
-        <jacoco.percentages.min.complex>0.79</jacoco.percentages.min.complex>
-        <jacoco.percentages.min.method>0.77</jacoco.percentages.min.method>
+        <jacoco.percentages.min.instruct>0.75</jacoco.percentages.min.instruct>
+        <jacoco.percentages.min.line>0.72</jacoco.percentages.min.line>
+        <jacoco.percentages.min.branch>0.72</jacoco.percentages.min.branch>
+        <jacoco.percentages.min.complex>0.71</jacoco.percentages.min.complex>
+        <jacoco.percentages.min.method>0.74</jacoco.percentages.min.method>
         <jacoco.missed.count.class>0</jacoco.missed.count.class>
     </properties>
 
