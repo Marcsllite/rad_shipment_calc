@@ -9,6 +9,7 @@
 *.code-workspace
 .factorypath
 .settings/org.eclipse.jdt.apt.core.prefs
+.settings/org.eclipse.core.resources.prefs
 
 # Local History for Visual Studio Code
 .history/

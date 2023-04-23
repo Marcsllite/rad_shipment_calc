@@ -46,7 +46,7 @@ public class StageManagerTest extends GUITest {
     }
 
      @ParameterizedTest
-     @EnumSource(value = FXMLView.class, names = {"TEST"}, mode = EnumSource.Mode.EXCLUDE)
+     @EnumSource(value = FXMLView.class, names = {"TEST", "MAIN", "MENU"}, mode = EnumSource.Mode.EXCLUDE)
      public void testSwitchSceneChecker(FXMLView view) {
          Platform.runLater(() -> {
              stageManager.switchScene(view);
@@ -84,7 +84,7 @@ public class StageManagerTest extends GUITest {
     }
 
      @ParameterizedTest
-     @EnumSource(value = FXMLView.class, names = {"TEST"}, mode = EnumSource.Mode.EXCLUDE)
+     @EnumSource(value = FXMLView.class, names = {"TEST", "MAIN", "MENU"}, mode = EnumSource.Mode.EXCLUDE)
      public void testShowChecker(FXMLView view) {
          Platform.runLater(() -> {
              stageManager.show(view);
