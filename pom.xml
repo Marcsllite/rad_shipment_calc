@@ -8,7 +8,18 @@
     <version>1.0.0</version>
 
     <properties>
-        <argLine>-Djdk.gtk.version=2</argLine>
+        <argLine>
+        -Djdk.gtk.version=2
+        -Djava.awt.headless=true
+        -Dglass.platform=Monocle
+        -Dmonocle.platform=Headless
+        -Dtestfx.robot=glass
+        -Dtestfx.headless=true
+        -Djavafx.verbose=true
+        -Dprism.order=sw
+        -Dprism.text=t2k
+        -Dprism.debug=true
+        </argLine>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11.0.2</maven.compiler.source>
         <maven.compiler.target>11.0.2</maven.compiler.target>
@@ -121,6 +132,14 @@
         <testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
         <outputDirectory>${basedir}/target/classes</outputDirectory>
         <testOutputDirectory>${basedir}/target/test-classes</testOutputDirectory>
+        <testResources>
+            <testResource>
+                <directory>${basedir}/src/main/resources/fxml</directory>
+            </testResource>
+            <testResource>
+                <directory>${basedir}/src/test/resources</directory>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
@@ -153,18 +172,18 @@
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>${javafx.maven.plugin.version}</version>
+                <configuration>
+                    <mainClass>com.marcsllite.App</mainClass>
+                    <options>
+                        <option>-Djdk.gtk.version=2</option>
+                        <option>-Djavafx.version=null</option>
+                    </options>
+                </configuration>
                 <executions>
                     <execution>
                         <!-- Default configuration for running -->
                         <!-- Usage: mvn clean javafx:run -->
                         <id>default-cli</id>
-                        <configuration>
-                            <mainClass>com.marcsllite.App</mainClass>
-                            <options>
-                                <option>-Djdk.gtk.version=2</option>
-                                <option>-Djavafx.version=null</option>
-                            </options>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>

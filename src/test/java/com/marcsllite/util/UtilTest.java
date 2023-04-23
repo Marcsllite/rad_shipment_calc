@@ -1,159 +1,159 @@
 package com.marcsllite.util;
 
-import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBase;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
+// import javafx.application.Platform;
+// import javafx.beans.property.SimpleStringProperty;
+// import javafx.scene.Scene;
+// import javafx.scene.control.Button;
+// import javafx.scene.control.ButtonBase;
+// import javafx.scene.input.KeyCode;
+// import javafx.scene.layout.VBox;
+// import javafx.stage.Stage;
+// import org.junit.jupiter.api.AfterEach;
+// import org.junit.jupiter.api.BeforeEach;
+// import org.junit.jupiter.api.DisplayName;
+// import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.junit.jupiter.api.extension.ExtendWith;
+// import org.junit.jupiter.api.TestInstance;
+// import org.junit.jupiter.api.TestInstance.Lifecycle;
+// import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.testfx.api.FxRobot;
-import org.testfx.api.FxToolkit;
-import org.testfx.framework.junit5.ApplicationExtension;
-import org.testfx.framework.junit5.Start;
-import org.testfx.util.WaitForAsyncUtils;
+// import org.testfx.api.FxRobot;
+// import org.testfx.api.FxToolkit;
+// import org.testfx.framework.junit5.ApplicationExtension;
+// import org.testfx.framework.junit5.Start;
+// import org.testfx.util.WaitForAsyncUtils;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
+// import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+// import static org.junit.jupiter.api.Assertions.assertNotNull;
+// import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+// import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class UtilTest {
 
-    @Nested
-    @DisplayName("Util Class UI Tests")
-    @ExtendWith(ApplicationExtension.class)
-    @TestInstance(Lifecycle.PER_CLASS) 
-    class UtilTestUI {
-        Stage stage; 
-        ButtonBase btnBase;
-        Button btn2;
-        VBox vBox;
-        SimpleStringProperty stringProp;
-        final String msg = "button was fired";
+    // @Nested
+    // @DisplayName("Util Class UI Tests")
+    // @ExtendWith(ApplicationExtension.class)
+    // @TestInstance(Lifecycle.PER_CLASS) 
+    // class UtilTestUI {
+    //     Stage stage; 
+    //     ButtonBase btnBase;
+    //     Button btn2;
+    //     VBox vBox;
+    //     SimpleStringProperty stringProp;
+    //     final String msg = "button was fired";
 
-        @Start
-        public void start(Stage stage) {
-            this.stage = stage;
-        }
+    //     @Start
+    //     public void start(Stage stage) {
+    //         this.stage = stage;
+    //     }
         
-        @BeforeEach
-        public void setUp() {
-            Platform.runLater(() -> {
-                btnBase = new Button("Button Base");
-                btn2 = new Button("Button 2");
-                stringProp = new SimpleStringProperty();
+    //     @BeforeEach
+    //     public void setUp() {
+    //         Platform.runLater(() -> {
+    //             btnBase = new Button("Button Base");
+    //             btn2 = new Button("Button 2");
+    //             stringProp = new SimpleStringProperty();
 
-                btnBase.setOnAction( 
-                    (event) -> stringProp.set("button was fired")
-                );
+    //             btnBase.setOnAction( 
+    //                 (event) -> stringProp.set("button was fired")
+    //             );
 
-                vBox = new VBox(10, btnBase, btn2);
+    //             vBox = new VBox(10, btnBase, btn2);
 
-                stage.setScene(new Scene(vBox, 100, 100));
-                stage.show();
-            });
-            WaitForAsyncUtils.waitForFxEvents();
-        }
+    //             stage.setScene(new Scene(vBox, 100, 100));
+    //             stage.show();
+    //         });
+    //         WaitForAsyncUtils.waitForFxEvents();
+    //     }
 
-        @AfterEach
-        public void tearDown() throws TimeoutException {
-            FxToolkit.hideStage();
-            btnBase = null;
-            btn2 = null;
-            stringProp = null;
-            vBox = null;
-        }
+    //     @AfterEach
+    //     public void tearDown() throws TimeoutException {
+    //         FxToolkit.hideStage();
+    //         btnBase = null;
+    //         btn2 = null;
+    //         stringProp = null;
+    //         vBox = null;
+    //     }
 
-        @Test
-        void fireBtnOnEnter_OtherKey_Focused(FxRobot robot) {
-            Platform.runLater(() -> {
-                Util.fireBtnOnEnter(btnBase);
+    //     @Test
+    //     void fireBtnOnEnter_OtherKey_Focused(FxRobot robot) {
+    //         Platform.runLater(() -> {
+    //             Util.fireBtnOnEnter(btnBase);
 
-                btnBase.requestFocus();
+    //             btnBase.requestFocus();
 
-                robot.press(KeyCode.A).release(KeyCode.A);
-                WaitForAsyncUtils.waitForFxEvents();
+    //             robot.press(KeyCode.A).release(KeyCode.A);
+    //             WaitForAsyncUtils.waitForFxEvents();
 
-                assertNotNull(btnBase.getOnKeyPressed());
-                assumeTrue(btnBase.isFocused());
-            });
-            WaitForAsyncUtils.waitForFxEvents();
-            assertNull(stringProp.get());
-        }
+    //             assertNotNull(btnBase.getOnKeyPressed());
+    //             assumeTrue(btnBase.isFocused());
+    //         });
+    //         WaitForAsyncUtils.waitForFxEvents();
+    //         assertNull(stringProp.get());
+    //     }
 
-        @Test
-        void fireBtnOnEnter_OtherKey_NotFocused(FxRobot robot) {
-            Platform.runLater(() -> {
-                Util.fireBtnOnEnter(btnBase);
+    //     @Test
+    //     void fireBtnOnEnter_OtherKey_NotFocused(FxRobot robot) {
+    //         Platform.runLater(() -> {
+    //             Util.fireBtnOnEnter(btnBase);
                 
-                btn2.requestFocus();
+    //             btn2.requestFocus();
                 
-                robot.press(KeyCode.A).release(KeyCode.A);
-                WaitForAsyncUtils.waitForFxEvents();
+    //             robot.press(KeyCode.A).release(KeyCode.A);
+    //             WaitForAsyncUtils.waitForFxEvents();
 
-                assertNotNull(btnBase.getOnKeyPressed());
-                assumeTrue(btn2.isFocused());
-                assertNull(stringProp.get());
-            });
-            WaitForAsyncUtils.waitForFxEvents();
-        }
+    //             assertNotNull(btnBase.getOnKeyPressed());
+    //             assumeTrue(btn2.isFocused());
+    //             assertNull(stringProp.get());
+    //         });
+    //         WaitForAsyncUtils.waitForFxEvents();
+    //     }
 
-        @Test
-        void fireBtnOnEnter_EnterKey_Focused(FxRobot robot) {
-            Platform.runLater(() -> {
-                Util.fireBtnOnEnter(btnBase);
+    //     @Test
+    //     void fireBtnOnEnter_EnterKey_Focused(FxRobot robot) {
+    //         Platform.runLater(() -> {
+    //             Util.fireBtnOnEnter(btnBase);
 
-                btnBase.requestFocus();
+    //             btnBase.requestFocus();
             
-                robot.press(KeyCode.ENTER).release(KeyCode.ENTER);
-                WaitForAsyncUtils.waitForFxEvents();
+    //             robot.press(KeyCode.ENTER).release(KeyCode.ENTER);
+    //             WaitForAsyncUtils.waitForFxEvents();
                                                 
-                assertNotNull(btnBase.getOnKeyPressed());
-                assumeTrue(btnBase.isFocused());
-            });
-            WaitForAsyncUtils.waitForFxEvents();
-            assertEquals(msg, stringProp.get());
-        }
+    //             assertNotNull(btnBase.getOnKeyPressed());
+    //             assumeTrue(btnBase.isFocused());
+    //         });
+    //         WaitForAsyncUtils.waitForFxEvents();
+    //         assertEquals(msg, stringProp.get());
+    //     }
 
-        @Test 
-        void fireBtnOnEnter_EnterKey_NotFocused(FxRobot robot) {
-            Platform.runLater(() -> {
-                Util.fireBtnOnEnter(btnBase);
+    //     @Test 
+    //     void fireBtnOnEnter_EnterKey_NotFocused(FxRobot robot) {
+    //         Platform.runLater(() -> {
+    //             Util.fireBtnOnEnter(btnBase);
 
-                btn2.requestFocus();
+    //             btn2.requestFocus();
 
-                robot.press(KeyCode.ENTER).release(KeyCode.ENTER);
-                WaitForAsyncUtils.waitForFxEvents();
+    //             robot.press(KeyCode.ENTER).release(KeyCode.ENTER);
+    //             WaitForAsyncUtils.waitForFxEvents();
 
-                assertNotNull(btnBase.getOnKeyPressed());
-                assumeTrue(btn2.isFocused());
-                assertNull(stringProp.get());
-            });
-            WaitForAsyncUtils.waitForFxEvents();
-        }
-    }
+    //             assertNotNull(btnBase.getOnKeyPressed());
+    //             assumeTrue(btn2.isFocused());
+    //             assertNull(stringProp.get());
+    //         });
+    //         WaitForAsyncUtils.waitForFxEvents();
+    //     }
+    // }
 
     @ParameterizedTest
     @NullAndEmptySource

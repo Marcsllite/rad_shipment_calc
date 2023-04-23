@@ -2,15 +2,18 @@ package com.marcsllite.util;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.BeforeEach;
+// import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.testfx.framework.junit5.ApplicationExtension;
-import org.testfx.util.WaitForAsyncUtils;
+// import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
+// import org.testfx.util.WaitForAsyncUtils;
+
+import com.marcsllite.GUITest;
 
 import java.security.InvalidParameterException;
 
@@ -21,21 +24,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
-@ExtendWith(ApplicationExtension.class)
 @ExtendWith(MockitoExtension.class)
-public class StageManagerTest {
+public class StageManagerTest extends GUITest {
     final static String propEx = Util.getString("properException");
     final static String propMsg = Util.getString("properMessage");
     final static String eMsgDefault = Util.getString("defaultMessage");
     final static String eMsgProp = Util.getString("properMessage");
-    StageManager stageManager;
 
-    @BeforeEach
-    void startup() {
-        Platform.runLater(() -> {
-            stageManager = new StageManager(new Stage());
-        });
-        WaitForAsyncUtils.waitForFxEvents();
+    @Override
+    @Start
+    public void start(Stage stage) {
+        stageManager = new StageManager(new Stage());
     }
 
     @Test

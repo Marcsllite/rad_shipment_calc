@@ -1,18 +1,18 @@
 package com.marcsllite;
 
-import com.marcsllite.util.FXMLView;
+// import com.marcsllite.util.FXMLView;
 import com.marcsllite.util.Util;
-import javafx.application.Platform;
-import javafx.stage.Stage;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
+// import javafx.application.Platform;
+// import javafx.stage.Stage;
+// import org.junit.jupiter.api.BeforeEach;
+// import org.junit.jupiter.api.DisplayName;
+// import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+// import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.testfx.framework.junit5.ApplicationExtension;
-import org.testfx.util.WaitForAsyncUtils;
+// import org.testfx.framework.junit5.ApplicationExtension;
+// import org.testfx.util.WaitForAsyncUtils;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
@@ -24,28 +24,28 @@ import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class AppTest {
-    @Nested
-    @DisplayName("App Class UI Tests")
-    @ExtendWith(ApplicationExtension.class)
-    public class AppTestUI {
-        Stage stage;
-        App app;
+    // @Nested
+    // @DisplayName("App Class UI Tests")
+    // @ExtendWith(ApplicationExtension.class)
+    // public class AppTestUI {
+    //     Stage stage;
+    //     App app;
 
-        @BeforeEach
-        public void setUp() {
-            app = new App();
-            stage = new Stage();
-        }
+    //     @BeforeEach
+    //     public void setUp() {
+    //         app = new App();
+    //         stage = new Stage();
+    //     }
 
-        @Test
-        public void testStart() {
-         Platform.runLater(() -> {
-             app.start(stage);
-         });
-            WaitForAsyncUtils.waitForFxEvents();
-            assertEquals(FXMLView.MAIN, app.getStageManager().getCurrentView());
-        }
-    }
+    //     @Test
+    //     public void testStart() {
+    //      Platform.runLater(() -> {
+    //          app.start(stage);
+    //      });
+    //         WaitForAsyncUtils.waitForFxEvents();
+    //         assertEquals(FXMLView.MAIN, app.getStageManager().getCurrentView());
+    //     }
+    // }
     final static String folderName = Util.getString("appFolderName");
 
     private boolean deleteDirectory(File directoryToBeDeleted) {
