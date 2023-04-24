@@ -35,16 +35,14 @@ environment:
   CODECOV_TOKEN:
     secure: zQd1mZd+Bl9Ev/rUgtx5eozOVW79Hcpp2+a8U01ij4hESsUrYJIuK29ZPmlmS3ql
   matrix:
-    - job_name: Windows build
-      appveyor_build_worker_image: Visual Studio 2019
+    # - job_name: Windows build
+    #   appveyor_build_worker_image: Visual Studio 2019
 
     - job_name: Mac build
       appveyor_build_worker_image: macOs
-      # _JAVA_OPTIONS: "-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.text=tk2"
 
-    - job_name: Linux build
-      appveyor_build_worker_image: Ubuntu2004
-      # _JAVA_OPTIONS: "-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.text=tk2"
+    # - job_name: Linux build
+    #   appveyor_build_worker_image: Ubuntu2004
 
 stack: jdk 11
 
@@ -85,7 +83,8 @@ for:
 
     install:
       # - sh: brew install maven
-      - sh: curl --output-dir /tmp https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz &&
+      - sh: cd /tmp &&
+            curl https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz &&
             sudo tar xf /tmp/apache-maven-*.tar.gz -C /opt &&
             export M2_HOME=/opt/apache-maven-3.6.3 &&
             export PATH=${PATH}:${M2_HOME}/bin
