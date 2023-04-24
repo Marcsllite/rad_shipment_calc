@@ -82,7 +82,12 @@ for:
         - job_name: Mac build
 
     install:
-      - sh: brew install maven
+      - sh: export HOMEBREW_NO_INSTALL_CLEANUP=1 &&
+            export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
+      - sh: brew install mvnvm &&
+            echo "mvn_version=3.6.3" > mvnvm.properties &&
+            git add mvnvm.properties &&
+            mvn -d clean package
       # - sh: brew search maven
       # - sh: cd /tmp &&
       #       curl --compressed https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz &&
