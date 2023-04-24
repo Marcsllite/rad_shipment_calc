@@ -35,14 +35,14 @@ environment:
   CODECOV_TOKEN:
     secure: zQd1mZd+Bl9Ev/rUgtx5eozOVW79Hcpp2+a8U01ij4hESsUrYJIuK29ZPmlmS3ql
   matrix:
-    # - job_name: Windows build
-    #   appveyor_build_worker_image: Visual Studio 2019
+    - job_name: Windows build
+      appveyor_build_worker_image: Visual Studio 2019
 
     - job_name: Mac build
       appveyor_build_worker_image: macos-monterey
 
-    # - job_name: Linux build
-    #   appveyor_build_worker_image: Ubuntu2004
+    - job_name: Linux build
+      appveyor_build_worker_image: Ubuntu2004
 
 stack: jdk 11
 
@@ -85,15 +85,7 @@ for:
       - sh: export HOMEBREW_NO_INSTALL_CLEANUP=1 &&
             export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
       - sh: brew install mvnvm &&
-            echo "mvn_version=3.6.3" > mvnvm.properties &&
-            git add mvnvm.properties &&
             mvn -d clean package
-      # - sh: brew search maven
-      # - sh: cd /tmp &&
-      #       curl --compressed https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz &&
-      #       sudo tar xf /tmp/apache-maven-*.tar.gz -C /opt &&
-      #       export M2_HOME=/opt/apache-maven-3.6.3 &&
-      #       export PATH=${PATH}:${M2_HOME}/bin
 
     build_script:
       # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-vnc.sh' | bash -e -
