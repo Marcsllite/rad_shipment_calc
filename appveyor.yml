@@ -83,6 +83,7 @@ for:
 
     install:
       # - sh: brew install maven
+      - sh: brew search maven
       - sh: cd /tmp &&
             curl --compressed https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz &&
             sudo tar xf /tmp/apache-maven-*.tar.gz -C /opt &&
