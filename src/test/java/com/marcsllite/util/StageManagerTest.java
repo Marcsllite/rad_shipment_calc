@@ -26,10 +26,8 @@ import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 @ExtendWith(MockitoExtension.class)
 public class StageManagerTest extends GUITest {
-    final static String propEx = Util.getString("properException");
-    final static String propMsg = Util.getString("properMessage");
-    final static String eMsgDefault = Util.getString("defaultMessage");
-    final static String eMsgProp = Util.getString("properMessage");
+    final static String propMsg = "This is a proper message";
+    final static String defaultMessage = "No Message";
 
     @Override
     @Start
@@ -117,12 +115,6 @@ public class StageManagerTest extends GUITest {
     @ParameterizedTest
     @MethodSource("logAndThrowException_data")
     public void logAndThrowExceptionChecker(String errorMsg, Exception exception, String expectedMsg) {
-        assumeFalse(propEx == null);
-        assumeFalse(propEx.isBlank());
-
-        assumeFalse(propMsg == null);
-        assumeFalse(propMsg.isBlank());
-
         RuntimeException except = assertThrows(
             RuntimeException.class, () -> stageManager.logAndThrowException(errorMsg, exception)
         );
@@ -134,14 +126,14 @@ public class StageManagerTest extends GUITest {
     }
   
     private static Object[] logAndThrowException_data() {
-        Exception properException = new Exception(propEx);
+        Exception properException = new Exception(propMsg);
         return new Object[] {
-            new Object[] { null, null, eMsgDefault },
-            new Object[] { "", null, eMsgDefault },
-            new Object[] { propMsg, null,eMsgProp },
-            new Object[] { null, properException, eMsgDefault },
-            new Object[] { "", properException, eMsgDefault },
-            new Object[] { propMsg, properException, eMsgProp }
+            new Object[] { null, null, defaultMessage },
+            new Object[] { "", null, defaultMessage },
+            new Object[] { propMsg, null, propMsg },
+            new Object[] { null, properException, defaultMessage },
+            new Object[] { "", properException, defaultMessage },
+            new Object[] { propMsg, properException, propMsg }
         };
     }
 }

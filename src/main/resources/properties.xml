@@ -115,7 +115,6 @@
     <entry key="confirmCloseMsg">User closed the Confirmation Window</entry>
     <entry key="informationCloseMsg">User closed the Information Window</entry>
     <entry key="properTitle">This is a proper title</entry>
-    <entry key="properMessage">This is a proper message</entry>
     <entry key="properBtnText">This is a proper button text</entry>
     <entry key="properBtnID">btnProperID</entry>
     <entry key="positiveBtnID">btnPositive</entry>
@@ -125,7 +124,6 @@
     <entry key="defaultBtn">button</entry>
     <entry key="usrBtnClick">User clicked the {0} button</entry>
     <entry key="usrMenuBtnClick">User clicked the {0} menu button ({1}) times</entry>
-    <entry key="properException">This is a proper Exception</entry>
     <entry key="timeout">1000</entry>
     <entry key="port">22</entry>
     <entry key="domain">uml.edu</entry>
@@ -246,6 +244,8 @@
     <entry key="updateReportQTableCSV">call csvwrite('{0}', 'select * from Reportable_Quantity')</entry>
 
     <!-- testing -->
+    <entry key="properMessage">This is a proper message</entry>
+    <entry key="properException">This is a proper Exception</entry>
     <entry key="replacePropString_noText"></entry>
     <entry key="replacePropString_noReplacements">This string doesn't contain any replacements</entry>
     <entry key="replacePropString_oneReplacement">This string contains {0} replacements</entry>

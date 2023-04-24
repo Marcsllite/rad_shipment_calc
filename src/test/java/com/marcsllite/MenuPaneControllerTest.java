@@ -3,7 +3,7 @@ package com.marcsllite;
 // import com.marcsllite.util.FXIds;
 // import com.marcsllite.util.FXMLView;
 // import com.marcsllite.util.StageManager;
-import com.marcsllite.util.Util;
+import com.marcsllite.GUITest;
 // import javafx.event.ActionEvent;
 // import javafx.scene.control.Button;
 // import javafx.scene.image.ImageView;
@@ -384,7 +384,7 @@ public class MenuPaneControllerTest {
 
     @Test
     public void testGetCurrentColor() {
-        String exp = Util.getString("umlBlue");
+        String exp = GUITest.getColor("umlBlue");
 
         assumeFalse(exp.isBlank());
 
@@ -393,7 +393,7 @@ public class MenuPaneControllerTest {
 
     @Test
     public void testGetHoverColor() {
-        String exp = Util.getString("defaultWhite");
+        String exp = GUITest.getColor("defaultWhite");
 
         assumeFalse(exp.isBlank());
 
@@ -402,7 +402,7 @@ public class MenuPaneControllerTest {
 
     @Test
     public void testGetIdleColor() {
-        String exp = Util.getString("de faultGrey");
+        String exp = GUITest.getColor("defaultGrey");
 
         assumeFalse(exp.isBlank());
 

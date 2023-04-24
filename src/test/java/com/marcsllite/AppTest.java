@@ -1,7 +1,6 @@
 package com.marcsllite;
 
 // import com.marcsllite.util.FXMLView;
-import com.marcsllite.util.Util;
 // import javafx.application.Platform;
 // import javafx.stage.Stage;
 // import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +19,6 @@ import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class AppTest {
@@ -46,7 +44,8 @@ public class AppTest {
     //         assertEquals(FXMLView.MAIN, app.getStageManager().getCurrentView());
     //     }
     // }
-    final static String folderName = Util.getString("appFolderName");
+    final static String appFolder = "UMass Lowell Radiation Safety";
+    final static String mainFolder = "Shipment Calculator";
 
     private boolean deleteDirectory(File directoryToBeDeleted) {
         File[] allContents = directoryToBeDeleted.listFiles();
@@ -79,9 +78,12 @@ public class AppTest {
         String name ="Default Dir";
 
         String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + name;
-        File directoryToBeDeleted = new File(path);
+        File dir = new File(path);
         
-        assumeTrue(deleteDirectory(directoryToBeDeleted));
+        if(dir.exists()) {
+            assumeTrue(deleteDirectory(dir));
+        }
+
         App.setDefaultDir(name);
         assertEquals(path, App.getDefaultDir());
     }
@@ -101,16 +103,12 @@ public class AppTest {
     @ParameterizedTest
     @MethodSource("testSetDefaultDirException_data")
    public void testSetDefaultDirExceptionChecker(String dirName, String expected) {
-        String name = Util.getString("appMainFolder");
-
-        assumeFalse(name.isBlank());
-
         App.setDefaultDir(dirName);
         assertEquals(expected, App.getDefaultDir());
     }
   
     private static Object[] testSetDefaultDirException_data() {
-        String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + Util.getString("appMainFolder");
+        String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + mainFolder;
         return new Object[] {
             new Object[] { null, path },
             new Object[] { "", path }
@@ -134,22 +132,18 @@ public class AppTest {
      @ParameterizedTest
      @MethodSource("setDataFolder_data")
      public void setDataFolderChecker(String osVersion, String expected) {
-         assumeFalse(folderName == null);
-         assumeFalse(folderName.isBlank());
-
         App.setDataFolder(osVersion);
-         assertEquals(expected, App.getDataFolder());
+        assertEquals(expected, App.getDataFolder());
      }
 
     private static Object[] setDataFolder_data() {
-        //String folderName = Util.getString("appFolderName");  // no access to util class
         String winExp = System.getProperty("user.home") + File.separator +
                             "AppData" + File.separator +
                             "Local" + File.separator +
-                            folderName + File.separator +
+                            appFolder + File.separator +
                             "logs";
         String otherExp = System.getProperty("user.home") + File.separator +
-                            folderName + File.separator +
+                            appFolder + File.separator +
                             "logs";
         return new Object[] {
             new Object[] { "Windows", winExp },

@@ -1,12 +1,16 @@
 package com.marcsllite.util;
 
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+// import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.testfx.framework.junit5.ApplicationExtension;
+// import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
+
+import com.marcsllite.GUITest;
 
 import java.io.File;
 import java.security.InvalidParameterException;
@@ -17,8 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
-@ExtendWith(ApplicationExtension.class)
-class ImageHandlerTest {
+// @ExtendWith(ApplicationExtension.class)
+class ImageHandlerTest extends GUITest {
+    @Override
+    @Start
+    public void start(Stage stage) {}
+
     @Test
     void testGetErrorImage() { 
         Image actual = ImageHandler.getErrorImage();
@@ -76,7 +84,7 @@ class ImageHandlerTest {
         "defaultGrey, /images/grey_single_box.png"
     })
     void testGetShipmentImage(String color, String url) {
-        String c = Util.getString(color);
+        String c = getColor(color);
 
         assumeFalse(c.isEmpty());
 
@@ -101,7 +109,7 @@ class ImageHandlerTest {
         "defaultGrey, /images/grey_paper.png"
     })
     void testGetReferenceImage(String color, String url) {
-        String c = Util.getString(color);
+        String c = getColor(color);
 
         assumeFalse(c.isEmpty());
 

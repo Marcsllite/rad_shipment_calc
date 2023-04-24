@@ -140,7 +140,6 @@
                     <exclude>csv</exclude>
                     <exclude>databaseAudit</exclude>
                     <exclude>font</exclude>
-                    <exclude>images</exclude>
                     <exclude>scripts</exclude>
                 </excludes>
             </testResource>
