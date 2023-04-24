@@ -39,7 +39,7 @@ environment:
     #   appveyor_build_worker_image: Visual Studio 2019
 
     - job_name: Mac build
-      appveyor_build_worker_image: macOs
+      appveyor_build_worker_image: macos-monterey
 
     # - job_name: Linux build
     #   appveyor_build_worker_image: Ubuntu2004
@@ -82,8 +82,8 @@ for:
         - job_name: Mac build
 
     install:
-      - sh: brew install maven
-      # - sh: brew search maven
+      # - sh: brew install maven
+      - sh: brew search maven
       # - sh: cd /tmp &&
       #       curl --compressed https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz &&
       #       sudo tar xf /tmp/apache-maven-*.tar.gz -C /opt &&
