@@ -82,13 +82,13 @@ for:
         - job_name: Mac build
 
     install:
-      # - sh: brew install maven
-      - sh: brew search maven
-      - sh: cd /tmp &&
-            curl --compressed https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz &&
-            sudo tar xf /tmp/apache-maven-*.tar.gz -C /opt &&
-            export M2_HOME=/opt/apache-maven-3.6.3 &&
-            export PATH=${PATH}:${M2_HOME}/bin
+      - sh: brew install maven
+      # - sh: brew search maven
+      # - sh: cd /tmp &&
+      #       curl --compressed https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz &&
+      #       sudo tar xf /tmp/apache-maven-*.tar.gz -C /opt &&
+      #       export M2_HOME=/opt/apache-maven-3.6.3 &&
+      #       export PATH=${PATH}:${M2_HOME}/bin
 
     build_script:
       # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-vnc.sh' | bash -e -
