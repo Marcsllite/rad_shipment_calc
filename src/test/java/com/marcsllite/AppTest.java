@@ -1,5 +1,6 @@
 package com.marcsllite;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 // import com.marcsllite.util.FXMLView;
 // import javafx.application.Platform;
@@ -12,6 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 // import org.testfx.framework.junit5.ApplicationExtension;
 // import org.testfx.util.WaitForAsyncUtils;
+import org.testfx.api.FxToolkit;
 
 import com.marcsllite.util.OS;
 
@@ -45,6 +47,11 @@ public class AppTest {
     final static String appFolder = "UMass Lowell Radiation Safety";
     final static String mainFolder = "Shipment Calculator";
     App app;
+
+    @BeforeAll
+    public static void init() throws TimeoutException {
+        FxToolkit.registerPrimaryStage();
+    }
 
     @BeforeEach
     public void setup() throws TimeoutException {
