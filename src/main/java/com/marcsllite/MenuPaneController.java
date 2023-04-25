@@ -2,7 +2,8 @@ package com.marcsllite;
 
 import com.marcsllite.util.BaseController;
 import com.marcsllite.util.ImageHandler;
-import com.marcsllite.util.Util;
+import com.marcsllite.util.PropManager;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -13,7 +14,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.security.InvalidParameterException;
-import java.util.Objects;
 
 public class MenuPaneController extends BaseController {
     // Declaring FXML objects
@@ -26,16 +26,17 @@ public class MenuPaneController extends BaseController {
     @FXML protected ImageView imgViewReference;
 
     private static final Logger logr = LogManager.getLogger();
-    private final String CURRENT_COLOR;  // color to make the button corresponding to the current page
-    private final String IDLE_COLOR;  // color to make idle buttons
-    private final String HOVER_COLOR;  // color to make buttons when mouse is hovering over
+    private PropManager propManager = PropManager.getInstance();
+    private final ImageHandler.Colors CURRENT_COLOR;  // color to make the button corresponding to the current page
+    private final ImageHandler.Colors IDLE_COLOR;  // color to make idle buttons
+    private final ImageHandler.Colors HOVER_COLOR;  // color to make buttons when mouse is hovering over
     private int currentBtn;  // variable to know what page the user is currently on
                               // 0 = Shipment, 1 = Reference
 
     public MenuPaneController() {
-        CURRENT_COLOR = Util.getString("umlBlue");
-        IDLE_COLOR = Util.getString("defaultGrey");
-        HOVER_COLOR = Util.getString("defaultWhite");
+        CURRENT_COLOR = ImageHandler.Colors.UML_BLUE;
+        IDLE_COLOR = ImageHandler.Colors.DEFAULT_GREY;
+        HOVER_COLOR = ImageHandler.Colors.DEFAULT_WHITE;
     }
 
     /**
@@ -91,7 +92,7 @@ public class MenuPaneController extends BaseController {
     @FXML protected void logoImgViewHandler(){
         logr.info("User clicked the UMass logo in the menu pane");
 
-        // Util.navigateToLink("https://www.uml.edu/");  // navigating to UMass Lowell website
+        // propManager.navigateToLink("https://www.uml.edu/");  // navigating to UMass Lowell website
     }
 
     /**
@@ -147,7 +148,7 @@ public class MenuPaneController extends BaseController {
      * Helper function to un-mark the previously marked button
      */
     protected void unsetCurrentButton() {
-        currentBtn = (int) Util.getDouble("defaultInt");
+        currentBtn = (int) propManager.getDouble("defaultInt");
 
         // changing the color of the buttons to the idle color
         setButtonColor(btnShipment, IDLE_COLOR);  // setting the single button and icon to be the current color
@@ -160,15 +161,15 @@ public class MenuPaneController extends BaseController {
      * @param btnMenu the menu button to set the color for
      * @param color the color to set the menu button and icon
      */
-    protected void setButtonColor(Button btnMenu, String color) throws InvalidParameterException {
+    protected void setButtonColor(Button btnMenu, ImageHandler.Colors color) throws InvalidParameterException {
         var errMsg = "";
         
         // making sure user is giving valid values
         if(btnMenu == null) {
-            errMsg = "The menu button cannot be null; ";
+            errMsg = "The menu button cannot be null;";
         }
-        if(color == null || color.isBlank()) {
-            errMsg = errMsg.concat("The color cannot be null or blank;");
+        if(color == null) {
+            errMsg = errMsg.concat("The color cannot be null;");
         }
 
         if(!errMsg.isBlank()) {
@@ -177,10 +178,10 @@ public class MenuPaneController extends BaseController {
             throw e;
         } else {
             if(btnShipment.equals(btnMenu)) {
-                btnShipment.setTextFill(Color.web(Objects.requireNonNull(color)));  // changing Shipment button text color
+                btnShipment.setTextFill(Color.web(color.val));  // changing Shipment button text color
                 imgViewShipment.setImage(ImageHandler.getShipmentImage(color));  // changing icon color
             } else if(btnReference.equals(btnMenu)) {
-                btnReference.setTextFill(Color.web(Objects.requireNonNull(color)));  // changing Reference button text color
+                btnReference.setTextFill(Color.web(color.val));  // changing Reference button text color
                 imgViewReference.setImage(ImageHandler.getReferenceImage(color));  // changing icon color
             }
         }
@@ -247,25 +248,4 @@ public class MenuPaneController extends BaseController {
      * @return the current button in integer form
      */
     public int getCurrentBtn() { return currentBtn; }
-
-    /**
-     * Getter function to get the color that the current menu button should be
-     *
-     * @return the color of the current menu button
-     */
-    public String getCurrentColor() { return CURRENT_COLOR; }
-
-    /**
-     * Getter function to get the color that idle menu buttons should be
-     *
-     * @return the color of idle menu buttons
-     */
-    public String getIdleColor() { return IDLE_COLOR; }
-
-    /**
-     * Getter function to get the color of the menu buttons when the mouse is hovering over them
-     *
-     * @return the color of the menu buttons when the mouse is hovering over them
-     */
-    public String getHoverColor() { return HOVER_COLOR; }
 }

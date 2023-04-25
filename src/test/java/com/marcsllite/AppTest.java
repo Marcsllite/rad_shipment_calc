@@ -3,7 +3,7 @@ package com.marcsllite;
 // import com.marcsllite.util.FXMLView;
 // import javafx.application.Platform;
 // import javafx.stage.Stage;
-// import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeEach;
 // import org.junit.jupiter.api.DisplayName;
 // import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -12,6 +12,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 // import org.testfx.framework.junit5.ApplicationExtension;
 // import org.testfx.util.WaitForAsyncUtils;
+
+import com.marcsllite.util.OS;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
@@ -46,6 +48,12 @@ public class AppTest {
     // }
     final static String appFolder = "UMass Lowell Radiation Safety";
     final static String mainFolder = "Shipment Calculator";
+    App app;
+
+    @BeforeEach
+    public void setUp() {
+        app = new App();
+    }
 
     private boolean deleteDirectory(File directoryToBeDeleted) {
         File[] allContents = directoryToBeDeleted.listFiles();
@@ -67,7 +75,7 @@ public class AppTest {
         String name ="?.\"*.*.?";
 
         RuntimeException exception = assertThrows(
-            RuntimeException.class, () -> App.setDefaultDir(name)
+            RuntimeException.class, () -> app.setDefaultDir(name)
         );
         
         assertTrue(exception.getMessage().contains("Failed to set up default directory"));
@@ -84,8 +92,8 @@ public class AppTest {
             assumeTrue(deleteDirectory(dir));
         }
 
-        App.setDefaultDir(name);
-        assertEquals(path, App.getDefaultDir());
+        app.setDefaultDir(name);
+        assertEquals(path, app.getDefaultDir());
     }
   
     @Test
@@ -96,15 +104,15 @@ public class AppTest {
         File toBeCreated = new File(path);
 
         assumeTrue(toBeCreated.mkdirs() || toBeCreated.exists());
-        App.setDefaultDir(name);
-        assertEquals(path, App.getDefaultDir());
+        app.setDefaultDir(name);
+        assertEquals(path, app.getDefaultDir());
     }
 
     @ParameterizedTest
     @MethodSource("testSetDefaultDirException_data")
    public void testSetDefaultDirExceptionChecker(String dirName, String expected) {
-        App.setDefaultDir(dirName);
-        assertEquals(expected, App.getDefaultDir());
+        app.setDefaultDir(dirName);
+        assertEquals(expected, app.getDefaultDir());
     }
   
     private static Object[] testSetDefaultDirException_data() {
@@ -115,25 +123,18 @@ public class AppTest {
         };
     }
 
-    @ParameterizedTest
-    @MethodSource("setDataFolderException_data")
-    public void setDataFolderExceptionChecker(String osVersion, String expected) {
-        App.setDataFolder(osVersion);
-        assertEquals(expected, App.getDataFolder());
-    }
-
-    private static Object[] setDataFolderException_data() {
-        return new Object[] {
-            new Object[] { null, null },
-            new Object[] { "", null }
-        };
+    @Test
+    public void setDataFolderExceptionChecker() {
+        assertThrows(
+            NullPointerException.class, () -> app.setDataFolder(null)
+        );
     }
 
      @ParameterizedTest
      @MethodSource("setDataFolder_data")
      public void setDataFolderChecker(String osVersion, String expected) {
-        App.setDataFolder(osVersion);
-        assertEquals(expected, App.getDataFolder());
+        app.setDataFolder(OS.valueOf(osVersion));
+        assertEquals(expected, app.getDataFolder());
      }
 
     private static Object[] setDataFolder_data() {
@@ -146,11 +147,11 @@ public class AppTest {
                             appFolder + File.separator +
                             "logs";
         return new Object[] {
-            new Object[] { "Windows", winExp },
-            new Object[] { "MAC", otherExp },
-            new Object[] { "Unix", otherExp },
-            new Object[] { "Solaris", otherExp },
-            new Object[] { "Not Supported", null}
+            new Object[] { OS.Windows.name(), winExp },
+            new Object[] { OS.MAC.name(), otherExp },
+            new Object[] { OS.Unix.name(), otherExp },
+            new Object[] { OS.Solaris.name(), otherExp },
+            new Object[] { OS.NOT_SUPPORTED.name(), null}
         };
     }
 }

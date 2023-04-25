@@ -21,6 +21,7 @@ public class StageManager {
   private FXMLView curView;
   
   private static final String NULL_ERROR = "FXML View is null";
+  protected static final String DEFAULT_MSG = "No Message";
   
   public StageManager(Stage stage) {
     primaryStage = stage;
@@ -87,9 +88,10 @@ public class StageManager {
   }
   
   @SuppressWarnings("java:S112")
+  // ignored rule java:S112 as RuntimeException is used to match previous exception type
   protected void logAndThrowException(String errorMsg, Exception exception) throws RuntimeException {
     if (errorMsg == null || errorMsg.isBlank()) {
-      errorMsg = Util.getString("defaultMessage");
+      errorMsg = StageManager.DEFAULT_MSG;
     } 
     
     if (exception == null) {

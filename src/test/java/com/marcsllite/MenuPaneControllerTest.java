@@ -3,7 +3,7 @@ package com.marcsllite;
 // import com.marcsllite.util.FXIds;
 // import com.marcsllite.util.FXMLView;
 // import com.marcsllite.util.StageManager;
-import com.marcsllite.GUITest;
+// import com.marcsllite.GUITest;
 // import javafx.event.ActionEvent;
 // import javafx.scene.control.Button;
 // import javafx.scene.image.ImageView;
@@ -18,24 +18,22 @@ import org.junit.jupiter.api.BeforeEach;
 // import org.junit.jupiter.api.DisplayName;
 // import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-// import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EmptySource;
-import org.junit.jupiter.params.provider.NullSource;
-// import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 // import org.testfx.api.FxRobot;
 // import org.testfx.api.FxToolkit;
 // import org.testfx.framework.junit5.ApplicationExtension;
 // import org.testfx.framework.junit5.Start;
 
+import com.marcsllite.util.ImageHandler;
+
 import java.security.InvalidParameterException;
 // import java.util.concurrent.TimeoutException;
 
 // import static junit.framework.Assert.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+// import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
 // import static org.mockito.Mockito.doNothing;
 // import static org.mockito.Mockito.mock;
 // import static org.mockito.Mockito.spy;
@@ -43,6 +41,7 @@ import static org.junit.jupiter.api.Assumptions.assumeFalse;
 // import static org.mockito.Mockito.verify;
 // import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 public class MenuPaneControllerTest {
     MenuPaneController c;
 
@@ -341,24 +340,21 @@ public class MenuPaneControllerTest {
         c = new MenuPaneController();
     }
 
-    @ParameterizedTest
-    @NullSource
-    @EmptySource
-    public void testSetButtonColor_NullBtn_InvalidColor(String color) {
+    @Test
+    public void testSetButtonColor_NullBtn_NullColor() {
         InvalidParameterException ex = assertThrows(
             InvalidParameterException.class, 
-            () -> c.setButtonColor(null, color)
+            () -> c.setButtonColor(null, null)
         );
         assertTrue(ex.getMessage().contains("The menu button cannot be null"));
-        assertTrue(ex.getMessage().contains("The color cannot be null or blank"));
+        assertTrue(ex.getMessage().contains("The color cannot be null"));
     }
 
     @Test
     public void testSetButtonColor_NullBtn_ProperColor() {
-        String color = c.getCurrentColor();
         InvalidParameterException ex = assertThrows(
             InvalidParameterException.class, 
-            () -> c.setButtonColor(null, color)
+            () -> c.setButtonColor(null, ImageHandler.Colors.UML_BLUE)
         );
         assertTrue(ex.getMessage().contains("The menu button cannot be null"));
     }
@@ -380,32 +376,5 @@ public class MenuPaneControllerTest {
         );
 
         assertTrue(ex.getMessage().contains("action event cannot be null"));
-    }
-
-    @Test
-    public void testGetCurrentColor() {
-        String exp = GUITest.getColor("umlBlue");
-
-        assumeFalse(exp.isBlank());
-
-        assertEquals(exp, c.getCurrentColor());
-    }
-
-    @Test
-    public void testGetHoverColor() {
-        String exp = GUITest.getColor("defaultWhite");
-
-        assumeFalse(exp.isBlank());
-
-        assertEquals(exp, c.getHoverColor());
-    }
-
-    @Test
-    public void testGetIdleColor() {
-        String exp = GUITest.getColor("defaultGrey");
-
-        assumeFalse(exp.isBlank());
-
-        assertEquals(exp, c.getIdleColor());
     }
 }

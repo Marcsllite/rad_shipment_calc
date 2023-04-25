@@ -3,25 +3,19 @@ package com.marcsllite.util;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
-// import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
-// import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
 import com.marcsllite.GUITest;
 
 import java.io.File;
-import java.security.InvalidParameterException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
-// @ExtendWith(ApplicationExtension.class)
 class ImageHandlerTest extends GUITest {
     @Override
     @Start
@@ -61,60 +55,53 @@ class ImageHandlerTest extends GUITest {
         assertEquals(expected, ImageHandler.getColorLogoBkgPath());
     }
   
-    @ParameterizedTest
-    @MethodSource("invalidColor_data")
-    void testGetShipmentImageExceptionChecker(String color, String message) {
-        InvalidParameterException exception = assertThrows(
-            InvalidParameterException.class, () -> ImageHandler.getShipmentImage(color)
+    @Test
+    void testGetShipmentImage_InvalidColor() {
+        assertThrows(
+            NullPointerException.class, () -> ImageHandler.getShipmentImage(null)
         );
-        assertTrue(exception.getMessage().contains(message));
-    }
-  
-    private static Object[] invalidColor_data() {
-        return new Object[] {
-            new Object[] { null, "The color cannot be null" },
-            new Object[] { "fakeColor", "Invalid color" }
-        };
     }
   
     @ParameterizedTest
-    @CsvSource({
-        "umlBlue, /images/color_single_box.png",
-        "defaultWhite, /images/white_single_box.png",
-        "defaultGrey, /images/grey_single_box.png"
-    })
+    @MethodSource("getShipmentImage_data")
     void testGetShipmentImage(String color, String url) {
-        String c = getColor(color);
-
-        assumeFalse(c.isEmpty());
+        ImageHandler.Colors c = ImageHandler.Colors.valueOf(color);
 
         Image actual = ImageHandler.getShipmentImage(c);
         assertNotNull(actual);
         assertTrue(actual.getUrl().contains(url));
     }
+
+    private static Object[] getShipmentImage_data() {
+        return new Object[] {
+            new Object[] {ImageHandler.Colors.UML_BLUE.name(), "/images/color_single_box.png"},
+            new Object[] {ImageHandler.Colors.DEFAULT_WHITE.name(), "/images/white_single_box.png"},
+            new Object[] {ImageHandler.Colors.DEFAULT_GREY.name(), "/images/grey_single_box.png"}
+        };
+    }
   
-    @ParameterizedTest
-    @MethodSource("invalidColor_data")
-    void testGetReferenceImageExceptionChecker(String color, String message) {
-        InvalidParameterException exception = assertThrows(
-            InvalidParameterException.class, () -> ImageHandler.getReferenceImage(color)
+    @Test
+    void testGetReferenceImage_InvalidColor() {
+        assertThrows(
+            NullPointerException.class, () -> ImageHandler.getReferenceImage(null)
         );
-        assertTrue(exception.getMessage().contains(message));
     }
   
     @ParameterizedTest
-    @CsvSource({
-        "umlBlue, /images/color_paper.png",
-        "defaultWhite, /images/white_paper.png",
-        "defaultGrey, /images/grey_paper.png"
-    })
+    @MethodSource("getReferenceImage_data")
     void testGetReferenceImage(String color, String url) {
-        String c = getColor(color);
-
-        assumeFalse(c.isEmpty());
-
+        ImageHandler.Colors c = ImageHandler.Colors.valueOf(color);
+        
         Image actual = ImageHandler.getReferenceImage(c);
         assertNotNull(actual);
         assertTrue(actual.getUrl().contains(url));
+    }
+
+    private static Object[] getReferenceImage_data() {
+        return new Object[] {
+            new Object[] {ImageHandler.Colors.UML_BLUE.name(), "/images/color_paper.png"},
+            new Object[] {ImageHandler.Colors.DEFAULT_WHITE.name(), "/images/white_paper.png"},
+            new Object[] {ImageHandler.Colors.DEFAULT_GREY.name(), "/images/grey_paper.png"}
+        };
     }
 }

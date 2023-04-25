@@ -1,8 +1,6 @@
 package com.marcsllite.util;
 
 import com.marcsllite.App;
-import javafx.scene.control.ButtonBase;
-import javafx.scene.input.KeyCode;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,18 +18,24 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-public final class Util {
+public class PropManager {
     private static final Logger logr = LogManager.getLogger();
-    private static final String PROP_NAME = "properties.xml";
-    private static String os;
-    private static Properties prop;
+    private final String PROP_NAME = "properties.xml";
+    private String os;
+    private Properties prop;
 
-    static {
-        Util.setOs(Util.getCurrentOS());
-        Util.setProp(PROP_NAME);
+    private PropManager() {
+        setOs(System.getProperty("os.name").toLowerCase());
+        setProp(PROP_NAME);
     }
 
-    private Util() {}
+    protected static class SingletonHelper {
+        private static final PropManager INSTANCE = new PropManager();
+    }
+
+    public static PropManager getInstance() {
+        return SingletonHelper.INSTANCE;
+    }
 
     /*/////////////////////////////////////////////////// SETTERS ////////////////////////////////////////////////////*/
     /**
@@ -39,12 +43,12 @@ public final class Util {
      * 
      * @param path the path to the properties file
      */
-    public static void setProp(String path) throws InvalidParameterException{
+    public void setProp(String path) throws InvalidParameterException{
         try {
-            Util.prop = new Properties();
+            prop = new Properties();
             var loader = ClassLoader.getSystemClassLoader();
             InputStream stream = loader.getResourceAsStream(path);
-            Util.prop.loadFromXML(stream);
+            prop.loadFromXML(stream);
         } catch (IOException | NullPointerException e) {
             logr.catching(Level.FATAL, e);
             var ee = new InvalidParameterException("Failed to set properties from path: " + path);
@@ -58,7 +62,7 @@ public final class Util {
      * 
      * @param os the current operating system
      */
-    public static void setOs(String os) { Util.os = os; }
+    public void setOs(String os) { this.os = os; }
 
     /*/////////////////////////////////////////////////// GETTERS ////////////////////////////////////////////////////*/
     /**
@@ -66,26 +70,14 @@ public final class Util {
      *
      * @return properties object
      */
-    public static Properties getProp() {
-        if(Util.prop == null) {
-            Util.setProp(PROP_NAME);
-        }
-
-        return Util.prop;
-    }
+    public Properties getProp() { return prop; }
 
     /**
      * Getter function to get the current operating system
      *
      * @return the current operating system
      */
-    public static String getOs() {
-        if (Util.os == null) {
-            setOs(System.getProperty("os.name").toLowerCase());
-        }
-
-        return Util.os;
-    }
+    public String getOS() { return os; }
 
     /**
      * @author Mkyong.com <a href="https://www.mkyong.com/java/how-to-detect-os-in-java-systemgetpropertyosname/">...</a>
@@ -93,14 +85,12 @@ public final class Util {
      *
      * @return the current operating system
      */
-    public static String getCurrentOS(){
-        String os = Util.getOs();
-
-        if (os.contains("win")) return Util.getString("windows");
-        else if (os.contains("mac")) return Util.getString("mac");
-        else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) return Util.getString("unix");
-        else if (os.contains("sunos")) return Util.getString("solaris");
-        else return getString("noSupport");
+    public OS parseOS(String os) {
+        if (os.contains("win")) return OS.Windows;
+        else if (os.contains("mac")) return OS.MAC;
+        else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) return OS.Unix;
+        else if (os.contains("sunos")) return OS.Solaris;
+        else return OS.NOT_SUPPORTED;
     }
 
     /**
@@ -111,7 +101,7 @@ public final class Util {
      * @param resourceFilePath the relative path of the resource file to get the text of
      * @return the contents of the file or the empty string if errors occurred
      */
-    public static String getFileText(String resourceFilePath) throws InvalidParameterException {
+    public String getFileText(String resourceFilePath) throws InvalidParameterException {
         try {
             if (resourceFilePath == null || resourceFilePath.isBlank()) {
                 var e = new InvalidParameterException("resourceFilepath (" + resourceFilePath + ") is invalid");
@@ -142,7 +132,7 @@ public final class Util {
      * @param propKey the name of the key from the property file
      * @param newValues the newValues to change the braced values in the string
      */
-    public static String replacePropString(String propKey, String... newValues) throws InvalidParameterException {
+    public String replacePropString(String propKey, String... newValues) throws InvalidParameterException {
         String propString;
         List<String> replacements;
 
@@ -184,7 +174,7 @@ public final class Util {
      * @param searchString the string in which to search for the substring
      * @return a List of substrings to replace in the order they were found
      */
-    public static List<String> parseStringsToReplace(String searchString) {
+    public List<String> parseStringsToReplace(String searchString) {
         List<String> ret = new ArrayList<>();
 
         // making sure searchString is not null
@@ -204,10 +194,10 @@ public final class Util {
      * @param key a key in the project's property file
      * @return the value at that key
      */
-    public static String getString(String key) {
+    public String getString(String key) {
         if(key == null || key.isBlank()) return "";
 
-        String ret = Util.getProp().getProperty(key);
+        String ret = Objects.requireNonNull(prop, "Properties has not been initialized").getProperty(key);
         return (ret == null)? "" : ret;
     }
 
@@ -217,7 +207,7 @@ public final class Util {
      * @param key a key in the project's property file
      * @return the double value at that key
      */
-    public static double getDouble(String key) {
+    public double getDouble(String key) {
         double ret = Double.MIN_VALUE;
 
         if(key == null || key.isBlank()) return ret;
@@ -256,7 +246,7 @@ public final class Util {
      * @param listName the properties key that all the list elements contain
      * @return a list of all the values from the property entry
      */
-    public static List<String> getList(String listName) {
+    public List<String> getList(String listName) {
         List<String> ret = new ArrayList<>();
 
         var str = getString(listName);
@@ -272,35 +262,5 @@ public final class Util {
         }
 
         return ret;
-    }
-
-    /**
-     * Helper function to allow the given buttonBase to be fired
-     * when the enter/space key is pressed and the buttonBase is in focus
-     * 
-     * Valid ButtonBases:
-     *      MenuBarButton
-     *      IndicatorButton
-     *      Button
-     *      CheckBox
-     *      Hyperlink
-     *      MenuButton
-     *      RadioButton
-     *      SplitMenuButton
-     *      ToggleButton
-     *
-     * @param btnBase the btnBase to add the listener to
-     */
-    public static void fireBtnOnEnter(ButtonBase btnBase) throws InvalidParameterException {
-        if(btnBase == null) throw new InvalidParameterException("button base cannot be null");
-
-        btnBase.setOnKeyPressed(
-            event -> {
-                if(event.getCode().equals(KeyCode.ENTER)) {
-                    btnBase.fire();
-                    event.consume();
-                }
-            }
-        );
     }
 }

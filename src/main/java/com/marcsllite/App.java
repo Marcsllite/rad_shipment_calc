@@ -1,8 +1,9 @@
 package com.marcsllite;
 
 import com.marcsllite.util.FXMLView;
+import com.marcsllite.util.OS;
+import com.marcsllite.util.PropManager;
 import com.marcsllite.util.StageManager;
-import com.marcsllite.util.Util;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Level;
@@ -18,13 +19,14 @@ import java.io.File;
 public class App extends Application {
 
     private static final Logger logr = LogManager.getLogger();
-    private static String dataFolder;
-    private static String defaultDir;
+    private String dataFolder;
+    private String defaultDir;
     private StageManager stageManager;
+    private PropManager propManager = PropManager.getInstance();
 
-    static {
-        setDataFolder(Util.getCurrentOS());
-        setDefaultDir(Util.getString("appMainFolder"));
+    public App() {
+        setDataFolder(propManager.parseOS(propManager.getOS()));
+        setDefaultDir(propManager.getString("appMainFolder"));
     }
 
     /**
@@ -55,8 +57,8 @@ public class App extends Application {
      * @param dirName the name of the default directory
      */
     @SuppressWarnings("java:S112")
-    public static void setDefaultDir(String dirName) throws RuntimeException {
-        if (dirName == null || dirName.isEmpty()) dirName = Util.getString("appMainFolder"); 
+    public void setDefaultDir(String dirName) throws RuntimeException {
+        if (dirName == null || dirName.isEmpty()) dirName = propManager.getString("appMainFolder"); 
         
         String name = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + dirName;
         var toBeCreated = new File(name);
@@ -79,29 +81,27 @@ public class App extends Application {
      * 
      * @param currentOS the operating system of the computer
      */
-    protected static void setDataFolder(String currentOS) {
+    protected void setDataFolder(OS currentOS) {
         String dirLoc = null;
 
-        if(currentOS == null ||  currentOS.isBlank()) {
-            dataFolder = null;
-            return;
-        } else if(Util.getString("windows").equals(currentOS)) {
-            dirLoc = System.getProperty("user.home") + File.separator +
-                    "AppData" + File.separator +
-                    "Local" + File.separator +
-                    Util.getString("appFolderName") + File.separator +
-                    "logs";
-        } else if(Util.getString("mac").equals(currentOS) ||
-                    Util.getString("unix").equals(currentOS) ||
-                    Util.getString("solaris").equals(currentOS)) {
-            dirLoc = System.getProperty("user.home") + File.separator +
-                    Util.getString("appFolderName") + File.separator +
-                    "logs";
+        switch(currentOS){
+            case Windows:
+                dirLoc = System.getProperty("user.home") + File.separator +
+                        "AppData" + File.separator +
+                        "Local" + File.separator +
+                        propManager.getString("appFolderName") + File.separator +
+                        "logs";
+                break;
+            case MAC: case Unix: case Solaris:
+                dirLoc = System.getProperty("user.home") + File.separator +
+                        propManager.getString("appFolderName") + File.separator +
+                        "logs";
+                break;
+            default:
+                logr.warn("Data Folder was not created");
         }
 
-        if(dirLoc == null) {
-            logr.warn("Data Folder was not created");
-        } else if((new File(dirLoc)).mkdirs()) {
+        if(dirLoc != null && (new File(dirLoc)).mkdirs()) {
             logr.info("%s directory was created", dirLoc);
         }
 
@@ -122,7 +122,7 @@ public class App extends Application {
      *
      * @return data folder for further used by the Open logs Button
      */
-    static String getDataFolder() { 
+    protected String getDataFolder() { 
         return dataFolder; 
     }
 
@@ -131,7 +131,7 @@ public class App extends Application {
      *
      * @return the application's default folder
      */
-    public static String getDefaultDir() {
+    public String getDefaultDir() {
         return defaultDir;
     }
 }

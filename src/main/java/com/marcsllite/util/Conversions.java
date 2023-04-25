@@ -3,7 +3,6 @@ package com.marcsllite.util;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.security.InvalidParameterException;
-import java.util.List;
 
 public final class Conversions {
     /* source: REMM(Radiation Emergency Medical Management)
@@ -43,33 +42,10 @@ public final class Conversions {
     public static final int DEFAULT_RAD_INDEX = 1;
     public static final int DEFAULT_MASS_SI_INDEX = 10;
     public static final int DEFAULT_MASS_INDEX = 0;
-    private static final List<String> siPrefixes = Util.getList("siPrefixes");
-    private static final List<String> radioactiveUnits = Util.getList("radioactiveUnits");
-    private static final List<String> massUnits = Util.getList("massUnits");
 
     private Conversions() {}
 
     /*////////////////////////////////////////////////// HELPERS /////////////////////////////////////////////////////*/
-    /**
-     * Helper function to get the names of all the si prefixes that can be converted
-     *
-     * @return a list of all the si prefixes that can be converted
-     */
-    public static List<String> getSiPrefixes() { return siPrefixes; }
-
-    /**
-     * Helper function to get the names of all the si units that can be converted
-     *
-     * @return a list of all the si units that can be converted
-     */
-    public static List<String> getRadioactiveUnits() { return radioactiveUnits; }
-
-    /**
-     * Helper function to get the names of all the si units that can be converted
-     *
-     * @return a list of all the si units that can be converted
-     */
-    public static List<String> getMassUnits() { return massUnits; }
 
     /**
      * Helper function to convert a given value to it's base value using its starting si prefix
