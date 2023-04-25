@@ -2,24 +2,29 @@ package com.marcsllite.util;
 
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.Start;
 
 import com.marcsllite.GUITest;
 
 import java.io.File;
+import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ImageHandlerTest extends GUITest {
-    @Override
-    @Start
-    public void start(Stage stage) {}
+class ImageHandlerTest {
+    @BeforeAll
+    public static void setup() throws TimeoutException {
+        FxToolkit.registerPrimaryStage();
+    }
 
     @Test
     void testGetErrorImage() { 

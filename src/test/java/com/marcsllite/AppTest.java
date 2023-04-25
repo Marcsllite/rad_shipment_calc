@@ -1,22 +1,28 @@
 package com.marcsllite;
 
+import org.junit.jupiter.api.BeforeAll;
 // import com.marcsllite.util.FXMLView;
 // import javafx.application.Platform;
 // import javafx.stage.Stage;
-import org.junit.jupiter.api.BeforeEach;
 // import org.junit.jupiter.api.DisplayName;
 // import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 // import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.testfx.api.FxToolkit;
 // import org.testfx.framework.junit5.ApplicationExtension;
 // import org.testfx.util.WaitForAsyncUtils;
+import org.testfx.framework.junit5.Start;
 
 import com.marcsllite.util.OS;
 
+import javafx.application.Platform;
+import javafx.stage.Stage;
+
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
+import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -26,33 +32,29 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 public class AppTest {
     // @Nested
     // @DisplayName("App Class UI Tests")
-    // @ExtendWith(ApplicationExtension.class)
-    // public class AppTestUI {
-    //     Stage stage;
+    // public class AppTestUI extends GUITest {
     //     App app;
 
-    //     @BeforeEach
-    //     public void setUp() {
+    //     @Override
+    //     @Start
+    //     public void start(Stage stage) {
     //         app = new App();
-    //         stage = new Stage();
+    //         app.start(stage);
     //     }
 
     //     @Test
     //     public void testStart() {
-    //      Platform.runLater(() -> {
-    //          app.start(stage);
-    //      });
-    //         WaitForAsyncUtils.waitForFxEvents();
-    //         assertEquals(FXMLView.MAIN, app.getStageManager().getCurrentView());
+    
     //     }
     // }
     final static String appFolder = "UMass Lowell Radiation Safety";
     final static String mainFolder = "Shipment Calculator";
-    App app;
+    static App app;
 
-    @BeforeEach
-    public void setUp() {
-        app = new App();
+    @BeforeAll
+    public static void setup() throws TimeoutException {
+        FxToolkit.registerPrimaryStage();
+        app = (App) FxToolkit.setupApplication(App.class);
     }
 
     private boolean deleteDirectory(File directoryToBeDeleted) {
@@ -64,9 +66,9 @@ public class AppTest {
         }
         return directoryToBeDeleted.delete();
     }
-  
+
     @Test
-   public void testSetDefaultDir_InvalidName() {
+    public void testSetDefaultDir_InvalidName() {
         String os = System.getProperty("os.name").toLowerCase();
 
         // linux and Mac have no bad names

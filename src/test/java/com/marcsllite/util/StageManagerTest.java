@@ -2,29 +2,33 @@ package com.marcsllite.util;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.Start;
 
 import com.marcsllite.GUITest;
 
 import java.security.InvalidParameterException;
+import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class StageManagerTest extends GUITest {
+public class StageManagerTest {
     final static String propMsg = "This is a proper message";
     final static String defaultMessage = StageManager.DEFAULT_MSG;
-
-    @Override
-    @Start
-    public void start(Stage stage) {
-        stageManager = new StageManager(new Stage());
+    static StageManager stageManager;
+    
+    @BeforeAll
+    public static void setup() throws TimeoutException {
+        stageManager = new StageManager(FxToolkit.registerPrimaryStage());
     }
 
     @Test
