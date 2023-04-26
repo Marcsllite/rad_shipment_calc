@@ -9,9 +9,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.testfx.api.FxToolkit;
-import org.testfx.framework.junit5.Start;
-
-import com.marcsllite.GUITest;
 
 import java.security.InvalidParameterException;
 import java.util.concurrent.TimeoutException;
