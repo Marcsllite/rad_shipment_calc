@@ -5,8 +5,6 @@ import org.testfx.api.FxAssert;
 import org.testfx.framework.junit5.Start;
 
 import com.marcsllite.util.FXIds;
-import com.marcsllite.util.FXMLView;
-import com.marcsllite.util.StageManager;
 
 import javafx.stage.Stage;
 
@@ -17,9 +15,7 @@ public class AppTest extends GUITest {
     @Override
     @Start
     public void start(Stage stage) {
-        view = FXMLView.MAIN;
-        stageManager = new StageManager(stage);
-        stageManager.show(view);
+        new App().start(stage);
     }
 
     @Test
