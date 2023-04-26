@@ -86,6 +86,10 @@ public class PropManager {
      * @return the current operating system
      */
     public OS parseOS(String os) {
+        if(os == null) {
+            return OS.NOT_SUPPORTED;
+        }
+
         if (os.contains("win")) return OS.Windows;
         else if (os.contains("mac")) return OS.MAC;
         else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) return OS.Unix;

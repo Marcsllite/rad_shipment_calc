@@ -18,6 +18,12 @@ public class FolderManager {
         setDefaultDir(propManager.getString("appMainFolder"));
     }
 
+    public FolderManager(PropManager propManager) {
+        this.propManager = propManager;
+        setDataFolder(propManager.parseOS(propManager.getOS()));
+        setDefaultDir(propManager.getString("appMainFolder"));
+    }
+
     /**
      * Set the location of the default directory
      * 

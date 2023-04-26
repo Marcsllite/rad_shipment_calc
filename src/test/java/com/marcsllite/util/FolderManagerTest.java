@@ -15,12 +15,13 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class FolderManagerTest {
     FolderManager folderManager;
+    PropManager propManager = PropManager.getInstance();
     final static String appFolder = "UMass Lowell Radiation Safety";
     final static String mainFolder = "Shipment Calculator";
 
     @BeforeEach
     public void setup() {
-        folderManager = new FolderManager();
+        folderManager = new FolderManager(propManager);
     }
 
     private boolean deleteDirectory(File directoryToBeDeleted) {

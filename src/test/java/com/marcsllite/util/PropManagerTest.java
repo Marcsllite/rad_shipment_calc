@@ -64,6 +64,9 @@ class PropManagerTest {
 
         osName = "fake";
         assertEquals(OS.NOT_SUPPORTED, manager.parseOS(osName));
+
+        osName = null;
+        assertEquals(OS.NOT_SUPPORTED, manager.parseOS(osName));
     }
   
     @Test
