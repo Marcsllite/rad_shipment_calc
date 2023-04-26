@@ -48,25 +48,27 @@ public class FolderManager {
     /**
      * Set the location of the data folder (logging folder)
      * 
-     * Windows: C:/Users/[username]/AppData/Local/[appFolderName]/logs
-     * MacOS/Unix/Solaris: ~/[appFolderName]/logs
+     * Windows: C:/Users/[username]/AppData/Local/[name]/logs
+     * MacOS/Unix/Solaris: ~/[name]/logs
      * 
+     * @param name the name of the data folder
      * @param currentOS the operating system of the computer
      */
-    protected void setDataFolder(OS currentOS) {
+    protected void setDataFolder(String name, OS currentOS) {
         String dirLoc = null;
+        if (name == null || name.isEmpty()) name = propManager.getString("appFolderName"); 
 
         switch(currentOS){
             case Windows:
                 dirLoc = System.getProperty("user.home") + File.separator +
                         "AppData" + File.separator +
                         "Local" + File.separator +
-                        propManager.getString("appFolderName") + File.separator +
+                        name + File.separator +
                         "logs";
                 break;
             case MAC: case Unix: case Solaris:
                 dirLoc = System.getProperty("user.home") + File.separator +
-                        propManager.getString("appFolderName") + File.separator +
+                        name + File.separator +
                         "logs";
                 break;
             default:

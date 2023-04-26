@@ -96,32 +96,45 @@ public class FolderManagerTest {
     @Test
     public void setDataFolderExceptionChecker() {
         assertThrows(
-            NullPointerException.class, () -> folderManager.setDataFolder(null)
+            NullPointerException.class, () -> folderManager.setDataFolder(appFolder, null)
         );
+    }
+
+    @Test
+    public void setDataFolder_InvalidName() {
+        String expected = System.getProperty("user.home") + File.separator +
+                            appFolder + File.separator +
+                            "logs";
+        folderManager.setDataFolder(null, OS.Unix);
+        assertEquals(expected, folderManager.getDataFolder());
+
+        folderManager.setDataFolder("", OS.Unix);
+        assertEquals(expected, folderManager.getDataFolder());
     }
 
      @ParameterizedTest
      @MethodSource("setDataFolder_data")
-     public void setDataFolderChecker(String osVersion, String expected) {
-        folderManager.setDataFolder(OS.valueOf(osVersion));
+     public void setDataFolderChecker(String name, String osVersion, String expected) {
+        folderManager.setDataFolder(name, OS.valueOf(osVersion));
         assertEquals(expected, folderManager.getDataFolder());
      }
 
     private static Object[] setDataFolder_data() {
+        String name = "FolderName";
         String winExp = System.getProperty("user.home") + File.separator +
                             "AppData" + File.separator +
                             "Local" + File.separator +
-                            appFolder + File.separator +
+                            name + File.separator +
                             "logs";
         String otherExp = System.getProperty("user.home") + File.separator +
-                            appFolder + File.separator +
+                            name + File.separator +
                             "logs";
         return new Object[] {
-            new Object[] { OS.Windows.name(), winExp },
-            new Object[] { OS.MAC.name(), otherExp },
-            new Object[] { OS.Unix.name(), otherExp },
-            new Object[] { OS.Solaris.name(), otherExp },
-            new Object[] { OS.NOT_SUPPORTED.name(), null}
+            new Object[] { name, OS.Windows.name(), winExp },
+            new Object[] { name, OS.MAC.name(), otherExp },
+            new Object[] { name, OS.Unix.name(), otherExp },
+            new Object[] { name, OS.Solaris.name(), otherExp },
+            new Object[] { name, OS.NOT_SUPPORTED.name(), null}
         };
     }
 }
