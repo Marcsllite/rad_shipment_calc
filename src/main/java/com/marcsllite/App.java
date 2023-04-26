@@ -3,6 +3,7 @@ package com.marcsllite;
 import com.marcsllite.util.FXMLView;
 import com.marcsllite.util.StageManager;
 import javafx.application.Application;
+import javafx.scene.Parent;
 import javafx.stage.Stage;
 
 /**
@@ -12,24 +13,10 @@ public class App extends Application {
 
     private StageManager stageManager;
 
-    /**
-     * Main function to run application
-     */
-    public static void main(String[] args) { launch(args); }
-
     @Override
     public void start(Stage stage) {
-        setStageManager(stage);
-        stageManager.show(FXMLView.MAIN);
-    }
-
-    /**
-     * Create a new StageManager with root at given stage
-     * 
-     * @param stage the root stage
-     */
-    private void setStageManager(Stage stage) {
         stageManager = new StageManager(stage);
+        stageManager.show(FXMLView.MAIN);
     }
 
     /**
@@ -38,4 +25,18 @@ public class App extends Application {
      * @return the StageManager
      */
     public StageManager getStageManager() { return stageManager; }
+
+    public static class AppPane extends Parent {
+        private StageManager stageManager;
+
+        public AppPane() {
+            super();
+            stageManager = new StageManager(null);
+            getChildren().addAll(
+                stageManager.loadViewNodeHierarchy(FXMLView.MAIN).getChildrenUnmodifiable()
+            );
+        }
+
+        
+    }
 }

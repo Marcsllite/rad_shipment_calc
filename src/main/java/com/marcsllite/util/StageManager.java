@@ -22,7 +22,7 @@ public class StageManager {
   
   private static final String NULL_ERROR = "FXML View is null";
   protected static final String DEFAULT_MSG = "No Message";
-  
+
   public StageManager(Stage stage) {
     primaryStage = stage;
     factory = new ControllerFactory();
@@ -70,8 +70,8 @@ public class StageManager {
     curView = view;
   }
   
-  protected Parent loadViewNodeHierarchy(FXMLView view) throws RuntimeException {
-    if (view == null) {
+  public Parent loadViewNodeHierarchy(FXMLView view) throws RuntimeException {
+    if (view == null) { 
       throw new InvalidParameterException(NULL_ERROR);
     }
 

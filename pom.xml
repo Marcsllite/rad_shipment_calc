@@ -181,7 +181,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>${javafx.maven.plugin.version}</version>
                 <configuration>
-                    <mainClass>com.marcsllite.App</mainClass>
+                    <mainClass>com.marcsllite.Launcher</mainClass>
                     <options>
                         <option>-Djdk.gtk.version=2</option>
                         <option>-Djavafx.version=null</option>
@@ -202,6 +202,7 @@
                 <configuration>
                     <excludes>
                         <exclude>**/Launcher.class</exclude>
+                        <exclude>**/App.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
