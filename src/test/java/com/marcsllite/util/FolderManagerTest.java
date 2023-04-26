@@ -15,12 +15,13 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class FolderManagerTest {
     FolderManager folderManager;
-    PropManager propManager = PropManager.getInstance();
+    PropManager propManager;
     final static String appFolder = "UMass Lowell Radiation Safety";
     final static String mainFolder = "Shipment Calculator";
 
     @BeforeEach
     public void setup() {
+        propManager = PropManager.getInstance();
         folderManager = new FolderManager(propManager);
     }
 

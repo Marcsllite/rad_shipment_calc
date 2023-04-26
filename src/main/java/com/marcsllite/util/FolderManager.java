@@ -11,11 +11,10 @@ public class FolderManager {
     private static final Logger logr = LogManager.getLogger();
     private String dataFolder;
     private String defaultDir;
-    private PropManager propManager = PropManager.getInstance();
+    private PropManager propManager;
 
     public FolderManager(){
-        setDataFolder(propManager.parseOS(propManager.getOS()));
-        setDefaultDir(propManager.getString("appMainFolder"));
+        this(PropManager.getInstance());
     }
 
     public FolderManager(PropManager propManager) {
