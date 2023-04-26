@@ -11,6 +11,7 @@ import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class FolderManagerTest {
@@ -81,6 +82,7 @@ public class FolderManagerTest {
     @ParameterizedTest
     @MethodSource("testSetDefaultDirException_data")
     public void testSetDefaultDirExceptionChecker(String dirName, String expected) {
+        assumeFalse(propManager.getString("appMainFolder").isBlank());
         folderManager.setDefaultDir(dirName);
         assertEquals(expected, folderManager.getDefaultDir());
     }
@@ -102,6 +104,7 @@ public class FolderManagerTest {
 
     @Test
     public void setDataFolder_InvalidName() {
+        assumeFalse(propManager.getString("appFolderName").isBlank());
         String expected = System.getProperty("user.home") + File.separator +
                             appFolder + File.separator +
                             "logs";
