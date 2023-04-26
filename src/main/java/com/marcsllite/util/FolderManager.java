@@ -19,7 +19,8 @@ public class FolderManager {
 
     public FolderManager(PropManager propManager) {
         this.propManager = propManager;
-        setDataFolder(propManager.parseOS(propManager.getOS()));
+        setDataFolder(propManager.getString("appFolderName"),
+                      propManager.parseOS(propManager.getOS()));
         setDefaultDir(propManager.getString("appMainFolder"));
     }
 
