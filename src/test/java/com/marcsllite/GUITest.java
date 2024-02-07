@@ -15,6 +15,14 @@ public abstract class GUITest extends FxRobot {
     FXMLView view;
     protected StageManager stageManager;
 
+    public GUITest() {
+        view = FXMLView.MAIN;
+    }
+
+    public GUITest(FXMLView view) {
+        this.view = view;
+    }
+
     @Start
     public void start(Stage stage) {
         stageManager = new StageManager(stage);
