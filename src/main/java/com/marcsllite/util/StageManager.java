@@ -9,9 +9,9 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.net.URL;
 import java.security.InvalidParameterException;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 public class StageManager {
   private static final Logger logr = LogManager.getLogger();
@@ -28,7 +28,7 @@ public class StageManager {
     factory = new ControllerFactory();
     curView = null;
   }
-  
+
   public Stage getPrimaryStage() {
     return primaryStage;
   }
@@ -76,9 +76,12 @@ public class StageManager {
     }
 
     Parent rootNode = null;
-    URL location = getClass().getResource(view.getFxmlLoc());
+    FXMLLoader loader = new FXMLLoader();
+    loader.setLocation(getClass().getResource(view.getFxmlLoc()));
+    loader.setControllerFactory(factory);
+    loader.setResources(ResourceBundle.getBundle("properties", new PropManagerControl()));
     try {
-      rootNode = FXMLLoader.load(Objects.requireNonNull(location), null, null, factory);
+      rootNode = loader.load();
       Objects.requireNonNull(rootNode, "A Root FXML node must not be null");
     } catch (Exception exception) {
       logAndThrowException("Unable to load FXML view " + view.getFxmlName(), exception);

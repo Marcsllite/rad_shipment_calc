@@ -65,8 +65,7 @@ class PropManagerTest {
         osName = "fake";
         assertEquals(OS.NOT_SUPPORTED, manager.parseOS(osName));
 
-        osName = null;
-        assertEquals(OS.NOT_SUPPORTED, manager.parseOS(osName));
+        assertEquals(OS.NOT_SUPPORTED, manager.parseOS(null));
     }
   
     @Test
@@ -138,12 +137,12 @@ class PropManagerTest {
     }
   
     @ParameterizedTest
-    @MethodSource("getString_data")
-    void getStringChecker(String propName, String expected) {
+    @MethodSource("handleGetObject_data")
+    void handleGetObjectChecker(String propName, String expected) {
         assertEquals(expected, manager.getString(propName));
     }
   
-    private static Object[] getString_data() {
+    private static Object[] handleGetObject_data() {
         return new Object[] { 
             new Object[] { null, "" },
             new Object[] { "", "" },

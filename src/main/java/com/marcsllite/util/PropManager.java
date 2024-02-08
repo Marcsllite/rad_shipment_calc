@@ -12,13 +12,17 @@ import java.io.InputStreamReader;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.regex.Pattern;
 
-public class PropManager {
+public class PropManager extends ResourceBundle {
     private static final Logger logr = LogManager.getLogger();
     private final String PROP_NAME = "properties.xml";
     private String os;
@@ -37,24 +41,59 @@ public class PropManager {
         return SingletonHelper.INSTANCE;
     }
 
+    /**
+     * Get the value at the specified key in the project's property file
+     *
+     * @param key a key in the project's property file
+     * @return the value at that key or empty string
+     */
+    @Override
+    protected Object handleGetObject(String key) {
+        if(key == null || key.isBlank()) return "";
+
+        String ret = Objects.requireNonNull(prop, "Properties has not been initialized").getProperty(key);
+        return (ret == null)? "" : ret;
+    }
+
+    @Override
+    public Enumeration<String> getKeys() {
+        Set<String> handleKeys = prop.stringPropertyNames();
+        return Collections.enumeration(handleKeys);
+    }
+
     /*/////////////////////////////////////////////////// SETTERS ////////////////////////////////////////////////////*/
     /**
-     * Set the properties
+     * Set the properties using a path
      * 
      * @param path the path to the properties file
      */
-    public void setProp(String path) throws InvalidParameterException{
+    public void setProp(String path) throws InvalidParameterException {
+        var loader = ClassLoader.getSystemClassLoader();
         try {
-            prop = new Properties();
-            var loader = ClassLoader.getSystemClassLoader();
-            InputStream stream = loader.getResourceAsStream(path);
-            prop.loadFromXML(stream);
-        } catch (IOException | NullPointerException e) {
+            setProp(loader.getResourceAsStream(path));
+        } catch(NullPointerException | InvalidParameterException e) {
             logr.catching(Level.FATAL, e);
             var ee = new InvalidParameterException("Failed to set properties from path: " + path);
             logr.throwing(Level.FATAL, ee);
             throw ee;
-        } 
+        }
+    }
+
+    /**
+     * Set the properties using a stream
+     *
+     * @param stream the InputStream to the properties file
+     */
+    public void setProp(InputStream stream) throws InvalidParameterException{
+        try {
+            prop = new Properties();
+            prop.loadFromXML(stream);
+        } catch (IOException | NullPointerException e) {
+            logr.catching(Level.FATAL, e);
+            var ee = new InvalidParameterException("Failed to set properties from stream: " + stream.toString());
+            logr.throwing(Level.FATAL, ee);
+            throw ee;
+        }
     }
 
     /**
@@ -192,18 +231,6 @@ public class PropManager {
         return ret;
     }
 
-    /**
-     * Convenience function to get the value at the specified key in the project's property file
-     *
-     * @param key a key in the project's property file
-     * @return the value at that key
-     */
-    public String getString(String key) {
-        if(key == null || key.isBlank()) return "";
-
-        String ret = Objects.requireNonNull(prop, "Properties has not been initialized").getProperty(key);
-        return (ret == null)? "" : ret;
-    }
 
     /**
      * Convenience function to get the double value at the specified key in the project's property file
@@ -223,7 +250,7 @@ public class PropManager {
             ret = Double.parseDouble(value);
         } catch (NumberFormatException ee) {
             logr.catching(Level.DEBUG, ee);
-            var e = new InvalidParameterException(value + "is not a number");
+            var e = new InvalidParameterException(value + " is not a number");
             logr.throwing(e);
             throw e;
         }
