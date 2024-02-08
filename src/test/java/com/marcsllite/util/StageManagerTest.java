@@ -15,6 +15,7 @@ import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -99,7 +100,7 @@ public class StageManagerTest {
             RuntimeException.class, () -> stageManager.loadViewNodeHierarchy(view)
         );
         String expected = "Unable to load FXML view " + view.getFxmlName();
-        assertEquals(expected, exception.getMessage());
+        assertTrue(exception.getMessage().contains(expected));
     }
   
     @ParameterizedTest

@@ -45,8 +45,7 @@ public class PropManagerControl extends ResourceBundle.Control {
         try (final InputStream stream = urlconnection.getInputStream();
              final BufferedInputStream bis = new BufferedInputStream(stream)
         ) {
-            PropManager.getInstance().setProp(bis);
-            return PropManager.getInstance();
+            return new PropManager(bis);
         }
     }
 

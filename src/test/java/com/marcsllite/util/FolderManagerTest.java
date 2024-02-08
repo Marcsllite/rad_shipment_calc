@@ -2,27 +2,46 @@ package com.marcsllite.util;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class FolderManagerTest {
     FolderManager folderManager;
-    PropManager propManager;
+    PropManager propManager =  new PropManager() {
+        @Override
+        protected Object handleGetObject(String key) {
+            switch (key) {
+                case "appFolderName":
+                    return appFolder;
+                case "appMainFolder":
+                    return mainFolder;
+                default:
+                    return "";
+            }
+        }
+
+        @Override
+        public Enumeration<String> getKeys() {
+            return Collections.enumeration(Arrays.asList("appFolderName", "appMainFolder"));
+        }
+    };
     final static String appFolder = "UMass Lowell Radiation Safety";
     final static String mainFolder = "Shipment Calculator";
 
     @BeforeEach
     public void setup() {
-        propManager = PropManager.getInstance();
         folderManager = new FolderManager(propManager);
     }
 
@@ -37,11 +56,9 @@ public class FolderManagerTest {
     }
 
     @Test
+    @EnabledOnOs(org.junit.jupiter.api.condition.OS.WINDOWS)
     public void testSetDefaultDir_InvalidName() {
         String os = System.getProperty("os.name").toLowerCase();
-
-        // linux and Mac have no bad names
-        assumeTrue(os.contains("win"));
 
         String name ="?.\"*.*.?";
 
@@ -82,7 +99,6 @@ public class FolderManagerTest {
     @ParameterizedTest
     @MethodSource("testSetDefaultDirException_data")
     public void testSetDefaultDirExceptionChecker(String dirName, String expected) {
-        assumeFalse(propManager.getString("appMainFolder").isBlank());
         folderManager.setDefaultDir(dirName);
         assertEquals(expected, folderManager.getDefaultDir());
     }
@@ -104,7 +120,6 @@ public class FolderManagerTest {
 
     @Test
     public void setDataFolder_InvalidName() {
-        assumeFalse(propManager.getString("appFolderName").isBlank());
         String expected = System.getProperty("user.home") + File.separator +
                             appFolder + File.separator +
                             "logs";

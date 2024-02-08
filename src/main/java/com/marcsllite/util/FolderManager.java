@@ -6,22 +6,23 @@ import org.apache.logging.log4j.Logger;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
+import java.util.ResourceBundle;
 
 public class FolderManager {
     private static final Logger logr = LogManager.getLogger();
     private String dataFolder;
     private String defaultDir;
-    private PropManager propManager;
+    private final PropManager propManager;
 
     public FolderManager(){
-        this(PropManager.getInstance());
+        this((PropManager) ResourceBundle.getBundle(PropManager.PROP_NAME, new PropManagerControl()));
     }
 
     public FolderManager(PropManager propManager) {
         this.propManager = propManager;
-        setDataFolder(propManager.getString("appFolderName"),
-                      propManager.parseOS(propManager.getOS()));
-        setDefaultDir(propManager.getString("appMainFolder"));
+        setDataFolder(this.propManager.getString("appFolderName"),
+                      this.propManager.parseOS(propManager.getOS()));
+        setDefaultDir(this.propManager.getString("appMainFolder"));
     }
 
     /**

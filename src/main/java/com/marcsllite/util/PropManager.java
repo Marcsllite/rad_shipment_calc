@@ -24,22 +24,26 @@ import java.util.regex.Pattern;
 
 public class PropManager extends ResourceBundle {
     private static final Logger logr = LogManager.getLogger();
-    private final String PROP_NAME = "properties.xml";
+    public static final String PROP_NAME = "properties";
     private String os;
     private Properties prop;
 
-    private PropManager() {
+    public PropManager() {
         setOs(System.getProperty("os.name").toLowerCase());
-        setProp(PROP_NAME);
     }
 
-    protected static class SingletonHelper {
-        private static final PropManager INSTANCE = new PropManager();
+    public PropManager(InputStream stream) {
+        this();
+        setProp(stream);
     }
 
-    public static PropManager getInstance() {
-        return SingletonHelper.INSTANCE;
-    }
+//    protected static class SingletonHelper {
+//        private static final PropManager INSTANCE = new PropManager();
+//    }
+//
+//    public static PropManager getInstance() {
+//        return SingletonHelper.INSTANCE;
+//    }
 
     /**
      * Get the value at the specified key in the project's property file
@@ -65,15 +69,15 @@ public class PropManager extends ResourceBundle {
     /**
      * Set the properties using a path
      * 
-     * @param path the path to the properties file
+     * @param name the name of the properties file
      */
-    public void setProp(String path) throws InvalidParameterException {
+    public void setProp(String name) throws InvalidParameterException {
         var loader = ClassLoader.getSystemClassLoader();
         try {
-            setProp(loader.getResourceAsStream(path));
+            setProp(loader.getResourceAsStream(name));
         } catch(NullPointerException | InvalidParameterException e) {
             logr.catching(Level.FATAL, e);
-            var ee = new InvalidParameterException("Failed to set properties from path: " + path);
+            var ee = new InvalidParameterException("Failed to set properties from resource bundle: " + name);
             logr.throwing(Level.FATAL, ee);
             throw ee;
         }

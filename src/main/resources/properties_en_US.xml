@@ -246,7 +246,7 @@
     <!-- testing -->
     <entry key="properMessage">This is a proper message</entry>
     <entry key="properException">This is a proper Exception</entry>
-    <entry key="replacePropString_noText"></entry>
+    <entry key="replacePropString_noText"/>
     <entry key="replacePropString_noReplacements">This string doesn't contain any replacements</entry>
     <entry key="replacePropString_oneReplacement">This string contains {0} replacements</entry>
     <entry key="replacePropString_wrongNumber">This string contains the incorrect {1} for replacement</entry>

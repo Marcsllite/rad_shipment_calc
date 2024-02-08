@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.security.InvalidParameterException;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -79,12 +80,17 @@ public class StageManager {
     FXMLLoader loader = new FXMLLoader();
     loader.setLocation(getClass().getResource(view.getFxmlLoc()));
     loader.setControllerFactory(factory);
-    loader.setResources(ResourceBundle.getBundle("properties", new PropManagerControl()));
+    String err_msg = "Unable to load FXML view " + view.getFxmlName();
+    PropManager propManager = (PropManager) ResourceBundle.getBundle(PropManager.PROP_NAME, new Locale("en", "US"), PropManager.class.getClassLoader(), new PropManagerControl());
+    if(propManager.keySet().isEmpty()) {
+      logAndThrowException(err_msg.concat(": The resource bundle contains no values."), null);
+    }
+    loader.setResources(propManager);
     try {
       rootNode = loader.load();
       Objects.requireNonNull(rootNode, "A Root FXML node must not be null");
     } catch (Exception exception) {
-      logAndThrowException("Unable to load FXML view " + view.getFxmlName(), exception);
+      logAndThrowException(err_msg, exception);
       Platform.exit();
     } 
     return rootNode;

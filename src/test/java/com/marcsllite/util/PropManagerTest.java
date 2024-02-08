@@ -11,6 +11,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -21,18 +22,18 @@ class PropManagerTest {
 
     @BeforeEach
     public void setUp() {
-        manager = PropManager.getInstance();
+        manager = (PropManager) ResourceBundle.getBundle(PropManager.PROP_NAME, new PropManagerControl());
     }
 
     @ParameterizedTest
     @NullAndEmptySource
-    @ValueSource(strings = {"invalid/path"})
-    void setPropExceptionChecker(String path) {
+    @ValueSource(strings = {"invalid/name"})
+    void setPropExceptionChecker(String name) {
         InvalidParameterException exception = assertThrows(
-            InvalidParameterException.class, () -> manager.setProp(path)
+            InvalidParameterException.class, () -> manager.setProp(name)
         );
         
-        assertTrue(exception.getMessage().contains("Failed to set properties from path: " + path));
+        assertTrue(exception.getMessage().contains("Failed to set properties from resource bundle: " + name));
     }
   
     @Test
