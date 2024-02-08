@@ -38,7 +38,5 @@ public class App extends Application {
                 stageManager.loadViewNodeHierarchy(view).getChildrenUnmodifiable()
             );
         }
-
-        
     }
 }
