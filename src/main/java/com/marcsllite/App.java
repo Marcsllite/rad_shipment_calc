@@ -26,14 +26,16 @@ public class App extends Application {
      */
     public StageManager getStageManager() { return stageManager; }
 
+    /**
+     * Helper class to initialize application for testing using StageManager implementation
+     * Adds the children of the given FXMLView to this javafx.scene.Parent
+     */
     public static class AppPane extends Parent {
-        private StageManager stageManager;
-
-        public AppPane() {
+        public AppPane(FXMLView view) {
             super();
-            stageManager = new StageManager(null);
+            StageManager stageManager = new StageManager(null);
             getChildren().addAll(
-                stageManager.loadViewNodeHierarchy(FXMLView.MAIN).getChildrenUnmodifiable()
+                stageManager.loadViewNodeHierarchy(view).getChildrenUnmodifiable()
             );
         }
 

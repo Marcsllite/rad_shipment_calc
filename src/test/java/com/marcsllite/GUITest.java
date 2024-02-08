@@ -1,31 +1,19 @@
 package com.marcsllite;
 
-import javafx.stage.Stage;
-
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.testfx.api.FxRobot;
-import org.testfx.framework.junit5.ApplicationExtension;
-import org.testfx.framework.junit5.Start;
-
 import com.marcsllite.util.FXMLView;
-import com.marcsllite.util.StageManager;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import org.testfx.api.FxRobot;
 
-@ExtendWith(ApplicationExtension.class)
 public abstract class GUITest extends FxRobot {
     FXMLView view;
-    protected StageManager stageManager;
+    protected Parent root;
 
-    public GUITest() {
-        view = FXMLView.MAIN;
-    }
-
-    public GUITest(FXMLView view) {
+    void start(Stage stage, FXMLView view) {
         this.view = view;
-    }
-
-    @Start
-    public void start(Stage stage) {
-        stageManager = new StageManager(stage);
-        stageManager.show(view);
+        root = new App.AppPane(view);
+        stage.setScene(new Scene(root, view.getWidth(), view.getHeight()));
+        stage.show();
     }
 }

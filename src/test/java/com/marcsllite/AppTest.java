@@ -1,11 +1,22 @@
 package com.marcsllite;
 
 import com.marcsllite.util.FXIds;
+import com.marcsllite.util.FXMLView;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxAssert;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.base.NodeMatchers;
 
+@ExtendWith(ApplicationExtension.class)
 public class AppTest extends GUITest {
+
+    @Start
+    void start(Stage stage) {
+        super.start(stage, FXMLView.MAIN);
+    }
 
     @Test
     public void testStart() {
