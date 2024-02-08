@@ -129,23 +129,31 @@
     </dependencies>
 
     <build>
-        <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
-        <testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
-        <outputDirectory>${basedir}/target/classes</outputDirectory>
-        <testOutputDirectory>${basedir}/target/test-classes</testOutputDirectory>
+        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+        <outputDirectory>${project.basedir}/target/classes</outputDirectory>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <excludes>
+                    <exclude>${project.basedir}/src/main/resources/databaseAudit/*</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
+        <testOutputDirectory>${project.basedir}/target/test-classes</testOutputDirectory>
         <testResources>
             <testResource>
-                <directory>${basedir}/src/main/resources</directory>
+                <directory>${project.basedir}/src/main/resources</directory>
                 <excludes>
-                    <exclude>css</exclude>
-                    <exclude>csv</exclude>
-                    <exclude>databaseAudit</exclude>
-                    <exclude>font</exclude>
-                    <exclude>scripts</exclude>
+                    <exclude>${project.basedir}/src/main/resources/css/*</exclude>
+                    <exclude>${project.basedir}/src/main/resources/csv/*</exclude>
+                    <exclude>${project.basedir}/src/main/resources/databaseAudit/*</exclude>
+                    <exclude>${project.basedir}/src/main/resources/font/*</exclude>
+                    <exclude>${project.basedir}/src/main/resources/scripts/*</exclude>
                 </excludes>
             </testResource>
             <testResource>
-                <directory>${basedir}/src/test/resources</directory>
+                <directory>${project.basedir}/src/test/resources</directory>
             </testResource>
         </testResources>
         <plugins>
@@ -158,6 +166,20 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>me.fabriciorby</groupId>
+                        <artifactId>maven-surefire-junit5-tree-reporter</artifactId>
+                        <version>1.2.1</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <reportFormat>plain</reportFormat>
+                    <consoleOutputReporter>
+                        <disable>true</disable>
+                    </consoleOutputReporter>
+                    <statelessTestsetInfoReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter"/>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

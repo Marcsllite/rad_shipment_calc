@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 
 public class PropManager extends ResourceBundle {
     private static final Logger logr = LogManager.getLogger();
-    public static final String PROP_NAME = "resources/properties";
+    public static final String PROP_NAME = "properties";
     private String os;
     private Properties prop;
 
