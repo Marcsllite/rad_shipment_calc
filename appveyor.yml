@@ -119,7 +119,7 @@ for:
 
     build_script:
 #     - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
-      - sh: mvn clean verify -e -X
+      - sh: mvn clean verify
 
     test_script:
       - sh: |
