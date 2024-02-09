@@ -118,7 +118,7 @@ for:
             export DISPLAY=:99
 
     build_script:
-#     - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
+      # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
       - sh: mvn clean verify
 
     test_script:
