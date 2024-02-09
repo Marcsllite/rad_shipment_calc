@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-
 <StackPane prefHeight="250.0" prefWidth="450.0" styleClass="root" stylesheets="@../css/shipmentDetails.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rad.shipment.calculator.gui.ShipmentDetailsController">
    <children>
       <VBox fx:id="vBoxShipmentDetails" styleClass="vBoxShipmentDetails">

@@ -23,8 +23,11 @@ only_commits:
 
 # environment variables
 environment:
+  # Linux Debugging
   # APPVEYOR_SSH_KEY: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDGx6AiZps++og4I04DyhDXp6ExBV68jkrGzqvWw9mqu03vHW4KIglXjiTm+WXb0wkpisiQCmnQLXYh6QgMzgA24QZ8PZS8KTzqqb/5xlAl4HoIu4yTXzi/cxfc0+WqjpSRRfC1GPD2OXsXvfufzl3RDKV6YeYaetVpYuc+OZpCsuDm01c6mKmwuzK0+QaaQKL3MLLwYdLNm0XIRatvXuEwiDl4IlEAwLMJqVCs/+JFxThSSt95VuLG2HrGdwQ4jCi2mK28Udw1u/ae5SPDSz1KhfoBZqv03kfAJmzjYZ9Ro4NMPQVCz26jYHYWHOKcP0CfQre6VaZBDF6CeM3sR2vcrb+oDmL+UYDHyVVMQlhuklU5CJhd9BQKqYonJPCWynVNVgN6vght8gTERRSL956ywSj/RKQNPISTf2zRTCfR0uK6AT33ZEQXDkJ0B8F0tIkz4V672KjJaQT6fDS/grOV4/SxaEKrKHauOcDAOHhLXDKRcpM2Ne1yAh7kiP7BgG0= marcsllite@marcsllte-linux
   # APPVEYOR_SSH_BLOCK: true
+  # Mac Debugging
+  # APPVEYOR_VNC_BLOCK: true
   MAVEN_VERSION: 3.6.3
   WIN_JDK: C:\Program Files\Java\jdk11
   GITHUB_TOKEN:
@@ -36,12 +39,10 @@ environment:
       appveyor_build_worker_image: Visual Studio 2019
 
     - job_name: Mac build
-      appveyor_build_worker_image: macOs
-      _JAVA_OPTIONS: "-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.verbose=true"
+      appveyor_build_worker_image: macos-monterey
 
     - job_name: Linux build
       appveyor_build_worker_image: Ubuntu2004
-      _JAVA_OPTIONS: "-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw"
 
 stack: jdk 11
 
@@ -59,7 +60,7 @@ for:
       - set PATH=%JDK_HOME%;%JDK_HOME%\bin;%PATH%
 
     build_script:
-      - cmd: mvn clean verify
+      - cmd: mvn clean verify -e -X
       
     test_script:
       - ps: $wc = New-Object 'System.Net.WebClient';
@@ -81,9 +82,13 @@ for:
         - job_name: Mac build
 
     install:
-      - sh: brew install maven
+      - sh: export HOMEBREW_NO_INSTALL_CLEANUP=1 &&
+            export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
+      - sh: brew install mvnvm &&
+            mvn -d clean package
 
     build_script:
+      # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-vnc.sh' | bash -e -
       - sh: mvn clean verify
 
     test_script:
@@ -105,13 +110,15 @@ for:
         - job_name: Linux build
 
     install:
-      - sh: wget https://www-us.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz -P /tmp &&
+      - sh: sudo apt-get -y install libcanberra-gtk-module
+      - sh: wget https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.6.3/apache-maven-3.6.3-bin.tar.gz -P /tmp &&
             sudo tar xf /tmp/apache-maven-*.tar.gz -C /opt && 
             sudo update-alternatives --install /usr/bin/mvn mvn /opt/apache-maven-3.6.3/bin/mvn 363
-      - sh: Xvfb :99 &
+      - sh: Xvfb :99 &>/dev/null &
             export DISPLAY=:99
 
     build_script:
+#     - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
       - sh: mvn clean verify
 
     test_script:

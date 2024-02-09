@@ -1,20 +1,18 @@
 package com.marcsllite.util;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
-
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.security.InvalidParameterException;
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class ConversionsTest {
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.security.InvalidParameterException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class ConversionsTest {
     final static BigDecimal toBeConverted = BigDecimal.valueOf(7.5d);
     final static MathContext mc = Conversions.context;
 
@@ -99,36 +97,6 @@ public class ConversionsTest {
             new Object[] {toBeConverted, 19, toBeConverted.multiply(BigDecimal.TEN.pow(-21, mc), mc)},
             new Object[] {toBeConverted, 20, toBeConverted.multiply(BigDecimal.TEN.pow(-24, mc), mc)}
         };
-    }
-
-    @Test
-    void testGetSiPrefixes() {
-        List<String> expected = Util.getList("siPrefixes");
-
-        assumeFalse(expected == null);
-        assumeFalse(expected.isEmpty());
-
-        assertEquals(expected, Conversions.getSiPrefixes());
-    }
-
-    @Test
-    void testGetRadioactiveUnits() {
-        List<String> expected = Util.getList("radioactiveUnits");
-
-        assumeFalse(expected == null);
-        assumeFalse(expected.isEmpty());
-
-        assertEquals(expected, Conversions.getRadioactiveUnits());
-    }
-
-    @Test
-    void testGetMassUnits() {
-        List<String> expected = Util.getList("massUnits");
-
-        assumeFalse(expected == null);
-        assumeFalse(expected.isEmpty());
-
-        assertEquals(expected, Conversions.getMassUnits());
     }
 
     @Test

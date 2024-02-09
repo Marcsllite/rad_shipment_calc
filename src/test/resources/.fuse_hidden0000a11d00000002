@@ -46,27 +46,27 @@
     <entry key="noSupport">Not Supported</entry>
 
     <!-- Heights and Widths for different panes of the application -->
-    <entry key="mainWidth">600</entry>
-    <entry key="maxMainWidth">950</entry>
-    <entry key="mainHeight">500</entry>
-    <entry key="maxMainHeight">850</entry>
-    <entry key="menuWidth">150</entry>
-    <entry key="menuHeight">500</entry>
-    <entry key="homeWidth">600</entry>
-    <entry key="homeHeight">500</entry>
-    <entry key="referenceWidth">600</entry>
-    <entry key="referenceHeight">500</entry>
-    <entry key="summaryWidth">600</entry>
-    <entry key="summaryHeight">400</entry>
-    <entry key="modifyHeight">320</entry>
-    <entry key="modifyWidth">450</entry>
-    <entry key="shipmentDetailsHeight">270</entry>
-    <entry key="shipmentDetailsWidth">450</entry>
+    <entry key="mainWidth">600.0</entry>
+    <entry key="maxMainWidth">950.0</entry>
+    <entry key="mainHeight">500.0</entry>
+    <entry key="maxMainHeight">850.0</entry>
+    <entry key="menuWidth">150.0</entry>
+    <entry key="menuHeight">500.0</entry>
+    <entry key="homeWidth">600.0</entry>
+    <entry key="homeHeight">500.0</entry>
+    <entry key="referenceWidth">600.0</entry>
+    <entry key="referenceHeight">500.0</entry>
+    <entry key="summaryWidth">600.0</entry>
+    <entry key="summaryHeight">400.0</entry>
+    <entry key="modifyHeight">320.0</entry>
+    <entry key="modifyWidth">450.0</entry>
+    <entry key="shipmentDetailsHeight">270.0</entry>
+    <entry key="shipmentDetailsWidth">450.0</entry>
 
     <!-- css -->
-    <entry key="umlBlue">\#0469B1</entry>
-    <entry key="defaultWhite">\#fff</entry>
-    <entry key="defaultGrey">\#8a8a8a</entry>
+    <entry key="umlBlue">#0469B1</entry>
+    <entry key="defaultWhite">#fff</entry>
+    <entry key="defaultGrey">#8a8a8a</entry>
 
     <!-- SI Prefixes -->
     <entry key="siPrefixes">
@@ -106,8 +106,8 @@
     <!-- misc -->
     <entry key="appFolderName">UMass Lowell Radiation Safety</entry>
     <entry key="appMainFolder">Shipment Calculator</entry>
-    <entry key="windowMinWidth">250</entry>
-    <entry key="windowMaxWidth">325</entry>
+    <entry key="windowMinWidth">250.0</entry>
+    <entry key="windowMaxWidth">325.0</entry>
     <entry key="defaultWindowTitle">Window</entry>
     <entry key="defaultConfirmTitle">Confirmation Window</entry>
     <entry key="defaultInformationTitle">Information Window</entry>
@@ -121,7 +121,7 @@
     <entry key="positiveBtnID">btnPositive</entry>
     <entry key="negativeBtnID">btnNegative</entry>
     <entry key="okayBtnID">btnOkay</entry>
-    <entry key="defaultMessage ">No Message</entry>
+    <entry key="defaultMessage">No Message</entry>
     <entry key="defaultBtn">button</entry>
     <entry key="usrBtnClick">User clicked the {0} button</entry>
     <entry key="usrMenuBtnClick">User clicked the {0} menu button ({1}) times</entry>
@@ -130,7 +130,7 @@
     <entry key="port">22</entry>
     <entry key="domain">uml.edu</entry>
     <entry key="defaultStr">Not Available</entry>
-    <entry key="defaultInt">-2</entry>
+    <entry key="defaultInt">-2.0</entry>
     <entry key="tableDatePattern">MMM dd, yyyy</entry>
     <entry key="datePattern">MM/dd/yyyy</entry>
     <entry key="dateNormalFormat">MM/dd/yyyy hh:mm:ss a</entry>

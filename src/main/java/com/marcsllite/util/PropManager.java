@@ -1,64 +1,111 @@
 package com.marcsllite.util;
 
+import com.marcsllite.App;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.MissingResourceException;
+import java.util.Objects;
 import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.regex.Pattern;
 
-import com.marcsllite.App;
-
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import javafx.scene.control.ButtonBase;
-import javafx.scene.input.KeyCode;
-
-public final class Util {
+public class PropManager extends ResourceBundle {
     private static final Logger logr = LogManager.getLogger();
-    private static String os;
-    private static Properties prop;
+    public static final String PROP_NAME = "properties";
+    private String os;
+    private Properties prop;
 
-    static {
-        String propertiesPath = "src/main/resources/properties.xml";
-        Util.setOs(Util.getCurrentOS());
-        Util.setProp(propertiesPath);
+    public PropManager() {
+        setOs(System.getProperty("os.name").toLowerCase());
     }
 
-    private Util() {}
+    public PropManager(InputStream stream) {
+        this();
+        setProp(stream);
+    }
+
+//    protected static class SingletonHelper {
+//        private static final PropManager INSTANCE = new PropManager();
+//    }
+//
+//    public static PropManager getInstance() {
+//        return SingletonHelper.INSTANCE;
+//    }
+
+    /**
+     * Get the value at the specified key in the project's property file
+     *
+     * @param key a key in the project's property file
+     * @return the value at that key or empty string
+     */
+    @Override
+    protected Object handleGetObject(String key) {
+        if(key == null || key.isBlank()) return "";
+
+        String ret = Objects.requireNonNull(prop, "Properties has not been initialized").getProperty(key);
+        return (ret == null)? "" : ret;
+    }
+
+    @Override
+    public Enumeration<String> getKeys() {
+        Set<String> handleKeys = prop.stringPropertyNames();
+        return Collections.enumeration(handleKeys);
+    }
 
     /*/////////////////////////////////////////////////// SETTERS ////////////////////////////////////////////////////*/
     /**
-     * Set the properties
+     * Set the properties using a path
      * 
-     * @param path the path to the properties file
+     * @param name the name of the properties file
      */
-    public static void setProp(String path) throws InvalidParameterException{
+    public void setProp(String name) throws InvalidParameterException {
+        var loader = ClassLoader.getSystemClassLoader();
         try {
-            Util.prop = new Properties();
-            Util.prop.loadFromXML(new FileInputStream(path));
-        } catch (IOException | NullPointerException e) {
+            setProp(loader.getResourceAsStream(name));
+        } catch(NullPointerException | InvalidParameterException e) {
             logr.catching(Level.FATAL, e);
-            var ee = new InvalidParameterException("Failed to set properties from path: " + path);
+            var ee = new InvalidParameterException("Failed to set properties from resource bundle: " + name);
             logr.throwing(Level.FATAL, ee);
             throw ee;
-        } 
+        }
+    }
+
+    /**
+     * Set the properties using a stream
+     *
+     * @param stream the InputStream to the properties file
+     */
+    public void setProp(InputStream stream) throws InvalidParameterException{
+        try {
+            prop = new Properties();
+            prop.loadFromXML(stream);
+        } catch (IOException | NullPointerException e) {
+            logr.catching(Level.FATAL, e);
+            var ee = new InvalidParameterException("Failed to set properties from stream: " + stream.toString());
+            logr.throwing(Level.FATAL, ee);
+            throw ee;
+        }
     }
 
     /**
      * Set the current operating system
      * 
-     * @param path the current operating system
+     * @param os the current operating system
      */
-    public static void setOs(String os) { Util.os = os; }
+    public void setOs(String os) { this.os = os; }
 
     /*/////////////////////////////////////////////////// GETTERS ////////////////////////////////////////////////////*/
     /**
@@ -66,52 +113,42 @@ public final class Util {
      *
      * @return properties object
      */
-    public static Properties getProp() {
-        if(Util.prop == null) {
-            Util.setProp("src/main/resources/properties.xml");
-        }
-
-        return Util.prop;
-    }
+    public Properties getProp() { return prop; }
 
     /**
      * Getter function to get the current operating system
      *
      * @return the current operating system
      */
-    public static String getOs() {
-        if (Util.os == null) {
-            setOs(System.getProperty("os.name").toLowerCase());
-        }
-
-        return Util.os;
-    }
+    public String getOS() { return os; }
 
     /**
-     * @author Mkyong.com https://www.mkyong.com/java/how-to-detect-os-in-java-systemgetpropertyosname/
+     * @author Mkyong.com <a href="https://www.mkyong.com/java/how-to-detect-os-in-java-systemgetpropertyosname/">...</a>
      * Convenience function to figure out the current operating system
      *
      * @return the current operating system
      */
-    public static String getCurrentOS(){
-        String os = Util.getOs();
+    public OS parseOS(String os) {
+        if(os == null) {
+            return OS.NOT_SUPPORTED;
+        }
 
-        if (os.contains("win")) return Util.getString("windows");
-        else if (os.contains("mac")) return Util.getString("mac");
-        else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) return Util.getString("unix");
-        else if (os.contains("sunos")) return Util.getString("solaris");
-        else return getString("noSupport");
+        if (os.contains("win")) return OS.Windows;
+        else if (os.contains("mac")) return OS.MAC;
+        else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) return OS.Unix;
+        else if (os.contains("sunos")) return OS.Solaris;
+        else return OS.NOT_SUPPORTED;
     }
 
     /**
-     * @author Alvin Alexander https://alvinalexander.com/blog/post/java/read-text-file-from-jar-file
+     * @author Alvin Alexander <a href="https://alvinalexander.com/blog/post/java/read-text-file-from-jar-file">...</a>
      * Convenience function to open the given file and return its
      * contents to a string
      *
      * @param resourceFilePath the relative path of the resource file to get the text of
      * @return the contents of the file or the empty string if errors occurred
      */
-    public static String getFileText(String resourceFilePath) throws InvalidParameterException {
+    public String getFileText(String resourceFilePath) throws InvalidParameterException {
         try {
             if (resourceFilePath == null || resourceFilePath.isBlank()) {
                 var e = new InvalidParameterException("resourceFilepath (" + resourceFilePath + ") is invalid");
@@ -120,7 +157,7 @@ public final class Util {
             } 
 
             InputStream is = App.class.getResourceAsStream(resourceFilePath);  // getResourceAsStream() may throw NullPointerException
-            var isr = new InputStreamReader(is);
+            var isr = new InputStreamReader(Objects.requireNonNull(is));
             var br = new BufferedReader(isr);
             var sb = new StringBuilder();
             String line;
@@ -142,7 +179,7 @@ public final class Util {
      * @param propKey the name of the key from the property file
      * @param newValues the newValues to change the braced values in the string
      */
-    public static String replacePropString(String propKey, String... newValues) throws InvalidParameterException {
+    public String replacePropString(String propKey, String... newValues) throws InvalidParameterException {
         String propString;
         List<String> replacements;
 
@@ -168,7 +205,7 @@ public final class Util {
 
         // if newValues is null or was omitted, return value from properties file
         if (newValues != null && newValues.length != 0 && newValues[0] != null && !replacements.isEmpty()) {
-            int loopCount = (newValues.length > replacements.size()) ? replacements.size() : newValues.length;
+            int loopCount = Math.min(newValues.length, replacements.size());
             for (var i = 0; i < loopCount; i++) {
                 propString = propString.replace(replacements.get(i), newValues[i]); 
             }
@@ -184,7 +221,7 @@ public final class Util {
      * @param searchString the string in which to search for the substring
      * @return a List of substrings to replace in the order they were found
      */
-    public static List<String> parseStringsToReplace(String searchString) {
+    public List<String> parseStringsToReplace(String searchString) {
         List<String> ret = new ArrayList<>();
 
         // making sure searchString is not null
@@ -198,36 +235,26 @@ public final class Util {
         return ret;
     }
 
-    /**
-     * Convenience function to get the value at the specified key in the project's property file
-     *
-     * @param key a key in the projects property file
-     * @return the value at that key
-     */
-    public static String getString(String key){
-        if(key == null || key.isBlank()) return "";
-
-        String ret = Util.getProp().getProperty(key);
-        return (ret == null)? "" : ret;
-    }
 
     /**
-     * Convenience function to get the integer value at the specified key in the project's property file
+     * Convenience function to get the double value at the specified key in the project's property file
      *
-     * @param key a key in the projects property file
-     * @return the integer value at that key
+     * @param key a key in the project's property file
+     * @return the double value at that key
      */
-    public static int getInt(String key) {
-        int ret = Integer.MIN_VALUE;
+    public double getDouble(String key) {
+        double ret = Double.MIN_VALUE;
 
         if(key == null || key.isBlank()) return ret;
 
+        String value = getString(key);
+
         // checking if the key exists in the property file and parsing value if it exists
         try {
-            ret = Integer.parseInt(getString(key));
+            ret = Double.parseDouble(value);
         } catch (NumberFormatException ee) {
             logr.catching(Level.DEBUG, ee);
-            var e = new InvalidParameterException("Value is not a number");
+            var e = new InvalidParameterException(value + " is not a number");
             logr.throwing(e);
             throw e;
         }
@@ -254,7 +281,7 @@ public final class Util {
      * @param listName the properties key that all the list elements contain
      * @return a list of all the values from the property entry
      */
-    public static List<String> getList(String listName) {
+    public List<String> getList(String listName) {
         List<String> ret = new ArrayList<>();
 
         var str = getString(listName);
@@ -270,35 +297,5 @@ public final class Util {
         }
 
         return ret;
-    }
-
-    /**
-     * Helper function to allow the given buttonBase to be fired
-     * when the enter/space key is pressed and the buttonBase is in focus
-     * 
-     * Valid ButtonBases:
-     *      MenuBarButton
-     *      IndicatorButton
-     *      Button
-     *      CheckBox
-     *      Hyperlink
-     *      MenuButton
-     *      RadioButton
-     *      SplitMenuButton
-     *      ToggleButton
-     *
-     * @param btnBase the btnBase to add the listener to
-     */
-    public static void fireBtnOnEnter(ButtonBase btnBase) throws InvalidParameterException {
-        if(btnBase == null) throw new InvalidParameterException("button base cannot be null");
-
-        btnBase.setOnKeyPressed(
-            event -> {
-                if(event.getCode().equals(KeyCode.ENTER)) {
-                    btnBase.fire();
-                    event.consume();
-                }
-            }
-        );
     }
 }
