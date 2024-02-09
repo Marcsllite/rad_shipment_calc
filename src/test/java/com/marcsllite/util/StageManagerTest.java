@@ -26,7 +26,7 @@ public class StageManagerTest {
     
     @BeforeAll
     public static void setup() throws TimeoutException {
-        stageManager = new StageManager(FxToolkit.registerPrimaryStage());
+        stageManager = new StageManager(FxToolkit.registerPrimaryStage(), GUITest.propManager);
     }
 
     @Test
@@ -92,23 +92,13 @@ public class StageManagerTest {
         );
         assertEquals("FXML View is null", exception.getMessage());
     }
-  
+
     @Test
-    public void testLoadViewNodeHierarchy_EmptyView_NullProps() {
+    public void testLoadViewNodeHierarchy_EmptyView() {
         FXMLView view = FXMLView.TEST;
+
         RuntimeException exception = assertThrows(
             RuntimeException.class, () -> stageManager.loadViewNodeHierarchy(view)
-        );
-        String expected = "Unable to load FXML view " + view.getFxmlName();
-        assertTrue(exception.getMessage().contains(expected));
-    }
-
-    @Test
-    public void testLoadViewNodeHierarchy_EmptyView_WithProps() {
-        FXMLView view = FXMLView.TEST;
-
-        RuntimeException exception = assertThrows(
-            RuntimeException.class, () -> stageManager.loadViewNodeHierarchy(view, GUITest.propManager)
         );
         String expected = "Unable to load FXML view " + view.getFxmlName();
         String expected2 = "The resource bundle contains no values.";

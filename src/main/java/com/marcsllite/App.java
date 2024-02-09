@@ -16,7 +16,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        stageManager = new StageManager(stage);
+        stageManager = new StageManager(stage, null);
         stageManager.show(FXMLView.MAIN);
     }
 
@@ -32,11 +32,11 @@ public class App extends Application {
      * Adds the children of the given FXMLView to this javafx.scene.Parent
      */
     public static class AppPane extends Parent {
-        public AppPane(FXMLView view, PropManager properties) {
+        public AppPane(FXMLView view, PropManager propManager) {
             super();
-            StageManager stageManager = new StageManager(null);
+            StageManager stageManager = new StageManager(null, propManager);
             getChildren().addAll(
-                stageManager.loadViewNodeHierarchy(view, properties).getChildrenUnmodifiable()
+                stageManager.loadViewNodeHierarchy(view).getChildrenUnmodifiable()
             );
         }
     }

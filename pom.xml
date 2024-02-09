@@ -228,6 +228,7 @@
                     <excludes>
                         <exclude>**/Launcher.class</exclude>
                         <exclude>**/App.class</exclude>
+                        <exclude>**/PropManagerControl.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>

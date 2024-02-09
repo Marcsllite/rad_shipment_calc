@@ -10,7 +10,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.security.InvalidParameterException;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -21,13 +20,20 @@ public class StageManager {
   private final Stage primaryStage;
   private final ControllerFactory factory;
   private FXMLView curView;
+  private final PropManager propManager;
   
   private static final String NULL_ERROR = "FXML View is null";
   protected static final String DEFAULT_MSG = "No Message";
 
-  public StageManager(Stage stage) {
+  public StageManager(Stage stage, PropManager propManager) {
+    if(propManager == null) {
+      this.propManager = (PropManager) ResourceBundle.getBundle(PropManager.PROP_NAME, new Locale("en", "US"), new PropManagerControl());
+    } else {
+      this.propManager = propManager;
+    }
+
     primaryStage = stage;
-    factory = new ControllerFactory();
+    factory = new ControllerFactory(this.propManager);
     curView = null;
   }
 
@@ -72,18 +78,12 @@ public class StageManager {
     curView = view;
   }
   
-  public Parent loadViewNodeHierarchy(FXMLView view, PropManager... properties) throws RuntimeException {
+  public Parent loadViewNodeHierarchy(FXMLView view) throws RuntimeException {
     if (view == null) { 
       throw new InvalidParameterException(NULL_ERROR);
     }
 
     String err_msg = "Unable to load FXML view " + view.getFxmlName();
-    PropManager propManager;
-    if(Arrays.stream(properties).findAny().isEmpty()) {
-      propManager = (PropManager) ResourceBundle.getBundle(PropManager.PROP_NAME, new Locale("en", "US"), new PropManagerControl());
-    } else {
-      propManager = properties[0];
-    }
 
     if(propManager.keySet().isEmpty()) {
       logAndThrowException(err_msg.concat(": The resource bundle contains no values."), null);
