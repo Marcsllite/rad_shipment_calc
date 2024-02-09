@@ -1,6 +1,6 @@
 package com.marcsllite.util;
 
-import com.marcsllite.MenuPaneControllerTest;
+import com.marcsllite.GUITest;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeAll;
@@ -108,7 +108,7 @@ public class StageManagerTest {
         FXMLView view = FXMLView.TEST;
 
         RuntimeException exception = assertThrows(
-            RuntimeException.class, () -> stageManager.loadViewNodeHierarchy(view, MenuPaneControllerTest.propManager)
+            RuntimeException.class, () -> stageManager.loadViewNodeHierarchy(view, GUITest.propManager)
         );
         String expected = "Unable to load FXML view " + view.getFxmlName();
         String expected2 = "The resource bundle contains no values.";

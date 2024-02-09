@@ -1,35 +1,20 @@
 package com.marcsllite;
 
 import com.marcsllite.util.ImageHandler;
-import com.marcsllite.util.PropManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.security.InvalidParameterException;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MenuPaneControllerTest {
     MenuPaneController c;
-    public static PropManager propManager =  new PropManager() {
-        @Override
-        protected Object handleGetObject(String key) {
-            if(key == null || key.isBlank()) return "";
-            return ("defaultInt".equals(key))? defaultInt : "";
-        }
-
-        @Override
-        protected Set<String> handleKeySet() {
-            return Set.of("defaultInt");
-        }
-    };
-    final static String defaultInt = "-2.0";
 
     @BeforeEach
     public void setUp() {
-        c = new MenuPaneController(propManager);
+        c = new MenuPaneController(GUITest.propManager);
     }
 
     @Test
