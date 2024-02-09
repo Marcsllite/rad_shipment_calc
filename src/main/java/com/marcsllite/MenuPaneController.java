@@ -28,21 +28,18 @@ public class MenuPaneController extends BaseController {
     @FXML protected ImageView imgViewReference;
 
     private static final Logger logr = LogManager.getLogger();
-    private PropManager propManager = (PropManager) ResourceBundle.getBundle(PropManager.PROP_NAME, new PropManagerControl());
-    private final ImageHandler.Colors CURRENT_COLOR;  // color to make the button corresponding to the current page
-    private final ImageHandler.Colors IDLE_COLOR;  // color to make idle buttons
-    private final ImageHandler.Colors HOVER_COLOR;  // color to make buttons when mouse is hovering over
+    private final PropManager propManager;
+    private final ImageHandler.Colors CURRENT_COLOR = ImageHandler.Colors.UML_BLUE;  // color to make the button corresponding to the current page
+    private final ImageHandler.Colors IDLE_COLOR = ImageHandler.Colors.DEFAULT_GREY;  // color to make idle buttons
+    private final ImageHandler.Colors HOVER_COLOR = ImageHandler.Colors.DEFAULT_WHITE;  // color to make buttons when mouse is hovering over
     private int currentBtn;  // variable to know what page the user is currently on
                               // 0 = Shipment, 1 = Reference
 
     public MenuPaneController() {
-        CURRENT_COLOR = ImageHandler.Colors.UML_BLUE;
-        IDLE_COLOR = ImageHandler.Colors.DEFAULT_GREY;
-        HOVER_COLOR = ImageHandler.Colors.DEFAULT_WHITE;
+        this((PropManager) ResourceBundle.getBundle(PropManager.PROP_NAME, new PropManagerControl()));
     }
 
     public MenuPaneController(PropManager propManager) {
-        this();
         this.propManager = propManager;
     }
 
