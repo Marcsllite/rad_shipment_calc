@@ -38,7 +38,7 @@ public class MainControllerTest {
 
     @Test
     public void testRegisterController_MenuPaneController() {
-        MenuPaneController controller = new MenuPaneController();
+        MenuPaneController controller = new MenuPaneController(MenuPaneControllerTest.propManager);
         
         MainController.getInstance().registerController(controller);
 

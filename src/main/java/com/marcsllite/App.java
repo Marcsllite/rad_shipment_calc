@@ -1,6 +1,7 @@
 package com.marcsllite;
 
 import com.marcsllite.util.FXMLView;
+import com.marcsllite.util.PropManager;
 import com.marcsllite.util.StageManager;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -31,11 +32,11 @@ public class App extends Application {
      * Adds the children of the given FXMLView to this javafx.scene.Parent
      */
     public static class AppPane extends Parent {
-        public AppPane(FXMLView view) {
+        public AppPane(FXMLView view, PropManager properties) {
             super();
             StageManager stageManager = new StageManager(null);
             getChildren().addAll(
-                stageManager.loadViewNodeHierarchy(view).getChildrenUnmodifiable()
+                stageManager.loadViewNodeHierarchy(view, properties).getChildrenUnmodifiable()
             );
         }
     }

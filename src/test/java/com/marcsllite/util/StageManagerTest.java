@@ -1,8 +1,8 @@
 package com.marcsllite.util;
 
+import com.marcsllite.MenuPaneControllerTest;
 import javafx.application.Platform;
 import javafx.stage.Stage;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -94,13 +94,26 @@ public class StageManagerTest {
     }
   
     @Test
-    public void testLoadViewNodeHierarchy_EmptyView() {
+    public void testLoadViewNodeHierarchy_EmptyView_NullProps() {
         FXMLView view = FXMLView.TEST;
         RuntimeException exception = assertThrows(
             RuntimeException.class, () -> stageManager.loadViewNodeHierarchy(view)
         );
         String expected = "Unable to load FXML view " + view.getFxmlName();
         assertTrue(exception.getMessage().contains(expected));
+    }
+
+    @Test
+    public void testLoadViewNodeHierarchy_EmptyView_WithProps() {
+        FXMLView view = FXMLView.TEST;
+
+        RuntimeException exception = assertThrows(
+            RuntimeException.class, () -> stageManager.loadViewNodeHierarchy(view, MenuPaneControllerTest.propManager)
+        );
+        String expected = "Unable to load FXML view " + view.getFxmlName();
+        String expected2 = "The resource bundle contains no values.";
+        assertTrue(exception.getMessage().contains(expected));
+        assertFalse(exception.getMessage().contains(expected2));
     }
   
     @ParameterizedTest

@@ -31,7 +31,7 @@ public enum FXMLView {
   }, TEST {
     public String getName() { return "Test"; }
 
-    public String getFxmlLoc() { return "/fxml/test.fxml"; }
+    public String getFxmlLoc() { return "/test.fxml"; }
   };
 
   public final double SIDE_500 = 500.0;

@@ -1,5 +1,6 @@
 package com.marcsllite.util;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -9,20 +10,60 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.security.InvalidParameterException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.ResourceBundle;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PropManagerTest {
-    PropManager manager;
+    AbstractMap<String, String> stringsMap = new HashMap<>();
+    PropManager manager =  new PropManager() {
+        @Override
+        protected Object handleGetObject(String key) {
+            if(key == null || key.isBlank()) return "";
+            return (stringsMap.get(key) == null)? "" : stringsMap.get(key);
+        }
+
+        @Override
+        protected Set<String> handleKeySet() {
+            return stringsMap.keySet();
+        }
+    };
+
+    void init() {
+        stringsMap.put("fakeKey", "");
+        stringsMap.put("replacePropStringRegex", "(\\{\\d+})");
+        stringsMap.put("properMessage", "This is a proper message");
+        stringsMap.put("properException", "This is a proper Exception");
+        stringsMap.put("replacePropString_noReplacements", "This string doesn't contain any replacements");
+        stringsMap.put("replacePropString_oneReplacement", "This string contains {0} replacements");
+        stringsMap.put("replacePropString_wrongNumber", "This string contains the incorrect {1} for replacement");
+        stringsMap.put("replacePropString_twoReplacements", "This string contains {0}, {1} replacements");
+        stringsMap.put("replacePropString_threeReplacements", "This string contains {0}, {1}, {2} replacements");
+        stringsMap.put("replacePropString_oneSameReplacements", "This string contains a replacement here: {0}, and the same replacement here: {0}");
+        stringsMap.put("replacePropString_twoSameReplacements", "First: {0}, Second: {1}, Third: {0}, Fourth: {1}");
+        stringsMap.put("getList_TrailingDelimiters", "This|List|has|trailing|delimiters||||");
+        stringsMap.put("getList_SpacesWithinElements", "element 1 has spaces|element 2 does too");
+        stringsMap.put("getList_SpacesAroundElements", "     there are spaces around this element    |   spaces around here too    ");
+        stringsMap.put("getList_ProperList", "This|is|a|proper|list");
+        stringsMap.put("mainPane", "UMass Lowell - Rad Shipment Calculator");
+        stringsMap.put("mainWidth", "600.0");
+    }
 
     @BeforeEach
     public void setUp() {
-        manager = (PropManager) ResourceBundle.getBundle(PropManager.PROP_NAME, new PropManagerControl());
+        init();
+    }
+
+    @AfterEach
+    public void tearDown() {
+        stringsMap.clear();
     }
 
     @ParameterizedTest
@@ -38,9 +79,8 @@ class PropManagerTest {
   
     @Test
     void getOs_NullOS() {
-        String expected = null;
         manager.setOs(null);
-        assertEquals(expected, manager.getOS());
+        assertNull(manager.getOS());
     }
 
     @Test
@@ -195,7 +235,7 @@ class PropManagerTest {
   
     @ParameterizedTest
     @CsvSource({"fakeKey", "replacePropString_noReplacements"})
-    void getIntExceptionChecker(String propName) {
+    void getDoubleExceptionChecker(String propName) {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> manager.getDouble(propName)
         );

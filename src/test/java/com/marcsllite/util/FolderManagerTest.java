@@ -8,9 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -33,8 +31,8 @@ public class FolderManagerTest {
         }
 
         @Override
-        public Enumeration<String> getKeys() {
-            return Collections.enumeration(Arrays.asList("appFolderName", "appMainFolder"));
+        protected Set<String> handleKeySet() {
+            return Set.of("appFolderName", "appMainFolder");
         }
     };
     final static String appFolder = "UMass Lowell Radiation Safety";

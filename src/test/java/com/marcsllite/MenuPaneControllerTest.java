@@ -4,34 +4,28 @@ import com.marcsllite.util.ImageHandler;
 import com.marcsllite.util.PropManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.security.InvalidParameterException;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith(MockitoExtension.class)
 public class MenuPaneControllerTest {
-    @Spy
     MenuPaneController c;
-    PropManager propManager =  new PropManager() {
+    public static PropManager propManager =  new PropManager() {
         @Override
         protected Object handleGetObject(String key) {
+            if(key == null || key.isBlank()) return "";
             return ("defaultInt".equals(key))? defaultInt : "";
         }
 
         @Override
-        public Enumeration<String> getKeys() {
-            return Collections.enumeration(List.of("defaultInt"));
+        protected Set<String> handleKeySet() {
+            return Set.of("defaultInt");
         }
     };
-    final static double defaultInt = -2.0;
+    final static String defaultInt = "-2.0";
 
     @BeforeEach
     public void setUp() {

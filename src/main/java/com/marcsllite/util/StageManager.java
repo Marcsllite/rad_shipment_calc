@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.security.InvalidParameterException;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -71,20 +72,27 @@ public class StageManager {
     curView = view;
   }
   
-  public Parent loadViewNodeHierarchy(FXMLView view) throws RuntimeException {
+  public Parent loadViewNodeHierarchy(FXMLView view, PropManager... properties) throws RuntimeException {
     if (view == null) { 
       throw new InvalidParameterException(NULL_ERROR);
+    }
+
+    String err_msg = "Unable to load FXML view " + view.getFxmlName();
+    PropManager propManager;
+    if(Arrays.stream(properties).findAny().isEmpty()) {
+      propManager = (PropManager) ResourceBundle.getBundle(PropManager.PROP_NAME, new Locale("en", "US"), new PropManagerControl());
+    } else {
+      propManager = properties[0];
+    }
+
+    if(propManager.keySet().isEmpty()) {
+      logAndThrowException(err_msg.concat(": The resource bundle contains no values."), null);
     }
 
     Parent rootNode = null;
     FXMLLoader loader = new FXMLLoader();
     loader.setLocation(getClass().getResource(view.getFxmlLoc()));
     loader.setControllerFactory(factory);
-    String err_msg = "Unable to load FXML view " + view.getFxmlName();
-    PropManager propManager = (PropManager) ResourceBundle.getBundle(PropManager.PROP_NAME, new Locale("en", "US"), PropManager.class.getClassLoader(), new PropManagerControl());
-    if(propManager.keySet().isEmpty()) {
-      logAndThrowException(err_msg.concat(": The resource bundle contains no values."), null);
-    }
     loader.setResources(propManager);
     try {
       rootNode = loader.load();
