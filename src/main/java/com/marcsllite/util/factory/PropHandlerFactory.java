@@ -1,4 +1,6 @@
-package com.marcsllite.util;
+package com.marcsllite.util.factory;
+
+import com.marcsllite.util.handler.PropHandler;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -10,7 +12,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class PropManagerControl extends ResourceBundle.Control {
+public class PropHandlerFactory extends ResourceBundle.Control {
 
     private static final String XML = "xml";
     private static final List<String> SINGLETON_LIST = Collections.singletonList(XML);
@@ -45,7 +47,7 @@ public class PropManagerControl extends ResourceBundle.Control {
         try (final InputStream stream = urlconnection.getInputStream();
              final BufferedInputStream bis = new BufferedInputStream(stream)
         ) {
-            return new PropManager(bis);
+            return new PropHandler(bis);
         }
     }
 

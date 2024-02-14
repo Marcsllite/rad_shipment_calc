@@ -21,8 +21,6 @@
         -Dprism.debug=true
         </argLine>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11.0.2</maven.compiler.source>
-        <maven.compiler.target>11.0.2</maven.compiler.target>
         <maven.compiler.release>11</maven.compiler.release>
         <maven.compiler.version>3.8.0</maven.compiler.version>
         <javafx.maven.plugin.version>0.0.6</javafx.maven.plugin.version>
@@ -36,6 +34,8 @@
         <sonar.version>3.9.0.2155</sonar.version>
         <surefire.version>3.0.0-M5</surefire.version>
         <monocle.version>jdk-11+26</monocle.version>
+        <h2.version>2.2.224</h2.version>
+        <hibernate-core.version>6.4.4.Final</hibernate-core.version>
 
         <!-- Test Coverage -->
         <jacoco.percentages.min.instruct>0.74</jacoco.percentages.min.instruct>
@@ -81,7 +81,12 @@
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>${jacoco.version}</version>
-        </dependency>        
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate-core.version}</version>
+        </dependency>
 
         <!-- Test Dependencies -->
         <dependency>
@@ -90,6 +95,13 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -124,6 +136,12 @@
             <groupId>org.testfx</groupId>
             <artifactId>openjfx-monocle</artifactId>
             <version>${monocle.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -197,8 +215,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.version}</version>
                 <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
                     <release>${maven.compiler.release}</release>
                     <encoding>UTF-8</encoding>
                 </configuration>
@@ -230,7 +246,6 @@
                     <excludes>
                         <exclude>**/Launcher.class</exclude>
                         <exclude>**/App.class</exclude>
-                        <exclude>**/PropManagerControl.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>

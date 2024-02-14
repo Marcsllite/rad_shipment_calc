@@ -1,6 +1,6 @@
-package com.marcsllite.util;
+package com.marcsllite.controller;
 
-import com.marcsllite.MainController;
+import com.marcsllite.controller.MainController;
 import javafx.fxml.FXML;
 
 public abstract class BaseController {

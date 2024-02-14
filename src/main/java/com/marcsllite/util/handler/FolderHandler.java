@@ -1,5 +1,7 @@
-package com.marcsllite.util;
+package com.marcsllite.util.handler;
 
+import com.marcsllite.util.OS;
+import com.marcsllite.util.factory.PropHandlerFactory;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,21 +10,21 @@ import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.util.ResourceBundle;
 
-public class FolderManager {
+public class FolderHandler {
     private static final Logger logr = LogManager.getLogger();
     private String dataFolder;
     private String defaultDir;
-    private final PropManager propManager;
+    private final PropHandler propHandler;
 
-    public FolderManager(){
-        this((PropManager) ResourceBundle.getBundle(PropManager.PROP_NAME, new PropManagerControl()));
+    public FolderHandler(){
+        this((PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()));
     }
 
-    public FolderManager(PropManager propManager) {
-        this.propManager = propManager;
-        setDataFolder(this.propManager.getString("appFolderName"),
-                      this.propManager.parseOS(propManager.getOS()));
-        setDefaultDir(this.propManager.getString("appMainFolder"));
+    public FolderHandler(PropHandler propHandler) {
+        this.propHandler = propHandler;
+        setDataFolder(this.propHandler.getString("appFolderName"),
+                      this.propHandler.parseOS(propHandler.getOS()));
+        setDefaultDir(this.propHandler.getString("appMainFolder"));
     }
 
     /**
@@ -32,7 +34,7 @@ public class FolderManager {
      */
     @SuppressWarnings("java:S112")
     public void setDefaultDir(String dirName) throws RuntimeException {
-        if (dirName == null || dirName.isEmpty()) dirName = propManager.getString("appMainFolder"); 
+        if (dirName == null || dirName.isEmpty()) dirName = propHandler.getString("appMainFolder");
         
         String name = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + dirName;
         var toBeCreated = new File(name);
@@ -58,7 +60,7 @@ public class FolderManager {
      */
     protected void setDataFolder(String name, OS currentOS) {
         String dirLoc = null;
-        if (name == null || name.isEmpty()) name = propManager.getString("appFolderName"); 
+        if (name == null || name.isEmpty()) name = propHandler.getString("appFolderName");
 
         switch(currentOS){
             case Windows:

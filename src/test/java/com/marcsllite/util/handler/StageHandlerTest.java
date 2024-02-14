@@ -1,6 +1,7 @@
-package com.marcsllite.util;
+package com.marcsllite.util.handler;
 
 import com.marcsllite.GUITest;
+import com.marcsllite.util.FXMLView;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,30 +20,30 @@ import static junit.framework.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class StageManagerTest {
+public class StageHandlerTest {
     final static String propMsg = "This is a proper message";
-    final static String defaultMessage = StageManager.DEFAULT_MSG;
-    static StageManager stageManager;
+    final static String defaultMessage = StageHandler.DEFAULT_MSG;
+    static StageHandler stageHandler;
     
     @BeforeAll
     public static void setup() throws TimeoutException {
-        stageManager = new StageManager(FxToolkit.registerPrimaryStage(), GUITest.propManager);
+        stageHandler = new StageHandler(FxToolkit.registerPrimaryStage(), GUITest.propHandler);
     }
 
     @Test
     public void testSwitchScene_NullView() {
         InvalidParameterException exception = assertThrows(
-            InvalidParameterException.class, () -> stageManager.switchScene(null)
+            InvalidParameterException.class, () -> stageHandler.switchScene(null)
         );
         assertEquals("FXML View is null", exception.getMessage());
     }
 
      @ParameterizedTest
      @EnumSource(value = FXMLView.class, names = {"TEST", "MAIN", "MENU"}, mode = EnumSource.Mode.EXCLUDE)
-     public void testSwitchSceneChecker(FXMLView view) {
+     public void testSwitchScene(FXMLView view) {
          Platform.runLater(() -> {
-             stageManager.switchScene(view);
-             Stage stage = stageManager.getPrimaryStage();
+             stageHandler.switchScene(view);
+             Stage stage = stageHandler.getPrimaryStage();
 
              assertEquals(view.getTitle(), stage.getTitle());
              assertEquals(view.getWidth(), stage.getMinWidth(), 0.0D);
@@ -58,7 +59,7 @@ public class StageManagerTest {
     @Test
     public void testShow_NullView() {
         InvalidParameterException exception = assertThrows(
-            InvalidParameterException.class, () -> stageManager.show(null)
+            InvalidParameterException.class, () -> stageHandler.show(null)
         );
         assertEquals("FXML View is null", exception.getMessage());
     }
@@ -67,7 +68,7 @@ public class StageManagerTest {
     public void testShow_EmptyView() {
         FXMLView view = FXMLView.TEST;
         RuntimeException exception = assertThrows(
-            RuntimeException.class, () -> stageManager.show(view)
+            RuntimeException.class, () -> stageHandler.show(view)
         );
         String exp = "Unable to show " + view.getName() + " scene";
         assertEquals(exp, exception.getMessage());
@@ -75,10 +76,10 @@ public class StageManagerTest {
 
      @ParameterizedTest
      @EnumSource(value = FXMLView.class, names = {"TEST", "MAIN", "MENU"}, mode = EnumSource.Mode.EXCLUDE)
-     public void testShowChecker(FXMLView view) {
+     public void testShow(FXMLView view) {
          Platform.runLater(() -> {
-             stageManager.show(view);
-             Stage stage = stageManager.getPrimaryStage();
+             stageHandler.show(view);
+             Stage stage = stageHandler.getPrimaryStage();
 
              assertEquals(view.getTitle(), stage.getTitle());
              assertNotNull(stage.getIcons());
@@ -88,7 +89,7 @@ public class StageManagerTest {
     @Test
     public void testLoadViewNodeHierarchy_NullView() {
         RuntimeException exception = assertThrows(
-            RuntimeException.class, () -> stageManager.loadViewNodeHierarchy(null)
+            RuntimeException.class, () -> stageHandler.loadViewNodeHierarchy(null)
         );
         assertEquals("FXML View is null", exception.getMessage());
     }
@@ -98,7 +99,7 @@ public class StageManagerTest {
         FXMLView view = FXMLView.TEST;
 
         RuntimeException exception = assertThrows(
-            RuntimeException.class, () -> stageManager.loadViewNodeHierarchy(view)
+            RuntimeException.class, () -> stageHandler.loadViewNodeHierarchy(view)
         );
         String expected = "Unable to load FXML view " + view.getFxmlName();
         String expected2 = "The resource bundle contains no values.";
@@ -108,9 +109,9 @@ public class StageManagerTest {
   
     @ParameterizedTest
     @MethodSource("logAndThrowException_data")
-    public void logAndThrowExceptionChecker(String errorMsg, Exception exception, String expectedMsg) {
+    public void testLogAndThrowException(String errorMsg, Exception exception, String expectedMsg) {
         RuntimeException except = assertThrows(
-            RuntimeException.class, () -> stageManager.logAndThrowException(errorMsg, exception)
+            RuntimeException.class, () -> stageHandler.logAndThrowException(errorMsg, exception)
         );
         assertEquals(expectedMsg, except.getMessage());
     }

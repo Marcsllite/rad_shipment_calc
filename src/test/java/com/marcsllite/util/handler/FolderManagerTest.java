@@ -1,5 +1,6 @@
-package com.marcsllite.util;
+package com.marcsllite.util.handler;
 
+import com.marcsllite.util.OS;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
@@ -16,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class FolderManagerTest {
-    FolderManager folderManager;
-    PropManager propManager =  new PropManager() {
+    FolderHandler folderHandler;
+    PropHandler propHandler =  new PropHandler() {
         @Override
         protected Object handleGetObject(String key) {
             switch (key) {
@@ -40,7 +41,7 @@ public class FolderManagerTest {
 
     @BeforeEach
     public void setup() {
-        folderManager = new FolderManager(propManager);
+        folderHandler = new FolderHandler(propHandler);
     }
 
     private boolean deleteDirectory(File directoryToBeDeleted) {
@@ -61,7 +62,7 @@ public class FolderManagerTest {
         String name ="?.\"*.*.?";
 
         RuntimeException exception = assertThrows(
-            RuntimeException.class, () -> folderManager.setDefaultDir(name)
+            RuntimeException.class, () -> folderHandler.setDefaultDir(name)
         );
         
         assertTrue(exception.getMessage().contains("Failed to set up default directory"));
@@ -78,8 +79,8 @@ public class FolderManagerTest {
             assumeTrue(deleteDirectory(dir));
         }
 
-        folderManager.setDefaultDir(name);
-        assertEquals(path, folderManager.getDefaultDir());
+        folderHandler.setDefaultDir(name);
+        assertEquals(path, folderHandler.getDefaultDir());
     }
   
     @Test
@@ -90,18 +91,18 @@ public class FolderManagerTest {
         File toBeCreated = new File(path);
 
         assumeTrue(toBeCreated.mkdirs() || toBeCreated.exists());
-        folderManager.setDefaultDir(name);
-        assertEquals(path, folderManager.getDefaultDir());
+        folderHandler.setDefaultDir(name);
+        assertEquals(path, folderHandler.getDefaultDir());
     }
 
     @ParameterizedTest
-    @MethodSource("testSetDefaultDirException_data")
-    public void testSetDefaultDirExceptionChecker(String dirName, String expected) {
-        folderManager.setDefaultDir(dirName);
-        assertEquals(expected, folderManager.getDefaultDir());
+    @MethodSource("setDefaultDirException_data")
+    public void testSetDefaultDir_Exceptions(String dirName, String expected) {
+        folderHandler.setDefaultDir(dirName);
+        assertEquals(expected, folderHandler.getDefaultDir());
     }
   
-    private static Object[] testSetDefaultDirException_data() {
+    private static Object[] setDefaultDirException_data() {
         String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + mainFolder;
         return new Object[] {
             new Object[] { null, path },
@@ -110,29 +111,29 @@ public class FolderManagerTest {
     }
 
     @Test
-    public void setDataFolderExceptionChecker() {
+    public void testSetDataFolder_Exceptions() {
         assertThrows(
-            NullPointerException.class, () -> folderManager.setDataFolder(appFolder, null)
+            NullPointerException.class, () -> folderHandler.setDataFolder(appFolder, null)
         );
     }
 
     @Test
-    public void setDataFolder_InvalidName() {
+    public void testSetDataFolder_InvalidName() {
         String expected = System.getProperty("user.home") + File.separator +
                             appFolder + File.separator +
                             "logs";
-        folderManager.setDataFolder(null, OS.Unix);
-        assertEquals(expected, folderManager.getDataFolder());
+        folderHandler.setDataFolder(null, OS.Unix);
+        assertEquals(expected, folderHandler.getDataFolder());
 
-        folderManager.setDataFolder("", OS.Unix);
-        assertEquals(expected, folderManager.getDataFolder());
+        folderHandler.setDataFolder("", OS.Unix);
+        assertEquals(expected, folderHandler.getDataFolder());
     }
 
      @ParameterizedTest
      @MethodSource("setDataFolder_data")
-     public void setDataFolderChecker(String name, String osVersion, String expected) {
-        folderManager.setDataFolder(name, OS.valueOf(osVersion));
-        assertEquals(expected, folderManager.getDataFolder());
+     public void testSetDataFolder(String name, String osVersion, String expected) {
+        folderHandler.setDataFolder(name, OS.valueOf(osVersion));
+        assertEquals(expected, folderHandler.getDataFolder());
      }
 
     private static Object[] setDataFolder_data() {

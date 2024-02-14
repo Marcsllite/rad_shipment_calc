@@ -1,16 +1,17 @@
-package com.marcsllite.util;
+package com.marcsllite.util.factory;
 
-import com.marcsllite.MainController;
-import com.marcsllite.MenuPaneController;
-import com.marcsllite.PrimaryController;
-import com.marcsllite.SecondaryController;
+import com.marcsllite.controller.MainController;
+import com.marcsllite.controller.MenuPaneController;
+import com.marcsllite.controller.PrimaryController;
+import com.marcsllite.controller.SecondaryController;
+import com.marcsllite.util.handler.PropHandler;
 import javafx.util.Callback;
 
 public class ControllerFactory implements Callback<Class<?>, Object> {
-    final PropManager propManager;
+    final PropHandler propHandler;
 
-    ControllerFactory(PropManager propManager) {
-        this.propManager = propManager;
+    public ControllerFactory(PropHandler propHandler) {
+        this.propHandler = propHandler;
     }
 
     @Override
@@ -21,7 +22,7 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
         if(name.equals(MainController.class.getName())) {
             ret = MainController.getInstance();
         } else if(name.equals(MenuPaneController.class.getName())) {
-            ret = new MenuPaneController(propManager);
+            ret = new MenuPaneController(propHandler);
         } else if(name.equals(PrimaryController.class.getName())) {
             ret = new PrimaryController();
         } else if(name.equals(SecondaryController.class.getName())) {

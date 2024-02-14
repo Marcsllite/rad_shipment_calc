@@ -1,4 +1,4 @@
-package com.marcsllite.util;
+package com.marcsllite.util.handler;
 
 import javafx.scene.image.Image;
 
@@ -14,7 +14,7 @@ public final class ImageHandler {
 
     public final String val;
 
-    private Colors(String val) {
+    Colors(String val) {
       this.val = val;
     }
   }

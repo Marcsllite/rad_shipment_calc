@@ -1,5 +1,6 @@
-package com.marcsllite;
+package com.marcsllite.controller;
 
+import com.marcsllite.GUITest;
 import com.marcsllite.util.FXIds;
 import com.marcsllite.util.FXMLView;
 import javafx.stage.Stage;
@@ -11,7 +12,7 @@ import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.base.NodeMatchers;
 
 @ExtendWith(ApplicationExtension.class)
-public class AppTest extends GUITest {
+public class MainControllerGUITest extends GUITest {
 
     @Start
     void start(Stage stage) {

@@ -1,6 +1,8 @@
-package com.marcsllite.util;
+package com.marcsllite.util.handler;
 
+import com.marcsllite.util.OS;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PropManagerTest {
     AbstractMap<String, String> stringsMap = new HashMap<>();
-    PropManager manager =  new PropManager() {
+    PropHandler manager =  new PropHandler() {
         @Override
         protected Object handleGetObject(String key) {
             if(key == null || key.isBlank()) return "";
@@ -36,7 +38,7 @@ class PropManagerTest {
         }
     };
 
-    void init() {
+    private void init() {
         stringsMap.put("fakeKey", "");
         stringsMap.put("replacePropStringRegex", "(\\{\\d+})");
         stringsMap.put("properMessage", "This is a proper message");
@@ -69,7 +71,7 @@ class PropManagerTest {
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {"invalid/name"})
-    void setPropExceptionChecker(String name) {
+    public void testSetProp_InvalidName(String name) {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> manager.setProp(name)
         );
@@ -78,15 +80,15 @@ class PropManagerTest {
     }
   
     @Test
-    void getOs_NullOS() {
+    public void testGetOs_NullOS() {
         manager.setOs(null);
         assertNull(manager.getOS());
     }
 
     @Test
-    void parseOSChecker() {
+    public void testParseOS() {
         String osName = "win";
-        assertEquals(OS.Windows, manager.parseOS(osName));
+        Assertions.assertEquals(OS.Windows, manager.parseOS(osName));
 
         osName = "mac";
         assertEquals(OS.MAC, manager.parseOS(osName));
@@ -110,14 +112,14 @@ class PropManagerTest {
     }
   
     @Test
-    void parseStringToReplace() {
+    public void testParseStringToReplace_NullSearchString() {
         assertEquals(new ArrayList<String>(), 
         manager.parseStringsToReplace(null));
     }
   
     @ParameterizedTest
     @MethodSource("replacePropString_data")
-    void replacePropStringChecker(String key, String expected, String[] replacement) {
+    public void testReplacePropString(String key, String expected, String[] replacement) {
         if (replacement != null) {
             switch (replacement.length) {
                 case 1:
@@ -179,7 +181,7 @@ class PropManagerTest {
   
     @ParameterizedTest
     @MethodSource("handleGetObject_data")
-    void handleGetObjectChecker(String propName, String expected) {
+    public void testHandleGetObject(String propName, String expected) {
         assertEquals(expected, manager.getString(propName));
     }
   
@@ -195,7 +197,7 @@ class PropManagerTest {
 
     @ParameterizedTest
     @MethodSource("getList_data")
-    void getListChecker(String listName, List<String> expected) {
+    public void testGetList(String listName, List<String> expected) {
         assertEquals(expected, manager.getList(listName));
     }
 
@@ -235,7 +237,7 @@ class PropManagerTest {
   
     @ParameterizedTest
     @CsvSource({"fakeKey", "replacePropString_noReplacements"})
-    void getDoubleExceptionChecker(String propName) {
+    public void testGetDouble_InvalidPropName(String propName) {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> manager.getDouble(propName)
         );
@@ -243,12 +245,12 @@ class PropManagerTest {
     }
   
     @ParameterizedTest
-    @MethodSource("getNumber_data")
-    void getNumberChecker(String propName, double expected) {
+    @MethodSource("getDouble_data")
+    public void testGetDouble(String propName, double expected) {
         assertEquals(expected, manager.getDouble(propName));
     }
   
-    private static Object[] getNumber_data() {
+    private static Object[] getDouble_data() {
         return new Object[] { 
             new Object[] { null, Double.MIN_VALUE },
             new Object[] { "", Double.MIN_VALUE },
@@ -258,7 +260,7 @@ class PropManagerTest {
   
     @ParameterizedTest
     @MethodSource("getFileText_data")
-    void getFileTextChecker(String file, String expected) {
+    public void testGetFileText(String file, String expected) {
         assertEquals(expected, manager.getFileText(file));
     }
   

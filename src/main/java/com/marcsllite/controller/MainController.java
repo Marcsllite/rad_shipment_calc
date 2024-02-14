@@ -1,6 +1,5 @@
-package com.marcsllite;
+package com.marcsllite.controller;
 
-import com.marcsllite.util.BaseController;
 import javafx.fxml.FXML;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -39,7 +38,6 @@ public class MainController {
 
     /**
      * Function to initialize the fxml controllers this
-     * class has
      * 
      * @param c the base controller to be register
      */

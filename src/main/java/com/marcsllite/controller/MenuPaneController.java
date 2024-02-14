@@ -1,10 +1,9 @@
-package com.marcsllite;
+package com.marcsllite.controller;
 
-import com.marcsllite.util.BaseController;
-import com.marcsllite.util.ImageHandler;
-import com.marcsllite.util.PropManager;
+import com.marcsllite.util.handler.ImageHandler;
+import com.marcsllite.util.handler.PropHandler;
 
-import com.marcsllite.util.PropManagerControl;
+import com.marcsllite.util.factory.PropHandlerFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -28,7 +27,7 @@ public class MenuPaneController extends BaseController {
     @FXML protected ImageView imgViewReference;
 
     private static final Logger logr = LogManager.getLogger();
-    private final PropManager propManager;
+    private final PropHandler propHandler;
     private final ImageHandler.Colors CURRENT_COLOR = ImageHandler.Colors.UML_BLUE;  // color to make the button corresponding to the current page
     private final ImageHandler.Colors IDLE_COLOR = ImageHandler.Colors.DEFAULT_GREY;  // color to make idle buttons
     private final ImageHandler.Colors HOVER_COLOR = ImageHandler.Colors.DEFAULT_WHITE;  // color to make buttons when mouse is hovering over
@@ -36,11 +35,11 @@ public class MenuPaneController extends BaseController {
                               // 0 = Shipment, 1 = Reference
 
     public MenuPaneController() {
-        this((PropManager) ResourceBundle.getBundle(PropManager.PROP_NAME, new PropManagerControl()));
+        this((PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()));
     }
 
-    public MenuPaneController(PropManager propManager) {
-        this.propManager = propManager;
+    public MenuPaneController(PropHandler propHandler) {
+        this.propHandler = propHandler;
     }
 
     /**
@@ -48,6 +47,7 @@ public class MenuPaneController extends BaseController {
      */
     @Override
     public void initialize() {
+        super.initialize();
         mouseLogoExit(); 
         mouseShipmentExit();
         mouseReferenceExit();
@@ -95,8 +95,8 @@ public class MenuPaneController extends BaseController {
      */
     @FXML protected void logoImgViewHandler(){
         logr.info("User clicked the UMass logo in the menu pane");
-
-        // propManager.navigateToLink("https://www.uml.edu/");  // navigating to UMass Lowell website
+        // TODO: implement clicking on menu logo
+        // propHandler.navigateToLink("https://www.uml.edu/");  // navigating to UMass Lowell website
     }
 
     /**
@@ -152,7 +152,7 @@ public class MenuPaneController extends BaseController {
      * Helper function to un-mark the previously marked button
      */
     protected void unsetCurrentButton() {
-        currentBtn = (int) propManager.getDouble("defaultInt");
+        currentBtn = (int) propHandler.getDouble("defaultNum");
 
         // changing the color of the buttons to the idle color
         setButtonColor(btnShipment, IDLE_COLOR);  // setting the single button and icon to be the current color

@@ -1,5 +1,6 @@
 package com.marcsllite.util;
 
+import com.marcsllite.util.handler.ImageHandler;
 import javafx.scene.image.Image;
 
 @SuppressWarnings("java:S116")

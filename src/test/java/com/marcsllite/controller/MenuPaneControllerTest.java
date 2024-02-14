@@ -1,6 +1,7 @@
-package com.marcsllite;
+package com.marcsllite.controller;
 
-import com.marcsllite.util.ImageHandler;
+import com.marcsllite.GUITest;
+import com.marcsllite.util.handler.ImageHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,12 +10,12 @@ import java.security.InvalidParameterException;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MenuPaneControllerTest {
+class MenuPaneControllerTest {
     MenuPaneController c;
 
     @BeforeEach
     public void setUp() {
-        c = new MenuPaneController(GUITest.propManager);
+        c = new MenuPaneController(GUITest.propHandler);
     }
 
     @Test

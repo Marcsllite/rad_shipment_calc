@@ -1,6 +1,7 @@
-package com.marcsllite.util;
+package com.marcsllite.util.handler;
 
 import com.marcsllite.App;
+import com.marcsllite.util.OS;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,26 +23,26 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-public class PropManager extends ResourceBundle {
+public class PropHandler extends ResourceBundle {
     private static final Logger logr = LogManager.getLogger();
     public static final String PROP_NAME = "properties";
     private String os;
     private Properties prop;
 
-    public PropManager() {
+    public PropHandler() {
         setOs(System.getProperty("os.name").toLowerCase());
     }
 
-    public PropManager(InputStream stream) {
+    public PropHandler(InputStream stream) {
         this();
         setProp(stream);
     }
 
 //    protected static class SingletonHelper {
-//        private static final PropManager INSTANCE = new PropManager();
+//        private static final PropHandler INSTANCE = new PropHandler();
 //    }
 //
-//    public static PropManager getInstance() {
+//    public static PropHandler getInstance() {
 //        return SingletonHelper.INSTANCE;
 //    }
 

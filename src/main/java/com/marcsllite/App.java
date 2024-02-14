@@ -1,8 +1,8 @@
 package com.marcsllite;
 
 import com.marcsllite.util.FXMLView;
-import com.marcsllite.util.PropManager;
-import com.marcsllite.util.StageManager;
+import com.marcsllite.util.handler.PropHandler;
+import com.marcsllite.util.handler.StageHandler;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
@@ -12,31 +12,31 @@ import javafx.stage.Stage;
  */
 public class App extends Application {
 
-    private StageManager stageManager;
+    private StageHandler stageHandler;
 
     @Override
     public void start(Stage stage) {
-        stageManager = new StageManager(stage, null);
-        stageManager.show(FXMLView.MAIN);
+        stageHandler = new StageHandler(stage, null);
+        stageHandler.show(FXMLView.MAIN);
     }
 
     /**
-     * Getter function to get the StageManager
+     * Getter function to get the StageHandler
      *
-     * @return the StageManager
+     * @return the StageHandler
      */
-    public StageManager getStageManager() { return stageManager; }
+    public StageHandler getStageManager() { return stageHandler; }
 
     /**
-     * Helper class to initialize application for testing using StageManager implementation
+     * Helper class to initialize application for testing using StageHandler implementation
      * Adds the children of the given FXMLView to this javafx.scene.Parent
      */
     public static class AppPane extends Parent {
-        public AppPane(FXMLView view, PropManager propManager) {
+        public AppPane(FXMLView view, PropHandler propHandler) {
             super();
-            StageManager stageManager = new StageManager(null, propManager);
+            StageHandler stageHandler = new StageHandler(null, propHandler);
             getChildren().addAll(
-                stageManager.loadViewNodeHierarchy(view).getChildrenUnmodifiable()
+                stageHandler.loadViewNodeHierarchy(view).getChildrenUnmodifiable()
             );
         }
     }

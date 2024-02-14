@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
-<GridPane fx:id="menuPane" nodeOrientation="LEFT_TO_RIGHT" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #232323;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.marcsllite.MenuPaneController">
+<GridPane fx:id="menuPane" nodeOrientation="LEFT_TO_RIGHT" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #232323;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.marcsllite.controller.MenuPaneController">
    <columnConstraints>
       <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
    </columnConstraints>

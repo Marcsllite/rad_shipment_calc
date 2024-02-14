@@ -1,6 +1,5 @@
-package com.marcsllite;
+package com.marcsllite.controller;
 
-import com.marcsllite.util.BaseController;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
 

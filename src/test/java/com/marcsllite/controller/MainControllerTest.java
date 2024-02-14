@@ -1,6 +1,6 @@
-package com.marcsllite;
+package com.marcsllite.controller;
 
-import com.marcsllite.util.BaseController;
+import com.marcsllite.GUITest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,7 +38,7 @@ public class MainControllerTest {
 
     @Test
     public void testRegisterController_MenuPaneController() {
-        MenuPaneController controller = new MenuPaneController(GUITest.propManager);
+        MenuPaneController controller = new MenuPaneController(GUITest.propHandler);
         
         MainController.getInstance().registerController(controller);
 
