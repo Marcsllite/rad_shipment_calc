@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class IsotopeModelId implements Serializable {
-    private static final long serialVersionUID = -46943743243796L;
+    private static final long serialVersionUID = 4570361434780825099L;
     private String name;
     private String abbr;
 

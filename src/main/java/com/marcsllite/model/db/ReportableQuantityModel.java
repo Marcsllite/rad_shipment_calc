@@ -16,6 +16,7 @@ import jakarta.persistence.Table;
             "as select * from csvread(" + ReportableQuantityModel.REPORTABLE_QTY_CSV_PATH + ")")
 )
 public class ReportableQuantityModel extends BaseModel {
+    private static final long serialVersionUID = 1479886818838786038L;
     public static final String CREATE_TABLE = "ReportableQuantityModel.createTable";
     public static final String REPORTABLE_QTY_CSV_PATH = "classpath:csv/Reportable_Quantities.csv";
 

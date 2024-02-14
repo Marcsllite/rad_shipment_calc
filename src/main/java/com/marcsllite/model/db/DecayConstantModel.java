@@ -18,6 +18,7 @@ import jakarta.persistence.Table;
         query = "select Value from DECAY_CONSTANT where Abbr=:abbr")
 })
 public class DecayConstantModel extends BaseModel {
+    private static final long serialVersionUID = 5704920375115196514L;
     public static final String CREATE_TABLE = "DecayConstantModel.createTable";
     public static final String DECAY_CONST_CSV_PATH = "classpath:csv/Decay_Constant.csv";
     public static final String GET_DECAY_CONST = "DecayConstantModel.getDecayConstant";

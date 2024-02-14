@@ -4,22 +4,26 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.StaleStateException;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
-public class AbstractDao<ENTITY, ID> {
+public abstract class AbstractDao<ENTITY, ID> implements Dao<ENTITY, ID> {
     @PersistenceContext
     private EntityManager em;
     private final Class<ENTITY> entityClass;
     private static final Logger logr = LogManager.getLogger();
 
     private static final String COUNT_ENTITIES_QUERY = "select count(a) from %s as a";
+    private static final String QUERY_ALL = "select a from %s as a";
 
     public AbstractDao() {
         entityClass = (Class<ENTITY>) (
@@ -29,8 +33,10 @@ public class AbstractDao<ENTITY, ID> {
 
     public AbstractDao(EntityManager em) {
         this();
-
+        setEntityManager(em);
     }
+
+    abstract void createTableFromCSV(String csvPath);
 
     public ENTITY findById(ID id) {
         ENTITY entity = em.find(entityClass, id);
@@ -41,6 +47,26 @@ public class AbstractDao<ENTITY, ID> {
             throw nre;
         }
         return entity;
+    }
+
+    public List<ENTITY> findAll() {
+        String query = String.format(QUERY_ALL, getEntityName());
+        return em.createQuery(query).getResultList();
+    }
+
+    public List<ENTITY> findSingleResult(Query query) {
+        List<ENTITY> res = query.getResultList();
+        if(res.isEmpty()) {
+            var nre = new NoResultException();
+            logr.throwing(nre);
+            throw nre;
+        }
+        if(res.size() > 1) {
+            var nure = new NonUniqueResultException();
+            logr.throwing(nure);
+            throw nure;
+        }
+        return res;
     }
 
     public int count() {

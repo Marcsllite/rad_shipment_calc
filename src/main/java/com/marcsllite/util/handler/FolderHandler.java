@@ -63,14 +63,14 @@ public class FolderHandler {
         if (name == null || name.isEmpty()) name = propHandler.getString("appFolderName");
 
         switch(currentOS){
-            case Windows:
+            case WINDOWS:
                 dirLoc = System.getProperty("user.home") + File.separator +
                         "AppData" + File.separator +
                         "Local" + File.separator +
                         name + File.separator +
                         "logs";
                 break;
-            case MAC: case Unix: case Solaris:
+            case MAC: case UNIX: case SOLARIS:
                 dirLoc = System.getProperty("user.home") + File.separator +
                         name + File.separator +
                         "logs";

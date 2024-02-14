@@ -23,9 +23,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class PropManagerTest {
+class PropHandlerTest {
     AbstractMap<String, String> stringsMap = new HashMap<>();
-    PropHandler manager =  new PropHandler() {
+    PropHandler handler =  new PropHandler() {
         @Override
         protected Object handleGetObject(String key) {
             if(key == null || key.isBlank()) return "";
@@ -43,7 +43,7 @@ class PropManagerTest {
         stringsMap.put("replacePropStringRegex", "(\\{\\d+})");
         stringsMap.put("properMessage", "This is a proper message");
         stringsMap.put("properException", "This is a proper Exception");
-        stringsMap.put("replacePropString_noReplacements", "This string doesn't contain any replacements");
+        stringsMap.put("replacePropString_noReplacements", "This string doesn’t contain any replacements");
         stringsMap.put("replacePropString_oneReplacement", "This string contains {0} replacements");
         stringsMap.put("replacePropString_wrongNumber", "This string contains the incorrect {1} for replacement");
         stringsMap.put("replacePropString_twoReplacements", "This string contains {0}, {1} replacements");
@@ -73,7 +73,7 @@ class PropManagerTest {
     @ValueSource(strings = {"invalid/name"})
     public void testSetProp_InvalidName(String name) {
         InvalidParameterException exception = assertThrows(
-            InvalidParameterException.class, () -> manager.setProp(name)
+            InvalidParameterException.class, () -> handler.setProp(name)
         );
         
         assertTrue(exception.getMessage().contains("Failed to set properties from resource bundle: " + name));
@@ -81,64 +81,40 @@ class PropManagerTest {
   
     @Test
     public void testGetOs_NullOS() {
-        manager.setOs(null);
-        assertNull(manager.getOS());
+        handler.setOs(null);
+        assertNull(handler.getOS());
     }
 
     @Test
     public void testParseOS() {
         String osName = "win";
-        Assertions.assertEquals(OS.Windows, manager.parseOS(osName));
+        Assertions.assertEquals(OS.WINDOWS, handler.parseOS(osName));
 
         osName = "mac";
-        assertEquals(OS.MAC, manager.parseOS(osName));
+        assertEquals(OS.MAC, handler.parseOS(osName));
 
         osName = "nix";
-        assertEquals(OS.Unix, manager.parseOS(osName));
+        assertEquals(OS.UNIX, handler.parseOS(osName));
 
         osName = "nux";
-        assertEquals(OS.Unix, manager.parseOS(osName));
+        assertEquals(OS.UNIX, handler.parseOS(osName));
 
         osName = "aix";
-        assertEquals(OS.Unix, manager.parseOS(osName));
+        assertEquals(OS.UNIX, handler.parseOS(osName));
 
         osName = "sunos";
-        assertEquals(OS.Solaris, manager.parseOS(osName));
+        assertEquals(OS.SOLARIS, handler.parseOS(osName));
 
         osName = "fake";
-        assertEquals(OS.NOT_SUPPORTED, manager.parseOS(osName));
+        assertEquals(OS.NOT_SUPPORTED, handler.parseOS(osName));
 
-        assertEquals(OS.NOT_SUPPORTED, manager.parseOS(null));
-    }
-  
-    @Test
-    public void testParseStringToReplace_NullSearchString() {
-        assertEquals(new ArrayList<String>(), 
-        manager.parseStringsToReplace(null));
+        assertEquals(OS.NOT_SUPPORTED, handler.parseOS(null));
     }
   
     @ParameterizedTest
     @MethodSource("replacePropString_data")
     public void testReplacePropString(String key, String expected, String[] replacement) {
-        if (replacement != null) {
-            switch (replacement.length) {
-                case 1:
-                    assertEquals(expected, manager.replacePropString(key, replacement[0]));
-                    break;
-                case 2:
-                    assertEquals(expected, manager.replacePropString(key, replacement[0], replacement[1]));
-                    break;
-                case 3:
-                    assertEquals(expected, manager.replacePropString(key, replacement[0], replacement[1], replacement[2]));
-                    break;
-                case 4:
-                    assertEquals(expected, manager.replacePropString(key, replacement[0], replacement[1], replacement[2], replacement[3]));
-                    break;
-            } 
-        } else {
-            assertEquals(expected, manager.replacePropString(key));
-            assertEquals(expected, manager.replacePropString(key, (String[]) null));
-        } 
+        assertEquals(expected, handler.replacePropString(key, replacement));
     }
   
     private static Object[] replacePropString_data() {
@@ -152,24 +128,24 @@ class PropManagerTest {
             new Object[] { "replacePropString_noText", "", new String[] { null } },
             new Object[] { "replacePropString_noText", "", null },
             new Object[] { "replacePropString_noText", "", new String[] { "ONE" } },
-            new Object[] { "replacePropString_noReplacements", "This string doesn't contain any replacements", new String[] { null } },
-            new Object[] { "replacePropString_noReplacements", "This string doesn't contain any replacements", null },
-            new Object[] { "replacePropString_noReplacements", "This string doesn't contain any replacements", new String[] { "ONE" } },
-            new Object[] { "replacePropString_oneReplacement", "This string contains {0} replacements", new String[] { null } },
+            new Object[] { "replacePropString_noReplacements", "This string doesn’t contain any replacements", new String[] { null } },
+            new Object[] { "replacePropString_noReplacements", "This string doesn’t contain any replacements", null },
+            new Object[] { "replacePropString_noReplacements", "This string doesn’t contain any replacements", new String[] { "ONE" } },
+            new Object[] { "replacePropString_oneReplacement", "This string contains null replacements", new String[] { null } },
             new Object[] { "replacePropString_oneReplacement", "This string contains {0} replacements", null },
             new Object[] { "replacePropString_oneReplacement", "This string contains ONE replacements", new String[] { "ONE" } },
             new Object[] { "replacePropString_oneReplacement", "This string contains ONE replacements", new String[] { "ONE", "TWO" } },
             new Object[] { "replacePropString_wrongNumber", "This string contains the incorrect {1} for replacement", new String[] { null } },
             new Object[] { "replacePropString_wrongNumber", "This string contains the incorrect {1} for replacement", null },
-            new Object[] { "replacePropString_wrongNumber", "This string contains the incorrect ONE for replacement", new String[] { "ONE" } },
-            new Object[] { "replacePropString_wrongNumber", "This string contains the incorrect ONE for replacement", new String[] { "ONE", "TWO" } }, 
+            new Object[] { "replacePropString_wrongNumber", "This string contains the incorrect {1} for replacement", new String[] { "ONE" } },
+            new Object[] { "replacePropString_wrongNumber", "This string contains the incorrect TWO for replacement", new String[] { "ONE", "TWO" } },
             new Object[] { "replacePropString_oneSameReplacements", "This string contains a replacement here: ONE, and the same replacement here: ONE", new String[] { "ONE" } },
-            new Object[] { "replacePropString_twoReplacements", "This string contains {0}, {1} replacements", new String[] { null } },
+            new Object[] { "replacePropString_twoReplacements", "This string contains null, {1} replacements", new String[] { null } },
             new Object[] { "replacePropString_twoReplacements", "This string contains {0}, {1} replacements", null },
             new Object[] { "replacePropString_twoReplacements", "This string contains ONE, {1} replacements", new String[] { "ONE" } },
             new Object[] { "replacePropString_twoReplacements", "This string contains ONE, TWO replacements", new String[] { "ONE", "TWO" } },
             new Object[] { "replacePropString_twoReplacements", "This string contains ONE, TWO replacements", new String[] { "ONE", "TWO", "THREE" } },
-            new Object[] { "replacePropString_threeReplacements", "This string contains {0}, {1}, {2} replacements", new String[] { null } },
+            new Object[] { "replacePropString_threeReplacements", "This string contains null, {1}, {2} replacements", new String[] { null } },
             new Object[] { "replacePropString_threeReplacements", "This string contains {0}, {1}, {2} replacements", null },
             new Object[] { "replacePropString_threeReplacements", "This string contains ONE, {1}, {2} replacements", new String[] { "ONE" } },
             new Object[] { "replacePropString_threeReplacements", "This string contains ONE, TWO, {2} replacements", new String[] { "ONE", "TWO" } }, 
@@ -182,7 +158,7 @@ class PropManagerTest {
     @ParameterizedTest
     @MethodSource("handleGetObject_data")
     public void testHandleGetObject(String propName, String expected) {
-        assertEquals(expected, manager.getString(propName));
+        assertEquals(expected, handler.getString(propName));
     }
   
     private static Object[] handleGetObject_data() {
@@ -198,7 +174,7 @@ class PropManagerTest {
     @ParameterizedTest
     @MethodSource("getList_data")
     public void testGetList(String listName, List<String> expected) {
-        assertEquals(expected, manager.getList(listName));
+        assertEquals(expected, handler.getList(listName));
     }
 
     private static Object[] getList_data() {
@@ -239,7 +215,7 @@ class PropManagerTest {
     @CsvSource({"fakeKey", "replacePropString_noReplacements"})
     public void testGetDouble_InvalidPropName(String propName) {
         InvalidParameterException exception = assertThrows(
-            InvalidParameterException.class, () -> manager.getDouble(propName)
+            InvalidParameterException.class, () -> handler.getDouble(propName)
         );
         assertTrue(exception.getMessage().contains("is not a number"));
     }
@@ -247,7 +223,7 @@ class PropManagerTest {
     @ParameterizedTest
     @MethodSource("getDouble_data")
     public void testGetDouble(String propName, double expected) {
-        assertEquals(expected, manager.getDouble(propName));
+        assertEquals(expected, handler.getDouble(propName));
     }
   
     private static Object[] getDouble_data() {
@@ -261,7 +237,7 @@ class PropManagerTest {
     @ParameterizedTest
     @MethodSource("getFileText_data")
     public void testGetFileText(String file, String expected) {
-        assertEquals(expected, manager.getFileText(file));
+        assertEquals(expected, handler.getFileText(file));
     }
   
     private static Object[] getFileText_data() {

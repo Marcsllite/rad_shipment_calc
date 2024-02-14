@@ -122,10 +122,10 @@ public class FolderManagerTest {
         String expected = System.getProperty("user.home") + File.separator +
                             appFolder + File.separator +
                             "logs";
-        folderHandler.setDataFolder(null, OS.Unix);
+        folderHandler.setDataFolder(null, OS.UNIX);
         assertEquals(expected, folderHandler.getDataFolder());
 
-        folderHandler.setDataFolder("", OS.Unix);
+        folderHandler.setDataFolder("", OS.UNIX);
         assertEquals(expected, folderHandler.getDataFolder());
     }
 
@@ -147,10 +147,10 @@ public class FolderManagerTest {
                             name + File.separator +
                             "logs";
         return new Object[] {
-            new Object[] { name, OS.Windows.name(), winExp },
+            new Object[] { name, OS.WINDOWS.name(), winExp },
             new Object[] { name, OS.MAC.name(), otherExp },
-            new Object[] { name, OS.Unix.name(), otherExp },
-            new Object[] { name, OS.Solaris.name(), otherExp },
+            new Object[] { name, OS.UNIX.name(), otherExp },
+            new Object[] { name, OS.SOLARIS.name(), otherExp },
             new Object[] { name, OS.NOT_SUPPORTED.name(), null}
         };
     }

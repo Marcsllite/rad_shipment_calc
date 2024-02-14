@@ -16,6 +16,7 @@ import jakarta.persistence.Table;
             "as select * from csvread(" + ExemptLimitModel.EXEMPT_LIM_CSV_PATH + ")")
 )
 public class ExemptLimitModel extends BaseModel {
+    private static final long serialVersionUID = -5142275333078025319L;
     public static final String CREATE_TABLE = "ExemptLimitModel.createTable";
     public static final String EXEMPT_LIM_CSV_PATH = "classpath:csv/Exempt_limit(Bq).csv";
 

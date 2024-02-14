@@ -16,6 +16,36 @@ public final class Conversions {
      *
      * NOTE: Accuracy is set by context
      */
+    public enum SIPrefix {
+        YOTTA("Yotta (Y)"),
+        ZETTA("Zetta (Z)"),
+        EXA("Exa (E)"),
+        PETA("Peta (P)"),
+        TERA("Tera (T)"),
+        GIGA("Giga (G)"),
+        MEGA("Mega (M)"),
+        KILO("Kilo (k)"),
+        HECTO("Hecto (h)"),
+        DEKA("Deka (da)"),
+        BASE("----"),
+        DECI("Deci (d)"),
+        CENTI("Centi (c)"),
+        MILLI("Milli (m)"),
+        MICRO("Micro (\u00B5)"),
+        NANO("Nano (n)"),
+        PICO("Pico (p)"),
+        FEMTO("Femto (f)"),
+        ATTO("Atto (a)"),
+        ZEPTO("Zepto (z)"),
+        YOCTO("Yocto (y)");
+
+        public final String val;
+
+        SIPrefix(String val) {
+            this.val = val;
+        }
+    }
+    
     // Declaring variables
     public static final MathContext context = new MathContext(2);
     private static final BigDecimal YOTTA = BigDecimal.TEN.pow(24, context);   // Y
@@ -48,89 +78,68 @@ public final class Conversions {
     /*////////////////////////////////////////////////// HELPERS /////////////////////////////////////////////////////*/
 
     /**
-     * Helper function to convert a given value to it's base value using its starting si prefix
+     * Helper function to convert a given value to it's base value using its starting SI prefix
      *
      * @param value the value to be converted
-     * @param prefixIndex the index of the selected si prefix
+     * @param prefix the starting SI prefix
      * @return the converted base value
      */
-    public static BigDecimal convertToBase(BigDecimal value, int prefixIndex) {
-        switch(prefixIndex) {
-            case 0:  // user selected yotta
-                return Conversions.yottaToBase(value);
-            case 1:  // user selected zetta
-                return Conversions.zettaToBase(value);
-            case 2:  // user selected exa
-                return Conversions.exaToBase(value);
-            case 3:  // user selected peta
-                return Conversions.petaToBase(value);
-            case 4:  // user selected tera
-                return Conversions.teraToBase(value);
-            case 5:  // user selected giga
-                return Conversions.gigaToBase(value);
-            case 6:  // user selected mega
-                return Conversions.megaToBase(value);
-            case 7:  // user selected kilo
-                return Conversions.kiloToBase(value);
-            case 8:  // user selected hecto
-                return Conversions.hectoToBase(value);
-            case 9:  // user selected deka
-                return Conversions.dekaToBase(value);
-            case 11:  // user selected deci
-                return Conversions.deciToBase(value);
-            case 12:  // user selected centi
-                return Conversions.centiToBase(value);
-            case 13:  // user selected milli
-                return Conversions.milliToBase(value);
-            case 14:  // user selected micro
-                return Conversions.microToBase(value);
-            case 15:  // user selected nano
-                return Conversions.nanoToBase(value);
-            case 16:  // user selected pico
-                return Conversions.picoToBase(value);
-            case 17:  // user selected femto
-                return Conversions.femtoToBase(value);
-            case 18:  // user selected atto
-                return Conversions.attoToBase(value);
-            case 19:  // user selected zepto
-                return Conversions.zeptoToBase(value);
-            case 20:  // user selected yocto
-                return Conversions.yoctoToBase(value);
-            default: // user selected base or invalid index
-                return value;
+    public static BigDecimal convertToBase(BigDecimal value, SIPrefix prefix) {
+        if(prefix == null) throw new InvalidParameterException("Invalid SI Prefix");
+        switch(prefix) {
+            case YOTTA: return Conversions.yottaToBase(value);
+            case ZETTA: return Conversions.zettaToBase(value);
+            case EXA: return Conversions.exaToBase(value);
+            case PETA: return Conversions.petaToBase(value);
+            case TERA: return Conversions.teraToBase(value);
+            case GIGA: return Conversions.gigaToBase(value);
+            case MEGA: return Conversions.megaToBase(value);
+            case KILO: return Conversions.kiloToBase(value);
+            case HECTO: return Conversions.hectoToBase(value);
+            case DEKA: return Conversions.dekaToBase(value);
+            case DECI: return Conversions.deciToBase(value);
+            case CENTI: return Conversions.centiToBase(value);
+            case MILLI: return Conversions.milliToBase(value);
+            case MICRO: return Conversions.microToBase(value);
+            case NANO: return Conversions.nanoToBase(value);
+            case PICO: return Conversions.picoToBase(value);
+            case FEMTO: return Conversions.femtoToBase(value);
+            case ATTO: return Conversions.attoToBase(value);
+            case ZEPTO: return Conversions.zeptoToBase(value);
+            case YOCTO: return Conversions.yoctoToBase(value);
+            default: return value;
         }
     }
 
     /**
-     * Helper function to convert a given value to it's micro value using its starting si prefix
+     * Helper function to convert a given value to it's micro value using its starting SI prefix
      *
      * @param value the value to be converted
-     * @param siPrefix the current si prefix of the given value
+     * @param prefix the current si prefix of the given value
      * @return the converted micro value
      */
-    public static BigDecimal convertToMicro(BigDecimal value, String siPrefix) {
-        if(siPrefix == null || siPrefix.isBlank()) throw new InvalidParameterException("Invalid SI Prefix");
-
-        switch(siPrefix) {
-            case "Yotta (Y)": return Conversions.baseToMicro(Conversions.yottaToBase(value));
-            case "Zetta (Z)": return Conversions.baseToMicro(Conversions.zettaToBase(value));
-            case "Exa (E)": return Conversions.baseToMicro(Conversions.exaToBase(value));
-            case "Peta (P)": return Conversions.baseToMicro(Conversions.petaToBase(value));
-            case "Tera (T)": return Conversions.baseToMicro(Conversions.teraToBase(value));
-            case "Giga (G)": return Conversions.baseToMicro(Conversions.gigaToBase(value));
-            case "Mega (M)": return Conversions.baseToMicro(Conversions.megaToBase(value));
-            case "Kilo (k)": return Conversions.baseToMicro(Conversions.kiloToBase(value));
-            case "Hecto (h)": return Conversions.baseToMicro(Conversions.hectoToBase(value));
-            case "Deka (da)": return Conversions.baseToMicro(Conversions.dekaToBase(value));
-            case "Deci (d)": return Conversions.baseToMicro(Conversions.deciToBase(value));
-            case "Centi (c)": return Conversions.baseToMicro(Conversions.centiToBase(value));
-            case "Milli (m)": return Conversions.baseToMicro(Conversions.milliToBase(value));
-            case "Nano (n)": return Conversions.baseToMicro(Conversions.nanoToBase(value));
-            case "Pico (p)": return Conversions.baseToMicro(Conversions.picoToBase(value));
-            case "Femto (f)": return Conversions.baseToMicro(Conversions.femtoToBase(value));
-            case "Atto (a)": return Conversions.baseToMicro(Conversions.attoToBase(value));
-            case "Zepto (z)": return Conversions.baseToMicro(Conversions.zeptoToBase(value));
-            case "Yocto (y)": return Conversions.baseToMicro(Conversions.yoctoToBase(value));
+    public static BigDecimal convertToMicro(BigDecimal value, SIPrefix prefix) {
+        if(prefix == null) throw new InvalidParameterException("Invalid SI Prefix");
+        switch(prefix) {
+            case YOTTA: return Conversions.baseToMicro(Conversions.yottaToBase(value));
+            case ZETTA: return Conversions.baseToMicro(Conversions.zettaToBase(value));
+            case EXA: return Conversions.baseToMicro(Conversions.exaToBase(value));
+            case PETA: return Conversions.baseToMicro(Conversions.petaToBase(value));
+            case TERA: return Conversions.baseToMicro(Conversions.teraToBase(value));
+            case GIGA: return Conversions.baseToMicro(Conversions.gigaToBase(value));
+            case MEGA: return Conversions.baseToMicro(Conversions.megaToBase(value));
+            case KILO: return Conversions.baseToMicro(Conversions.kiloToBase(value));
+            case HECTO: return Conversions.baseToMicro(Conversions.hectoToBase(value));
+            case DEKA: return Conversions.baseToMicro(Conversions.dekaToBase(value));
+            case DECI: return Conversions.baseToMicro(Conversions.deciToBase(value));
+            case CENTI: return Conversions.baseToMicro(Conversions.centiToBase(value));
+            case MILLI: return Conversions.baseToMicro(Conversions.milliToBase(value));
+            case NANO: return Conversions.baseToMicro(Conversions.nanoToBase(value));
+            case PICO: return Conversions.baseToMicro(Conversions.picoToBase(value));
+            case FEMTO: return Conversions.baseToMicro(Conversions.femtoToBase(value));
+            case ATTO: return Conversions.baseToMicro(Conversions.attoToBase(value));
+            case ZEPTO: return Conversions.baseToMicro(Conversions.zeptoToBase(value));
+            case YOCTO: return Conversions.baseToMicro(Conversions.yoctoToBase(value));
             default: return value;
         }
     }

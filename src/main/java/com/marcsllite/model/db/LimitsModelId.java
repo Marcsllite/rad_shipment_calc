@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class LimitsModelId implements Serializable {
-    private static final long serialVersionUID = -614849316255649L;
+    private static final long serialVersionUID = 7009442724876176627L;
     private String state;
     private String form;
 

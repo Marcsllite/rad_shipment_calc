@@ -16,6 +16,7 @@ import jakarta.persistence.Table;
             "as select * from csvread(" + HalfLifeModel.HALF_LIFE_CSV_PATH + ")")
 )
 public class HalfLifeModel extends BaseModel {
+    private static final long serialVersionUID = -3082962071180959635L;
     public static final String CREATE_TABLE = "HalfLifeModel.createTable";
     public static final String HALF_LIFE_CSV_PATH = "classpath:csv/Half_Life(days).csv";
 

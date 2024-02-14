@@ -11,17 +11,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.InvalidParameterException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 public class PropHandler extends ResourceBundle {
     private static final Logger logr = LogManager.getLogger();
@@ -37,14 +36,6 @@ public class PropHandler extends ResourceBundle {
         this();
         setProp(stream);
     }
-
-//    protected static class SingletonHelper {
-//        private static final PropHandler INSTANCE = new PropHandler();
-//    }
-//
-//    public static PropHandler getInstance() {
-//        return SingletonHelper.INSTANCE;
-//    }
 
     /**
      * Get the value at the specified key in the project's property file
@@ -134,10 +125,10 @@ public class PropHandler extends ResourceBundle {
             return OS.NOT_SUPPORTED;
         }
 
-        if (os.contains("win")) return OS.Windows;
+        if (os.contains("win")) return OS.WINDOWS;
         else if (os.contains("mac")) return OS.MAC;
-        else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) return OS.Unix;
-        else if (os.contains("sunos")) return OS.Solaris;
+        else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) return OS.UNIX;
+        else if (os.contains("sunos")) return OS.SOLARIS;
         else return OS.NOT_SUPPORTED;
     }
 
@@ -180,11 +171,7 @@ public class PropHandler extends ResourceBundle {
      * @param propKey the name of the key from the property file
      * @param newValues the newValues to change the braced values in the string
      */
-    public String replacePropString(String propKey, String... newValues) throws InvalidParameterException {
-        String propString;
-        List<String> replacements;
-
-        // checking if the key exists in the properties file
+    public String replacePropString(String propKey, Object[] newValues) throws InvalidParameterException {
         try {
             InvalidParameterException e = null;
             if (propKey == null) {
@@ -197,43 +184,12 @@ public class PropHandler extends ResourceBundle {
                 throw e;
             }
 
-            propString = getString(propKey);
-            replacements = parseStringsToReplace(propString);
-        } catch (MissingResourceException | InvalidParameterException e) {
+            String propString = getString(propKey);
+            return newValues == null? propString : MessageFormat.format(propString, newValues);
+        } catch (InvalidParameterException e) {
             logr.catching(Level.DEBUG, e);
             return "";  // if key does not exist return empty string
         }
-
-        // if newValues is null or was omitted, return value from properties file
-        if (newValues != null && newValues.length != 0 && newValues[0] != null && !replacements.isEmpty()) {
-            int loopCount = Math.min(newValues.length, replacements.size());
-            for (var i = 0; i < loopCount; i++) {
-                propString = propString.replace(replacements.get(i), newValues[i]); 
-            }
-        } 
-        
-        return propString;
-    }
-
-    /**
-     * Convenience function to create a list of the substrings to be changed
-     * finds strings that match the regular expression: \\{\\d+}
-     *
-     * @param searchString the string in which to search for the substring
-     * @return a List of substrings to replace in the order they were found
-     */
-    public List<String> parseStringsToReplace(String searchString) {
-        List<String> ret = new ArrayList<>();
-
-        // making sure searchString is not null
-        if(searchString == null || searchString.isBlank()) return ret;
-        
-        var pattern = Pattern.compile(getString("replacePropStringRegex"));
-        var matcher = pattern.matcher(searchString);
-        // adding \\{\\d+} regex to list
-        while(matcher.find()){ ret.add(matcher.group()); }
-
-        return ret;
     }
 
 

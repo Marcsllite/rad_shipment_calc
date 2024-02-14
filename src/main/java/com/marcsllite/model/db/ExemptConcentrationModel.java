@@ -18,6 +18,7 @@ import jakarta.persistence.Table;
         query = "select Value from EXEMPT_CONCENTRATION where Abbr=:abbr")
 })
 public class ExemptConcentrationModel extends BaseModel {
+    private static final long serialVersionUID = 5186004813264658890L;
     public static final String CREATE_TABLE = "ExemptConcentrationModel.createTable";
     public static final String EXEMPT_CON_CSV_PATH = "classpath:csv/Exempt_concentration(Bq-g).csv";
     public static final String GET_EXEMPT_CON = "ExemptConcentrationModel.getExemptConcentration";

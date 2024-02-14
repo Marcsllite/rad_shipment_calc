@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @MappedSuperclass
 public abstract class BaseModel implements Serializable {
-    private static final long serialVersionUID = 4615324685L;
+    private static final long serialVersionUID = -7070688536494118785L;
     @Version private Long version;
 
     public Long getVersion() {

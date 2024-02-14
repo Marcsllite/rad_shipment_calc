@@ -22,19 +22,42 @@ import jakarta.persistence.Table;
         query = "select Limited from LIMITS where State=:state and Form=:form")
 })
 public class LimitsModel extends BaseModel {
+    private static final long serialVersionUID = -5280835757871497233L;
     public static final String CREATE_TABLE = "LimitsModel.createTable";
     public static final String Limits_CSV_PATH = "classpath:csv/Limits.csv";
     public static final String GET_IA_LIMITED = "LimitsModel.getIALimited";
     public static final String GET_IA_PACKAGE = "LimitsModel.getIAPackage";
     public static final String GET_LIMITED = "LimitsModel.getLimited";
 
+    public enum State {
+        SOLID("Solid"),
+        LIQUID("Liquid"),
+        GAS("Gas");
+
+        public final String val;
+
+        State(String val) {
+            this.val = val;
+        }
+    }
+
+    public enum Form {
+        NORMAL("Normal"),
+        SPECIAL("Special");
+
+        public final String val;
+
+        Form(String val) {
+            this.val = val;
+        }
+    }
     @Id
     @Column(name = "State")
-    private String state;
+    private State state;
 
     @Id
     @Column(name = "Form")
-    private String form;
+    private Form form;
 
     @Column(name = "IA_Limited")
     private float ia_limited;
@@ -45,19 +68,19 @@ public class LimitsModel extends BaseModel {
     @Column(name = "Limited")
     private float limited;
 
-    public String getState() {
+    public State getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(State state) {
         this.state = state;
     }
 
-    public String getForm() {
+    public Form getForm() {
         return form;
     }
 
-    public void setForm(String form) {
+    public void setForm(Form form) {
         this.form = form;
     }
 

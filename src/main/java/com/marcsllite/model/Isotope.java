@@ -12,6 +12,16 @@ public class Isotope {
     private final PropHandler propHandler;
     private final IsotopeConstants constants;
 
+    public enum Mass {
+        GRAMS("#grams"),
+        LITERS("liters");
+
+        public final String val;
+
+        Mass(String val) {
+            this.val = val;
+        }
+    }
     public Isotope() {
         this(
             (PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory())

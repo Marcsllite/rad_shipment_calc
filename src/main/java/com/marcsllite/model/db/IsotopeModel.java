@@ -16,22 +16,35 @@ import jakarta.persistence.Table;
             "as select * from csvread(" + IsotopeModel.ISOTOPES_CSV_PATH + ")")
 )
 public class IsotopeModel extends BaseModel {
+    private static final long serialVersionUID = -4943560854632091343L;
     public static final String CREATE_TABLE = "IsotopeModel.createTable";
     public static final String ISOTOPES_CSV_PATH = "classpath:csv/ValidIsotopes.csv";
 
+    public enum Nature {
+        REGULAR("Regular"),
+        INSTRUMENT("Instrument"),
+        ARTICLE("Article");
+
+        public final String val;
+
+        Nature(String val) {
+            this.val = val;
+        }
+    }
     @Id
     @Column(name = "Name")
     private String name;
     @Id
     @Column(name = "Abbr")
     private String abbr;
+    private Nature nature;
 
-    public String getValue() {
+    public String getName() {
         return name;
     }
 
-    public void setValue(String value) {
-        this.name = value;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAbbr() {
@@ -40,5 +53,13 @@ public class IsotopeModel extends BaseModel {
 
     public void setAbbr(String abbr) {
         this.abbr = abbr;
+    }
+
+    public Nature getNature() {
+        return nature;
+    }
+
+    public void setNature(Nature nature) {
+        this.nature = nature;
     }
 }

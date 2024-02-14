@@ -1,5 +1,6 @@
 package com.marcsllite.util;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -16,86 +17,85 @@ class ConversionsTest {
     final static BigDecimal toBeConverted = BigDecimal.valueOf(7.5d);
     final static MathContext mc = Conversions.context;
 
-    @ParameterizedTest(name = "Convert 7.5({0}) to micro = {1}")
-    @MethodSource("convertToMicroException_data")
-    void testConvertToMicroExceptionChecker(String siPrefix, String message) {
+    @Test
+    @DisplayName("Convert 7.5 {0} to micro = {1}")
+    void testConvertToMicroException() {
+        String message = "Invalid SI Prefix";
         InvalidParameterException exception = assertThrows(
-            InvalidParameterException.class, () -> Conversions.convertToMicro(toBeConverted, siPrefix)
+            InvalidParameterException.class, () -> Conversions.convertToMicro(toBeConverted, null)
         );
         assertTrue(exception.getMessage().contains(message));
     }
 
-    private static Object[] convertToMicroException_data() {
-        String message = "Invalid SI Prefix";
-
-        return new Object[] {
-            new Object[] {null, message},
-            new Object[] {" ", message},
-            new Object[] {"", message}
-        };
-    }
-
     @ParameterizedTest(name = "Convert 7.5{0} to micro = {1}")
     @MethodSource("convertToMicro_data")
-    void testConvertToMicroChecker(String siPrefix, BigDecimal expected) {
-        assertEquals(expected, Conversions.convertToMicro(toBeConverted, siPrefix));
+    void testConvertToMicro(Conversions.SIPrefix prefix, BigDecimal expected) {
+        assertEquals(expected, Conversions.convertToMicro(toBeConverted, prefix));
     }
 
     private static Object[] convertToMicro_data() {
         return new Object[] {
-            new Object[] {"Yotta (Y)", toBeConverted.multiply(BigDecimal.TEN.pow(30, mc), mc)},
-            new Object[] {"Zetta (Z)", toBeConverted.multiply(BigDecimal.TEN.pow(27, mc), mc)},
-            new Object[] {"Exa (E)", toBeConverted.multiply(BigDecimal.TEN.pow(24, mc), mc)},
-            new Object[] {"Peta (P)", toBeConverted.multiply(BigDecimal.TEN.pow(21, mc), mc)},
-            new Object[] {"Tera (T)", toBeConverted.multiply(BigDecimal.TEN.pow(18, mc), mc)},
-            new Object[] {"Giga (G)", toBeConverted.multiply(BigDecimal.TEN.pow(15, mc), mc)},
-            new Object[] {"Mega (M)", toBeConverted.multiply(BigDecimal.TEN.pow(12, mc), mc)},
-            new Object[] {"Kilo (k)", toBeConverted.multiply(BigDecimal.TEN.pow(9, mc), mc)},
-            new Object[] {"Hecto (h)", toBeConverted.multiply(BigDecimal.TEN.pow(8, mc), mc)},
-            new Object[] {"Deka (da)", toBeConverted.multiply(BigDecimal.TEN.pow(7, mc), mc)},
-            new Object[] {"Deci (d)", toBeConverted.multiply(BigDecimal.TEN.pow(5, mc), mc)},
-            new Object[] {"Centi (c)", toBeConverted.multiply(BigDecimal.TEN.pow(4, mc), mc)},
-            new Object[] {"Milli (m)", toBeConverted.multiply(BigDecimal.TEN.pow(3, mc), mc)},
-            new Object[] {"Nano (n)", toBeConverted.multiply(BigDecimal.TEN.pow(-3, mc), mc)},
-            new Object[] {"Pico (p)", toBeConverted.multiply(BigDecimal.TEN.pow(-6, mc), mc)},
-            new Object[] {"Femto (f)", toBeConverted.multiply(BigDecimal.TEN.pow(-9, mc), mc)},
-            new Object[] {"Atto (a)", toBeConverted.multiply(BigDecimal.TEN.pow(-12, mc), mc)},
-            new Object[] {"Zepto (z)", toBeConverted.multiply(BigDecimal.TEN.pow(-15, mc), mc)},
-            new Object[] {"Yocto (y)", toBeConverted.multiply(BigDecimal.TEN.pow(-18, mc), mc)},
-            new Object[] {"fakePrefix", toBeConverted}
+            new Object[] {Conversions.SIPrefix.YOTTA, toBeConverted.multiply(BigDecimal.TEN.pow(30, mc), mc)},
+            new Object[] {Conversions.SIPrefix.ZETTA, toBeConverted.multiply(BigDecimal.TEN.pow(27, mc), mc)},
+            new Object[] {Conversions.SIPrefix.EXA, toBeConverted.multiply(BigDecimal.TEN.pow(24, mc), mc)},
+            new Object[] {Conversions.SIPrefix.PETA, toBeConverted.multiply(BigDecimal.TEN.pow(21, mc), mc)},
+            new Object[] {Conversions.SIPrefix.TERA, toBeConverted.multiply(BigDecimal.TEN.pow(18, mc), mc)},
+            new Object[] {Conversions.SIPrefix.GIGA, toBeConverted.multiply(BigDecimal.TEN.pow(15, mc), mc)},
+            new Object[] {Conversions.SIPrefix.MEGA, toBeConverted.multiply(BigDecimal.TEN.pow(12, mc), mc)},
+            new Object[] {Conversions.SIPrefix.KILO, toBeConverted.multiply(BigDecimal.TEN.pow(9, mc), mc)},
+            new Object[] {Conversions.SIPrefix.HECTO, toBeConverted.multiply(BigDecimal.TEN.pow(8, mc), mc)},
+            new Object[] {Conversions.SIPrefix.DEKA, toBeConverted.multiply(BigDecimal.TEN.pow(7, mc), mc)},
+            new Object[] {Conversions.SIPrefix.DECI, toBeConverted.multiply(BigDecimal.TEN.pow(5, mc), mc)},
+            new Object[] {Conversions.SIPrefix.CENTI, toBeConverted.multiply(BigDecimal.TEN.pow(4, mc), mc)},
+            new Object[] {Conversions.SIPrefix.MILLI, toBeConverted.multiply(BigDecimal.TEN.pow(3, mc), mc)},
+            new Object[] {Conversions.SIPrefix.NANO, toBeConverted.multiply(BigDecimal.TEN.pow(-3, mc), mc)},
+            new Object[] {Conversions.SIPrefix.PICO, toBeConverted.multiply(BigDecimal.TEN.pow(-6, mc), mc)},
+            new Object[] {Conversions.SIPrefix.FEMTO, toBeConverted.multiply(BigDecimal.TEN.pow(-9, mc), mc)},
+            new Object[] {Conversions.SIPrefix.ATTO, toBeConverted.multiply(BigDecimal.TEN.pow(-12, mc), mc)},
+            new Object[] {Conversions.SIPrefix.ZEPTO, toBeConverted.multiply(BigDecimal.TEN.pow(-15, mc), mc)},
+            new Object[] {Conversions.SIPrefix.YOCTO, toBeConverted.multiply(BigDecimal.TEN.pow(-18, mc), mc)}
         };
     }
 
-    @ParameterizedTest(name = "Index: {1}, Convert {0} to base = {3}")
+    @Test
+    @DisplayName("Convert 7.5 {0} to base = {1}")
+    void testConvertToBaseException() {
+        String message = "Invalid SI Prefix";
+        InvalidParameterException exception = assertThrows(
+            InvalidParameterException.class, () -> Conversions.convertToBase(toBeConverted, null)
+        );
+        assertTrue(exception.getMessage().contains(message));
+    }
+    
+    @ParameterizedTest(name = "Convert {0} {1} to base = {3}")
     @MethodSource("convertToBase_data")
-    void testConvertToBaseChecker(BigDecimal value, int prefixIndex, BigDecimal expected) {
-        assertEquals(expected, Conversions.convertToBase(value, prefixIndex));
+    void testConvertToBase(BigDecimal value, Conversions.SIPrefix prefix, BigDecimal expected) {
+        assertEquals(expected, Conversions.convertToBase(value, prefix));
     }
 
     private static Object[] convertToBase_data() {
         return new Object[] {
-            new Object[] {toBeConverted, -1, toBeConverted},
-            new Object[] {toBeConverted, 0, toBeConverted.multiply(BigDecimal.TEN.pow(24, mc), mc)},
-            new Object[] {toBeConverted, 1, toBeConverted.multiply(BigDecimal.TEN.pow(21, mc), mc)},
-            new Object[] {toBeConverted, 2, toBeConverted.multiply(BigDecimal.TEN.pow(18, mc), mc)},
-            new Object[] {toBeConverted, 3, toBeConverted.multiply(BigDecimal.TEN.pow(15), mc)},
-            new Object[] {toBeConverted, 4, toBeConverted.multiply(BigDecimal.TEN.pow(12), mc)},
-            new Object[] {toBeConverted, 5, toBeConverted.multiply(BigDecimal.TEN.pow(9), mc)},
-            new Object[] {toBeConverted, 6, toBeConverted.multiply(BigDecimal.TEN.pow(6), mc)},
-            new Object[] {toBeConverted, 7, toBeConverted.multiply(BigDecimal.TEN.pow(3), mc)},
-            new Object[] {toBeConverted, 8, toBeConverted.multiply(BigDecimal.TEN.pow(2), mc)},
-            new Object[] {toBeConverted, 9, toBeConverted.multiply(BigDecimal.TEN.pow(1), mc)},
-            new Object[] {toBeConverted, 10, toBeConverted},
-            new Object[] {toBeConverted, 11, toBeConverted.multiply(BigDecimal.TEN.pow(-1, mc), mc)},
-            new Object[] {toBeConverted, 12, toBeConverted.multiply(BigDecimal.TEN.pow(-2, mc), mc)},
-            new Object[] {toBeConverted, 13, toBeConverted.multiply(BigDecimal.TEN.pow(-3, mc), mc)},
-            new Object[] {toBeConverted, 14, toBeConverted.multiply(BigDecimal.TEN.pow(-6, mc), mc)},
-            new Object[] {toBeConverted, 15, toBeConverted.multiply(BigDecimal.TEN.pow(-9, mc), mc)},
-            new Object[] {toBeConverted, 16, toBeConverted.multiply(BigDecimal.TEN.pow(-12, mc), mc)},
-            new Object[] {toBeConverted, 17, toBeConverted.multiply(BigDecimal.TEN.pow(-15, mc), mc)},
-            new Object[] {toBeConverted, 18, toBeConverted.multiply(BigDecimal.TEN.pow(-18, mc), mc)},
-            new Object[] {toBeConverted, 19, toBeConverted.multiply(BigDecimal.TEN.pow(-21, mc), mc)},
-            new Object[] {toBeConverted, 20, toBeConverted.multiply(BigDecimal.TEN.pow(-24, mc), mc)}
+            new Object[] {toBeConverted, Conversions.SIPrefix.YOTTA, toBeConverted.multiply(BigDecimal.TEN.pow(24, mc), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.ZETTA, toBeConverted.multiply(BigDecimal.TEN.pow(21, mc), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.EXA, toBeConverted.multiply(BigDecimal.TEN.pow(18, mc), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.PETA, toBeConverted.multiply(BigDecimal.TEN.pow(15), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.TERA, toBeConverted.multiply(BigDecimal.TEN.pow(12), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.GIGA, toBeConverted.multiply(BigDecimal.TEN.pow(9), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.MEGA, toBeConverted.multiply(BigDecimal.TEN.pow(6), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.KILO, toBeConverted.multiply(BigDecimal.TEN.pow(3), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.HECTO, toBeConverted.multiply(BigDecimal.TEN.pow(2), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.DEKA, toBeConverted.multiply(BigDecimal.TEN.pow(1), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.BASE, toBeConverted},
+            new Object[] {toBeConverted, Conversions.SIPrefix.DECI, toBeConverted.multiply(BigDecimal.TEN.pow(-1, mc), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.CENTI, toBeConverted.multiply(BigDecimal.TEN.pow(-2, mc), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.MILLI, toBeConverted.multiply(BigDecimal.TEN.pow(-3, mc), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.MICRO, toBeConverted.multiply(BigDecimal.TEN.pow(-6, mc), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.NANO, toBeConverted.multiply(BigDecimal.TEN.pow(-9, mc), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.PICO, toBeConverted.multiply(BigDecimal.TEN.pow(-12, mc), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.FEMTO, toBeConverted.multiply(BigDecimal.TEN.pow(-15, mc), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.ATTO, toBeConverted.multiply(BigDecimal.TEN.pow(-18, mc), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.ZEPTO, toBeConverted.multiply(BigDecimal.TEN.pow(-21, mc), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.YOCTO, toBeConverted.multiply(BigDecimal.TEN.pow(-24, mc), mc)}
         };
     }
 

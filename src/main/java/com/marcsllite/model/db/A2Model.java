@@ -18,6 +18,7 @@ import jakarta.persistence.Table;
         query = "select Value from A_TWO where Abbr=:abbr")
 })
 public class A2Model extends BaseModel {
+    private static final long serialVersionUID = -5895460983437367212L;
     public static final String CREATE_TABLE = "A2Model.createTable";
     public static final String A2_CSV_PATH = "classpath:csv/A2(TBq).csv";
     public static final String GET_A2 = "A2Model.getA2";
