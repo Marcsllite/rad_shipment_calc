@@ -26,6 +26,7 @@ public abstract class GUITest extends FxRobot {
     protected void start(Stage stage, FXMLView view) {
         this.view = view;
         root = new App.AppPane(stage, view, propHandler);
-        root.getStageHandler().getPrimaryStage().show();
+        root.getStageHandler().switchScene(view);
+        stage.show();
     }
 }

@@ -50,7 +50,7 @@ public class StageHandler {
     public void switchScene(FXMLView view) {
         if (view == null) {
             throw new InvalidParameterException(NULL_ERROR);
-        } else if(!view.equals(getCurrentView())) {
+        } else if(view.equals(getCurrentView())) {
             return;
         }
 
@@ -65,6 +65,8 @@ public class StageHandler {
         primaryStage.setTitle(view.getTitle());
         primaryStage.getIcons().add(view.getIconImage());
         primaryStage.centerOnScreen();
+
+        curView = view;
     }
 
     public void show(FXMLView view) throws RuntimeException {
@@ -79,7 +81,6 @@ public class StageHandler {
             logAndThrowException("Unable to show " + view.getName() + " scene", exception);
             Platform.exit();
         }
-        curView = view;
     }
 
     public Parent loadViewNodeHierarchy(FXMLView view) throws RuntimeException {

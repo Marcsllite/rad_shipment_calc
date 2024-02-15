@@ -1,0 +1,7 @@
+State,Form,IA_Limited, IA_Package, Limited, version
+solid,special,1.00e-02,1.00e+00,1.00e-03,0
+solid,normal,1.00e-02,1.00e+00,1.00e-03,0
+liquid,normal,1.00e-03,1.00e-01,1.00e-04,0
+gas,tritium,2.00e-02,2.00e-01,2.00e-02,0
+gas,special,1.00e-03,1.00e-02,1.00e-03,0
+gas,normal,1.00e-03,1.00e-02,1.00e-03,0

@@ -45,6 +45,7 @@ public class StageHandlerTest {
              stageHandler.switchScene(view);
              Stage stage = stageHandler.getPrimaryStage();
 
+             assertEquals(view, stageHandler.getCurrentView());
              assertEquals(view.getTitle(), stage.getTitle());
              assertEquals(view.getWidth(), stage.getMinWidth(), 0.0D);
              assertEquals(view.getHeight(), stage.getMinHeight(), 0.0D);
