@@ -3,22 +3,12 @@ package com.marcsllite.model.db;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "EXEMPT_LIMIT")
-@NamedQueries(
-    @NamedQuery(name = ExemptLimitModel.CREATE_TABLE,
-        query = "create table if not exists " +
-            "EXEMPT_LIMIT (Abbr char(15) not null, Value real, version bigint default 0, primary key (Abbr)) " +
-            "as select * from csvread(" + ExemptLimitModel.EXEMPT_LIM_CSV_PATH + ")")
-)
 public class ExemptLimitModel extends BaseModel {
     private static final long serialVersionUID = -5142275333078025319L;
-    public static final String CREATE_TABLE = "ExemptLimitModel.createTable";
-    public static final String EXEMPT_LIM_CSV_PATH = "classpath:csv/Exempt_limit(Bq).csv";
 
     @Id
     @Column(name = "Abbr")

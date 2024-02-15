@@ -147,31 +147,31 @@
     </dependencies>
 
     <build>
-        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-        <outputDirectory>${project.basedir}/target/classes</outputDirectory>
+        <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+        <outputDirectory>${basedir}/target/classes</outputDirectory>
         <resources>
             <resource>
-                <directory>${project.basedir}/src/main/resources</directory>
+                <directory>${basedir}/src/main/resources</directory>
                 <excludes>
-                    <exclude>${project.basedir}/src/main/resources/databaseAudit/*</exclude>
+                    <exclude>${basedir}/src/main/resources/databaseAudit/*</exclude>
                 </excludes>
             </resource>
         </resources>
-        <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
-        <testOutputDirectory>${project.basedir}/target/test-classes</testOutputDirectory>
+        <testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
+        <testOutputDirectory>${basedir}/target/test-classes</testOutputDirectory>
         <testResources>
             <testResource>
-                <directory>${project.basedir}/src/main/resources</directory>
+                <directory>${basedir}/src/main/resources</directory>
                 <excludes>
-                    <exclude>${project.basedir}/src/main/resources/css/*</exclude>
-                    <exclude>${project.basedir}/src/main/resources/csv/*</exclude>
-                    <exclude>${project.basedir}/src/main/resources/databaseAudit/*</exclude>
-                    <exclude>${project.basedir}/src/main/resources/font/*</exclude>
-                    <exclude>${project.basedir}/src/main/resources/scripts/*</exclude>
+                    <exclude>${basedir}/src/main/resources/css/*</exclude>
+                    <exclude>${basedir}/src/main/resources/csv/*</exclude>
+                    <exclude>${basedir}/src/main/resources/databaseAudit/*</exclude>
+                    <exclude>${basedir}/src/main/resources/font/*</exclude>
+                    <exclude>${basedir}/src/main/resources/scripts/*</exclude>
                 </excludes>
             </testResource>
             <testResource>
-                <directory>${project.basedir}/src/test/resources</directory>
+                <directory>${basedir}/src/test/resources</directory>
             </testResource>
         </testResources>
         <plugins>
@@ -193,7 +193,7 @@
                 </dependencies>
                 <configuration>
                     <additionalClasspathElements>
-                        <additionalClasspathElement>${project.basedir}/src/main/resources</additionalClasspathElement>
+                        <additionalClasspathElement>${basedir}/src/main/resources</additionalClasspathElement>
                     </additionalClasspathElements>
                     <reportFormat>plain</reportFormat>
                     <consoleOutputReporter>
@@ -226,8 +226,8 @@
                 <configuration>
                     <mainClass>com.marcsllite.App</mainClass>
                     <options>
-                        <option>-Djdk.gtk.version=2</option>
-                        <option>-Djavafx.version=null</option>
+<!--                        <option>-Djdk.gtk.version=2</option>-->
+<!--                        <option>-Djavafx.version=null</option>-->
                     </options>
                 </configuration>
                 <executions>
@@ -246,6 +246,8 @@
                     <excludes>
                         <exclude>**/Launcher.class</exclude>
                         <exclude>**/App.class</exclude>
+                        <exclude>**/dao/*</exclude>
+                        <exclude>**/model/db/*</exclude>
                     </excludes>
                 </configuration>
                 <executions>

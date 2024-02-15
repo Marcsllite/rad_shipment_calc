@@ -11,14 +11,15 @@ public class Isotope {
     private static final Logger logr = LogManager.getLogger();
     private final PropHandler propHandler;
     private final IsotopeConstants constants;
+    private MassUnit massUnit;
 
-    public enum Mass {
-        GRAMS("#grams"),
+    public enum MassUnit {
+        GRAMS("grams"),
         LITERS("liters");
 
         public final String val;
 
-        Mass(String val) {
+        MassUnit(String val) {
             this.val = val;
         }
     }
@@ -27,8 +28,22 @@ public class Isotope {
             (PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory())
         );
     }
+
+    public IsotopeConstants getConstants() {
+        return constants;
+    }
+
+    public MassUnit getMassUnit() {
+        return massUnit;
+    }
+
+    public void setMassUnit(MassUnit massUnit) {
+        this.massUnit = massUnit;
+    }
+
     public Isotope(PropHandler propHandler) {
         this.propHandler = propHandler;
         this.constants = new IsotopeConstants();
+        setMassUnit(MassUnit.GRAMS);
     }
 }

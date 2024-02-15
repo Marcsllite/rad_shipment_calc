@@ -3,24 +3,18 @@ package com.marcsllite.model.db;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
+import jakarta.persistence.NamedNativeQueries;
+import jakarta.persistence.NamedNativeQuery;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "DECAY_CONSTANT")
-@NamedQueries({
-    @NamedQuery(name = DecayConstantModel.CREATE_TABLE,
-        query = "create table if not exists " +
-            "DECAY_CONSTANT (Abbr char(15) not null, Value real, version bigint default 0, primary key (Abbr)) " +
-            "as select * from csvread(" + DecayConstantModel.DECAY_CONST_CSV_PATH + ")"),
-    @NamedQuery(name = DecayConstantModel.GET_DECAY_CONST,
+@NamedNativeQueries({
+    @NamedNativeQuery(name = DecayConstantModel.GET_DECAY_CONST,
         query = "select Value from DECAY_CONSTANT where Abbr=:abbr")
 })
 public class DecayConstantModel extends BaseModel {
     private static final long serialVersionUID = 5704920375115196514L;
-    public static final String CREATE_TABLE = "DecayConstantModel.createTable";
-    public static final String DECAY_CONST_CSV_PATH = "classpath:csv/Decay_Constant.csv";
     public static final String GET_DECAY_CONST = "DecayConstantModel.getDecayConstant";
 
     @Id

@@ -1,0 +1,36 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+
+    <persistence-unit name="com.marcsllite.db">
+        <description>
+            Persistence unit for the Radiation Shipment Calculator project
+        </description>
+
+        <class>com.marcsllite.model.db.A1Model</class>
+        <class>com.marcsllite.model.db.A2Model</class>
+        <class>com.marcsllite.model.db.DecayConstantModel</class>
+        <class>com.marcsllite.model.db.ExemptConcentrationModel</class>
+        <class>com.marcsllite.model.db.ExemptLimitModel</class>
+        <class>com.marcsllite.model.db.HalfLifeModel</class>
+        <class>com.marcsllite.model.db.IsotopeModel</class>
+        <class>com.marcsllite.model.db.LimitsModel</class>
+        <class>com.marcsllite.model.db.ReportableQuantityModel</class>
+
+        <properties>
+            <!-- Database connection settings -->
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:h2:db/ShipmentCalculatorLocal;INIT=RUNSCRIPT FROM 'main/resources/dbInit.sql';" />
+            <property name="jakarta.persistence.jdbc.user" value="superuser" />
+            <property name="jakarta.persistence.jdbc.password" value="SnayRadiation" />
+
+            <!-- Automatically export the schema -->
+            <property name="jakarta.persistence.schema-generation.database.action" value="update" />
+
+            <!-- Echo all executed SQL to console -->
+            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.format_sql" value="true" />
+            <property name="hibernate.highlight_sql" value="true" />
+        </properties>
+    </persistence-unit>
+</persistence>
