@@ -59,5 +59,6 @@
     <Button fx:id="btnCalculate" layoutX="356.0" layoutY="134.0" mnemonicParsing="false" onAction="#homePaneHandler" prefHeight="30.0" prefWidth="105.0" styleClass="calculateBtn" text="CALCULATE" textFill="#0469b1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
       <font>
          <Font size="14.0" />
-      </font></Button>
+      </font>
+    </Button>
 </GridPane>

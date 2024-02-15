@@ -32,12 +32,18 @@ public class App extends Application {
      * Adds the children of the given FXMLView to this javafx.scene.Parent
      */
     public static class AppPane extends Parent {
-        public AppPane(FXMLView view, PropHandler propHandler) {
+        final StageHandler stageHandler;
+        public AppPane(Stage stage, FXMLView view, PropHandler propHandler) {
             super();
-            StageHandler stageHandler = new StageHandler(null, propHandler);
+            stageHandler = new StageHandler(stage, propHandler);
+            stageHandler.switchScene(view);
             getChildren().addAll(
-                stageHandler.loadViewNodeHierarchy(view).getChildrenUnmodifiable()
+                stageHandler.getPrimaryStage().getScene().rootProperty().get().getChildrenUnmodifiable()
             );
+        }
+
+        public StageHandler getStageHandler() {
+            return stageHandler;
         }
     }
 }
