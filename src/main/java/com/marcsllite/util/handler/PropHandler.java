@@ -159,7 +159,7 @@ public class PropHandler extends ResourceBundle {
             is.close();  // close() may throw IOException
             return sb.toString();
         } catch (IOException | NullPointerException | InvalidParameterException e) {
-            logr.atWarn().withThrowable(e).log("Failed to read file (%s) and turn to String.", resourceFilePath);
+            logr.atWarn().withThrowable(e).log("Failed to read file ({}) and turn to String.", resourceFilePath);
         }
         return "";
     }

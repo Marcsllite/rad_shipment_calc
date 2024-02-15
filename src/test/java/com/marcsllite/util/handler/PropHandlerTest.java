@@ -40,7 +40,6 @@ class PropHandlerTest {
 
     private void init() {
         stringsMap.put("fakeKey", "");
-        stringsMap.put("replacePropStringRegex", "(\\{\\d+})");
         stringsMap.put("properMessage", "This is a proper message");
         stringsMap.put("properException", "This is a proper Exception");
         stringsMap.put("replacePropString_noReplacements", "This string doesn’t contain any replacements");

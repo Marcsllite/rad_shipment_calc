@@ -44,7 +44,7 @@ public class FolderHandler {
             logr.throwing(Level.FATAL, e);
             throw e;
         } else {
-            logr.info("%s directory was created", name);
+            logr.info("{} directory was created", name);
             defaultDir = name;
         }
     }
@@ -80,7 +80,7 @@ public class FolderHandler {
         }
 
         if(dirLoc != null && (new File(dirLoc)).mkdirs()) {
-            logr.info("%s directory was created", dirLoc);
+            logr.info("{} directory was created", dirLoc);
         }
 
         dataFolder = dirLoc;

@@ -25,7 +25,33 @@ public enum FXMLView {
     public String getName() { return "Home Page"; }
 
     public String getFxmlLoc() { return "/fxml/homePane.fxml"; }
-  },PRIMARY {
+  }, REFERENCE {
+    public String getName() { return "Reference Page"; }
+
+    public String getFxmlLoc() { return "/fxml/referencePane.fxml"; }
+  }, SUMMARY {
+    public String getName() { return "Summary Page"; }
+
+    @Override public double getHeight() { return 400.0; }
+
+    public String getFxmlLoc() { return "/fxml/summaryPane.fxml"; }
+  }, MODIFY {
+    public String getName() { return "Modify Page"; }
+
+    @Override public double getHeight() { return 320.0; }
+
+    @Override public double getWidth() { return 450.0; }
+
+    public String getFxmlLoc() { return "/fxml/modify.fxml"; }
+  }, DETAILS {
+    public String getName() { return "Shipment Details"; }
+
+    @Override public double getHeight() { return 270.0; }
+
+    @Override public double getWidth() { return 450.0; }
+
+    public String getFxmlLoc() { return "/fxml/modify.fxml"; }
+  }, PRIMARY {
     public String getName() { return "Primary Page"; }
 
     public String getFxmlLoc() { return "/fxml/primary.fxml"; }

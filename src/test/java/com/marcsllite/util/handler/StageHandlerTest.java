@@ -39,7 +39,7 @@ public class StageHandlerTest {
     }
 
      @ParameterizedTest
-     @EnumSource(value = FXMLView.class, names = {"TEST", "MAIN", "MENU", "HOME"}, mode = EnumSource.Mode.EXCLUDE)
+     @EnumSource(value = FXMLView.class, names = {"PRIMARY", "SECONDARY"}, mode = EnumSource.Mode.INCLUDE)
      public void testSwitchScene(FXMLView view) {
          Platform.runLater(() -> {
              stageHandler.switchScene(view);
@@ -76,7 +76,7 @@ public class StageHandlerTest {
     }
 
      @ParameterizedTest
-     @EnumSource(value = FXMLView.class, names = {"TEST", "MAIN", "MENU", "HOME"}, mode = EnumSource.Mode.EXCLUDE)
+     @EnumSource(value = FXMLView.class, names = {"PRIMARY", "SECONDARY"}, mode = EnumSource.Mode.INCLUDE)
      public void testShow(FXMLView view) {
          Platform.runLater(() -> {
              stageHandler.show(view);

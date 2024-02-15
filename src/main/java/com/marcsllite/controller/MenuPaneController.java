@@ -28,11 +28,25 @@ public class MenuPaneController extends BaseController {
 
     private static final Logger logr = LogManager.getLogger();
     private final PropHandler propHandler;
-    private final ImageHandler.Colors CURRENT_COLOR = ImageHandler.Colors.UML_BLUE;  // color to make the button corresponding to the current page
-    private final ImageHandler.Colors IDLE_COLOR = ImageHandler.Colors.DEFAULT_GREY;  // color to make idle buttons
-    private final ImageHandler.Colors HOVER_COLOR = ImageHandler.Colors.DEFAULT_WHITE;  // color to make buttons when mouse is hovering over
-    private int currentBtn;  // variable to know what page the user is currently on
-                              // 0 = Shipment, 1 = Reference
+    // color to make the button corresponding to the current page
+    private final ImageHandler.Colors CURRENT_COLOR = ImageHandler.Colors.UML_BLUE;
+    // color to make idle buttons
+    private final ImageHandler.Colors IDLE_COLOR = ImageHandler.Colors.DEFAULT_GREY;
+    // color to make buttons when mouse is hovering over
+    private final ImageHandler.Colors HOVER_COLOR = ImageHandler.Colors.DEFAULT_WHITE;
+    private Page currentPage;
+
+    public enum Page {
+        SHIPMENT("Shipment Page"),
+        REFERENCE("Reference Page"),
+        EMPTY("");
+
+        public final String val;
+
+        Page(String val) {
+            this.val = val;
+        }
+    }
 
     public MenuPaneController() {
         this((PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()));
@@ -94,9 +108,8 @@ public class MenuPaneController extends BaseController {
      * Helper function to handle the UMass Lowell logo being pressed
      */
     @FXML protected void logoImgViewHandler(){
-        logr.info("User clicked the UMass logo in the menu pane");
+        logr.info("User clicked the UMass logo on the menu pane");
         // TODO: implement clicking on menu logo
-        // propHandler.navigateToLink("https://www.uml.edu/");  // navigating to UMass Lowell website
     }
 
     /**
@@ -104,7 +117,7 @@ public class MenuPaneController extends BaseController {
      */
     protected void shipmentBtnHandler(){
         // checking if user is already on the Shipment page
-        if(getCurrentBtn() != 0) {
+        if(getCurrentPage() != Page.SHIPMENT) {
             setCurrentButton(btnShipment);  // setting the current button
             main.showHomePane();
         }
@@ -115,7 +128,7 @@ public class MenuPaneController extends BaseController {
      */
     protected void referenceBtnHandler(){
         // checking if user is already on the Shipment page
-        if(getCurrentBtn() != 1) {
+        if(getCurrentPage() != Page.REFERENCE) {
             setCurrentButton(btnReference);  // setting the current button
             main.showReferencePane();
         }
@@ -139,12 +152,12 @@ public class MenuPaneController extends BaseController {
 
         if(btnCurrent.equals(btnShipment)) {
             setButtonColor(btnShipment, CURRENT_COLOR);  // setting the single button and icon to be the current color
-            currentBtn = 0;  // noting that the Shipment button is marked
-            logr.info("Navigated to %s page.", btnShipment.getText());
+            currentPage = Page.SHIPMENT;
+            logr.info("Navigated to {} page.", btnShipment.getText());
         } else if(btnCurrent.equals(btnReference)) {
             setButtonColor(btnReference, CURRENT_COLOR);  // setting the multiple button and icon to be the current color
-            currentBtn = 1;  // noting that the Reference button is marked
-            logr.info("Navigated to %s page.", btnReference.getText());
+            currentPage = Page.REFERENCE;
+            logr.info("Navigated to {} page.", btnReference.getText());
         }
     }
 
@@ -152,7 +165,7 @@ public class MenuPaneController extends BaseController {
      * Helper function to un-mark the previously marked button
      */
     protected void unsetCurrentButton() {
-        currentBtn = (int) propHandler.getDouble("defaultNum");
+        currentPage = Page.EMPTY;
 
         // changing the color of the buttons to the idle color
         setButtonColor(btnShipment, IDLE_COLOR);  // setting the single button and icon to be the current color
@@ -219,7 +232,7 @@ public class MenuPaneController extends BaseController {
      * FXML function to handle mouse leaving single button
      */
     @FXML protected void mouseShipmentExit(){
-        if(getCurrentBtn() == 0) {
+        if(getCurrentPage() == Page.SHIPMENT) {
             setButtonColor(btnShipment, CURRENT_COLOR);
         } else {
             setButtonColor(btnShipment, IDLE_COLOR);
@@ -235,7 +248,7 @@ public class MenuPaneController extends BaseController {
      * FXML function to handle mouse leaving multiple button
      */
     @FXML protected void mouseReferenceExit(){
-        if(getCurrentBtn() == 1) {
+        if(getCurrentPage() == Page.REFERENCE) {
             setButtonColor(btnReference, CURRENT_COLOR);
         } else {
             setButtonColor(btnReference, IDLE_COLOR);
@@ -251,5 +264,5 @@ public class MenuPaneController extends BaseController {
      *
      * @return the current button in integer form
      */
-    public int getCurrentBtn() { return currentBtn; }
+    public Page getCurrentPage() { return currentPage; }
 }
