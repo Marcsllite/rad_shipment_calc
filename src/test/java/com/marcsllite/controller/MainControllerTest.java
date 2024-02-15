@@ -47,7 +47,7 @@ public class MainControllerTest {
 
     @Test
     public void testRegisterController_HomePaneController() {
-        PrimaryController controller = new PrimaryController();
+        HomePaneController controller = new HomePaneController(GUITest.propHandler);
         
         MainController.getInstance().registerController(controller);
 

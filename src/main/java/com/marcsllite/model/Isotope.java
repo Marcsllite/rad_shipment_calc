@@ -31,7 +31,7 @@ public class Isotope {
 
     public Isotope(PropHandler propHandler) {
         this.propHandler = propHandler;
-        this.constants = new IsotopeConstants();
+        this.constants = new IsotopeConstants(this.propHandler);
         setMassUnit(MassUnit.GRAMS);
     }
 

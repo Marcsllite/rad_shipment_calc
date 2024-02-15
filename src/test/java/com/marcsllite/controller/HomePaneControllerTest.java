@@ -1,5 +1,5 @@
 package com.marcsllite.controller;
 
-class PrimaryControllerTest {
+class HomePaneControllerTest {
 
 }

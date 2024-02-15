@@ -19,7 +19,6 @@ import java.util.ResourceBundle;
 
 public class StageHandler {
     private static final Logger logr = LogManager.getLogger();
-
     private final Stage primaryStage;
     private final ControllerFactory factory;
     private FXMLView curView;

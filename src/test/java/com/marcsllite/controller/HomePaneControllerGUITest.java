@@ -8,9 +8,9 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
 @ExtendWith(ApplicationExtension.class)
-public class PrimaryControllerGUITest extends GUITest {
+public class HomePaneControllerGUITest extends GUITest {
     @Start
     void start(Stage stage) {
-        super.start(stage, FXMLView.PRIMARY);
+        super.start(stage, FXMLView.HOME);
     }
 }

@@ -21,7 +21,11 @@ public enum FXMLView {
     @Override public double getWidth() { return 150.0; }
 
     public String getFxmlLoc() { return "/fxml/menuPane.fxml"; }
-  }, PRIMARY {
+  }, HOME {
+    public String getName() { return "Home Page"; }
+
+    public String getFxmlLoc() { return "/fxml/homePane.fxml"; }
+  },PRIMARY {
     public String getName() { return "Primary Page"; }
 
     public String getFxmlLoc() { return "/fxml/primary.fxml"; }

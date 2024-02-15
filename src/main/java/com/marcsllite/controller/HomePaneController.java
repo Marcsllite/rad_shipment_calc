@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 import java.security.InvalidParameterException;
 import java.util.ResourceBundle;
 
-public class PrimaryController extends BaseController {
+public class HomePaneController extends BaseController {
     @FXML GridPane homePane;
     @FXML Button btnAdd;
     @FXML Button btnEdit;
@@ -32,11 +32,11 @@ public class PrimaryController extends BaseController {
     private static final Logger logr = LogManager.getLogger();
     private final PropHandler propHandler;
 
-    public PrimaryController() {
+    public HomePaneController() {
         this((PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()));
     }
 
-    public PrimaryController(PropHandler propHandler) {
+    public HomePaneController(PropHandler propHandler) {
         this.propHandler = propHandler;
     }
 

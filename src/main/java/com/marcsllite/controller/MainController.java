@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 public class MainController {
     // DECLARING FXML CONTROLLERS
     @FXML private MenuPaneController menuPaneController;
-    @FXML private PrimaryController homePaneController;
+    @FXML private HomePaneController homePaneController;
     @FXML private SecondaryController referencePaneController;
 
     private static final Logger logr = LogManager.getLogger();
@@ -50,8 +50,8 @@ public class MainController {
 
         if(c instanceof MenuPaneController) {
             menuPaneController = (MenuPaneController) c;
-        } else if(c instanceof PrimaryController) {
-            homePaneController = (PrimaryController) c;
+        } else if(c instanceof HomePaneController) {
+            homePaneController = (HomePaneController) c;
         } else if(c instanceof SecondaryController) {
             referencePaneController = (SecondaryController) c;
         }
@@ -61,7 +61,7 @@ public class MainController {
         return menuPaneController;
     }
 
-    public PrimaryController getHomePaneController() {
+    public HomePaneController getHomePaneController() {
         return homePaneController;
     }
 
