@@ -29,6 +29,12 @@ public class Isotope {
         );
     }
 
+    public Isotope(PropHandler propHandler) {
+        this.propHandler = propHandler;
+        this.constants = new IsotopeConstants();
+        setMassUnit(MassUnit.GRAMS);
+    }
+
     public IsotopeConstants getConstants() {
         return constants;
     }
@@ -39,11 +45,5 @@ public class Isotope {
 
     public void setMassUnit(MassUnit massUnit) {
         this.massUnit = massUnit;
-    }
-
-    public Isotope(PropHandler propHandler) {
-        this.propHandler = propHandler;
-        this.constants = new IsotopeConstants();
-        setMassUnit(MassUnit.GRAMS);
     }
 }
