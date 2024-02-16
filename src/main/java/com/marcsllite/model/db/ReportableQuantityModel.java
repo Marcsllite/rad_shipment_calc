@@ -19,9 +19,9 @@ public class ReportableQuantityModel extends BaseModel {
     private float teraBq;
 
     public ReportableQuantityModel(String abbr, float curie, float teraBq) {
-        this.abbr = abbr;
-        this.curie = curie;
-        this.teraBq = teraBq;
+        setAbbr(abbr);
+        setCurie(curie);
+        setTeraBq(teraBq);
     }
 
     public String getAbbr() {

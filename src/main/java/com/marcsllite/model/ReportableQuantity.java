@@ -7,7 +7,6 @@ import javafx.beans.property.SimpleFloatProperty;
 import java.util.ResourceBundle;
 
 public class ReportableQuantity {
-    private final PropHandler propHandler;
     private final float defaultVal;
     private String abbr;
     private final SimpleFloatProperty curie = new SimpleFloatProperty();
@@ -28,10 +27,9 @@ public class ReportableQuantity {
     }
 
     public ReportableQuantity(PropHandler propHandler, String abbr, Float curie, Float teraBq) {
-        this.abbr = abbr;
-        this.propHandler = propHandler;
-        this.defaultVal = (float) this.propHandler.getDouble("defaultNum");
+        this.defaultVal = (float) propHandler.getDouble("defaultNum");
 
+        setAbbr(abbr);
         setCurie(curie == null? defaultVal : curie);
         setTeraBq(teraBq == null? defaultVal : teraBq);
     }

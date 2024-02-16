@@ -24,9 +24,9 @@ public class IsotopeModel extends BaseModel {
     @Column(name = "Abbr", length = 15, nullable = false)
     private String abbr;
 
-    public IsotopeModel(String name, String abbr) {
-        this.abbr = abbr;
-        this.name = name;
+    public IsotopeModel(IsotopeModelId modelId) {
+        setName(modelId.getName());
+        setAbbr(modelId.getAbbr());
     }
 
     public String getName() {

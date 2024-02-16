@@ -18,8 +18,8 @@ public class ExemptConcentrationModel extends BaseModel {
     private float value;
 
     public ExemptConcentrationModel(String abbr, float value) {
-        this.abbr = abbr;
-        this.value = value;
+        setAbbr(abbr);
+        setValue(value);
         setBasePrefix(Conversions.SIPrefix.BASE);
     }
 

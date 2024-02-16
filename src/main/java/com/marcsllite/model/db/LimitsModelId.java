@@ -5,29 +5,31 @@ import java.util.Objects;
 
 public class LimitsModelId implements Serializable {
     private static final long serialVersionUID = 7009442724876176627L;
-    private String state;
-    private String form;
+    private LimitsModel.State state;
+    private LimitsModel.Form form;
 
-    public LimitsModelId() { }
-
-    public LimitsModelId(String state, String form) {
-        this.state = state;
-        this.form = form;
+    public LimitsModelId() {
+        this(LimitsModel.State.SOLID, LimitsModel.Form.NORMAL);
     }
 
-    public String getState() {
+    public LimitsModelId(LimitsModel.State state, LimitsModel.Form form) {
+        setState(state);
+        setForm(form);
+    }
+
+    public LimitsModel.State getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(LimitsModel.State state) {
         this.state = state;
     }
 
-    public String getForm() {
+    public LimitsModel.Form getForm() {
         return form;
     }
 
-    public void setForm(String form) {
+    public void setForm(LimitsModel.Form form) {
         this.form = form;
     }
 

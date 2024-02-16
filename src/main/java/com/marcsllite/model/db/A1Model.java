@@ -18,8 +18,8 @@ public class A1Model extends BaseModel {
     private float value;
 
     public A1Model(String abbr, float value) {
-        this.abbr = abbr;
-        this.value = value;
+        setAbbr(abbr);
+        setValue(value);
         setBasePrefix(Conversions.SIPrefix.TERA);
     }
 

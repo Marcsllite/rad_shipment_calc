@@ -18,8 +18,8 @@ public class DecayConstantModel extends BaseModel {
     private float value;
 
     public DecayConstantModel(String abbr, float value) {
-        this.abbr = abbr;
-        this.value = value;
+        setAbbr(abbr);
+        setValue(value);
         setBasePrefix(Conversions.SIPrefix.BASE);
     }
 

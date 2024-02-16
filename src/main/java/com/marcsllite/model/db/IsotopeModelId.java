@@ -8,11 +8,13 @@ public class IsotopeModelId implements Serializable {
     private String name;
     private String abbr;
 
-    public IsotopeModelId() { }
+    public IsotopeModelId() {
+        this("", "");
+    }
 
     public IsotopeModelId(String name, String abbr) {
-        this.name = name;
-        this.abbr = abbr;
+        setName(name);
+        setAbbr(abbr);
     }
 
     public String getName() {

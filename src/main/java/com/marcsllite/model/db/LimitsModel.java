@@ -49,12 +49,12 @@ public class LimitsModel extends BaseModel {
     @Column(name = "Limited")
     private float limited;
 
-    public LimitsModel(State state, Form form, float ia_limited, float ia_package, float limited) {
-        this.state = state;
-        this.form = form;
-        this.ia_limited = ia_limited;
-        this.ia_package = ia_package;
-        this.limited = limited;
+    public LimitsModel(LimitsModelId modelId, float ia_limited, float ia_package, float limited) {
+        setState(modelId.getState());
+        setForm(modelId.getForm());
+        setIa_limited(ia_limited);
+        setIa_package(ia_package);
+        setLimited(limited);
     }
 
     public State getState() {

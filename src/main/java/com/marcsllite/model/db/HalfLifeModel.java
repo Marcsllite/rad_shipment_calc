@@ -17,8 +17,8 @@ public class HalfLifeModel extends BaseModel {
     private float value;
 
     public HalfLifeModel(String abbr, float value) {
-        this.abbr = abbr;
-        this.value = value;
+        setAbbr(abbr);
+        setValue(value);
     }
 
     public float getValue() {

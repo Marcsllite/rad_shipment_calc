@@ -1,5 +1,6 @@
 package com.marcsllite.model.db;
 
+import com.marcsllite.util.Conversions;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -17,8 +18,9 @@ public class ExemptLimitModel extends BaseModel {
     private float value;
 
     public ExemptLimitModel(String abbr, float value) {
-        this.abbr = abbr;
-        this.value = value;
+        setAbbr(abbr);
+        setValue(value);
+        setBasePrefix(Conversions.SIPrefix.BASE);
     }
 
     public float getValue() {
