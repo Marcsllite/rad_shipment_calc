@@ -11,7 +11,7 @@ class IsotopeConstantsTest {
     private final float DEFAULT_INT = -2.0f;
     
     @Test
-    public void testConstructor() {
+    public void testConstructor_PropHandler() {
         assertEquals(DEFAULT_INT, constants.getDefaultVal(), 0.0f);
         assertEquals(DEFAULT_INT, constants.getA1(), 0.0f);
         assertEquals(DEFAULT_INT, constants.getA2(), 0.0f);
@@ -23,5 +23,34 @@ class IsotopeConstantsTest {
         assertEquals(DEFAULT_INT, constants.getIaPackageLimit(), 0.0f);
         assertEquals(DEFAULT_INT, constants.getLimitedLimit(), 0.0f);
         assertEquals(DEFAULT_INT, constants.getReportableQuan(), 0.0f);
+    }
+
+    @Test
+    public void testConstructor_WithValues() {
+        float val = 1.5f;
+        
+        constants = new IsotopeConstants(GUITest.propHandler,
+            val,
+            val,
+            val,
+            val,
+            val,
+            val,
+            val,
+            val,
+            val,
+            val);
+        
+        assertEquals(DEFAULT_INT, constants.getDefaultVal(), 0.0f);
+        assertEquals(val, constants.getA1(), 0.0f);
+        assertEquals(val, constants.getA2(), 0.0f);
+        assertEquals(val, constants.getDecayConstant(), 0.0f);
+        assertEquals(val, constants.getExemptConcentration(), 0.0f);
+        assertEquals(val, constants.getExemptLimit(), 0.0f);
+        assertEquals(val, constants.getHalfLife(), 0.0f);
+        assertEquals(val, constants.getIaLimitedLimit(), 0.0f);
+        assertEquals(val, constants.getIaPackageLimit(), 0.0f);
+        assertEquals(val, constants.getLimitedLimit(), 0.0f);
+        assertEquals(val, constants.getReportableQuan(), 0.0f);
     }
 }

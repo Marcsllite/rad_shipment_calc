@@ -10,8 +10,8 @@ public class ReportableQuantity {
     private final PropHandler propHandler;
     private final float defaultVal;
     private String abbr;
-    private final SimpleFloatProperty curie;
-    private final SimpleFloatProperty teraBq;
+    private final SimpleFloatProperty curie = new SimpleFloatProperty();
+    private final SimpleFloatProperty teraBq = new SimpleFloatProperty();
 
     public ReportableQuantity(String abbr) {
         this(
@@ -32,8 +32,8 @@ public class ReportableQuantity {
         this.propHandler = propHandler;
         this.defaultVal = (float) this.propHandler.getDouble("defaultNum");
 
-        this.curie = new SimpleFloatProperty(curie == null? defaultVal : curie);
-        this.teraBq = new SimpleFloatProperty(teraBq == null? defaultVal : teraBq);
+        setCurie(curie == null? defaultVal : curie);
+        setTeraBq(teraBq == null? defaultVal : teraBq);
     }
 
     public float getDefaultVal() {

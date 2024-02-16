@@ -9,16 +9,16 @@ import java.util.ResourceBundle;
 public class IsotopeConstants {
     private final PropHandler propHandler;
     private final float defaultVal;
-    private final SimpleFloatProperty a1;
-    private final SimpleFloatProperty a2;
-    private final SimpleFloatProperty decayConstant;
-    private final SimpleFloatProperty exemptConcentration;
-    private final SimpleFloatProperty exemptLimit;
-    private final SimpleFloatProperty halfLife;
-    private final SimpleFloatProperty iaLimitedLimit;
-    private final SimpleFloatProperty iaPackageLimit;
-    private final SimpleFloatProperty limitedLimit;
-    private final SimpleFloatProperty reportableQuan;
+    private final SimpleFloatProperty a1 = new SimpleFloatProperty();
+    private final SimpleFloatProperty a2 = new SimpleFloatProperty();
+    private final SimpleFloatProperty decayConstant = new SimpleFloatProperty();
+    private final SimpleFloatProperty exemptConcentration = new SimpleFloatProperty();
+    private final SimpleFloatProperty exemptLimit = new SimpleFloatProperty();
+    private final SimpleFloatProperty halfLife = new SimpleFloatProperty();
+    private final SimpleFloatProperty iaLimitedLimit = new SimpleFloatProperty();
+    private final SimpleFloatProperty iaPackageLimit = new SimpleFloatProperty();
+    private final SimpleFloatProperty limitedLimit = new SimpleFloatProperty();
+    private final SimpleFloatProperty reportableQuan = new SimpleFloatProperty();
 
     public IsotopeConstants() {
         this((PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()));
@@ -53,16 +53,16 @@ public class IsotopeConstants {
         this.propHandler = propHandler;
         this.defaultVal = (float) this.propHandler.getDouble("defaultNum");
 
-        this.a1 = new SimpleFloatProperty(a1 == null? defaultVal : a1);
-        this.a2 = new SimpleFloatProperty(a2 == null? defaultVal : a2);
-        this.decayConstant = new SimpleFloatProperty(decayConstant == null? defaultVal : decayConstant);
-        this.exemptConcentration = new SimpleFloatProperty(exemptConcentration == null? defaultVal : exemptConcentration);
-        this.exemptLimit = new SimpleFloatProperty(exemptLimit == null? defaultVal : exemptLimit);
-        this.halfLife = new SimpleFloatProperty(halfLife == null? defaultVal : halfLife);
-        this.iaLimitedLimit = new SimpleFloatProperty(iaLimitedLimit == null? defaultVal : iaLimitedLimit);
-        this.iaPackageLimit = new SimpleFloatProperty(iaPackageLimit == null? defaultVal : iaPackageLimit);
-        this.limitedLimit = new SimpleFloatProperty(limitedLimit == null? defaultVal : limitedLimit);
-        this.reportableQuan = new SimpleFloatProperty(reportableQuan == null? defaultVal : reportableQuan);
+        setA1(a1 == null? defaultVal : a1);
+        setA2(a2 == null? defaultVal : a2);
+        setDecayConstant(decayConstant == null? defaultVal : decayConstant);
+        setExemptConcentration(exemptConcentration == null? defaultVal : exemptConcentration);
+        setExemptLimit(exemptLimit == null? defaultVal : exemptLimit);
+        setHalfLife(halfLife == null? defaultVal : halfLife);
+        setIaLimitedLimit(iaLimitedLimit == null? defaultVal : iaLimitedLimit);
+        setIaPackageLimit(iaPackageLimit == null? defaultVal : iaPackageLimit);
+        setLimitedLimit(limitedLimit == null? defaultVal : limitedLimit);
+        setReportableQuan(reportableQuan == null? defaultVal : reportableQuan);
     }
 
     public float getDefaultVal() {

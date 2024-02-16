@@ -12,9 +12,9 @@ public class Limits {
     private final float defaultVal;
     private LimitsModel.State state;
     private LimitsModel.Form form;
-    private final SimpleFloatProperty ia_limited;
-    private final SimpleFloatProperty ia_package;
-    private final SimpleFloatProperty limited;
+    private final SimpleFloatProperty ia_limited = new SimpleFloatProperty();
+    private final SimpleFloatProperty ia_package = new SimpleFloatProperty();
+    private final SimpleFloatProperty limited = new SimpleFloatProperty();
 
     public Limits() {
         this(
@@ -35,11 +35,11 @@ public class Limits {
     public Limits(PropHandler propHandler, LimitsModel.State state, LimitsModel.Form form, Float ia_limited, Float ia_package, Float limited) {
         this.propHandler = propHandler;
         this.defaultVal = (float) propHandler.getDouble("defaultNum");
-        this.state = state;
-        this.form = form;
-        this.ia_limited = new SimpleFloatProperty(ia_limited == null? defaultVal : ia_limited);
-        this.ia_package = new SimpleFloatProperty(ia_package == null? defaultVal : ia_package);
-        this.limited = new SimpleFloatProperty(limited == null? defaultVal : limited);
+        setState(state);
+        setForm(form);
+        setIa_limited(ia_limited == null? defaultVal : ia_limited);
+        setIa_package(ia_package == null? defaultVal : ia_package);
+        setLimited(limited == null? defaultVal : limited);
     }
 
     public float getDefaultVal() {

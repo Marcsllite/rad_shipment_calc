@@ -84,8 +84,7 @@ public class Isotope {
             abbr,
             massUnit,
             nature,
-            LimitsModel.State.SOLID,
-            LimitsModel.Form.NORMAL);
+            LimitsModel.State.SOLID);
     }
 
     public Isotope(PropHandler propHandler, String name, String abbr, MassUnit massUnit, Nature nature, LimitsModel.State state) {
