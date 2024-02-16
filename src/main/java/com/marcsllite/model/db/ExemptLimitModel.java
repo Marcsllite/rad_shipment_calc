@@ -11,10 +11,15 @@ public class ExemptLimitModel extends BaseModel {
     private static final long serialVersionUID = -5142275333078025319L;
 
     @Id
-    @Column(name = "Abbr")
+    @Column(name = "Abbr", length = 15, nullable = false)
     private String abbr;
-    @Column(name = "Value")
+    @Column(name = "Val")
     private float value;
+
+    public ExemptLimitModel(String abbr, float value) {
+        this.abbr = abbr;
+        this.value = value;
+    }
 
     public float getValue() {
         return value;

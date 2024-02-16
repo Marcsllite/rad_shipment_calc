@@ -1,27 +1,27 @@
 package com.marcsllite.model.db;
 
+import com.marcsllite.util.Conversions;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.NamedNativeQueries;
-import jakarta.persistence.NamedNativeQuery;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "EXEMPT_CONCENTRATION")
-@NamedNativeQueries({
-    @NamedNativeQuery(name = ExemptConcentrationModel.GET_EXEMPT_CON,
-        query = "select Value from EXEMPT_CONCENTRATION where Abbr=:abbr")
-})
 public class ExemptConcentrationModel extends BaseModel {
     private static final long serialVersionUID = 5186004813264658890L;
-    public static final String GET_EXEMPT_CON = "ExemptConcentrationModel.getExemptConcentration";
 
     @Id
-    @Column(name = "Abbr")
+    @Column(name = "Abbr", length = 15, nullable = false)
     private String abbr;
-    @Column(name = "Value")
+    @Column(name = "Val")
     private float value;
+
+    public ExemptConcentrationModel(String abbr, float value) {
+        this.abbr = abbr;
+        this.value = value;
+        setBasePrefix(Conversions.SIPrefix.BASE);
+    }
 
     public float getValue() {
         return value;

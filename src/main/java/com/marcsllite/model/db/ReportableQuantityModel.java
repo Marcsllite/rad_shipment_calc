@@ -11,13 +11,18 @@ public class ReportableQuantityModel extends BaseModel {
     private static final long serialVersionUID = 1479886818838786038L;
 
     @Id
-    @Column(name = "Abbr")
+    @Column(name = "Abbr", length = 15, nullable = false)
     private String abbr;
     @Column(name = "Ci")
     private float curie;
     @Column(name = "TBq")
     private float teraBq;
 
+    public ReportableQuantityModel(String abbr, float curie, float teraBq) {
+        this.abbr = abbr;
+        this.curie = curie;
+        this.teraBq = teraBq;
+    }
 
     public String getAbbr() {
         return abbr;

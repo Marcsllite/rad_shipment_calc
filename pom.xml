@@ -54,6 +54,11 @@
     <dependencies>
         <dependency>
             <groupId>org.openjfx</groupId>
+            <artifactId>javafx-base</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>${javafx.version}</version>
         </dependency>
@@ -258,6 +263,7 @@
                         <exclude>**/App.class</exclude>
                         <exclude>**/dao/*</exclude>
                         <exclude>**/model/db/*</exclude>
+                        <exclude>**/service/*</exclude>
                     </excludes>
                 </configuration>
                 <executions>

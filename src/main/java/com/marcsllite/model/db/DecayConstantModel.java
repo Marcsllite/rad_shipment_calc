@@ -1,27 +1,27 @@
 package com.marcsllite.model.db;
 
+import com.marcsllite.util.Conversions;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.NamedNativeQueries;
-import jakarta.persistence.NamedNativeQuery;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "DECAY_CONSTANT")
-@NamedNativeQueries({
-    @NamedNativeQuery(name = DecayConstantModel.GET_DECAY_CONST,
-        query = "select Value from DECAY_CONSTANT where Abbr=:abbr")
-})
 public class DecayConstantModel extends BaseModel {
     private static final long serialVersionUID = 5704920375115196514L;
-    public static final String GET_DECAY_CONST = "DecayConstantModel.getDecayConstant";
 
     @Id
-    @Column(name = "Abbr")
+    @Column(name = "Abbr", length = 15, nullable = false)
     private String abbr;
-    @Column(name = "Value")
+    @Column(name = "Val")
     private float value;
+
+    public DecayConstantModel(String abbr, float value) {
+        this.abbr = abbr;
+        this.value = value;
+        setBasePrefix(Conversions.SIPrefix.BASE);
+    }
 
     public float getValue() {
         return value;

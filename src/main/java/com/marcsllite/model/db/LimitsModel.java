@@ -3,25 +3,12 @@ package com.marcsllite.model.db;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.NamedNativeQueries;
-import jakarta.persistence.NamedNativeQuery;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "LIMITS")
-@NamedNativeQueries({
-    @NamedNativeQuery(name = LimitsModel.GET_IA_LIMITED,
-        query = "select IA_Limited from LIMITS where State=:state and Form=:form"),
-    @NamedNativeQuery(name = LimitsModel.GET_IA_PACKAGE,
-        query = "select IA_Package from LIMITS where State=:state and Form=:form"),
-    @NamedNativeQuery(name = LimitsModel.GET_LIMITED,
-        query = "select Limited from LIMITS where State=:state and Form=:form")
-})
 public class LimitsModel extends BaseModel {
     private static final long serialVersionUID = -5280835757871497233L;
-    public static final String GET_IA_LIMITED = "LimitsModel.getIALimited";
-    public static final String GET_IA_PACKAGE = "LimitsModel.getIAPackage";
-    public static final String GET_LIMITED = "LimitsModel.getLimited";
 
     public enum State {
         SOLID("Solid"),
@@ -46,11 +33,11 @@ public class LimitsModel extends BaseModel {
         }
     }
     @Id
-    @Column(name = "State")
+    @Column(name = "State", nullable = false)
     private State state;
 
     @Id
-    @Column(name = "Form")
+    @Column(name = "Form", nullable = false)
     private Form form;
 
     @Column(name = "IA_Limited")
@@ -61,6 +48,14 @@ public class LimitsModel extends BaseModel {
 
     @Column(name = "Limited")
     private float limited;
+
+    public LimitsModel(State state, Form form, float ia_limited, float ia_package, float limited) {
+        this.state = state;
+        this.form = form;
+        this.ia_limited = ia_limited;
+        this.ia_package = ia_package;
+        this.limited = limited;
+    }
 
     public State getState() {
         return state;

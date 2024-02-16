@@ -1,27 +1,27 @@
 package com.marcsllite.model.db;
 
+import com.marcsllite.util.Conversions;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.NamedNativeQueries;
-import jakarta.persistence.NamedNativeQuery;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "A_ONE")
-@NamedNativeQueries({
-    @NamedNativeQuery(name = A1Model.GET_A1,
-        query = "select Value from A_ONE where Abbr=:abbr")
-})
 public class A1Model extends BaseModel {
     private static final long serialVersionUID = 1600283366978070629L;
-    public static final String GET_A1 = "A1Model.getA1";
 
     @Id
-    @Column(name = "Abbr")
+    @Column(name = "Abbr", length = 15, nullable = false)
     private String abbr;
-    @Column(name = "Value")
+    @Column(name = "Val")
     private float value;
+
+    public A1Model(String abbr, float value) {
+        this.abbr = abbr;
+        this.value = value;
+        setBasePrefix(Conversions.SIPrefix.TERA);
+    }
 
     public float getValue() {
         return value;

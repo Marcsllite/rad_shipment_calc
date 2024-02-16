@@ -88,7 +88,7 @@ public class HomePaneController extends BaseController {
      * Helper function to handle the add button being pressed
      */
     @FXML protected void addBtnHandler(){
-        logr.info("User clicked the Add button on the home pane");
+        logr.debug("User clicked the Add button on the home pane");
         // TODO: implement clicking on add button
     }
 
@@ -96,7 +96,7 @@ public class HomePaneController extends BaseController {
      * Helper function to handle the edit button being pressed
      */
     @FXML protected void editBtnHandler(){
-        logr.info("User clicked the Edit button on the home pane");
+        logr.debug("User clicked the Edit button on the home pane");
         // TODO: implement clicking on edit button
     }
 
@@ -104,7 +104,7 @@ public class HomePaneController extends BaseController {
      * Helper function to handle the remove button being pressed
      */
     @FXML protected void removeBtnHandler(){
-        logr.info("User clicked the Remove button on the home pane");
+        logr.debug("User clicked the Remove button on the home pane");
         // TODO: implement clicking on remove button
     }
 
@@ -112,7 +112,7 @@ public class HomePaneController extends BaseController {
      * Helper function to handle the calculate button being pressed
      */
     @FXML protected void calculateBtnHandler(){
-        logr.info("User clicked the Calculate button on the home pane");
+        logr.debug("User clicked the Calculate button on the home pane");
         // TODO: implement clicking on calculate button
     }
 }

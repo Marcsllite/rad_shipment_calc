@@ -20,6 +20,7 @@
 
         <properties>
             <!-- Database connection settings -->
+            <property name="jakarta.persistence.jdbc.driver" value="org.h2.Driver"/>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:h2:db/ShipmentCalculatorLocal;INIT=RUNSCRIPT FROM 'main/resources/dbInit.sql';" />
             <property name="jakarta.persistence.jdbc.user" value="superuser" />
             <property name="jakarta.persistence.jdbc.password" value="SnayRadiation" />
@@ -27,10 +28,15 @@
             <!-- Automatically export the schema -->
             <property name="jakarta.persistence.schema-generation.database.action" value="update" />
 
+            <property name="hibernate.check_nullability" value="true"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+
             <!-- Echo all executed SQL to console -->
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="true" />
             <property name="hibernate.highlight_sql" value="true" />
+            <property name="hibernate.use_sql_comments" value="true" />
         </properties>
     </persistence-unit>
 </persistence>

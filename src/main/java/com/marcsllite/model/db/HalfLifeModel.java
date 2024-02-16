@@ -11,10 +11,15 @@ public class HalfLifeModel extends BaseModel {
     private static final long serialVersionUID = -3082962071180959635L;
 
     @Id
-    @Column(name = "Abbr")
+    @Column(name = "Abbr", length = 15, nullable = false)
     private String abbr;
-    @Column(name = "Value")
+    @Column(name = "Val")
     private float value;
+
+    public HalfLifeModel(String abbr, float value) {
+        this.abbr = abbr;
+        this.value = value;
+    }
 
     public float getValue() {
         return value;

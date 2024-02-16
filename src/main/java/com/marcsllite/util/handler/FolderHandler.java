@@ -23,7 +23,7 @@ public class FolderHandler {
     public FolderHandler(PropHandler propHandler) {
         this.propHandler = propHandler;
         setDataFolder(this.propHandler.getString("appFolderName"),
-                      this.propHandler.parseOS(propHandler.getOS()));
+                      this.propHandler.parseOS(this.propHandler.getOS()));
         setDefaultDir(this.propHandler.getString("appMainFolder"));
     }
 

@@ -1,14 +1,29 @@
 package com.marcsllite.model.db;
 
+import com.marcsllite.util.Conversions;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.io.Serializable;
 
 @MappedSuperclass
 public abstract class BaseModel implements Serializable {
     private static final long serialVersionUID = -7070688536494118785L;
-    @Version private Long version;
+    @Version
+    @ColumnDefault("0")
+    private Long version;
+    @Transient
+    private Conversions.SIPrefix basePrefix;
+
+    public Conversions.SIPrefix getBasePrefix() {
+        return basePrefix;
+    }
+
+    public void setBasePrefix(Conversions.SIPrefix basePrefix) {
+        this.basePrefix = basePrefix;
+    }
 
     public Long getVersion() {
         return version;

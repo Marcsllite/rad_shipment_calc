@@ -5,10 +5,13 @@
       <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
       <!-- Flow tracing is most useful with a pattern that shows location.
            Below pattern outputs class, line number and method name. -->
-      <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36}.%M:%L - %msg%xEx%n"/>
+      <PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss,SSS} %-5level %class{36}.%M:%L - %msg%xEx%n"/>
     </Console>
     <File name="file" fileName="logs/shipmentCalc.log" append="false">
-      <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36}.%M:%L - %msg%xEx%n"/>
+      <PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss,SSS} %-5level %class{36}.%M:%L - %msg%xEx%n"/>
+    </File>
+    <File name="release" fileName="logs/ShipmentCalculator.log" append="true">
+      <PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss,SSS} %-5level %class{36}.%M:%L - %msg%xEx%n"/>
     </File>
   </Appenders>
   <Loggers>

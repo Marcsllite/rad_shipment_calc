@@ -108,7 +108,7 @@ public class MenuPaneController extends BaseController {
      * Helper function to handle the UMass Lowell logo being pressed
      */
     @FXML protected void logoImgViewHandler(){
-        logr.info("User clicked the UMass logo on the menu pane");
+        logr.debug("User clicked the UMass logo on the menu pane");
         // TODO: implement clicking on menu logo
     }
 
@@ -153,11 +153,11 @@ public class MenuPaneController extends BaseController {
         if(btnCurrent.equals(btnShipment)) {
             setButtonColor(btnShipment, CURRENT_COLOR);  // setting the single button and icon to be the current color
             currentPage = Page.SHIPMENT;
-            logr.info("Navigated to {} page.", btnShipment.getText());
+            logr.debug("Navigated to {} page.", btnShipment.getText());
         } else if(btnCurrent.equals(btnReference)) {
             setButtonColor(btnReference, CURRENT_COLOR);  // setting the multiple button and icon to be the current color
             currentPage = Page.REFERENCE;
-            logr.info("Navigated to {} page.", btnReference.getText());
+            logr.debug("Navigated to {} page.", btnReference.getText());
         }
     }
 

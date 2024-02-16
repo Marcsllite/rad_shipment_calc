@@ -32,7 +32,6 @@ public abstract class AbstractDao<ENTITY, ID> implements Dao<ENTITY, ID> {
 
     public AbstractDao() {
         factory = Persistence.createEntityManagerFactory("com.marcsllite.db");
-        em = factory.createEntityManager();
         entityClass = (Class<ENTITY>) (
             (ParameterizedType) getClass().getGenericSuperclass()
         ).getActualTypeArguments()[0];
