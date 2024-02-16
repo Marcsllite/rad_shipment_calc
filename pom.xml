@@ -262,7 +262,6 @@
                         <exclude>**/Launcher.class</exclude>
                         <exclude>**/App.class</exclude>
                         <exclude>**/dao/*</exclude>
-                        <exclude>**/model/db/*</exclude>
                         <exclude>**/service/*</exclude>
                     </excludes>
                 </configuration>
