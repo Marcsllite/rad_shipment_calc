@@ -18,6 +18,10 @@ public class ReportableQuantityModel extends BaseModel {
     @Column(name = "TBq")
     private float teraBq;
 
+    public ReportableQuantityModel() {
+        this("Abbr", -2.0f, -2.0f);
+    }
+
     public ReportableQuantityModel(String abbr, float curie, float teraBq) {
         setAbbr(abbr);
         setCurie(curie);

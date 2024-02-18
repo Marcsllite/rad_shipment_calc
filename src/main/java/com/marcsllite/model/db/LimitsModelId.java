@@ -1,35 +1,69 @@
 package com.marcsllite.model.db;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Embeddable;
+
 import java.io.Serializable;
 import java.util.Objects;
 
+@Embeddable
 public class LimitsModelId implements Serializable {
     private static final long serialVersionUID = 7009442724876176627L;
-    private LimitsModel.State state;
-    private LimitsModel.Form form;
 
-    public LimitsModelId() {
-        this(LimitsModel.State.SOLID, LimitsModel.Form.NORMAL);
+    public enum State {
+        SOLID("Solid"),
+        LIQUID("Liquid"),
+        GAS("Gas");
+
+        public final String val;
+
+        State(String val) {
+            this.val = val;
+        }
     }
 
-    public LimitsModelId(LimitsModel.State state, LimitsModel.Form form) {
+    public enum Form {
+        NORMAL("Normal"),
+        SPECIAL("Special");
+
+        public final String val;
+
+        Form(String val) {
+            this.val = val;
+        }
+    }
+
+    @Column(name = "State", nullable = false)
+    @Convert(converter = StateAttrConverter.class)
+    private State state;
+
+    @Column(name = "Form", nullable = false)
+    @Convert(converter = FormAttrConverter.class)
+    private Form form;
+
+    public LimitsModelId() {
+        this(State.SOLID, Form.NORMAL);
+    }
+
+    public LimitsModelId(State state, Form form) {
         setState(state);
         setForm(form);
     }
 
-    public LimitsModel.State getState() {
+    public State getState() {
         return state;
     }
 
-    public void setState(LimitsModel.State state) {
+    public void setState(State state) {
         this.state = state;
     }
 
-    public LimitsModel.Form getForm() {
+    public Form getForm() {
         return form;
     }
 
-    public void setForm(LimitsModel.Form form) {
+    public void setForm(Form form) {
         this.form = form;
     }
 

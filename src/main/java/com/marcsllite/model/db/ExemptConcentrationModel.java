@@ -17,6 +17,10 @@ public class ExemptConcentrationModel extends BaseModel {
     @Column(name = "Val")
     private float value;
 
+    public ExemptConcentrationModel() {
+        this("Abbr", -2.0f);
+    }
+
     public ExemptConcentrationModel(String abbr, float value) {
         setAbbr(abbr);
         setValue(value);

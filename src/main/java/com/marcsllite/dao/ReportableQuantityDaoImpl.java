@@ -1,8 +1,13 @@
 package com.marcsllite.dao;
 
 import com.marcsllite.model.db.ReportableQuantityModel;
+import jakarta.persistence.EntityManager;
 
 public class ReportableQuantityDaoImpl extends AbstractDao<ReportableQuantityModel, String> {
+    public ReportableQuantityDaoImpl(EntityManager em) {
+        super(em);
+    }
+
     public ReportableQuantityModel getReportQuan(String abbr) {
         return findById(abbr);
     }

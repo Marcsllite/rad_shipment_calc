@@ -16,6 +16,10 @@ public class HalfLifeModel extends BaseModel {
     @Column(name = "Val")
     private float value;
 
+    public HalfLifeModel() {
+        this("Abbr", -2.0f);
+    }
+
     public HalfLifeModel(String abbr, float value) {
         setAbbr(abbr);
         setValue(value);

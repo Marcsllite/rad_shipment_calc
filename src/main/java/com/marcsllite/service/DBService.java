@@ -39,7 +39,7 @@ public interface DBService {
 
     ReportableQuantity getReportQuan(String abbr);
 
-    float getCi(String abbr);
+    float getCiReportQuan(String abbr);
 
-    float getTBq(String abbr);
+    float getTBqReportQuan(String abbr);
 }

@@ -1,19 +1,23 @@
 package com.marcsllite.model;
 
-import com.marcsllite.model.db.LimitsModel;
+import com.marcsllite.model.db.IsotopeModelId;
+import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ResourceBundle;
 
 public class Isotope {
+    private static final Logger logr = LogManager.getLogger();
     private final PropHandler propHandler;
     private final IsotopeConstants constants;
     private String name;
     private String abbr;
     private Nature nature;
-    private LimitsModel.State state;
-    private LimitsModel.Form form;
+    private LimitsModelId.State state;
+    private LimitsModelId.Form form;
     private MassUnit massUnit;
     private IsoClass isoClass;
 
@@ -55,58 +59,53 @@ public class Isotope {
             this.val = val;
         }
     }
-    public Isotope(String name, String abbr) {
-        this(
-            (PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()),
-            name,
-            abbr
+    public Isotope(IsotopeModelId isoId) {
+        this((PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()),
+            isoId
         );
     }
 
-    public Isotope(PropHandler propHandler, String name, String abbr) {
+    public Isotope(PropHandler propHandler, IsotopeModelId isoId) {
         this(propHandler,
-            name,
-            abbr,
+            isoId,
             MassUnit.GRAMS);
     }
 
-    public Isotope(PropHandler propHandler, String name, String abbr, MassUnit massUnit) {
+    public Isotope(PropHandler propHandler, IsotopeModelId isoId, MassUnit massUnit) {
         this(propHandler,
-            name,
-            abbr,
+            isoId,
             massUnit,
             Nature.REGULAR);
     }
 
-    public Isotope(PropHandler propHandler, String name, String abbr, MassUnit massUnit, Nature nature) {
+    public Isotope(PropHandler propHandler, IsotopeModelId isoId, MassUnit massUnit, Nature nature) {
         this(propHandler,
-            name,
-            abbr,
+            isoId,
             massUnit,
             nature,
-            LimitsModel.State.SOLID);
+            LimitsModelId.State.SOLID);
     }
 
-    public Isotope(PropHandler propHandler, String name, String abbr, MassUnit massUnit, Nature nature, LimitsModel.State state) {
+    public Isotope(PropHandler propHandler, IsotopeModelId isoId, MassUnit massUnit, Nature nature, LimitsModelId.State state) {
         this(propHandler,
-            name,
-            abbr,
+            isoId,
             massUnit,
             nature,
-            state,
-            LimitsModel.Form.NORMAL);
+            new LimitsModelId(state, LimitsModelId.Form.NORMAL));
     }
 
-    public Isotope(PropHandler propHandler, String name, String abbr, MassUnit massUnit, Nature nature, LimitsModel.State state, LimitsModel.Form form) {
+    public Isotope(PropHandler propHandler, IsotopeModelId isoId, MassUnit massUnit, Nature nature, LimitsModelId limitsId) {
         this.propHandler = propHandler;
         this.constants = new IsotopeConstants(this.propHandler);
-        setName(name);
-        setAbbr(abbr);
+        constants.dbInit(isoId, limitsId);
+        setName(isoId.getName());
+        setAbbr(isoId.getAbbr());
         setMassUnit(massUnit);
         setNature(nature);
-        setState(state);
-        setForm(form);
+        setState(limitsId.getState());
+        setForm(limitsId.getForm());
         setIsoClass(IsoClass.TBD);
+        logr.debug("Created new Isotope " + getAbbr() + " and initialized it with the following data:\n" + constants);
     }
 
     public IsotopeConstants getConstants() {
@@ -144,19 +143,19 @@ public class Isotope {
         this.nature = nature;
     }
 
-    public LimitsModel.State getState() {
+    public LimitsModelId.State getState() {
         return state;
     }
 
-    public void setState(LimitsModel.State state) {
+    public void setState(LimitsModelId.State state) {
         this.state = state;
     }
 
-    public LimitsModel.Form getForm() {
+    public LimitsModelId.Form getForm() {
         return form;
     }
 
-    public void setForm(LimitsModel.Form form) {
+    public void setForm(LimitsModelId.Form form) {
         this.form = form;
     }
 

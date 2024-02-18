@@ -1,7 +1,8 @@
 package com.marcsllite.model;
 
 import com.marcsllite.GUITest;
-import com.marcsllite.model.db.LimitsModel;
+import com.marcsllite.model.db.IsotopeModelId;
+import com.marcsllite.model.db.LimitsModelId;
 import org.junit.jupiter.api.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -10,11 +11,11 @@ import static junit.framework.Assert.assertNotNull;
 public class IsotopeTest {
     private final String DEFAULT_NAME = "Name";
     private final String DEFAULT_ABBR = "Abbr";
-    Isotope iso = new Isotope(GUITest.propHandler, DEFAULT_NAME, DEFAULT_ABBR);
+    Isotope iso = new Isotope(GUITest.propHandler, new IsotopeModelId(DEFAULT_NAME, DEFAULT_ABBR));
     private final Isotope.MassUnit DEFAULT_MASS_UNIT = Isotope.MassUnit.GRAMS;
     private final Isotope.Nature DEFAULT_NATURE = Isotope.Nature.REGULAR;
-    private final LimitsModel.State DEFAULT_STATE = LimitsModel.State.SOLID;
-    private final LimitsModel.Form DEFAULT_FORM = LimitsModel.Form.NORMAL;
+    private final LimitsModelId.State DEFAULT_STATE = LimitsModelId.State.SOLID;
+    private final LimitsModelId.Form DEFAULT_FORM = LimitsModelId.Form.NORMAL;
     private final Isotope.IsoClass DEFAULT_CLASS = Isotope.IsoClass.TBD;
 
     @Test
@@ -27,5 +28,6 @@ public class IsotopeTest {
         assertEquals(DEFAULT_MASS_UNIT, iso.getMassUnit());
         assertEquals(DEFAULT_CLASS, iso.getIsoClass());
         assertNotNull(iso.getConstants());
+        System.out.println(iso.getConstants().toString());
     }
 }

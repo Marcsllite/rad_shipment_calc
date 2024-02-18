@@ -2,14 +2,11 @@ package com.marcsllite.dao;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.OptimisticLockException;
-import jakarta.persistence.Persistence;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceUnit;
 import jakarta.persistence.Query;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,18 +17,14 @@ import java.util.List;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractDao<ENTITY, ID> implements Dao<ENTITY, ID> {
-    @PersistenceUnit
-    private EntityManagerFactory factory;
     @PersistenceContext
     private EntityManager em;
     private final Class<ENTITY> entityClass;
     private static final Logger logr = LogManager.getLogger();
-
     private static final String COUNT_ENTITIES_QUERY = "select count(a) from %s as a";
     private static final String QUERY_ALL = "select a from %s as a";
 
     public AbstractDao() {
-        factory = Persistence.createEntityManagerFactory("com.marcsllite.db");
         entityClass = (Class<ENTITY>) (
             (ParameterizedType) getClass().getGenericSuperclass()
         ).getActualTypeArguments()[0];
@@ -39,7 +32,9 @@ public abstract class AbstractDao<ENTITY, ID> implements Dao<ENTITY, ID> {
 
     public AbstractDao(EntityManager em) {
         this();
-        setEntityManager(em);
+        if(em != null) {
+            setEntityManager(em);
+        }
     }
 
     public ENTITY findById(ID id) {

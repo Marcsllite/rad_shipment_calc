@@ -1,8 +1,8 @@
 package com.marcsllite.model.db;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
@@ -10,35 +10,8 @@ import jakarta.persistence.Table;
 public class LimitsModel extends BaseModel {
     private static final long serialVersionUID = -5280835757871497233L;
 
-    public enum State {
-        SOLID("Solid"),
-        LIQUID("Liquid"),
-        GAS("Gas");
-
-        public final String val;
-
-        State(String val) {
-            this.val = val;
-        }
-    }
-
-    public enum Form {
-        NORMAL("Normal"),
-        SPECIAL("Special");
-
-        public final String val;
-
-        Form(String val) {
-            this.val = val;
-        }
-    }
-    @Id
-    @Column(name = "State", nullable = false)
-    private State state;
-
-    @Id
-    @Column(name = "Form", nullable = false)
-    private Form form;
+    @EmbeddedId
+    private LimitsModelId limitsId;
 
     @Column(name = "IA_Limited")
     private float ia_limited;
@@ -49,28 +22,26 @@ public class LimitsModel extends BaseModel {
     @Column(name = "Limited")
     private float limited;
 
-    public LimitsModel(LimitsModelId modelId, float ia_limited, float ia_package, float limited) {
-        setState(modelId.getState());
-        setForm(modelId.getForm());
+    public LimitsModel() {
+        this(new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL),
+            -2.0f,
+            -2.0f,
+            -2.0f);
+    }
+
+    public LimitsModel(LimitsModelId limitsId, float ia_limited, float ia_package, float limited) {
+        setLimitsId(limitsId);
         setIa_limited(ia_limited);
         setIa_package(ia_package);
         setLimited(limited);
     }
 
-    public State getState() {
-        return state;
+    public LimitsModelId getLimitsId() {
+        return limitsId;
     }
 
-    public void setState(State state) {
-        this.state = state;
-    }
-
-    public Form getForm() {
-        return form;
-    }
-
-    public void setForm(Form form) {
-        this.form = form;
+    public void setLimitsId(LimitsModelId limitsId) {
+        this.limitsId = limitsId;
     }
 
     public float getIa_limited() {

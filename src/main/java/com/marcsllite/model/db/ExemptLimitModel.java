@@ -17,6 +17,10 @@ public class ExemptLimitModel extends BaseModel {
     @Column(name = "Val")
     private float value;
 
+    public ExemptLimitModel() {
+        this("Abbr", -2.0f);
+    }
+
     public ExemptLimitModel(String abbr, float value) {
         setAbbr(abbr);
         setValue(value);

@@ -17,6 +17,10 @@ public class A2Model extends BaseModel {
     @Column(name = "Val")
     private float value;
 
+    public A2Model() {
+        this("Abbr", -2.0f);
+    }
+
     public A2Model(String abbr, float value) {
         setAbbr(abbr);
         setValue(value);

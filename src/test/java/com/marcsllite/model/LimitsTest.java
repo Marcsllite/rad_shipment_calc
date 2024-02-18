@@ -2,7 +2,7 @@ package com.marcsllite.model;
 
 
 import com.marcsllite.GUITest;
-import com.marcsllite.model.db.LimitsModel;
+import com.marcsllite.model.db.LimitsModelId;
 import org.junit.jupiter.api.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -10,8 +10,8 @@ import static junit.framework.Assert.assertEquals;
 class LimitsTest {
     Limits limits = new Limits(GUITest.propHandler);
     private final float DEFAULT_INT = -2.0f;
-    private final LimitsModel.State DEFAULT_STATE = LimitsModel.State.SOLID;
-    private final LimitsModel.Form DEFAULT_FORM = LimitsModel.Form.NORMAL;
+    private final LimitsModelId.State DEFAULT_STATE = LimitsModelId.State.SOLID;
+    private final LimitsModelId.Form DEFAULT_FORM = LimitsModelId.Form.NORMAL;
     
     @Test
     public void testConstructor_PropHandler() {
@@ -26,17 +26,18 @@ class LimitsTest {
     @Test
     public void testConstructor_WithValues() {
         float val = 2.5f;
+        LimitsModelId limitsId = new LimitsModelId(LimitsModelId.State.LIQUID,
+            LimitsModelId.Form.SPECIAL);
         
         limits = new Limits(GUITest.propHandler,
-            LimitsModel.State.LIQUID,
-            LimitsModel.Form.SPECIAL,
+            limitsId,
             val,
             val,
             val);
         
         assertEquals(DEFAULT_INT, limits.getDefaultVal());
-        assertEquals(LimitsModel.State.LIQUID, limits.getState());
-        assertEquals(LimitsModel.Form.SPECIAL, limits.getForm());
+        assertEquals(limitsId.getState(), limits.getState());
+        assertEquals(limitsId.getForm(), limits.getForm());
         assertEquals(val, limits.getIa_limited(), 0.0f);
         assertEquals(val, limits.getIa_package(), 0.0f);
         assertEquals(val, limits.getLimited(), 0.0f);

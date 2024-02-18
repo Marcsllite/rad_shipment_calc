@@ -17,6 +17,10 @@ public class DecayConstantModel extends BaseModel {
     @Column(name = "Val")
     private float value;
 
+    public DecayConstantModel() {
+        this("Abbr", -2.0f);
+    }
+
     public DecayConstantModel(String abbr, float value) {
         setAbbr(abbr);
         setValue(value);

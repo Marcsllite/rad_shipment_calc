@@ -147,7 +147,6 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -172,6 +171,7 @@
                     <exclude>${basedir}/src/main/resources/csv/*</exclude>
                     <exclude>${basedir}/src/main/resources/databaseAudit/*</exclude>
                     <exclude>${basedir}/src/main/resources/font/*</exclude>
+                    <exclude>${basedir}/src/main/resources/META-INF/*</exclude>
                     <exclude>${basedir}/src/main/resources/scripts/*</exclude>
                 </excludes>
             </testResource>
@@ -261,8 +261,6 @@
                     <excludes>
                         <exclude>**/Launcher.class</exclude>
                         <exclude>**/App.class</exclude>
-                        <exclude>**/dao/*</exclude>
-                        <exclude>**/service/*</exclude>
                     </excludes>
                 </configuration>
                 <executions>

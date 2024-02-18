@@ -6,15 +6,15 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
 class LimitsModelTest {
-    private final LimitsModel.State DEFAULT_STATE = LimitsModel.State.SOLID;
-    private final LimitsModel.Form DEFAULT_FORM = LimitsModel.Form.NORMAL;
+    private final LimitsModelId.State DEFAULT_STATE = LimitsModelId.State.SOLID;
+    private final LimitsModelId.Form DEFAULT_FORM = LimitsModelId.Form.NORMAL;
+    private final LimitsModelId DEFAULT_LIMITS_ID = new LimitsModelId(DEFAULT_STATE, DEFAULT_FORM);
     private final float DEFAULT_VAL = 1.0f;
-    LimitsModel model = new LimitsModel(new LimitsModelId(DEFAULT_STATE, DEFAULT_FORM), DEFAULT_VAL, DEFAULT_VAL, DEFAULT_VAL);
+    LimitsModel model = new LimitsModel(DEFAULT_LIMITS_ID, DEFAULT_VAL, DEFAULT_VAL, DEFAULT_VAL);
 
     @Test
     public void testConstructor() {
-        assertEquals(DEFAULT_STATE, model.getState());
-        assertEquals(DEFAULT_FORM, model.getForm());
+        assertEquals(DEFAULT_LIMITS_ID, model.getLimitsId());
         assertEquals(DEFAULT_VAL, model.getIa_limited());
         assertEquals(DEFAULT_VAL, model.getIa_package());
         assertEquals(DEFAULT_VAL, model.getLimited());
@@ -22,17 +22,10 @@ class LimitsModelTest {
     }
 
     @Test
-    public void testSetState() {
-        LimitsModel.State state = LimitsModel.State.GAS;
-        model.setState(state);
-        assertEquals(state, model.getState());
-    }
-
-    @Test
-    public void testSetForm() {
-        LimitsModel.Form state = LimitsModel.Form.SPECIAL;
-        model.setForm(state);
-        assertEquals(state, model.getForm());
+    public void testSetLimitsId() {
+        LimitsModelId limitsId = new LimitsModelId(LimitsModelId.State.LIQUID, LimitsModelId.Form.SPECIAL);
+        model.setLimitsId(limitsId);
+        assertEquals(limitsId, model.getLimitsId());
     }
 
     @Test

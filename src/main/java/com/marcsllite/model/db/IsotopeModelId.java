@@ -1,16 +1,20 @@
 package com.marcsllite.model.db;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+
 import java.io.Serializable;
 import java.util.Objects;
 
+@Embeddable
 public class IsotopeModelId implements Serializable {
     private static final long serialVersionUID = 4570361434780825099L;
-    private String name;
-    private String abbr;
 
-    public IsotopeModelId() {
-        this("", "");
-    }
+    @Column(name = "Name", nullable = false)
+    private String name;
+
+    @Column(name = "Abbr", length = 15, nullable = false)
+    private String abbr;
 
     public IsotopeModelId(String name, String abbr) {
         setName(name);

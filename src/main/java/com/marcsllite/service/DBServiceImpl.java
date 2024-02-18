@@ -19,6 +19,7 @@ import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.model.db.ReportableQuantityModel;
 import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
+import jakarta.persistence.EntityManager;
 
 import java.util.List;
 import java.util.ResourceBundle;
@@ -36,21 +37,25 @@ public class DBServiceImpl implements DBService {
     private LimitsDaoImpl limitsDao;
     private ReportableQuantityDaoImpl reportableQuanDao;
 
-    DBServiceImpl() {
+    public DBServiceImpl() {
         this((PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()));
     }
 
-    DBServiceImpl(PropHandler propHandler) {
+    public DBServiceImpl(PropHandler propHandler) {
+        this(propHandler, null);
+    }
+
+    public DBServiceImpl(PropHandler propHandler, EntityManager em) {
         this.propHandler = propHandler;
-        setA1Dao(new A1DaoImpl());
-        setA2Dao(new A2DaoImpl());
-        setDecayConstantDao(new DecayConstantDaoImpl());
-        setExemptConDao(new ExemptConcentrationDaoImpl());
-        setExemptLimitDao(new ExemptLimitDaoImpl());
-        setHalfLifeDao(new HalfLifeDaoImpl());
-        setIsotopeDao(new IsotopeDaoImpl());
-        setLimitsDao(new LimitsDaoImpl());
-        setReportableQuanDao(new ReportableQuantityDaoImpl());
+        setA1Dao(new A1DaoImpl(em));
+        setA2Dao(new A2DaoImpl(em));
+        setDecayConstantDao(new DecayConstantDaoImpl(em));
+        setExemptConDao(new ExemptConcentrationDaoImpl(em));
+        setExemptLimitDao(new ExemptLimitDaoImpl(em));
+        setHalfLifeDao(new HalfLifeDaoImpl(em));
+        setIsotopeDao(new IsotopeDaoImpl(em));
+        setLimitsDao(new LimitsDaoImpl(em));
+        setReportableQuanDao(new ReportableQuantityDaoImpl(em));
     }
 
     public void setA1Dao(A1DaoImpl a1Dao) {
@@ -123,14 +128,14 @@ public class DBServiceImpl implements DBService {
     public List<Isotope> getMatchingIsotopes(String substr) {
         return isotopeDao.getMatchingIsotopes(substr)
             .stream()
-            .map(model -> new Isotope(model.getName(), model.getAbbr()))
+            .map(model -> new Isotope(new IsotopeModelId(model.getIsotopeId().getName(), model.getIsotopeId().getAbbr())))
             .collect(Collectors.toList());
     }
 
     @Override
     public Isotope getIsotope(IsotopeModelId modelId) {
         IsotopeModel model = isotopeDao.getIsotope(modelId);
-        return new Isotope(model.getName(), model.getAbbr());
+        return model == null? null : new Isotope(new IsotopeModelId(model.getIsotopeId().getName(), model.getIsotopeId().getAbbr()));
     }
 
     @Override
@@ -146,8 +151,8 @@ public class DBServiceImpl implements DBService {
     @Override
     public Limits getAllLimits(LimitsModelId modelId) {
         LimitsModel model = limitsDao.getAllLimits(modelId);
-        return new Limits(propHandler, model.getState(),
-            model.getForm(),
+        return model == null? null : new Limits(propHandler,
+            new LimitsModelId(model.getLimitsId().getState(), model.getLimitsId().getForm()),
             model.getIa_limited(),
             model.getIa_package(),
             model.getLimited());
@@ -171,16 +176,16 @@ public class DBServiceImpl implements DBService {
     @Override
     public ReportableQuantity getReportQuan(String abbr) {
         ReportableQuantityModel model = reportableQuanDao.getReportQuan(abbr);
-        return new ReportableQuantity(propHandler, model.getAbbr(), model.getCurie(), model.getTeraBq());
+        return model == null? null : new ReportableQuantity(propHandler, model.getAbbr(), model.getCurie(), model.getTeraBq());
     }
 
     @Override
-    public float getCi(String abbr) {
+    public float getCiReportQuan(String abbr) {
         return reportableQuanDao.getCi(abbr);
     }
 
     @Override
-    public float getTBq(String abbr) {
+    public float getTBqReportQuan(String abbr) {
         return reportableQuanDao.getTBq(abbr);
     }
 }

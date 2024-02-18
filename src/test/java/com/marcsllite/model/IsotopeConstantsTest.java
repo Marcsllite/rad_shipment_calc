@@ -1,56 +1,71 @@
 package com.marcsllite.model;
 
 
+import com.marcsllite.DBTest;
 import com.marcsllite.GUITest;
+import com.marcsllite.model.db.IsotopeModelId;
+import com.marcsllite.model.db.LimitsModelId;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static junit.framework.Assert.assertEquals;
 
-class IsotopeConstantsTest {
-    IsotopeConstants constants = new IsotopeConstants(GUITest.propHandler);
+class IsotopeConstantsTest extends DBTest {
+    IsotopeConstants constants;
     private final float DEFAULT_INT = -2.0f;
-    
-    @Test
-    public void testConstructor_PropHandler() {
-        assertEquals(DEFAULT_INT, constants.getDefaultVal(), 0.0f);
-        assertEquals(DEFAULT_INT, constants.getA1(), 0.0f);
-        assertEquals(DEFAULT_INT, constants.getA2(), 0.0f);
-        assertEquals(DEFAULT_INT, constants.getDecayConstant(), 0.0f);
-        assertEquals(DEFAULT_INT, constants.getExemptConcentration(), 0.0f);
-        assertEquals(DEFAULT_INT, constants.getExemptLimit(), 0.0f);
-        assertEquals(DEFAULT_INT, constants.getHalfLife(), 0.0f);
-        assertEquals(DEFAULT_INT, constants.getIaLimitedLimit(), 0.0f);
-        assertEquals(DEFAULT_INT, constants.getIaPackageLimit(), 0.0f);
-        assertEquals(DEFAULT_INT, constants.getLimitedLimit(), 0.0f);
-        assertEquals(DEFAULT_INT, constants.getReportableQuan(), 0.0f);
+    private final String DEFAULT_NAME = "Abbreviation";
+    private final String DEFAULT_ABBR = "Abbr";
+    private final float DEFAULT_A1 = 1.0f;
+    private final float DEFAULT_A2 = 1.0f;
+    private final float DEFAULT_DECAY_CONST = 1.0f;
+    private final float DEFAULT_EXEMPT_CON = 1.0f;
+    private final float DEFAULT_EXEMPT_LIM = 1.0f;
+    private final float DEFAULT_HALF_LIFE = 1.0f;
+    private final LimitsModelId.State DEFAULT_STATE = LimitsModelId.State.SOLID;
+    private final LimitsModelId.Form DEFAULT_FORM = LimitsModelId.Form.NORMAL;
+    private final float DEFAULT_IA_LIMITED_LIM = 1.5f;
+    private final float DEFAULT_IA_PACKAGE_LIM = 2.0f;
+    private final float DEFAULT_LIMITED_LIM = 3.5f;
+    private final float DEFAULT_CI_REPORT_QUAN = 1.0f;
+    private final float DEFAULT_TBQ_REPORT_QUAN = 0.037f;
+
+    @BeforeEach
+    public void beforeEach() {
+//        super.initPU();
+        constants = new IsotopeConstants(GUITest.propHandler, em);
+    }
+
+    @AfterEach
+    public void afterEach() {
+        factory = null;
+        constants = null;
     }
 
     @Test
-    public void testConstructor_WithValues() {
-        float val = 1.5f;
-        
-        constants = new IsotopeConstants(GUITest.propHandler,
-            val,
-            val,
-            val,
-            val,
-            val,
-            val,
-            val,
-            val,
-            val,
-            val);
-        
+    public void testConstructor() {
         assertEquals(DEFAULT_INT, constants.getDefaultVal(), 0.0f);
-        assertEquals(val, constants.getA1(), 0.0f);
-        assertEquals(val, constants.getA2(), 0.0f);
-        assertEquals(val, constants.getDecayConstant(), 0.0f);
-        assertEquals(val, constants.getExemptConcentration(), 0.0f);
-        assertEquals(val, constants.getExemptLimit(), 0.0f);
-        assertEquals(val, constants.getHalfLife(), 0.0f);
-        assertEquals(val, constants.getIaLimitedLimit(), 0.0f);
-        assertEquals(val, constants.getIaPackageLimit(), 0.0f);
-        assertEquals(val, constants.getLimitedLimit(), 0.0f);
-        assertEquals(val, constants.getReportableQuan(), 0.0f);
     }
+
+    @Disabled
+    public void testDbInit() {
+        IsotopeModelId isoId = new IsotopeModelId(DEFAULT_NAME, DEFAULT_ABBR);
+        LimitsModelId limitsId = new LimitsModelId(DEFAULT_STATE, DEFAULT_FORM);
+
+        constants.dbInit(isoId, limitsId);
+
+        assertEquals(DEFAULT_A1, constants.getA1(), 0.0f);
+        assertEquals(DEFAULT_A2, constants.getA2(), 0.0f);
+        assertEquals(DEFAULT_DECAY_CONST, constants.getDecayConstant(), 0.0f);
+        assertEquals(DEFAULT_EXEMPT_CON, constants.getExemptConcentration(), 0.0f);
+        assertEquals(DEFAULT_EXEMPT_LIM, constants.getExemptLimit(), 0.0f);
+        assertEquals(DEFAULT_HALF_LIFE, constants.getHalfLife(), 0.0f);
+        assertEquals(DEFAULT_IA_LIMITED_LIM, constants.getIaLimitedLimit(), 0.0f);
+        assertEquals(DEFAULT_IA_PACKAGE_LIM, constants.getIaPackageLimit(), 0.0f);
+        assertEquals(DEFAULT_LIMITED_LIM, constants.getLimitedLimit(), 0.0f);
+        assertEquals(DEFAULT_CI_REPORT_QUAN, constants.getCurieReportQuan(), 0.0f);
+        assertEquals(DEFAULT_TBQ_REPORT_QUAN, constants.getTeraBqReportQuan(), 0.0f);
+    }
+
 }

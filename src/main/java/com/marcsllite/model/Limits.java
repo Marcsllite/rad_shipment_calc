@@ -1,6 +1,6 @@
 package com.marcsllite.model;
 
-import com.marcsllite.model.db.LimitsModel;
+import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.beans.property.SimpleFloatProperty;
@@ -10,8 +10,8 @@ import java.util.ResourceBundle;
 public class Limits {
     private final PropHandler propHandler;
     private final float defaultVal;
-    private LimitsModel.State state;
-    private LimitsModel.Form form;
+    private LimitsModelId.State state;
+    private LimitsModelId.Form form;
     private final SimpleFloatProperty ia_limited = new SimpleFloatProperty();
     private final SimpleFloatProperty ia_package = new SimpleFloatProperty();
     private final SimpleFloatProperty limited = new SimpleFloatProperty();
@@ -24,19 +24,18 @@ public class Limits {
 
     public Limits(PropHandler propHandler) {
         this(propHandler,
-            LimitsModel.State.SOLID,
-            LimitsModel.Form.NORMAL,
+             new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL),
             null,
             null,
             null
         );
     }
 
-    public Limits(PropHandler propHandler, LimitsModel.State state, LimitsModel.Form form, Float ia_limited, Float ia_package, Float limited) {
+    public Limits(PropHandler propHandler, LimitsModelId limitsId, Float ia_limited, Float ia_package, Float limited) {
         this.propHandler = propHandler;
         this.defaultVal = (float) propHandler.getDouble("defaultNum");
-        setState(state);
-        setForm(form);
+        setState(limitsId.getState());
+        setForm(limitsId.getForm());
         setIa_limited(ia_limited == null? defaultVal : ia_limited);
         setIa_package(ia_package == null? defaultVal : ia_package);
         setLimited(limited == null? defaultVal : limited);
@@ -46,19 +45,19 @@ public class Limits {
         return defaultVal;
     }
 
-    public LimitsModel.State getState() {
+    public LimitsModelId.State getState() {
         return state;
     }
 
-    public void setState(LimitsModel.State state) {
+    public void setState(LimitsModelId.State state) {
         this.state = state;
     }
 
-    public LimitsModel.Form getForm() {
+    public LimitsModelId.Form getForm() {
         return form;
     }
 
-    public void setForm(LimitsModel.Form form) {
+    public void setForm(LimitsModelId.Form form) {
         this.form = form;
     }
 

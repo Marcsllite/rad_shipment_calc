@@ -1,13 +1,24 @@
 package com.marcsllite.model;
 
+import com.marcsllite.model.db.IsotopeModelId;
+import com.marcsllite.model.db.LimitsModelId;
+import com.marcsllite.service.DBService;
+import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
+import jakarta.persistence.EntityManager;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleFloatProperty;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ResourceBundle;
 
 public class IsotopeConstants {
+    private static final Logger logr = LogManager.getLogger();
     private final PropHandler propHandler;
+    private final DBService dbService;
     private final float defaultVal;
     private final SimpleFloatProperty a1 = new SimpleFloatProperty();
     private final SimpleFloatProperty a2 = new SimpleFloatProperty();
@@ -18,51 +29,42 @@ public class IsotopeConstants {
     private final SimpleFloatProperty iaLimitedLimit = new SimpleFloatProperty();
     private final SimpleFloatProperty iaPackageLimit = new SimpleFloatProperty();
     private final SimpleFloatProperty limitedLimit = new SimpleFloatProperty();
-    private final SimpleFloatProperty reportableQuan = new SimpleFloatProperty();
+    private final SimpleFloatProperty curieReportQuan = new SimpleFloatProperty();
+
+    private final SimpleFloatProperty teraBqReportQuan = new SimpleFloatProperty();
 
     public IsotopeConstants() {
         this((PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()));
     }
 
     public IsotopeConstants(PropHandler propHandler) {
-       this(propHandler,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-        );
+        this(propHandler, null);
     }
 
-    public IsotopeConstants(PropHandler propHandler,
-                            Float a1,
-                            Float a2,
-                            Float decayConstant,
-                            Float exemptConcentration,
-                            Float exemptLimit,
-                            Float halfLife,
-                            Float iaLimitedLimit,
-                            Float iaPackageLimit,
-                            Float limitedLimit,
-                            Float reportableQuan) {
+    public IsotopeConstants(PropHandler propHandler, EntityManager em) {
         this.propHandler = propHandler;
+        this.dbService = new DBServiceImpl(this.propHandler, em);
         this.defaultVal = (float) this.propHandler.getDouble("defaultNum");
+    }
 
-        setA1(a1 == null? defaultVal : a1);
-        setA2(a2 == null? defaultVal : a2);
-        setDecayConstant(decayConstant == null? defaultVal : decayConstant);
-        setExemptConcentration(exemptConcentration == null? defaultVal : exemptConcentration);
-        setExemptLimit(exemptLimit == null? defaultVal : exemptLimit);
-        setHalfLife(halfLife == null? defaultVal : halfLife);
-        setIaLimitedLimit(iaLimitedLimit == null? defaultVal : iaLimitedLimit);
-        setIaPackageLimit(iaPackageLimit == null? defaultVal : iaPackageLimit);
-        setLimitedLimit(limitedLimit == null? defaultVal : limitedLimit);
-        setReportableQuan(reportableQuan == null? defaultVal : reportableQuan);
+    public void dbInit(IsotopeModelId isoId, LimitsModelId limitsId) {
+        try {
+            setA1(dbService.getA1(isoId.getAbbr()));
+            setA2(dbService.getA2(isoId.getAbbr()));
+            setDecayConstant(dbService.getDecayConstant(isoId.getAbbr()));
+            setExemptConcentration(dbService.getExemptConcentration(isoId.getAbbr()));
+            setExemptLimit(dbService.getExemptLimit(isoId.getAbbr()));
+            setHalfLife(dbService.getHalfLife(isoId.getAbbr()));
+            setIaLimitedLimit(dbService.getIALimited(limitsId));
+            setIaPackageLimit(dbService.getIAPackage(limitsId));
+            setLimitedLimit(dbService.getLimited(limitsId));
+            setCurieReportQuan(dbService.getCiReportQuan(isoId.getAbbr()));
+            setTeraBqReportQuan(dbService.getTBqReportQuan(isoId.getAbbr()));
+        } catch (Exception e) {
+            logr.fatal("Failed to initialize {} isotope constants from db", isoId.getName());
+            logr.catching(Level.FATAL, e);
+            Platform.exit();
+        }
     }
 
     public float getDefaultVal() {
@@ -177,15 +179,41 @@ public class IsotopeConstants {
         limitedLimitProperty().set(limitedLimit);
     }
 
-    public float getReportableQuan() {
-        return reportableQuanProperty().get();
+    public float getCurieReportQuan() {
+        return curieReportQuanProperty().get();
     }
 
-    public SimpleFloatProperty reportableQuanProperty() {
-        return reportableQuan;
+    public SimpleFloatProperty curieReportQuanProperty() {
+        return curieReportQuan;
     }
 
-    public void setReportableQuan(float reportableQuan) {
-        reportableQuanProperty().set(reportableQuan);
+    public void setCurieReportQuan(float curieReportQuan) {
+        curieReportQuanProperty().set(curieReportQuan);
+    }
+
+    public float getTeraBqReportQuan() {
+        return teraBqReportQuanProperty().get();
+    }
+
+    public SimpleFloatProperty teraBqReportQuanProperty() {
+        return teraBqReportQuan;
+    }
+
+    public void setTeraBqReportQuan(float teraBqReportQuan) {
+        teraBqReportQuanProperty().set(teraBqReportQuan);
+    }
+
+    @Override
+    public String toString() {
+        return "Isotope Constants: {\n\tA1: " + getA1() + " TBq\n" +
+            "\tA2: " + getA2() + " TBq\n" +
+            "\tDecay Constant: " + getDecayConstant() + " \n" +
+            "\tExempt Concentration: " + getExemptConcentration() + " Bq/g\n" +
+            "\tExempt Limit: " + getExemptLimit() + " Bq\n" +
+            "\tHalfLife: " + getHalfLife() + " days\n" +
+            "\tInstruments/Articles Limited Limit: " + getIaLimitedLimit() + " \n" +
+            "\tInstruments/Articles Package Limit: " + getIaPackageLimit() + " \n" +
+            "\tNormal Limited Limit: " + getLimitedLimit() + " TBq\n" +
+            "\tReportable Quantity: " + getCurieReportQuan() + " TBq\n}";
     }
 }

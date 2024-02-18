@@ -1,6 +1,5 @@
 package com.marcsllite.util.handler;
 
-import com.marcsllite.util.OS;
 import com.marcsllite.util.factory.PropHandlerFactory;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -12,78 +11,72 @@ import java.util.ResourceBundle;
 
 public class FolderHandler {
     private static final Logger logr = LogManager.getLogger();
-    private String dataFolder;
-    private String defaultDir;
+    private String appFolderPath;
+    private String dataFolderPath;
+    private final String DATA_FOLDER_NAME = "Shipment Calculator";
     private final PropHandler propHandler;
 
-    public FolderHandler(){
+    public FolderHandler() {
         this((PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()));
     }
 
     public FolderHandler(PropHandler propHandler) {
         this.propHandler = propHandler;
-        setDataFolder(this.propHandler.getString("appFolderName"),
-                      this.propHandler.parseOS(this.propHandler.getOS()));
-        setDefaultDir(this.propHandler.getString("appMainFolder"));
+        setAppFolderPath(this.propHandler.getString("appFolderName"));
     }
 
     /**
      * Set the location of the default directory
      * 
-     * @param dirName the name of the default directory
+     * @param appFolderName the name of the default directory
      */
-    @SuppressWarnings("java:S112")
-    public void setDefaultDir(String dirName) throws RuntimeException {
-        if (dirName == null || dirName.isEmpty()) dirName = propHandler.getString("appMainFolder");
+
+    public void setAppFolderPath(String appFolderName) throws RuntimeException {
+        if (appFolderName == null || appFolderName.isEmpty()) appFolderName = propHandler.getString("appFolderName");
         
-        String name = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + dirName;
-        var toBeCreated = new File(name);
+        String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + appFolderName;
+        var toBeCreated = createFolder(path);
         
-        if (!toBeCreated.exists() && !toBeCreated.mkdirs()) {
-            var e = new RuntimeException("Failed to set up default directory");
+        if (toBeCreated == null) {
+            var e = new RuntimeException("Failed to set up app folder");
             logr.throwing(Level.FATAL, e);
             throw e;
-        } else {
-            logr.info("{} directory was created", name);
-            defaultDir = name;
         }
+
+        this.appFolderPath = path;
+        setDataFolder();
     }
 
     /**
-     * Set the location of the data folder (logging folder)
-     * 
-     * Windows: C:/Users/[username]/AppData/Local/[name]/logs
-     * MacOS/Unix/Solaris: ~/[name]/logs
-     * 
-     * @param name the name of the data folder
-     * @param currentOS the operating system of the computer
+     * Creates the data folder (logging/db folder)
      */
-    protected void setDataFolder(String name, OS currentOS) {
-        String dirLoc = null;
-        if (name == null || name.isEmpty()) name = propHandler.getString("appFolderName");
+    protected void setDataFolder() {
+        String path = getAppFolderPath() + File.separator + DATA_FOLDER_NAME;
+        var toBeCreated = createFolder(path);
 
-        switch(currentOS){
-            case WINDOWS:
-                dirLoc = System.getProperty("user.home") + File.separator +
-                        "AppData" + File.separator +
-                        "Local" + File.separator +
-                        name + File.separator +
-                        "logs";
-                break;
-            case MAC: case UNIX: case SOLARIS:
-                dirLoc = System.getProperty("user.home") + File.separator +
-                        name + File.separator +
-                        "logs";
-                break;
-            default:
-                logr.warn("Data Folder was not created");
+        if (toBeCreated == null) {
+            var e = new RuntimeException("Failed to set up data folder");
+            logr.throwing(Level.FATAL, e);
+            throw e;
         }
 
-        if(dirLoc != null && (new File(dirLoc)).mkdirs()) {
-            logr.info("{} directory was created", dirLoc);
+        this.dataFolderPath = path;
+    }
+
+    protected File createFolder(String path) {
+        if(path == null) {
+            return null;
         }
 
-        dataFolder = dirLoc;
+        var toBeCreated = new File(path);
+
+        if (!toBeCreated.exists() && !toBeCreated.mkdirs()) {
+            logr.debug("Failed to create {}", path);
+            return null;
+        } else {
+            logr.info("{} was created", path);
+            return toBeCreated;
+        }
     }
 
     /*/////////////////////////////////////////////////// GETTERS ////////////////////////////////////////////////////*/
@@ -93,8 +86,8 @@ public class FolderHandler {
      *
      * @return data folder for further used by the Open logs Button
      */
-    protected String getDataFolder() { 
-        return dataFolder; 
+    public String getDataFolderPath() {
+        return dataFolderPath;
     }
 
     /**
@@ -102,7 +95,7 @@ public class FolderHandler {
      *
      * @return the application's default folder
      */
-    public String getDefaultDir() {
-        return defaultDir;
+    public String getAppFolderPath() {
+        return appFolderPath;
     }
 }
