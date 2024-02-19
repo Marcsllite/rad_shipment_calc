@@ -2,12 +2,10 @@ package com.marcsllite.util.handler;
 
 import com.marcsllite.controller.GUITest;
 import com.marcsllite.util.FXMLView;
-import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junitpioneer.jupiter.SetSystemProperty;
 import org.testfx.api.FxToolkit;
@@ -42,25 +40,6 @@ public class StageHandlerTest {
         );
         assertEquals("FXML View is null", exception.getMessage());
     }
-
-     @ParameterizedTest
-     @EnumSource(value = FXMLView.class)
-     public void testSwitchScene(FXMLView view) {
-         Platform.runLater(() -> {
-             stageHandler.switchScene(view);
-             Stage stage = stageHandler.getPrimaryStage();
-
-             assertEquals(view, stageHandler.getCurrentView());
-             assertEquals(view.getTitle(), stage.getTitle());
-             assertEquals(view.getWidth(), stage.getMinWidth(), 0.0D);
-             assertEquals(view.getHeight(), stage.getMinHeight(), 0.0D);
-             assertEquals(view.getMaxWidth(), stage.getMaxWidth(), 0.0D);
-             assertEquals(view.getMaxHeight(), stage.getMaxHeight(), 0.0D);
-             assertFalse(stage.isFullScreen());
-             assertFalse(stage.isMaximized());
-             assertFalse(stage.getIcons().isEmpty());
-         });
-     }
 
     @Test
     public void testShow_NullView() {

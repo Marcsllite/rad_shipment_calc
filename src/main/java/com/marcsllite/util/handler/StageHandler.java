@@ -80,6 +80,9 @@ public class StageHandler {
         } catch (Exception exception) {
             logr.catching(Level.FATAL, exception);
             logr.fatal("Unable to show " + view.getName() + " scene", exception);
+            // Can only initialize one FX Thread per JVM
+            // Do not call Platform.exit when testing because other tests that
+            // require the FX Thread will fail or be ignored
             if(System.getProperty("keepPlatformOpen") == null) {
                 Platform.exit();
             }
@@ -107,6 +110,9 @@ public class StageHandler {
             Objects.requireNonNull(rootNode, "A Root FXML node must not be null");
         } catch (Exception exception) {
             logAndThrowException(err_msg, exception);
+            // Can only initialize one FX Thread per JVM
+            // Do not call Platform.exit when testing because other tests that
+            // require the FX Thread will fail or be ignored
             if(System.getProperty("keepPlatformOpen") == null) {
                 Platform.exit();
             }

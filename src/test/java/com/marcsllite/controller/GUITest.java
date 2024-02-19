@@ -4,6 +4,7 @@ import com.marcsllite.App;
 import com.marcsllite.util.FXIds;
 import com.marcsllite.util.FXMLView;
 import com.marcsllite.util.handler.PropHandler;
+import com.marcsllite.util.handler.StageHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
@@ -16,15 +17,16 @@ import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
+import org.testfx.framework.junit5.Stop;
 import org.testfx.matcher.base.NodeMatchers;
 
 import java.util.Set;
 import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static junit.framework.Assert.assertFalse;
 
-
+@ExtendWith(ApplicationExtension.class)
 public class GUITest extends FxRobot {
     protected FXMLView view;
     protected App.AppPane root;
@@ -48,7 +50,7 @@ public class GUITest extends FxRobot {
         stage.show();
     }
 
-//    @Stop
+    @Stop
     protected void stop() throws TimeoutException {
         FxToolkit.cleanupStages();
         release(new KeyCode[]{});
@@ -59,7 +61,6 @@ public class GUITest extends FxRobot {
 
     @Nested
     @DisplayName("Main Controller GUI Test")
-    @ExtendWith(ApplicationExtension.class)
     public class MainControllerGUITest {
 
         @Start
@@ -72,12 +73,24 @@ public class GUITest extends FxRobot {
             FxAssert.verifyThat(FXIds.GRIDPANE_MENU, NodeMatchers.isVisible());
             FxAssert.verifyThat(FXIds.GRIDPANE_HOME, NodeMatchers.isVisible());
             FxAssert.verifyThat(FXIds.GRIDPANE_REFERENCE, NodeMatchers.isInvisible());
+
+            StageHandler stageHandler = root.getStageHandler();
+            Stage stage = stageHandler.getPrimaryStage();
+
+            assertEquals(view, stageHandler.getCurrentView());
+            assertEquals(view.getTitle(), stage.getTitle());
+            assertEquals(view.getWidth(), stage.getMinWidth(), 0.0D);
+            assertEquals(view.getHeight(), stage.getMinHeight(), 0.0D);
+            assertEquals(view.getMaxWidth(), stage.getMaxWidth(), 0.0D);
+            assertEquals(view.getMaxHeight(), stage.getMaxHeight(), 0.0D);
+            assertFalse(stage.isFullScreen());
+            assertFalse(stage.isMaximized());
+            assertFalse(stage.getIcons().isEmpty());
         }
     }
 
     @Nested
     @DisplayName("Menu Pane Controller GUI Test")
-    @ExtendWith(ApplicationExtension.class)
     public class MenuPaneControllerGUITest {
         @Start
         public void start(Stage stage) {
@@ -87,15 +100,24 @@ public class GUITest extends FxRobot {
         @Test
         public void testStart() {
             FxAssert.verifyThat(FXIds.GRIDPANE_MENU, NodeMatchers.isVisible());
-            Stage stage = root.getStageHandler().getPrimaryStage();
+
+            StageHandler stageHandler = root.getStageHandler();
+            Stage stage = stageHandler.getPrimaryStage();
+
+            assertEquals(view, stageHandler.getCurrentView());
             assertEquals(view.getTitle(), stage.getTitle());
-            assertNotNull(stage.getIcons());
+            assertEquals(view.getWidth(), stage.getMinWidth(), 0.0D);
+            assertEquals(view.getHeight(), stage.getMinHeight(), 0.0D);
+            assertEquals(view.getMaxWidth(), stage.getMaxWidth(), 0.0D);
+            assertEquals(view.getMaxHeight(), stage.getMaxHeight(), 0.0D);
+            assertFalse(stage.isFullScreen());
+            assertFalse(stage.isMaximized());
+            assertFalse(stage.getIcons().isEmpty());
         }
     }
 
     @Nested
     @DisplayName("Home Pane Controller GUI Test")
-    @ExtendWith(ApplicationExtension.class)
     public class HomePaneControllerGUITest {
         @Start
         public void start(Stage stage) {
@@ -105,15 +127,24 @@ public class GUITest extends FxRobot {
         @Test
         public void testStart() {
             FxAssert.verifyThat(FXIds.GRIDPANE_HOME, NodeMatchers.isVisible());
-            Stage stage = root.getStageHandler().getPrimaryStage();
+
+            StageHandler stageHandler = root.getStageHandler();
+            Stage stage = stageHandler.getPrimaryStage();
+
+            assertEquals(view, stageHandler.getCurrentView());
             assertEquals(view.getTitle(), stage.getTitle());
-            assertNotNull(stage.getIcons());
+            assertEquals(view.getWidth(), stage.getMinWidth(), 0.0D);
+            assertEquals(view.getHeight(), stage.getMinHeight(), 0.0D);
+            assertEquals(view.getMaxWidth(), stage.getMaxWidth(), 0.0D);
+            assertEquals(view.getMaxHeight(), stage.getMaxHeight(), 0.0D);
+            assertFalse(stage.isFullScreen());
+            assertFalse(stage.isMaximized());
+            assertFalse(stage.getIcons().isEmpty());
         }
     }
 
     @Nested
     @DisplayName("Reference Pane Controller GUI Test")
-    @ExtendWith(ApplicationExtension.class)
     public class ReferencePaneControllerGUITest {
         @Start
         public void start(Stage stage) {
@@ -123,15 +154,24 @@ public class GUITest extends FxRobot {
         @Test
         public void testStart() {
             FxAssert.verifyThat(FXIds.GRIDPANE_REFERENCE, NodeMatchers.isVisible());
-            Stage stage = root.getStageHandler().getPrimaryStage();
+
+            StageHandler stageHandler = root.getStageHandler();
+            Stage stage = stageHandler.getPrimaryStage();
+
+            assertEquals(view, stageHandler.getCurrentView());
             assertEquals(view.getTitle(), stage.getTitle());
-            assertNotNull(stage.getIcons());
+            assertEquals(view.getWidth(), stage.getMinWidth(), 0.0D);
+            assertEquals(view.getHeight(), stage.getMinHeight(), 0.0D);
+            assertEquals(view.getMaxWidth(), stage.getMaxWidth(), 0.0D);
+            assertEquals(view.getMaxHeight(), stage.getMaxHeight(), 0.0D);
+            assertFalse(stage.isFullScreen());
+            assertFalse(stage.isMaximized());
+            assertFalse(stage.getIcons().isEmpty());
         }
     }
 
     @Nested
     @DisplayName("Modify Controller GUI Test")
-    @ExtendWith(ApplicationExtension.class)
     public class ModifyControllerGUITest {
         @Start
         public void start(Stage stage) {
@@ -141,15 +181,24 @@ public class GUITest extends FxRobot {
         @Test
         public void testStart() {
             FxAssert.verifyThat(FXIds.STACKPANE_MODIFY, NodeMatchers.isVisible());
-            Stage stage = root.getStageHandler().getPrimaryStage();
+
+            StageHandler stageHandler = root.getStageHandler();
+            Stage stage = stageHandler.getPrimaryStage();
+
+            assertEquals(view, stageHandler.getCurrentView());
             assertEquals(view.getTitle(), stage.getTitle());
-            assertNotNull(stage.getIcons());
+            assertEquals(view.getWidth(), stage.getMinWidth(), 0.0D);
+            assertEquals(view.getHeight(), stage.getMinHeight(), 0.0D);
+            assertEquals(view.getMaxWidth(), stage.getMaxWidth(), 0.0D);
+            assertEquals(view.getMaxHeight(), stage.getMaxHeight(), 0.0D);
+            assertFalse(stage.isFullScreen());
+            assertFalse(stage.isMaximized());
+            assertFalse(stage.getIcons().isEmpty());
         }
     }
 
     @Nested
     @DisplayName("Shipment Details Controller GUI Test")
-    @ExtendWith(ApplicationExtension.class)
     public class ShipmentDetailsControllerGUITest {
         @Start
         public void start(Stage stage) {
@@ -159,15 +208,24 @@ public class GUITest extends FxRobot {
         @Test
         public void testStart() {
             FxAssert.verifyThat(FXIds.STACKPANE_SHIPMENT_DETAILS, NodeMatchers.isVisible());
-            Stage stage = root.getStageHandler().getPrimaryStage();
+
+            StageHandler stageHandler = root.getStageHandler();
+            Stage stage = stageHandler.getPrimaryStage();
+
+            assertEquals(view, stageHandler.getCurrentView());
             assertEquals(view.getTitle(), stage.getTitle());
-            assertNotNull(stage.getIcons());
+            assertEquals(view.getWidth(), stage.getMinWidth(), 0.0D);
+            assertEquals(view.getHeight(), stage.getMinHeight(), 0.0D);
+            assertEquals(view.getMaxWidth(), stage.getMaxWidth(), 0.0D);
+            assertEquals(view.getMaxHeight(), stage.getMaxHeight(), 0.0D);
+            assertFalse(stage.isFullScreen());
+            assertFalse(stage.isMaximized());
+            assertFalse(stage.getIcons().isEmpty());
         }
     }
 
     @Nested
     @DisplayName("Summary Pane Controller GUI Test")
-    @ExtendWith(ApplicationExtension.class)
     public class SummaryPaneControllerGUITest {
         @Start
         public void start(Stage stage) {
@@ -177,9 +235,19 @@ public class GUITest extends FxRobot {
         @Test
         public void testStart() {
             FxAssert.verifyThat(FXIds.ANCHORPANE_SUMMARY, NodeMatchers.isVisible());
-            Stage stage = root.getStageHandler().getPrimaryStage();
+
+            StageHandler stageHandler = root.getStageHandler();
+            Stage stage = stageHandler.getPrimaryStage();
+
+            assertEquals(view, stageHandler.getCurrentView());
             assertEquals(view.getTitle(), stage.getTitle());
-            assertNotNull(stage.getIcons());
+            assertEquals(view.getWidth(), stage.getMinWidth(), 0.0D);
+            assertEquals(view.getHeight(), stage.getMinHeight(), 0.0D);
+            assertEquals(view.getMaxWidth(), stage.getMaxWidth(), 0.0D);
+            assertEquals(view.getMaxHeight(), stage.getMaxHeight(), 0.0D);
+            assertFalse(stage.isFullScreen());
+            assertFalse(stage.isMaximized());
+            assertFalse(stage.getIcons().isEmpty());
         }
     }
 }

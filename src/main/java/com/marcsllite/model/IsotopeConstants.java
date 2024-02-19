@@ -63,6 +63,9 @@ public class IsotopeConstants {
         } catch (Exception e) {
             logr.fatal("Failed to initialize {} isotope constants from db", isoId.getName());
             logr.catching(Level.FATAL, e);
+            // Can only initialize one FX Thread per JVM
+            // Do not call Platform.exit when testing because other tests that
+            // require the FX Thread will fail or be ignored
             if(System.getProperty("keepPlatformOpen") == null) {
                 Platform.exit();
             }
