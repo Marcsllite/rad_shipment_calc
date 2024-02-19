@@ -1,6 +1,5 @@
 package com.marcsllite.controller;
 
-import com.marcsllite.GUITest;
 import com.marcsllite.util.handler.ImageHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

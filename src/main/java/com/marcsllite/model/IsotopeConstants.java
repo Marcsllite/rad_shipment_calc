@@ -63,7 +63,9 @@ public class IsotopeConstants {
         } catch (Exception e) {
             logr.fatal("Failed to initialize {} isotope constants from db", isoId.getName());
             logr.catching(Level.FATAL, e);
-            Platform.exit();
+            if(System.getProperty("keepPlatformOpen") == null) {
+                Platform.exit();
+            }
         }
     }
 

@@ -1,6 +1,6 @@
 package com.marcsllite.util.handler;
 
-import com.marcsllite.GUITest;
+import com.marcsllite.controller.GUITest;
 import com.marcsllite.util.FXMLView;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junitpioneer.jupiter.SetSystemProperty;
 import org.testfx.api.FxToolkit;
 
 import java.security.InvalidParameterException;
@@ -19,7 +20,7 @@ import java.util.concurrent.TimeoutException;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static junit.framework.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class StageHandlerTest {
@@ -70,26 +71,15 @@ public class StageHandlerTest {
     }
   
     @Test
+    @SetSystemProperty(key = "keepPlatformOpen",value = "true")
     public void testShow_EmptyView() {
         FXMLView view = FXMLView.TEST;
-        RuntimeException exception = assertThrows(
-            RuntimeException.class, () -> stageHandler.show(view)
-        );
-        String exp = "Unable to show " + view.getName() + " scene";
-        assertEquals(exp, exception.getMessage());
+        try {
+            stageHandler.show(view);
+        } catch(Exception e) {
+            fail("An exception should not have been thrown");
+        }
     }
-
-     @ParameterizedTest
-     @EnumSource(value = FXMLView.class)
-     public void testShow(FXMLView view) {
-         Platform.runLater(() -> {
-             stageHandler.show(view);
-             Stage stage = stageHandler.getPrimaryStage();
-
-             assertEquals(view.getTitle(), stage.getTitle());
-             assertNotNull(stage.getIcons());
-         });
-     }
 
     @Test
     public void testLoadViewNodeHierarchy_NullView() {

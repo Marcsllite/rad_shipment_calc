@@ -36,6 +36,7 @@
         <monocle.version>jdk-11+26</monocle.version>
         <h2.version>2.2.224</h2.version>
         <hibernate-core.version>6.4.4.Final</hibernate-core.version>
+        <pioneer.version>2.2.0</pioneer.version>
 
         <!-- Test Coverage -->
         <jacoco.percentages.min.instruct>0.70</jacoco.percentages.min.instruct>
@@ -92,6 +93,11 @@
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate-core.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
+        </dependency>
 
         <!-- Test Dependencies -->
         <dependency>
@@ -144,9 +150,10 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2.version}</version>
+            <groupId>org.junit-pioneer</groupId>
+            <artifactId>junit-pioneer</artifactId>
+            <version>${pioneer.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

@@ -46,6 +46,10 @@ public class App extends Application {
         public AppPane(Stage stage, FXMLView view, PropHandler propHandler) {
             super();
             stageHandler = new StageHandler(stage, propHandler);
+            switchScene(view);
+        }
+
+        public void switchScene(FXMLView view) {
             getChildren().addAll(
                 stageHandler.loadViewNodeHierarchy(view).getChildrenUnmodifiable()
             );

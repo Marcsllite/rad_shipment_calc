@@ -49,7 +49,7 @@ public enum FXMLView {
 
     @Override public double getWidth() { return 450.0; }
 
-    public String getFxmlLoc() { return "/fxml/modify.fxml"; }
+    public String getFxmlLoc() { return "/fxml/shipmentDetails.fxml"; }
   }, TEST {
     public String getName() { return "Test"; }
 

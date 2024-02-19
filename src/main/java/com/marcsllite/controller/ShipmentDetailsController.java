@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,10 +17,11 @@ import java.security.InvalidParameterException;
 import java.util.ResourceBundle;
 
 public class ShipmentDetailsController extends BaseController {
+    @FXML private StackPane shipmentDetails;
     @FXML private VBox vBoxShipmentDetails;
     @FXML private DatePicker datePicker;
     @FXML private TextField txtFieldMass;
-    @FXML private ChoiceBox<String> choiceBoxMassUnit;
+    @FXML private ChoiceBox<String> choiceBoxMassPrefix;
     @FXML private ChoiceBox<String> choiceBoxMassName;
     @FXML private ChoiceBox<String> choiceBoxNature;
     @FXML private ChoiceBox<String> choiceBoxState;

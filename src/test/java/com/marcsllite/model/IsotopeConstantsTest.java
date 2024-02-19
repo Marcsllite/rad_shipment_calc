@@ -2,13 +2,14 @@ package com.marcsllite.model;
 
 
 import com.marcsllite.DBTest;
-import com.marcsllite.GUITest;
+import com.marcsllite.controller.GUITest;
 import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.SetSystemProperty;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -49,6 +50,7 @@ class IsotopeConstantsTest extends DBTest {
     }
 
     @Disabled
+    @SetSystemProperty(key = "keepPlatformOpen",value = "true")
     public void testDbInit() {
         IsotopeModelId isoId = new IsotopeModelId(DEFAULT_NAME, DEFAULT_ABBR);
         LimitsModelId limitsId = new LimitsModelId(DEFAULT_STATE, DEFAULT_FORM);

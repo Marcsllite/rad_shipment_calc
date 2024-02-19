@@ -78,8 +78,11 @@ public class StageHandler {
             switchScene(view);
             primaryStage.show();
         } catch (Exception exception) {
-            logAndThrowException("Unable to show " + view.getName() + " scene", exception);
-            Platform.exit();
+            logr.catching(Level.FATAL, exception);
+            logr.fatal("Unable to show " + view.getName() + " scene", exception);
+            if(System.getProperty("keepPlatformOpen") == null) {
+                Platform.exit();
+            }
         }
     }
 
@@ -104,7 +107,9 @@ public class StageHandler {
             Objects.requireNonNull(rootNode, "A Root FXML node must not be null");
         } catch (Exception exception) {
             logAndThrowException(err_msg, exception);
-            Platform.exit();
+            if(System.getProperty("keepPlatformOpen") == null) {
+                Platform.exit();
+            }
         }
         return rootNode;
     }

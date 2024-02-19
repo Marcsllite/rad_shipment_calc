@@ -1,6 +1,5 @@
 package com.marcsllite.controller;
 
-import com.marcsllite.GUITest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -56,7 +55,7 @@ public class MainControllerTest {
 
     @Test
     public void testRegisterController_ReferencePaneController() {
-        ReferencePaneController controller = new ReferencePaneController();
+        ReferencePaneController controller = new ReferencePaneController(GUITest.propHandler);
         
         MainController.getInstance().registerController(controller);
 

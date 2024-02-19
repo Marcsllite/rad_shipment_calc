@@ -50,7 +50,7 @@ public class ModifyController extends BaseController {
     @FXML private VBox vBoxSecondPage;
     @FXML private DatePicker datePicker;
     @FXML private TextField txtFieldMass;
-    @FXML private ChoiceBox<String> choiceBoxMassUnit;
+    @FXML private ChoiceBox<String> choiceBoxMassPrefix;
     @FXML private ChoiceBox<String> choiceBoxMassName;
     @FXML private ChoiceBox<String> choiceBoxNature;
     @FXML private ChoiceBox<String> choiceBoxState;
@@ -69,7 +69,7 @@ public class ModifyController extends BaseController {
         // adding values to the choice boxes
         choiceBoxA0Prefix.setItems(Conversions.SIPrefix.getFxValues());
         choiceBoxA0Name.setItems(Isotope.RadUnit.getFxValues());
-        choiceBoxMassUnit.setItems(Conversions.SIPrefix.getFxValues());
+        choiceBoxMassPrefix.setItems(Conversions.SIPrefix.getFxValues());
         choiceBoxMassName.setItems(Isotope.Mass.getFxValues());
         choiceBoxNature.setItems(Isotope.Nature.getFxValues());
         choiceBoxState.setItems(LimitsModelId.State.getFxValues());
@@ -78,7 +78,7 @@ public class ModifyController extends BaseController {
         // Default value for choice boxes
         choiceBoxA0Prefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
         choiceBoxA0Name.getSelectionModel().select(Isotope.RadUnit.CURIE.getVal());
-        choiceBoxMassUnit.getSelectionModel().select(Isotope.Mass.GRAMS.getVal());
+        choiceBoxMassPrefix.getSelectionModel().select(Isotope.Mass.GRAMS.getVal());
     }
 
     public ModifyController() {
