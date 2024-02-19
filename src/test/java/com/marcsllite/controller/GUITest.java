@@ -16,7 +16,6 @@ import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-import org.testfx.framework.junit5.Stop;
 import org.testfx.matcher.base.NodeMatchers;
 
 import java.util.Set;
@@ -26,11 +25,10 @@ import static junit.framework.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
-@ExtendWith(ApplicationExtension.class)
 public class GUITest extends FxRobot {
     protected FXMLView view;
     protected App.AppPane root;
-    public static PropHandler propHandler =  new PropHandler() {
+    public static final PropHandler propHandler =  new PropHandler() {
         @Override
         protected Object handleGetObject(String key) {
             if(key == null || key.isBlank()) return "";
@@ -50,15 +48,18 @@ public class GUITest extends FxRobot {
         stage.show();
     }
 
-    @Stop
+//    @Stop
     protected void stop() throws TimeoutException {
-        FxToolkit.hideStage();
+        FxToolkit.cleanupStages();
         release(new KeyCode[]{});
         release(new MouseButton[]{});
+        root = null;
+        view = null;
     }
 
     @Nested
     @DisplayName("Main Controller GUI Test")
+    @ExtendWith(ApplicationExtension.class)
     public class MainControllerGUITest {
 
         @Start
@@ -76,6 +77,7 @@ public class GUITest extends FxRobot {
 
     @Nested
     @DisplayName("Menu Pane Controller GUI Test")
+    @ExtendWith(ApplicationExtension.class)
     public class MenuPaneControllerGUITest {
         @Start
         public void start(Stage stage) {
@@ -92,7 +94,8 @@ public class GUITest extends FxRobot {
     }
 
     @Nested
-    @DisplayName("Menu Pane Controller GUI Test")
+    @DisplayName("Home Pane Controller GUI Test")
+    @ExtendWith(ApplicationExtension.class)
     public class HomePaneControllerGUITest {
         @Start
         public void start(Stage stage) {
@@ -110,6 +113,7 @@ public class GUITest extends FxRobot {
 
     @Nested
     @DisplayName("Reference Pane Controller GUI Test")
+    @ExtendWith(ApplicationExtension.class)
     public class ReferencePaneControllerGUITest {
         @Start
         public void start(Stage stage) {
@@ -127,6 +131,7 @@ public class GUITest extends FxRobot {
 
     @Nested
     @DisplayName("Modify Controller GUI Test")
+    @ExtendWith(ApplicationExtension.class)
     public class ModifyControllerGUITest {
         @Start
         public void start(Stage stage) {
@@ -144,6 +149,7 @@ public class GUITest extends FxRobot {
 
     @Nested
     @DisplayName("Shipment Details Controller GUI Test")
+    @ExtendWith(ApplicationExtension.class)
     public class ShipmentDetailsControllerGUITest {
         @Start
         public void start(Stage stage) {
@@ -161,6 +167,7 @@ public class GUITest extends FxRobot {
 
     @Nested
     @DisplayName("Summary Pane Controller GUI Test")
+    @ExtendWith(ApplicationExtension.class)
     public class SummaryPaneControllerGUITest {
         @Start
         public void start(Stage stage) {

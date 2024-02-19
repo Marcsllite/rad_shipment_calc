@@ -21,6 +21,11 @@ public class ReferencePaneController extends BaseController {
   }
 
   @Override
+  public void initialize() {
+    super.initialize();
+  }
+
+  @Override
   public void show() {
     referencePane.setVisible(true);
     referencePane.toFront();
