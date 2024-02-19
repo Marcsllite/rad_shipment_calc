@@ -1,6 +1,6 @@
 package com.marcsllite.model;
 
-import com.marcsllite.controller.GUITest;
+import com.marcsllite.GUITest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

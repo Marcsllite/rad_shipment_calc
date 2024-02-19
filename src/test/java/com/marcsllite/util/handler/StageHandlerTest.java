@@ -1,6 +1,6 @@
 package com.marcsllite.util.handler;
 
-import com.marcsllite.controller.GUITest;
+import com.marcsllite.GUITest;
 import com.marcsllite.util.FXMLView;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeAll;

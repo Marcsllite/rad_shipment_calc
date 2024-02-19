@@ -1,5 +1,6 @@
 package com.marcsllite.controller;
 
+import com.marcsllite.GUITest;
 import org.junit.jupiter.api.Test;
 
 import java.security.InvalidParameterException;

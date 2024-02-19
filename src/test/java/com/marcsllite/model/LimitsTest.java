@@ -1,7 +1,7 @@
 package com.marcsllite.model;
 
 
-import com.marcsllite.controller.GUITest;
+import com.marcsllite.GUITest;
 import com.marcsllite.model.db.LimitsModelId;
 import org.junit.jupiter.api.Test;
 
