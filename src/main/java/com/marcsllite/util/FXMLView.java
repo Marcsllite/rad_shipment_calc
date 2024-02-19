@@ -3,7 +3,6 @@ package com.marcsllite.util;
 import com.marcsllite.util.handler.ImageHandler;
 import javafx.scene.image.Image;
 
-@SuppressWarnings("java:S116")
 public enum FXMLView {
   MAIN {
     public String getName() { return "Main Page"; }
@@ -51,14 +50,6 @@ public enum FXMLView {
     @Override public double getWidth() { return 450.0; }
 
     public String getFxmlLoc() { return "/fxml/modify.fxml"; }
-  }, PRIMARY {
-    public String getName() { return "Primary Page"; }
-
-    public String getFxmlLoc() { return "/fxml/primary.fxml"; }
-  }, SECONDARY {
-    public String getName() { return "Secondary Page"; }
-
-    public String getFxmlLoc() { return "/fxml/secondary.fxml"; }
   }, TEST {
     public String getName() { return "Test"; }
 

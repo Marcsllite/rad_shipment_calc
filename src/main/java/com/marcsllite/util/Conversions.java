@@ -1,8 +1,13 @@
 package com.marcsllite.util;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.security.InvalidParameterException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public final class Conversions {
     /* source: REMM(Radiation Emergency Medical Management)
@@ -39,10 +44,20 @@ public final class Conversions {
         ZEPTO("Zepto (z)"),
         YOCTO("Yocto (y)");
 
-        public final String val;
+        private final String val;
 
         SIPrefix(String val) {
             this.val = val;
+        }
+
+        public String getVal() {
+            return val;
+        }
+
+        public static ObservableList<String> getFxValues() {
+            return Arrays.stream(SIPrefix.values())
+                .map(SIPrefix::getVal)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
         }
     }
     

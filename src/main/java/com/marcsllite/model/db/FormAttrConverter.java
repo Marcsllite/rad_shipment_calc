@@ -12,7 +12,7 @@ public class FormAttrConverter implements AttributeConverter<LimitsModelId.Form,
         if(form == null) {
             return null;
         }
-        return form.val;
+        return form.getVal();
     }
 
     @Override
@@ -21,7 +21,7 @@ public class FormAttrConverter implements AttributeConverter<LimitsModelId.Form,
             return null;
         }
         return Stream.of(LimitsModelId.Form.values())
-            .filter(f -> f.val.equals(str))
+            .filter(f -> f.getVal().equals(str))
             .findFirst()
             .orElseThrow(IllegalArgumentException::new);
     }

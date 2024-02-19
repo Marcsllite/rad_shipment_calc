@@ -4,10 +4,14 @@ import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Arrays;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class Isotope {
     private static final Logger logr = LogManager.getLogger();
@@ -18,18 +22,49 @@ public class Isotope {
     private Nature nature;
     private LimitsModelId.State state;
     private LimitsModelId.Form form;
-    private MassUnit massUnit;
+    private Mass mass;
+    private RadUnit radUnit;
     private IsoClass isoClass;
 
-
-    public enum MassUnit {
+    public enum Mass {
         GRAMS("grams"),
         LITERS("liters");
 
-        public final String val;
+        private final String val;
 
-        MassUnit(String val) {
+        Mass(String val) {
             this.val = val;
+        }
+
+        public String getVal() {
+            return val;
+        }
+
+        public static ObservableList<String> getFxValues() {
+            return Arrays.stream(Mass.values())
+                .map(Mass::getVal)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+    }
+
+    public enum RadUnit {
+        BECQUEREL("Bq"),
+        CURIE("Ci");
+
+        private final String val;
+
+        RadUnit(String val) {
+            this.val = val;
+        }
+
+        public String getVal() {
+            return val;
+        }
+
+        public static ObservableList<String> getFxValues() {
+            return Arrays.stream(RadUnit.values())
+                .map(RadUnit::getVal)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
         }
     }
 
@@ -41,10 +76,20 @@ public class Isotope {
         TYPE_B_HIGHWAY("Type B: Highway Route Control"),
         TBD("To Be Determined");
 
-        public final String val;
+        private final String val;
 
         IsoClass(String val) {
             this.val = val;
+        }
+
+        public String getVal() {
+            return val;
+        }
+
+        public static ObservableList<String> getFxValues() {
+            return Arrays.stream(IsoClass.values())
+                .map(IsoClass::getVal)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
         }
     }
 
@@ -53,12 +98,23 @@ public class Isotope {
         INSTRUMENT("Instrument"),
         ARTICLE("Article");
 
-        public final String val;
+        private final String val;
 
         Nature(String val) {
             this.val = val;
         }
+
+        public String getVal() {
+            return val;
+        }
+
+        public static ObservableList<String> getFxValues() {
+            return Arrays.stream(Nature.values())
+                .map(Nature::getVal)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
     }
+
     public Isotope(IsotopeModelId isoId) {
         this((PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()),
             isoId
@@ -68,39 +124,50 @@ public class Isotope {
     public Isotope(PropHandler propHandler, IsotopeModelId isoId) {
         this(propHandler,
             isoId,
-            MassUnit.GRAMS);
+            Mass.GRAMS);
     }
 
-    public Isotope(PropHandler propHandler, IsotopeModelId isoId, MassUnit massUnit) {
+    public Isotope(PropHandler propHandler, IsotopeModelId isoId, Mass mass) {
         this(propHandler,
             isoId,
-            massUnit,
+            mass,
+            RadUnit.CURIE);
+    }
+
+    public Isotope(PropHandler propHandler, IsotopeModelId isoId, Mass mass, RadUnit radUnit) {
+        this(propHandler,
+            isoId,
+            mass,
+            radUnit,
             Nature.REGULAR);
     }
 
-    public Isotope(PropHandler propHandler, IsotopeModelId isoId, MassUnit massUnit, Nature nature) {
+    public Isotope(PropHandler propHandler, IsotopeModelId isoId, Mass mass, RadUnit radUnit, Nature nature) {
         this(propHandler,
             isoId,
-            massUnit,
+            mass,
+            radUnit,
             nature,
             LimitsModelId.State.SOLID);
     }
 
-    public Isotope(PropHandler propHandler, IsotopeModelId isoId, MassUnit massUnit, Nature nature, LimitsModelId.State state) {
+    public Isotope(PropHandler propHandler, IsotopeModelId isoId, Mass mass, RadUnit radUnit, Nature nature, LimitsModelId.State state) {
         this(propHandler,
             isoId,
-            massUnit,
+            mass,
+            radUnit,
             nature,
             new LimitsModelId(state, LimitsModelId.Form.NORMAL));
     }
 
-    public Isotope(PropHandler propHandler, IsotopeModelId isoId, MassUnit massUnit, Nature nature, LimitsModelId limitsId) {
+    public Isotope(PropHandler propHandler, IsotopeModelId isoId, Mass mass, RadUnit radUnit, Nature nature, LimitsModelId limitsId) {
         this.propHandler = propHandler;
         this.constants = new IsotopeConstants(this.propHandler);
         constants.dbInit(isoId, limitsId);
         setName(isoId.getName());
         setAbbr(isoId.getAbbr());
-        setMassUnit(massUnit);
+        setMass(mass);
+        setRadUnit(radUnit);
         setNature(nature);
         setState(limitsId.getState());
         setForm(limitsId.getForm());
@@ -112,12 +179,20 @@ public class Isotope {
         return constants;
     }
 
-    public MassUnit getMassUnit() {
-        return massUnit;
+    public Mass getMass() {
+        return mass;
     }
 
-    public void setMassUnit(MassUnit massUnit) {
-        this.massUnit = massUnit;
+    public void setMass(Mass mass) {
+        this.mass = mass;
+    }
+
+    public RadUnit getRadUnit() {
+        return radUnit;
+    }
+
+    public void setRadUnit(RadUnit radUnit) {
+        this.radUnit = radUnit;
     }
 
     public String getName() {

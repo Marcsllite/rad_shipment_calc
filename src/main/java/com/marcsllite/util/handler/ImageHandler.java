@@ -12,10 +12,14 @@ public final class ImageHandler {
     DEFAULT_WHITE("#fff"),
     UML_BLUE("#0469B1");
 
-    public final String val;
+    private final String val;
 
     Colors(String val) {
       this.val = val;
+    }
+
+    public String getVal() {
+      return val;
     }
   }
 

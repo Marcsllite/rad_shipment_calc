@@ -1,9 +1,8 @@
 package com.marcsllite.controller;
 
+import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.ImageHandler;
 import com.marcsllite.util.handler.PropHandler;
-
-import com.marcsllite.util.factory.PropHandlerFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -39,12 +38,18 @@ public class MenuPaneController extends BaseController {
     public enum Page {
         SHIPMENT("Shipment Page"),
         REFERENCE("Reference Page"),
+        DETAILS("Shipment Details"),
+        SUMMARY("Shipment Summary"),
         EMPTY("");
 
-        public final String val;
+        private final String val;
 
         Page(String val) {
             this.val = val;
+        }
+
+        public String getVal() {
+            return val;
         }
     }
 
@@ -195,10 +200,10 @@ public class MenuPaneController extends BaseController {
             throw e;
         } else {
             if(btnShipment.equals(btnMenu)) {
-                btnShipment.setTextFill(Color.web(color.val));  // changing Shipment button text color
+                btnShipment.setTextFill(Color.web(color.getVal()));  // changing Shipment button text color
                 imgViewShipment.setImage(ImageHandler.getShipmentImage(color));  // changing icon color
             } else if(btnReference.equals(btnMenu)) {
-                btnReference.setTextFill(Color.web(color.val));  // changing Reference button text color
+                btnReference.setTextFill(Color.web(color.getVal()));  // changing Reference button text color
                 imgViewReference.setImage(ImageHandler.getReferenceImage(color));  // changing icon color
             }
         }

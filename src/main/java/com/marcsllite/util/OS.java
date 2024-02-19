@@ -7,10 +7,14 @@ public enum OS {
     SOLARIS("Solaris"),
     NOT_SUPPORTED("Not Supported");
 
-    public final String val;
+    private final String val;
 
     OS(String val) {
         this.val = val;
+    }
+
+    public String getVal() {
+        return val;
     }
 }
 

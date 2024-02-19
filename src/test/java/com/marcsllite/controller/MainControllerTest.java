@@ -56,7 +56,7 @@ public class MainControllerTest {
 
     @Test
     public void testRegisterController_ReferencePaneController() {
-        SecondaryController controller = new SecondaryController();
+        ReferencePaneController controller = new ReferencePaneController();
         
         MainController.getInstance().registerController(controller);
 

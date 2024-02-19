@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Text?>
 <StackPane prefHeight="250.0" prefWidth="450.0" styleClass="root" stylesheets="@../css/shipmentDetails.css"
            xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="rad.shipment.calculator.gui.ShipmentDetailsController">
+           fx:controller="com.marcsllite.controller.ShipmentDetailsController">
    <VBox fx:id="vBoxShipmentDetails" styleClass="vBoxShipmentDetails">
       <HBox styleClass="hBoxShipmentDetails">
          <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="shipmentDetailsTxt" text="Shipment Date:"/>

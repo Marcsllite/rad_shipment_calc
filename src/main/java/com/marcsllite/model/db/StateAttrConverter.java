@@ -12,7 +12,7 @@ public class StateAttrConverter implements AttributeConverter<LimitsModelId.Stat
         if(state == null) {
             return null;
         }
-        return state.val;
+        return state.getVal();
     }
 
     @Override
@@ -21,7 +21,7 @@ public class StateAttrConverter implements AttributeConverter<LimitsModelId.Stat
             return null;
         }
         return Stream.of(LimitsModelId.State.values())
-            .filter(s -> s.val.equals(str))
+            .filter(s -> s.getVal().equals(str))
             .findFirst()
             .orElseThrow(IllegalArgumentException::new);
     }

@@ -16,7 +16,7 @@ public class FormAttrConverterTest {
     @Test
     public void testConvertToDatabaseColumn() {
         LimitsModelId.Form form = LimitsModelId.Form.NORMAL;
-        String expected = form.val;
+        String expected = form.getVal();
         assertEquals(expected, converter.convertToDatabaseColumn(form));
     }
 
@@ -28,7 +28,7 @@ public class FormAttrConverterTest {
     @Test
     public void testConvertToEntityAttribute() {
         LimitsModelId.Form expected = LimitsModelId.Form.NORMAL;
-        String str = expected.val;
+        String str = expected.getVal();
         assertEquals(expected, converter.convertToEntityAttribute(str));
     }
 }

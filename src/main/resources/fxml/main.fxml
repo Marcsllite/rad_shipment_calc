@@ -18,6 +18,6 @@
         <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <fx:include fx:id="menuPane"  source="menuPane.fxml" GridPane.halignment="CENTER" GridPane.rowSpan="2147483647" GridPane.valignment="TOP" />
-    <fx:include fx:id="referencePane"  source="secondary.fxml" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowSpan="2147483647" />
+    <fx:include fx:id="referencePane"  source="referencePane.fxml" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowSpan="2147483647" />
     <fx:include fx:id="homePane" source="homePane.fxml" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.hgrow="ALWAYS" GridPane.rowSpan="2147483647" />
 </GridPane>

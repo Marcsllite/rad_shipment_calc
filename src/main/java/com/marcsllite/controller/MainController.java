@@ -9,7 +9,7 @@ public class MainController {
     // DECLARING FXML CONTROLLERS
     @FXML private MenuPaneController menuPaneController;
     @FXML private HomePaneController homePaneController;
-    @FXML private SecondaryController referencePaneController;
+    @FXML private ReferencePaneController referencePaneController;
 
     private static final Logger logr = LogManager.getLogger();
 
@@ -52,8 +52,8 @@ public class MainController {
             menuPaneController = (MenuPaneController) c;
         } else if(c instanceof HomePaneController) {
             homePaneController = (HomePaneController) c;
-        } else if(c instanceof SecondaryController) {
-            referencePaneController = (SecondaryController) c;
+        } else if(c instanceof ReferencePaneController) {
+            referencePaneController = (ReferencePaneController) c;
         }
     }
 
@@ -65,7 +65,7 @@ public class MainController {
         return homePaneController;
     }
 
-    public SecondaryController getReferencePaneController() {
+    public ReferencePaneController getReferencePaneController() {
         return referencePaneController;
     }
 

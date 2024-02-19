@@ -48,6 +48,7 @@ class ConversionsTest {
             new Object[] {Conversions.SIPrefix.DECI, toBeConverted.multiply(BigDecimal.TEN.pow(5, mc), mc)},
             new Object[] {Conversions.SIPrefix.CENTI, toBeConverted.multiply(BigDecimal.TEN.pow(4, mc), mc)},
             new Object[] {Conversions.SIPrefix.MILLI, toBeConverted.multiply(BigDecimal.TEN.pow(3, mc), mc)},
+            new Object[] {Conversions.SIPrefix.MICRO, toBeConverted},
             new Object[] {Conversions.SIPrefix.NANO, toBeConverted.multiply(BigDecimal.TEN.pow(-3, mc), mc)},
             new Object[] {Conversions.SIPrefix.PICO, toBeConverted.multiply(BigDecimal.TEN.pow(-6, mc), mc)},
             new Object[] {Conversions.SIPrefix.FEMTO, toBeConverted.multiply(BigDecimal.TEN.pow(-9, mc), mc)},

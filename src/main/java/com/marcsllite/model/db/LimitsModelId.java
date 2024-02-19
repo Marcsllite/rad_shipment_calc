@@ -3,9 +3,13 @@ package com.marcsllite.model.db;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Embeddable
 public class LimitsModelId implements Serializable {
@@ -16,10 +20,20 @@ public class LimitsModelId implements Serializable {
         LIQUID("Liquid"),
         GAS("Gas");
 
-        public final String val;
+        private final String val;
 
         State(String val) {
             this.val = val;
+        }
+
+        public String getVal() {
+            return val;
+        }
+
+        public static ObservableList<String> getFxValues() {
+            return Arrays.stream(State.values())
+                .map(State::getVal)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
         }
     }
 
@@ -27,10 +41,20 @@ public class LimitsModelId implements Serializable {
         NORMAL("Normal"),
         SPECIAL("Special");
 
-        public final String val;
+        private final String val;
 
         Form(String val) {
             this.val = val;
+        }
+
+        public String getVal() {
+            return val;
+        }
+
+        public static ObservableList<String> getFxValues() {
+            return Arrays.stream(Form.values())
+                .map(Form::getVal)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
         }
     }
 
