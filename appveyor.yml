@@ -63,7 +63,7 @@ for:
       - set PATH=%JDK_HOME%;%JDK_HOME%\bin;%PATH%
 
     build_script:
-      - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+      - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
       # - cmd: mvn clean verify -e -X
       
     test_script:
