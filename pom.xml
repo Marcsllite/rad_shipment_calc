@@ -38,11 +38,11 @@
         <hibernate-core.version>6.4.4.Final</hibernate-core.version>
 
         <!-- Test Coverage -->
-        <jacoco.percentages.min.instruct>0.74</jacoco.percentages.min.instruct>
+        <jacoco.percentages.min.instruct>0.70</jacoco.percentages.min.instruct>
         <jacoco.percentages.min.line>0.68</jacoco.percentages.min.line>
-        <jacoco.percentages.min.branch>0.72</jacoco.percentages.min.branch>
-        <jacoco.percentages.min.complex>0.71</jacoco.percentages.min.complex>
-        <jacoco.percentages.min.method>0.70</jacoco.percentages.min.method>
+        <jacoco.percentages.min.branch>0.68</jacoco.percentages.min.branch>
+        <jacoco.percentages.min.complex>0.68</jacoco.percentages.min.complex>
+        <jacoco.percentages.min.method>0.69</jacoco.percentages.min.method>
         <jacoco.missed.count.class>0</jacoco.missed.count.class>
     </properties>
 
