@@ -52,7 +52,7 @@ public class GUITest extends FxRobot {
 
     @Stop
     protected void stop() throws TimeoutException {
-        FxToolkit.cleanupStages();
+        FxToolkit.hideStage();
         release(new KeyCode[]{});
         release(new MouseButton[]{});
         root = null;

@@ -88,8 +88,8 @@ for:
             mvn -d clean package
 
     build_script:
-      - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-vnc.sh' | bash -e -
-      # - sh: mvn clean verify
+      # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-vnc.sh' | bash -e -
+      - sh: mvn clean verify
 
     test_script:
       - sh: |
