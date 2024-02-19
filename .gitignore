@@ -20,8 +20,6 @@
 ###########
 # IntelliJ #
 ###########
-out/
-
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
@@ -32,7 +30,7 @@ out/
 # AWS User-specific
 .idea/**/aws.xml
 
-# Generated files 
+# Generated files
 .idea/**/contentModel.xml
 
 # Sensitive or high-churn files
@@ -44,18 +42,43 @@ out/
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
 
+# Gradle
+.idea/**/gradle.xml
+.idea/**/libraries
+
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
 # since they will be recreated, and may cause churn.  Uncomment if using
 # auto-import.
-.idea/artifacts
-.idea/compiler.xml
-.idea/jarRepositories.xml
-.idea/modules.xml
-.idea/*.iml
-.idea/modules
-*.iml
-*.ipr
+# .idea/artifacts
+# .idea/compiler.xml
+# .idea/jarRepositories.xml
+# .idea/modules.xml
+# .idea/*.iml
+# .idea/modules
+# *.iml
+# *.ipr
+
+# CMake
+cmake-build-*/
+
+# Mongo Explorer plugin
+.idea/**/mongoSettings.xml
+
+# File-based project format
+*.iws
+
+# IntelliJ
+out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+# Cursive Clojure plugin
+.idea/replstate.xml
 
 # SonarLint plugin
 .idea/sonarlint/
@@ -68,6 +91,9 @@ fabric.properties
 
 # Editor-based Rest Client
 .idea/httpRequests
+
+# Android studio 3.1+ serialized cache file
+.idea/caches/build_file_checksums.ser
 
 
 #########
