@@ -41,12 +41,12 @@ public class ShipmentDetailsController extends BaseController {
 
     @Override
     public void show() {
-        vBoxShipmentDetails.setVisible(true);
+        shipmentDetails.setVisible(true);
     }
 
     @Override
     public void hide() {
-        vBoxShipmentDetails.setVisible(false);
+        shipmentDetails.setVisible(false);
     }
 
     /**

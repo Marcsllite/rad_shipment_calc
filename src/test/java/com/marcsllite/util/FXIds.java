@@ -13,6 +13,7 @@ public class FXIds {
     public static final String GRIDPANE_REFERENCE = "#referencePane";
 
     // Menu Pane
+    public static final String STACKPANE_LOGO = "#stackPaneLogo";
     public static final String IMGVIEW_COLOR_LOGO = "#imgViewColorLogo";
     public static final String IMGVIEW_GREY_LOGO = "#imgViewGreyLogo";
     public static final String BTN_SHIPMENT = "#btnShipment";

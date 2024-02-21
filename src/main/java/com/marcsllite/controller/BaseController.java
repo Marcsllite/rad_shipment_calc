@@ -1,10 +1,13 @@
 package com.marcsllite.controller;
 
-import com.marcsllite.controller.MainController;
 import javafx.fxml.FXML;
 
 public abstract class BaseController {
-    protected final MainController main = MainController.getInstance();
+    protected MainController main;
+
+    public BaseController() {
+        main = MainController.getInstance();
+    }
 
     /**
      * FXML Function to initialize GUI

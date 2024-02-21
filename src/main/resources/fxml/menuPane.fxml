@@ -23,7 +23,7 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
    </rowConstraints>
-   <StackPane onMouseEntered="#mouseLogoEnter" onMouseExited="#mouseLogoExit" GridPane.halignment="CENTER" GridPane.valignment="TOP">
+   <StackPane fx:id="stackPaneLogo" onMouseEntered="#mouseLogoEnter" onMouseExited="#mouseLogoExit" GridPane.halignment="CENTER" GridPane.valignment="TOP">
       <GridPane.margin>
          <Insets top="10.0" />
       </GridPane.margin>

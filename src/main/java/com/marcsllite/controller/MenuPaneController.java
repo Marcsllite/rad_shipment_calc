@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,6 +19,7 @@ import java.util.ResourceBundle;
 public class MenuPaneController extends BaseController {
     // Declaring FXML objects
     @FXML protected GridPane menuPane;
+    @FXML protected StackPane stackPaneLogo;
     @FXML protected ImageView imgViewColorLogo;
     @FXML protected ImageView imgViewGreyLogo;
     @FXML protected Button btnShipment;
@@ -153,7 +155,7 @@ public class MenuPaneController extends BaseController {
         }
 
         // un-marking previous button
-        unsetCurrentButton();
+        unsetCurrentPage();
 
         if(btnCurrent.equals(btnShipment)) {
             setButtonColor(btnShipment, CURRENT_COLOR);  // setting the single button and icon to be the current color
@@ -169,7 +171,7 @@ public class MenuPaneController extends BaseController {
     /**
      * Helper function to un-mark the previously marked button
      */
-    protected void unsetCurrentButton() {
+    protected void unsetCurrentPage() {
         currentPage = Page.EMPTY;
 
         // changing the color of the buttons to the idle color
@@ -270,4 +272,16 @@ public class MenuPaneController extends BaseController {
      * @return the current button in integer form
      */
     public Page getCurrentPage() { return currentPage; }
+
+    public ImageHandler.Colors getCURRENT_COLOR() {
+        return CURRENT_COLOR;
+    }
+
+    public ImageHandler.Colors getIDLE_COLOR() {
+        return IDLE_COLOR;
+    }
+
+    public ImageHandler.Colors getHOVER_COLOR() {
+        return HOVER_COLOR;
+    }
 }

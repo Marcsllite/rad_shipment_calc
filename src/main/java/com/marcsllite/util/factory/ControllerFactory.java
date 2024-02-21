@@ -1,5 +1,6 @@
 package com.marcsllite.util.factory;
 
+import com.marcsllite.controller.BaseController;
 import com.marcsllite.controller.HomePaneController;
 import com.marcsllite.controller.MainController;
 import com.marcsllite.controller.MenuPaneController;
@@ -10,11 +11,25 @@ import com.marcsllite.controller.SummaryPaneController;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.util.Callback;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 public class ControllerFactory implements Callback<Class<?>, Object> {
     final PropHandler propHandler;
+    final Map<String, Object> controllerMap;
 
     public ControllerFactory(PropHandler propHandler) {
         this.propHandler = propHandler;
+        controllerMap = new HashMap<>();
+    }
+
+    public Object getController(String name) {
+        if(name == null) {
+            return null;
+        }
+
+        return controllerMap.get(name);
     }
 
     @Override
@@ -38,6 +53,10 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
             ret = new SummaryPaneController(propHandler);
         }
 
+        if(ret instanceof BaseController ||
+            name.equals(Objects.requireNonNull(ret).getClass().getName())) {
+            controllerMap.put(name, ret);
+        }
         return ret;
     }
 }

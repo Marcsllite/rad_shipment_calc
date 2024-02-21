@@ -47,6 +47,10 @@ public class StageHandler {
         return curView;
     }
 
+    public ControllerFactory getFactory() {
+        return factory;
+    }
+
     public void switchScene(FXMLView view) {
         if (view == null) {
             throw new InvalidParameterException(NULL_ERROR);

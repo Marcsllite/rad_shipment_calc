@@ -64,8 +64,7 @@ public class ModifyController extends BaseController {
     private static final Logger logr = LogManager.getLogger();
     private final PropHandler propHandler;
 
-    @FXML
-    public void initialize(){
+    @FXML public void initialize(){
         // adding values to the choice boxes
         choiceBoxA0Prefix.setItems(Conversions.SIPrefix.getFxValues());
         choiceBoxA0Name.setItems(Isotope.RadUnit.getFxValues());
@@ -78,7 +77,8 @@ public class ModifyController extends BaseController {
         // Default value for choice boxes
         choiceBoxA0Prefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
         choiceBoxA0Name.getSelectionModel().select(Isotope.RadUnit.CURIE.getVal());
-        choiceBoxMassPrefix.getSelectionModel().select(Isotope.Mass.GRAMS.getVal());
+        choiceBoxMassPrefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
+        choiceBoxMassName.getSelectionModel().select(Isotope.Mass.GRAMS.getVal());
     }
 
     public ModifyController() {
