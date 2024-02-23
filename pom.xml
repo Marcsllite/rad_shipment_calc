@@ -204,7 +204,7 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <parallel>classes</parallel>
+                    <reuseForks>false</reuseForks> <!-- Creates a new JVM process for each test class. Needed for GUITests -->
                     <additionalClasspathElements>
                         <additionalClasspathElement>${basedir}/src/main/resources</additionalClasspathElement>
                     </additionalClasspathElements>
