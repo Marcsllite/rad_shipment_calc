@@ -1,20 +1,17 @@
 package com.marcsllite;
 
+import com.marcsllite.service.DBService;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import jakarta.persistence.PersistenceUnit;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class DBTest {
-    @PersistenceUnit
-    protected EntityManagerFactory factory;
-    @PersistenceUnit
+    @Mock
     protected EntityManager em;
-
-    private final String PERSISTENCE_UNIT_NAME = "com.marcsllite.db.test";
-
-    protected void initPU() {
-        factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-        em = factory.createEntityManager();
-    }
+    @Mock
+    protected DBService dbService;
 }

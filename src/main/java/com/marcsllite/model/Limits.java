@@ -1,14 +1,11 @@
 package com.marcsllite.model;
 
 import com.marcsllite.model.db.LimitsModelId;
-import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.beans.property.SimpleFloatProperty;
 
-import java.util.ResourceBundle;
-
 public class Limits {
-    private final PropHandler propHandler;
+    private PropHandler propHandler;
     private final float defaultVal;
     private LimitsModelId.State state;
     private LimitsModelId.Form form;
@@ -17,28 +14,37 @@ public class Limits {
     private final SimpleFloatProperty limited = new SimpleFloatProperty();
 
     public Limits() {
-        this(
-            (PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory())
-        );
-    }
-
-    public Limits(PropHandler propHandler) {
-        this(propHandler,
-             new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL),
+        this(new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL),
             null,
             null,
             null
         );
     }
 
-    public Limits(PropHandler propHandler, LimitsModelId limitsId, Float ia_limited, Float ia_package, Float limited) {
-        this.propHandler = propHandler;
-        this.defaultVal = (float) propHandler.getDouble("defaultNum");
+    public Limits(LimitsModelId limitsId) {
+        this(limitsId,
+            null,
+            null,
+            null
+        );
+    }
+
+    public Limits(LimitsModelId limitsId, Float ia_limited, Float ia_package, Float limited) {
+        this.propHandler = new PropHandler();
+        this.defaultVal = (float) getPropHandler().getDouble("defaultNum");
         setState(limitsId.getState());
         setForm(limitsId.getForm());
         setIa_limited(ia_limited == null? defaultVal : ia_limited);
         setIa_package(ia_package == null? defaultVal : ia_package);
         setLimited(limited == null? defaultVal : limited);
+    }
+
+    public PropHandler getPropHandler() {
+        return propHandler;
+    }
+
+    public void setPropHandler(PropHandler propHandler) {
+        this.propHandler = propHandler;
     }
 
     public float getDefaultVal() {

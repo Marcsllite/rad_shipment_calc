@@ -4,21 +4,15 @@ import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
-import com.marcsllite.util.factory.PropHandlerFactory;
-import com.marcsllite.util.handler.PropHandler;
-import jakarta.persistence.EntityManager;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleFloatProperty;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ResourceBundle;
-
 public class IsotopeConstants {
     private static final Logger logr = LogManager.getLogger();
-    private final PropHandler propHandler;
-    private final DBService dbService;
+    private DBService dbService;
     private final float defaultVal;
     private final SimpleFloatProperty a1 = new SimpleFloatProperty();
     private final SimpleFloatProperty a2 = new SimpleFloatProperty();
@@ -30,36 +24,26 @@ public class IsotopeConstants {
     private final SimpleFloatProperty iaPackageLimit = new SimpleFloatProperty();
     private final SimpleFloatProperty limitedLimit = new SimpleFloatProperty();
     private final SimpleFloatProperty curieReportQuan = new SimpleFloatProperty();
-
     private final SimpleFloatProperty teraBqReportQuan = new SimpleFloatProperty();
 
-    public IsotopeConstants() {
-        this((PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()));
-    }
-
-    public IsotopeConstants(PropHandler propHandler) {
-        this(propHandler, null);
-    }
-
-    public IsotopeConstants(PropHandler propHandler, EntityManager em) {
-        this.propHandler = propHandler;
-        this.dbService = new DBServiceImpl(this.propHandler, em);
-        this.defaultVal = (float) this.propHandler.getDouble("defaultNum");
+    public IsotopeConstants(float defaultVal) {
+        setDbService(new DBServiceImpl());
+        this.defaultVal = defaultVal;
     }
 
     public void dbInit(IsotopeModelId isoId, LimitsModelId limitsId) {
         try {
-            setA1(dbService.getA1(isoId.getAbbr()));
-            setA2(dbService.getA2(isoId.getAbbr()));
-            setDecayConstant(dbService.getDecayConstant(isoId.getAbbr()));
-            setExemptConcentration(dbService.getExemptConcentration(isoId.getAbbr()));
-            setExemptLimit(dbService.getExemptLimit(isoId.getAbbr()));
-            setHalfLife(dbService.getHalfLife(isoId.getAbbr()));
-            setIaLimitedLimit(dbService.getIALimited(limitsId));
-            setIaPackageLimit(dbService.getIAPackage(limitsId));
-            setLimitedLimit(dbService.getLimited(limitsId));
-            setCurieReportQuan(dbService.getCiReportQuan(isoId.getAbbr()));
-            setTeraBqReportQuan(dbService.getTBqReportQuan(isoId.getAbbr()));
+            setA1(getDbService().getA1(isoId.getAbbr()));
+            setA2(getDbService().getA2(isoId.getAbbr()));
+            setDecayConstant(getDbService().getDecayConstant(isoId.getAbbr()));
+            setExemptConcentration(getDbService().getExemptConcentration(isoId.getAbbr()));
+            setExemptLimit(getDbService().getExemptLimit(isoId.getAbbr()));
+            setHalfLife(getDbService().getHalfLife(isoId.getAbbr()));
+            setIaLimitedLimit(getDbService().getIALimited(limitsId));
+            setIaPackageLimit(getDbService().getIAPackage(limitsId));
+            setLimitedLimit(getDbService().getLimited(limitsId));
+            setCurieReportQuan(getDbService().getCiReportQuan(isoId.getAbbr()));
+            setTeraBqReportQuan(getDbService().getTBqReportQuan(isoId.getAbbr()));
         } catch (Exception e) {
             logr.fatal("Failed to initialize {} isotope constants from db", isoId.getName());
             logr.catching(Level.FATAL, e);
@@ -70,6 +54,14 @@ public class IsotopeConstants {
                 Platform.exit();
             }
         }
+    }
+
+    public DBService getDbService() {
+        return dbService;
+    }
+
+    public void setDbService(DBService dbService) {
+        this.dbService = dbService;
     }
 
     public float getDefaultVal() {

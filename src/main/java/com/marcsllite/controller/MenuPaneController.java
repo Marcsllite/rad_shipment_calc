@@ -1,8 +1,6 @@
 package com.marcsllite.controller;
 
-import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.ImageHandler;
-import com.marcsllite.util.handler.PropHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,7 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.security.InvalidParameterException;
-import java.util.ResourceBundle;
 
 public class MenuPaneController extends BaseController {
     // Declaring FXML objects
@@ -28,7 +25,6 @@ public class MenuPaneController extends BaseController {
     @FXML protected ImageView imgViewReference;
 
     private static final Logger logr = LogManager.getLogger();
-    private final PropHandler propHandler;
     // color to make the button corresponding to the current page
     private final ImageHandler.Colors CURRENT_COLOR = ImageHandler.Colors.UML_BLUE;
     // color to make idle buttons
@@ -55,19 +51,11 @@ public class MenuPaneController extends BaseController {
         }
     }
 
-    public MenuPaneController() {
-        this((PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()));
-    }
-
-    public MenuPaneController(PropHandler propHandler) {
-        this.propHandler = propHandler;
-    }
-
     /**
      * FXML Function to initialize GUI (run when the menuPane.fxml file is loaded by the FXMLLoader)
      */
     @Override
-    public void initialize() {
+    @FXML public void initialize() {
         super.initialize();
         mouseLogoExit(); 
         mouseShipmentExit();
@@ -126,7 +114,7 @@ public class MenuPaneController extends BaseController {
         // checking if user is already on the Shipment page
         if(getCurrentPage() != Page.SHIPMENT) {
             setCurrentButton(btnShipment);  // setting the current button
-            main.showHomePane();
+            getMain().showHomePane();
         }
     }
 
@@ -137,7 +125,7 @@ public class MenuPaneController extends BaseController {
         // checking if user is already on the Shipment page
         if(getCurrentPage() != Page.REFERENCE) {
             setCurrentButton(btnReference);  // setting the current button
-            main.showReferencePane();
+            getMain().showReferencePane();
         }
     }
 

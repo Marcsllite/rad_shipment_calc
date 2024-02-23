@@ -2,8 +2,6 @@ package com.marcsllite.controller;
 
 import com.marcsllite.model.Isotope;
 import com.marcsllite.model.PTableColumn;
-import com.marcsllite.util.factory.PropHandlerFactory;
-import com.marcsllite.util.handler.PropHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,7 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.security.InvalidParameterException;
-import java.util.ResourceBundle;
 
 public class HomePaneController extends BaseController {
     @FXML GridPane homePane;
@@ -30,18 +27,9 @@ public class HomePaneController extends BaseController {
     @FXML Button btnCalculate;
 
     private static final Logger logr = LogManager.getLogger();
-    private final PropHandler propHandler;
-
-    public HomePaneController() {
-        this((PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()));
-    }
-
-    public HomePaneController(PropHandler propHandler) {
-        this.propHandler = propHandler;
-    }
 
     @Override
-    public void initialize() {
+    @FXML public void initialize() {
         super.initialize();
     }
 

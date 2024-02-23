@@ -6,23 +6,26 @@ import com.marcsllite.util.FXMLView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.api.FxAssert;
-import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.base.NodeMatchers;
 
-@ExtendWith(ApplicationExtension.class)
-@ExtendWith(MockitoExtension.class)
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
+
 public class HomePaneControllerGUITest extends GUITest {
     @Spy
     HomePaneController controller;
+
+    public HomePaneControllerGUITest() {
+        super(FXMLView.HOME);
+    }
+
     @Start
-    public void start(Stage stage) {
-        super.start(stage, FXMLView.HOME);
-        controller = (HomePaneController) getController(HomePaneController.class);
+    public void start(Stage stage) throws IOException, TimeoutException {
+        super.start(stage);
+        controller = (HomePaneController) getController();
     }
 
     @Test

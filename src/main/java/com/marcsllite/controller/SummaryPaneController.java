@@ -1,7 +1,5 @@
 package com.marcsllite.controller;
 
-import com.marcsllite.util.factory.PropHandlerFactory;
-import com.marcsllite.util.handler.PropHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -11,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.security.InvalidParameterException;
-import java.util.ResourceBundle;
 
 public class SummaryPaneController extends BaseController {
     @FXML AnchorPane summaryPane;
@@ -19,15 +16,6 @@ public class SummaryPaneController extends BaseController {
     @FXML Button btnSave;
 
     private static final Logger logr = LogManager.getLogger();
-    private final PropHandler propHandler;
-
-    public SummaryPaneController() {
-        this((PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()));
-    }
-
-    public SummaryPaneController(PropHandler propHandler) {
-        this.propHandler = propHandler;
-    }
 
     @Override
     public void show() {

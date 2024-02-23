@@ -6,7 +6,6 @@ import java.io.File;
 import java.security.InvalidParameterException;
 
 public final class ImageHandler {
-
   public enum Colors {
     DEFAULT_GREY("#8a8a8a"),
     DEFAULT_WHITE("#fff"),

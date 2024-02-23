@@ -13,7 +13,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class PropHandlerFactory extends ResourceBundle.Control {
-
     private static final String XML = "xml";
     private static final List<String> SINGLETON_LIST = Collections.singletonList(XML);
 

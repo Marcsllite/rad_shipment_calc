@@ -1,18 +1,23 @@
 package com.marcsllite.util.handler;
 
-import com.marcsllite.GUITest;
+import com.marcsllite.ControllerFactoryTestObj;
+import com.marcsllite.PropHandlerTestObj;
 import com.marcsllite.util.FXMLView;
+import com.marcsllite.util.factory.ControllerFactory;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junitpioneer.jupiter.SetSystemProperty;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.api.FxToolkit;
 
 import java.security.InvalidParameterException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Properties;
 import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
@@ -21,16 +26,20 @@ import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class StageHandlerTest {
     final static String propMsg = "This is a proper message";
     final static String defaultMessage = StageHandler.DEFAULT_MSG;
-    static StageHandler stageHandler;
+    private StageHandler stageHandler;
     static Stage stage;
+    @Mock
+    private ControllerFactory factory;
     
     @BeforeAll
-    public static void setup() throws TimeoutException {
+    public void beforeAll() throws TimeoutException {
         stage = FxToolkit.registerPrimaryStage();
-        stageHandler = new StageHandler(stage, GUITest.propHandler);
+        stageHandler = new StageHandler(stage, new PropHandlerTestObj(), new ControllerFactoryTestObj());
     }
 
     @Test
@@ -70,20 +79,11 @@ public class StageHandlerTest {
 
     @Test
     public void testLoadViewNodeHierarchy_EmptyProperties() {
-        PropHandler propHandler =  new PropHandler() {
-            @Override
-            protected Object handleGetObject(String key) {
-                if(key == null || key.isBlank()) return "";
-                return ("defaultNum".equals(key))? "-2.0" : "";
-            }
+        stageHandler = new StageHandler(stage);
+        PropHandler propHandler = stageHandler.getPropHandler();
+        propHandler.setProp(new Properties());
+        stageHandler.setPropHandler(propHandler);
 
-            @Override
-            protected Set<String> handleKeySet() {
-                return new HashSet<>();
-            }
-        };
-
-        stageHandler = new StageHandler(stage, propHandler);
         RuntimeException exception = assertThrows(
             RuntimeException.class, () -> stageHandler.loadViewNodeHierarchy(FXMLView.TEST)
         );

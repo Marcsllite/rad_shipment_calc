@@ -1,12 +1,15 @@
 package com.marcsllite.controller;
 
+import com.marcsllite.util.handler.PropHandler;
 import javafx.fxml.FXML;
 
 public abstract class BaseController {
-    protected MainController main;
+    private MainController main;
+    private PropHandler propHandler;
 
     public BaseController() {
-        main = MainController.getInstance();
+        setPropHandler(new PropHandler());
+        setMain(MainController.getInstance());
     }
 
     /**
@@ -15,7 +18,7 @@ public abstract class BaseController {
      */
     @FXML
     public void initialize(){
-        main.registerController(this);
+        getMain().registerController(this);
     }
 
     /**
@@ -27,4 +30,20 @@ public abstract class BaseController {
      * Function to hide the controller's scene
      */
     public abstract void hide();
+
+    public PropHandler getPropHandler() {
+        return propHandler;
+    }
+
+    public void setPropHandler(PropHandler propHandler) {
+        this.propHandler = propHandler;
+    }
+
+    public MainController getMain() {
+        return main;
+    }
+
+    public void setMain(MainController main) {
+        this.main = main;
+    }
 }

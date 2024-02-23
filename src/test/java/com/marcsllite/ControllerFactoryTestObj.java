@@ -1,4 +1,4 @@
-package com.marcsllite.util.factory;
+package com.marcsllite;
 
 import com.marcsllite.controller.BaseController;
 import com.marcsllite.controller.HomePaneController;
@@ -8,45 +8,30 @@ import com.marcsllite.controller.ModifyController;
 import com.marcsllite.controller.ReferencePaneController;
 import com.marcsllite.controller.ShipmentDetailsController;
 import com.marcsllite.controller.SummaryPaneController;
-import javafx.util.Callback;
+import com.marcsllite.util.factory.ControllerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
+import static org.mockito.Mockito.mock;
 
-public class ControllerFactory implements Callback<Class<?>, Object> {
-    protected final Map<String, Object> controllerMap;
-
-    public ControllerFactory() {
-        controllerMap = new HashMap<>();
-    }
-
-    public Object getController(String name) {
-        if(name == null) {
-            return null;
-        }
-
-        return controllerMap.get(name);
-    }
-
+public class ControllerFactoryTestObj extends ControllerFactory {
     @Override
     public Object call(Class<?> param) {
         String name = param.getName();
         Object ret = getController(name);
 
         if(name.equals(MainController.class.getName())) {
-            ret = ret == null? MainController.getInstance() : ret;
+            ret = ret == null? mock(MainController.class) : ret;
         } else if(name.equals(MenuPaneController.class.getName())) {
-            ret = ret == null? new MenuPaneController() : ret;
+            ret = ret == null? mock(MenuPaneController.class) : ret;
         } else if(name.equals(HomePaneController.class.getName())) {
-            ret = ret == null? new HomePaneController() : ret;
+            ret = ret == null? mock(HomePaneController.class) : ret;
         } else if(name.equals(ReferencePaneController.class.getName())) {
-            ret = ret == null? new ReferencePaneController() : ret;
+            ret = ret == null? mock(ReferencePaneController.class) : ret;
         } else if(name.equals(ModifyController.class.getName())) {
-            ret = ret == null? new ModifyController() : ret;
+            ret = ret == null? mock(ModifyController.class) : ret;
         } else if(name.equals(ShipmentDetailsController.class.getName())) {
-            ret = ret == null? new ShipmentDetailsController() : ret;
+            ret = ret == null? mock(ShipmentDetailsController.class) : ret;
         } else if(name.equals(SummaryPaneController.class.getName())) {
-            ret = ret == null? new SummaryPaneController() : ret;
+            ret = ret == null? mock(SummaryPaneController.class) : ret;
         }
 
         if((ret instanceof BaseController ||

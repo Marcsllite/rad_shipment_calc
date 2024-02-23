@@ -1,28 +1,26 @@
 package com.marcsllite.util.handler;
 
-import com.marcsllite.util.factory.PropHandlerFactory;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
-import java.util.ResourceBundle;
 
 public class FolderHandler {
     private static final Logger logr = LogManager.getLogger();
     private String appFolderPath;
     private String dataFolderPath;
     private final String DATA_FOLDER_NAME = "Shipment Calculator";
-    private final PropHandler propHandler;
+    private PropHandler propHandler;
 
     public FolderHandler() {
-        this((PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()));
+        this(null);
     }
 
     public FolderHandler(PropHandler propHandler) {
-        this.propHandler = propHandler;
-        setAppFolderPath(this.propHandler.getString("appFolderName"));
+        setPropHandler(propHandler == null? new PropHandler() : propHandler);
+        setAppFolderPath(getPropHandler().getString("appFolderName"));
     }
 
     /**
@@ -32,7 +30,7 @@ public class FolderHandler {
      */
 
     public void setAppFolderPath(String appFolderName) throws RuntimeException {
-        if (appFolderName == null || appFolderName.isEmpty()) appFolderName = propHandler.getString("appFolderName");
+        if (appFolderName == null || appFolderName.isEmpty()) appFolderName = getPropHandler().getString("appFolderName");
         
         String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + appFolderName;
         var toBeCreated = createFolder(path);
@@ -97,5 +95,13 @@ public class FolderHandler {
      */
     public String getAppFolderPath() {
         return appFolderPath;
+    }
+
+    public PropHandler getPropHandler() {
+        return propHandler;
+    }
+
+    public void setPropHandler(PropHandler propHandler) {
+        this.propHandler = propHandler;
     }
 }

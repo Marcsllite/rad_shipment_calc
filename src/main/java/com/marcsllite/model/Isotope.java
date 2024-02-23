@@ -2,7 +2,6 @@ package com.marcsllite.model;
 
 import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
-import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,18 +9,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class Isotope {
     private static final Logger logr = LogManager.getLogger();
-    private final PropHandler propHandler;
-    private final IsotopeConstants constants;
-    private String name;
-    private String abbr;
+    protected PropHandler propHandler;
+    protected IsotopeConstants constants;
+    private IsotopeModelId isoId;
     private Nature nature;
-    private LimitsModelId.State state;
-    private LimitsModelId.Form form;
+    private LimitsModelId limitsId;
     private Mass mass;
     private RadUnit radUnit;
     private IsoClass isoClass;
@@ -116,67 +112,66 @@ public class Isotope {
     }
 
     public Isotope(IsotopeModelId isoId) {
-        this((PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()),
-            isoId
-        );
-    }
-
-    public Isotope(PropHandler propHandler, IsotopeModelId isoId) {
-        this(propHandler,
-            isoId,
+        this(isoId,
             Mass.GRAMS);
     }
 
-    public Isotope(PropHandler propHandler, IsotopeModelId isoId, Mass mass) {
-        this(propHandler,
-            isoId,
+    public Isotope(IsotopeModelId isoId, Mass mass) {
+        this(isoId,
             mass,
             RadUnit.CURIE);
     }
 
-    public Isotope(PropHandler propHandler, IsotopeModelId isoId, Mass mass, RadUnit radUnit) {
-        this(propHandler,
-            isoId,
+    public Isotope(IsotopeModelId isoId, Mass mass, RadUnit radUnit) {
+        this(isoId,
             mass,
             radUnit,
             Nature.REGULAR);
     }
 
-    public Isotope(PropHandler propHandler, IsotopeModelId isoId, Mass mass, RadUnit radUnit, Nature nature) {
-        this(propHandler,
-            isoId,
+    public Isotope(IsotopeModelId isoId, Mass mass, RadUnit radUnit, Nature nature) {
+        this(isoId,
             mass,
             radUnit,
             nature,
             LimitsModelId.State.SOLID);
     }
 
-    public Isotope(PropHandler propHandler, IsotopeModelId isoId, Mass mass, RadUnit radUnit, Nature nature, LimitsModelId.State state) {
-        this(propHandler,
-            isoId,
+    public Isotope(IsotopeModelId isoId, Mass mass, RadUnit radUnit, Nature nature, LimitsModelId.State state) {
+        this(isoId,
             mass,
             radUnit,
             nature,
             new LimitsModelId(state, LimitsModelId.Form.NORMAL));
     }
 
-    public Isotope(PropHandler propHandler, IsotopeModelId isoId, Mass mass, RadUnit radUnit, Nature nature, LimitsModelId limitsId) {
-        this.propHandler = propHandler;
-        this.constants = new IsotopeConstants(this.propHandler);
+    public Isotope(IsotopeModelId isoId, Mass mass, RadUnit radUnit, Nature nature, LimitsModelId limitsId) {
+        setPropHandler(new PropHandler());
+        constants = new IsotopeConstants((float) getPropHandler().getDouble("defaultNum"));
         constants.dbInit(isoId, limitsId);
-        setName(isoId.getName());
-        setAbbr(isoId.getAbbr());
+        setIsoId(isoId);
         setMass(mass);
         setRadUnit(radUnit);
         setNature(nature);
-        setState(limitsId.getState());
-        setForm(limitsId.getForm());
+        setLimitsId(limitsId);
         setIsoClass(IsoClass.TBD);
-        logr.debug("Created new Isotope " + getAbbr() + " and initialized it with the following data:\n" + constants);
+        logr.debug("Created new Isotope " + getIsoId().getAbbr() + " and initialized it with the following data:\n" + getConstants());
+    }
+
+    public PropHandler getPropHandler() {
+        return propHandler;
+    }
+
+    public void setPropHandler(PropHandler propHandler) {
+        this.propHandler = propHandler;
     }
 
     public IsotopeConstants getConstants() {
         return constants;
+    }
+
+    public void setConstants(IsotopeConstants constants) {
+        this.constants = constants;
     }
 
     public Mass getMass() {
@@ -195,21 +190,14 @@ public class Isotope {
         this.radUnit = radUnit;
     }
 
-    public String getName() {
-        return name;
+    public void setIsoId(IsotopeModelId isoId) {
+        this.isoId = isoId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public IsotopeModelId getIsoId() {
+        return isoId;
     }
 
-    public String getAbbr() {
-        return abbr;
-    }
-
-    public void setAbbr(String abbr) {
-        this.abbr = abbr;
-    }
     public Nature getNature() {
         return nature;
     }
@@ -218,20 +206,12 @@ public class Isotope {
         this.nature = nature;
     }
 
-    public LimitsModelId.State getState() {
-        return state;
+    public LimitsModelId getLimitsId() {
+        return limitsId;
     }
 
-    public void setState(LimitsModelId.State state) {
-        this.state = state;
-    }
-
-    public LimitsModelId.Form getForm() {
-        return form;
-    }
-
-    public void setForm(LimitsModelId.Form form) {
-        this.form = form;
+    public void setLimitsId(LimitsModelId limitsId) {
+        this.limitsId = limitsId;
     }
 
     public IsoClass getIsoClass() {

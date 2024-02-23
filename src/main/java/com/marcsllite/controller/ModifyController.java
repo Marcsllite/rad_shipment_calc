@@ -3,8 +3,6 @@ package com.marcsllite.controller;
 import com.marcsllite.model.Isotope;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.Conversions;
-import com.marcsllite.util.factory.PropHandlerFactory;
-import com.marcsllite.util.handler.PropHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -22,7 +20,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.security.InvalidParameterException;
-import java.util.ResourceBundle;
 
 public class ModifyController extends BaseController {
     @FXML private StackPane modifyPane;
@@ -62,7 +59,6 @@ public class ModifyController extends BaseController {
     @FXML private Text txtSecondPageStatus;
 
     private static final Logger logr = LogManager.getLogger();
-    private final PropHandler propHandler;
 
     @FXML public void initialize(){
         // adding values to the choice boxes
@@ -79,14 +75,6 @@ public class ModifyController extends BaseController {
         choiceBoxA0Name.getSelectionModel().select(Isotope.RadUnit.CURIE.getVal());
         choiceBoxMassPrefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
         choiceBoxMassName.getSelectionModel().select(Isotope.Mass.GRAMS.getVal());
-    }
-
-    public ModifyController() {
-        this((PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()));
-    }
-
-    public ModifyController(PropHandler propHandler) {
-        this.propHandler = propHandler;
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.marcsllite.util.handler;
 
 import com.marcsllite.util.FXMLView;
 import com.marcsllite.util.factory.ControllerFactory;
-import com.marcsllite.util.factory.PropHandlerFactory;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,30 +12,27 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.security.InvalidParameterException;
-import java.util.Locale;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
 public class StageHandler {
     private static final Logger logr = LogManager.getLogger();
     private final Stage primaryStage;
-    private final ControllerFactory factory;
+    private ControllerFactory factory;
     private FXMLView curView;
-    private final PropHandler propHandler;
+    private PropHandler propHandler;
 
     private static final String NULL_ERROR = "FXML View is null";
     protected static final String DEFAULT_MSG = "No Message";
 
-    public StageHandler(Stage stage, PropHandler propHandler) {
-        if(propHandler == null) {
-            this.propHandler = (PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new Locale("en", "US"), new PropHandlerFactory());
-        } else {
-            this.propHandler = propHandler;
-        }
+    public StageHandler(Stage stage) {
+        this(stage, null, null);
+    }
 
+    public StageHandler(Stage stage, PropHandler propHandler, ControllerFactory factory) {
         primaryStage = stage;
-        factory = new ControllerFactory(this.propHandler);
-        curView = null;
+        setPropHandler(propHandler == null? new PropHandler() : propHandler);
+        setFactory(factory == null? new ControllerFactory() : factory);
+        setCurView(null);
     }
 
     public Stage getPrimaryStage() {
@@ -47,8 +43,24 @@ public class StageHandler {
         return curView;
     }
 
+    public void setCurView(FXMLView curView) {
+        this.curView = curView;
+    }
+
     public ControllerFactory getFactory() {
         return factory;
+    }
+
+    public void setFactory(ControllerFactory factory) {
+        this.factory = factory;
+    }
+
+    public PropHandler getPropHandler() {
+        return propHandler;
+    }
+
+    public void setPropHandler(PropHandler propHandler) {
+        this.propHandler = propHandler;
     }
 
     public void switchScene(FXMLView view) {
@@ -100,7 +112,7 @@ public class StageHandler {
 
         String err_msg = "Unable to load FXML view " + view.getFxmlName();
 
-        if(propHandler.keySet().isEmpty()) {
+        if(getPropHandler().keySet().isEmpty()) {
             logAndThrowException(err_msg.concat(": The resource bundle contains no values."), null);
         }
 
@@ -108,7 +120,7 @@ public class StageHandler {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(view.getFxmlLoc()));
         loader.setControllerFactory(factory);
-        loader.setResources(propHandler);
+        loader.setResources(getPropHandler());
         try {
             rootNode = loader.load();
             Objects.requireNonNull(rootNode, "A Root FXML node must not be null");

@@ -1,38 +1,47 @@
 package com.marcsllite.model;
 
-import com.marcsllite.GUITest;
+import com.marcsllite.DBTest;
+import com.marcsllite.PropHandlerTestObj;
 import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
+import com.marcsllite.util.handler.PropHandler;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
-public class IsotopeTest {
-    private static final String DEFAULT_NAME = "Name";
+public class IsotopeTest extends DBTest {
+    private final float DEFAULT_NUM = -2.0f;
+    private static final String DEFAULT_NAME = "Abbreviation";
     private static final String DEFAULT_ABBR = "Abbr";
-    static Isotope iso;
+    private static final IsotopeModelId isoId = new IsotopeModelId(DEFAULT_NAME, DEFAULT_ABBR);
     private final Isotope.Mass DEFAULT_MASS = Isotope.Mass.GRAMS;
     private final Isotope.RadUnit DEFAULT_RAD_UNIT = Isotope.RadUnit.CURIE;
     private final Isotope.Nature DEFAULT_NATURE = Isotope.Nature.REGULAR;
-    private final LimitsModelId.State DEFAULT_STATE = LimitsModelId.State.SOLID;
-    private final LimitsModelId.Form DEFAULT_FORM = LimitsModelId.Form.NORMAL;
+    private final LimitsModelId limitsId = new LimitsModelId();
     private final Isotope.IsoClass DEFAULT_CLASS = Isotope.IsoClass.TBD;
+    @Spy
+    @InjectMocks
+    Isotope iso = new Isotope(isoId) {
+        @Override
+        public PropHandler getPropHandler() {
+            return new PropHandlerTestObj();
+        }
+    };
 
     @BeforeAll
-    public static void beforeAll() {
+    public void beforeAll() {
         System.setProperty("keepPlatformOpen", "true");
-        iso = new Isotope(GUITest.propHandler, new IsotopeModelId(DEFAULT_NAME, DEFAULT_ABBR));
     }
 
     @Test
     public void testInit() {
-        assertEquals(DEFAULT_NAME, iso.getName());
-        assertEquals(DEFAULT_ABBR, iso.getAbbr());
+        assertEquals(isoId, iso.getIsoId());
         assertEquals(DEFAULT_NATURE, iso.getNature());
-        assertEquals(DEFAULT_STATE, iso.getState());
-        assertEquals(DEFAULT_FORM, iso.getForm());
+        assertEquals(limitsId, iso.getLimitsId());
         assertEquals(DEFAULT_MASS, iso.getMass());
         assertEquals(DEFAULT_RAD_UNIT, iso.getRadUnit());
         assertEquals(DEFAULT_CLASS, iso.getIsoClass());

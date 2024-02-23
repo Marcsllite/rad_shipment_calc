@@ -29,12 +29,14 @@ public class PropHandler extends ResourceBundle {
     private Properties prop;
 
     public PropHandler() {
-        setOs(System.getProperty("os.name").toLowerCase());
+        this(null);
     }
 
     public PropHandler(InputStream stream) {
-        this();
-        setProp(stream);
+        setOs(System.getProperty("os.name").toLowerCase());
+        if(stream != null) {
+            setProp(stream);
+        }
     }
 
     /**
@@ -53,26 +55,18 @@ public class PropHandler extends ResourceBundle {
 
     @Override
     public Enumeration<String> getKeys() {
-        Set<String> handleKeys = prop.stringPropertyNames();
+        Set<String> handleKeys = Objects.requireNonNull(prop, "Properties has not been initialized").stringPropertyNames();
         return Collections.enumeration(handleKeys);
     }
 
     /*/////////////////////////////////////////////////// SETTERS ////////////////////////////////////////////////////*/
     /**
-     * Set the properties using a path
+     * Set the properties using Properties object
      * 
-     * @param name the name of the properties file
+     * @param properties the properties to be set
      */
-    public void setProp(String name) throws InvalidParameterException {
-        var loader = ClassLoader.getSystemClassLoader();
-        try {
-            setProp(loader.getResourceAsStream(name));
-        } catch(NullPointerException | InvalidParameterException e) {
-            logr.catching(Level.FATAL, e);
-            var ee = new InvalidParameterException("Failed to set properties from resource bundle: " + name);
-            logr.throwing(Level.FATAL, ee);
-            throw ee;
-        }
+    public void setProp(Properties properties)  {
+        prop = properties;
     }
 
     /**

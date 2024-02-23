@@ -1,31 +1,42 @@
 package com.marcsllite.model;
 
-import com.marcsllite.GUITest;
+import com.marcsllite.PropHandlerTestObj;
+import com.marcsllite.util.handler.PropHandler;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ReportableQuantityTest {
     private final String DEFAULT_ABBR = "Abbr";
-    ReportableQuantity reportQuan = new ReportableQuantity(GUITest.propHandler, DEFAULT_ABBR);
+    ReportableQuantity reportQuan = new ReportableQuantity(DEFAULT_ABBR) {
+        @Override
+        public PropHandler getPropHandler() {
+            return new PropHandlerTestObj();
+        }
+    };
 
-    private final float DEFAULT_INT = -2.0f;
+    private final float DEFAULT_NUM = -2.0f;
 
     @Test
     public void testConstructor_NoValues() {
-        assertEquals(DEFAULT_INT, reportQuan.getDefaultVal());
+        assertEquals(DEFAULT_NUM, reportQuan.getDefaultVal());
         assertEquals(DEFAULT_ABBR, reportQuan.getAbbr());
-        assertEquals(DEFAULT_INT, reportQuan.getCurie(), 0.0f);
-        assertEquals(DEFAULT_INT, reportQuan.getTeraBq(), 0.0f);
+        assertEquals(DEFAULT_NUM, reportQuan.getCurie(), 0.0f);
+        assertEquals(DEFAULT_NUM, reportQuan.getTeraBq(), 0.0f);
     }
 
     @Test
     public void testConstructor_WithValues() {
         String abbr = "abracadabra";
         float val = 5.2f;
-        reportQuan = new ReportableQuantity(GUITest.propHandler, abbr, val, val);
+        reportQuan = new ReportableQuantity(abbr, val, val){
+            @Override
+            public PropHandler getPropHandler() {
+                return new PropHandlerTestObj();
+            }
+        };
 
-        assertEquals(DEFAULT_INT, reportQuan.getDefaultVal());
+        assertEquals(DEFAULT_NUM, reportQuan.getDefaultVal());
         assertEquals(abbr, reportQuan.getAbbr());
         assertEquals(val, reportQuan.getCurie(), 0.0f);
         assertEquals(val, reportQuan.getTeraBq(), 0.0f);

@@ -10,33 +10,35 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.api.FxAssert;
-import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.base.NodeMatchers;
 
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
+
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 
-@ExtendWith(ApplicationExtension.class)
-@ExtendWith(MockitoExtension.class)
 public class MenuPaneControllerGUITest extends GUITest {
     MainController mainController;
-    @InjectMocks
     MenuPaneController controller;
     ImageHandler.Colors CURRENT_COLOR;
     ImageHandler.Colors IDLE_COLOR;
     ImageHandler.Colors HOVER_COLOR;
-    @Start
-    public void start(Stage stage) {
-        super.start(stage, FXMLView.MENU);
-        controller = (MenuPaneController) getController(MenuPaneController.class);
 
-        mainController = mock(MainController.class);
+    public MenuPaneControllerGUITest() {
+        super(FXMLView.MENU);
+    }
+
+    @Start
+    public void start(Stage stage) throws IOException, TimeoutException {
+        super.start(stage);
+        controller = (MenuPaneController) getController();
+
+        mainController = spy(controller.getMain());
+        controller.setMain(mainController);
 
         CURRENT_COLOR = controller.getCURRENT_COLOR();
         IDLE_COLOR = controller.getIDLE_COLOR();

@@ -17,12 +17,9 @@ import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModel;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.model.db.ReportableQuantityModel;
-import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
-import jakarta.persistence.EntityManager;
 
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class DBServiceImpl implements DBService {
@@ -38,24 +35,20 @@ public class DBServiceImpl implements DBService {
     private ReportableQuantityDaoImpl reportableQuanDao;
 
     public DBServiceImpl() {
-        this((PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()));
+        this.propHandler = new PropHandler();
+        setA1Dao(new A1DaoImpl());
+        setA2Dao(new A2DaoImpl());
+        setDecayConstantDao(new DecayConstantDaoImpl());
+        setExemptConDao(new ExemptConcentrationDaoImpl());
+        setExemptLimitDao(new ExemptLimitDaoImpl());
+        setHalfLifeDao(new HalfLifeDaoImpl());
+        setIsotopeDao(new IsotopeDaoImpl());
+        setLimitsDao(new LimitsDaoImpl());
+        setReportableQuanDao(new ReportableQuantityDaoImpl());
     }
 
-    public DBServiceImpl(PropHandler propHandler) {
-        this(propHandler, null);
-    }
-
-    public DBServiceImpl(PropHandler propHandler, EntityManager em) {
-        this.propHandler = propHandler;
-        setA1Dao(new A1DaoImpl(em));
-        setA2Dao(new A2DaoImpl(em));
-        setDecayConstantDao(new DecayConstantDaoImpl(em));
-        setExemptConDao(new ExemptConcentrationDaoImpl(em));
-        setExemptLimitDao(new ExemptLimitDaoImpl(em));
-        setHalfLifeDao(new HalfLifeDaoImpl(em));
-        setIsotopeDao(new IsotopeDaoImpl(em));
-        setLimitsDao(new LimitsDaoImpl(em));
-        setReportableQuanDao(new ReportableQuantityDaoImpl(em));
+    public PropHandler getPropHandler() {
+        return propHandler;
     }
 
     public void setA1Dao(A1DaoImpl a1Dao) {
@@ -151,11 +144,12 @@ public class DBServiceImpl implements DBService {
     @Override
     public Limits getAllLimits(LimitsModelId modelId) {
         LimitsModel model = limitsDao.getAllLimits(modelId);
-        return model == null? null : new Limits(propHandler,
+        return model == null? null : new Limits(
             new LimitsModelId(model.getLimitsId().getState(), model.getLimitsId().getForm()),
             model.getIa_limited(),
             model.getIa_package(),
-            model.getLimited());
+            model.getLimited()
+        );
     }
 
     @Override
@@ -176,7 +170,11 @@ public class DBServiceImpl implements DBService {
     @Override
     public ReportableQuantity getReportQuan(String abbr) {
         ReportableQuantityModel model = reportableQuanDao.getReportQuan(abbr);
-        return model == null? null : new ReportableQuantity(propHandler, model.getAbbr(), model.getCurie(), model.getTeraBq());
+        return model == null? null : new ReportableQuantity(
+            model.getAbbr(),
+            model.getCurie(),
+            model.getTeraBq()
+        );
     }
 
     @Override

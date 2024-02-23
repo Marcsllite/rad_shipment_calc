@@ -1,37 +1,32 @@
 package com.marcsllite.model;
 
-import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.beans.property.SimpleFloatProperty;
 
-import java.util.ResourceBundle;
-
 public class ReportableQuantity {
+    private final PropHandler propHandler;
     private final float defaultVal;
     private String abbr;
     private final SimpleFloatProperty curie = new SimpleFloatProperty();
     private final SimpleFloatProperty teraBq = new SimpleFloatProperty();
 
     public ReportableQuantity(String abbr) {
-        this(
-            (PropHandler) ResourceBundle.getBundle(PropHandler.PROP_NAME, new PropHandlerFactory()),
-            abbr
-        );
-    }
-
-    public ReportableQuantity(PropHandler propHandler, String abbr) {
-        this(propHandler,
-            abbr,
+        this(abbr,
             null,
             null);
     }
 
-    public ReportableQuantity(PropHandler propHandler, String abbr, Float curie, Float teraBq) {
-        this.defaultVal = (float) propHandler.getDouble("defaultNum");
+    public ReportableQuantity(String abbr, Float curie, Float teraBq) {
+        this.propHandler = new PropHandler();
+        this.defaultVal = (float) getPropHandler().getDouble("defaultNum");
 
         setAbbr(abbr);
         setCurie(curie == null? defaultVal : curie);
         setTeraBq(teraBq == null? defaultVal : teraBq);
+    }
+
+    public PropHandler getPropHandler() {
+        return propHandler;
     }
 
     public float getDefaultVal() {

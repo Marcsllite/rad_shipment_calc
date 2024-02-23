@@ -1,22 +1,16 @@
 package com.marcsllite.util.handler;
 
+import com.marcsllite.PropHandlerTestObj;
 import com.marcsllite.util.OS;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.security.InvalidParameterException;
-import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -24,59 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PropHandlerTest {
-    AbstractMap<String, String> stringsMap = new HashMap<>();
-    PropHandler handler =  new PropHandler() {
-        @Override
-        protected Object handleGetObject(String key) {
-            if(key == null || key.isBlank()) return "";
-            return (stringsMap.get(key) == null)? "" : stringsMap.get(key);
-        }
-
-        @Override
-        protected Set<String> handleKeySet() {
-            return stringsMap.keySet();
-        }
-    };
-
-    private void init() {
-        stringsMap.put("fakeKey", "");
-        stringsMap.put("properMessage", "This is a proper message");
-        stringsMap.put("properException", "This is a proper Exception");
-        stringsMap.put("replacePropString_noReplacements", "This string doesn’t contain any replacements");
-        stringsMap.put("replacePropString_oneReplacement", "This string contains {0} replacements");
-        stringsMap.put("replacePropString_wrongNumber", "This string contains the incorrect {1} for replacement");
-        stringsMap.put("replacePropString_twoReplacements", "This string contains {0}, {1} replacements");
-        stringsMap.put("replacePropString_threeReplacements", "This string contains {0}, {1}, {2} replacements");
-        stringsMap.put("replacePropString_oneSameReplacements", "This string contains a replacement here: {0}, and the same replacement here: {0}");
-        stringsMap.put("replacePropString_twoSameReplacements", "First: {0}, Second: {1}, Third: {0}, Fourth: {1}");
-        stringsMap.put("getList_TrailingDelimiters", "This|List|has|trailing|delimiters||||");
-        stringsMap.put("getList_SpacesWithinElements", "element 1 has spaces|element 2 does too");
-        stringsMap.put("getList_SpacesAroundElements", "     there are spaces around this element    |   spaces around here too    ");
-        stringsMap.put("getList_ProperList", "This|is|a|proper|list");
-        stringsMap.put("mainPane", "UMass Lowell - Rad Shipment Calculator");
-        stringsMap.put("mainWidth", "600.0");
-    }
-
-    @BeforeEach
-    public void setUp() {
-        init();
-    }
-
-    @AfterEach
-    public void tearDown() {
-        stringsMap.clear();
-    }
-
-    @ParameterizedTest
-    @NullAndEmptySource
-    @ValueSource(strings = {"invalid/name"})
-    public void testSetProp_InvalidName(String name) {
-        InvalidParameterException exception = assertThrows(
-            InvalidParameterException.class, () -> handler.setProp(name)
-        );
-        
-        assertTrue(exception.getMessage().contains("Failed to set properties from resource bundle: " + name));
-    }
+    PropHandler handler = new PropHandlerTestObj();
   
     @Test
     public void testGetOs_NullOS() {

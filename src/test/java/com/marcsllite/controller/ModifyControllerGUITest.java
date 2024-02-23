@@ -11,21 +11,26 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxAssert;
-import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.base.NodeMatchers;
 
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
+
 import static junit.framework.Assert.assertEquals;
 
-@ExtendWith(ApplicationExtension.class)
 public class ModifyControllerGUITest extends GUITest {
     ModifyController controller;
+
+    public ModifyControllerGUITest() {
+        super(FXMLView.MODIFY);
+    }
+
     @Start
-    public void start(Stage stage) {
-        super.start(stage, FXMLView.MODIFY);
-        controller = (ModifyController) getController(ModifyController.class);
+    public void start(Stage stage) throws IOException, TimeoutException {
+        super.start(stage);
+        controller = (ModifyController) getController();
     }
 
     @Test

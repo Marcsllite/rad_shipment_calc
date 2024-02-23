@@ -6,19 +6,24 @@ import com.marcsllite.util.FXMLView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxAssert;
-import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.base.NodeMatchers;
 
-@ExtendWith(ApplicationExtension.class)
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
+
 public class SummaryPaneControllerGUITest extends GUITest {
     SummaryPaneController controller;
+
+    public SummaryPaneControllerGUITest() {
+        super(FXMLView.SUMMARY);
+    }
+
     @Start
-    public void start(Stage stage) {
-        super.start(stage, FXMLView.SUMMARY);
-        controller = (SummaryPaneController) getController(SummaryPaneController.class);
+    public void start(Stage stage) throws IOException, TimeoutException {
+        super.start(stage);
+        controller = (SummaryPaneController) getController();
     }
 
     @Test

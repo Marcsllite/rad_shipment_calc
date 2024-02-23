@@ -12,11 +12,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.StaleStateException;
 
+import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-public abstract class AbstractDao<ENTITY, ID> implements Dao<ENTITY, ID> {
+public abstract class AbstractDao<ENTITY extends Serializable, ID> implements Dao<ENTITY, ID> {
     @PersistenceContext
     private EntityManager em;
     private final Class<ENTITY> entityClass;
@@ -38,7 +39,7 @@ public abstract class AbstractDao<ENTITY, ID> implements Dao<ENTITY, ID> {
     }
 
     public ENTITY findById(ID id) {
-        ENTITY entity = em.find(entityClass, id);
+        ENTITY entity = getEntityManager().find(entityClass, id);
         if(entity == null) {
             String msg = String.format("Attempted to fetch an entity that does not exist. ID: %s", id);
             var nre = new NoResultException(msg);
@@ -50,7 +51,7 @@ public abstract class AbstractDao<ENTITY, ID> implements Dao<ENTITY, ID> {
 
     public List<ENTITY> findAll() {
         String query = String.format(QUERY_ALL, getEntityName());
-        return em.createQuery(query).getResultList();
+        return getEntityManager().createQuery(query).getResultList();
     }
 
     public List<ENTITY> findSingleResult(Query query) {
@@ -70,12 +71,12 @@ public abstract class AbstractDao<ENTITY, ID> implements Dao<ENTITY, ID> {
 
     public int count() {
         String query = String.format(AbstractDao.COUNT_ENTITIES_QUERY, getEntityName());
-        return ((Long) em.createQuery(query).getSingleResult()).intValue();
+        return ((Long) getEntityManager().createQuery(query).getSingleResult()).intValue();
     }
 
     public ENTITY attach(ENTITY entity) {
         try {
-            ENTITY mergedEntity = em.merge(entity);
+            ENTITY mergedEntity = getEntityManager().merge(entity);
             flush();
             return mergedEntity;
         } catch (OptimisticLockException ole) {
@@ -89,8 +90,8 @@ public abstract class AbstractDao<ENTITY, ID> implements Dao<ENTITY, ID> {
     public void remove(ID id) {
         ENTITY ref;
         try {
-            ref = em.getReference(entityClass, id);
-            em.remove(ref);
+            ref = getEntityManager().getReference(entityClass, id);
+            getEntityManager().remove(ref);
         } catch (EntityNotFoundException enf) {
             logr.catching(enf);
             String msg = String.format("Attempted to remove an unknown entity object. ID: %s", id);
@@ -100,11 +101,11 @@ public abstract class AbstractDao<ENTITY, ID> implements Dao<ENTITY, ID> {
     }
 
     public void flush() {
-        em.flush();
+        getEntityManager().flush();
     }
 
     public void persist(ENTITY entity) {
-        em.persist(entity);
+        getEntityManager().persist(entity);
     }
 
     protected String getEntityName() {

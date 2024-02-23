@@ -1,19 +1,17 @@
 package com.marcsllite.util.handler;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import com.marcsllite.PropHandlerTestObj;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -26,35 +24,12 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class FolderHandlerTest {
-    FolderHandler folderHandler;
     @Mock
     File file;
-    PropHandler propHandler =  new PropHandler() {
-        @Override
-        protected Object handleGetObject(String key) {
-            if("appFolderName".equals(key)) {
-                return appFolderName;
-            }
-            return "";
-        }
-
-        @Override
-        protected Set<String> handleKeySet() {
-            return Set.of("appFolderName");
-        }
-    };
+    @Spy
+    FolderHandler folderHandler = new FolderHandler(new PropHandlerTestObj());
     final static String appFolderName = "UMass Lowell Radiation Safety";
     final static String dataFolderName = "Shipment Calculator";
-
-    @BeforeEach
-    public void setup() {
-        folderHandler = Mockito.spy(new FolderHandler(propHandler));
-    }
-
-    @AfterEach
-    public void afterEach() {
-        folderHandler = null;
-    }
 
     @Test
     public void testCreateFolder_NullPath() {
