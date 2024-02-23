@@ -44,13 +44,13 @@ public abstract class GUITest extends FxRobot {
     private final EntityManager entityManager;
     private final App app;
 
-    public GUITest(FXMLView view){
+    public GUITest(FXMLView view) {
         this.view = view;
         folderHandler = spy(new FolderHandler(new PropHandlerTestObj()));
         emFactory = mock(EntityManagerFactory.class);
         entityManager = mock(EntityManager.class);
         dbService = mock(DBService.class);
-        app = new App();
+        app = new App(false);
     }
 
 

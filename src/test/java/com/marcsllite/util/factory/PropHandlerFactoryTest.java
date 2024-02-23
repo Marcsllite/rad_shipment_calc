@@ -22,22 +22,47 @@ import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PropHandlerFactoryTest {
-    PropHandlerFactory control = new PropHandlerFactory();
+    PropHandlerFactory factory = spy(new PropHandlerFactory());
     private static final String baseName = "testBundle";
     private static final Locale locale = new Locale("en", "US");
     private static final String format = "xml";
     private static final ClassLoader loader = ClassLoader.getSystemClassLoader();
 
+    @Test
+    public void testGetPropHandler_NullName() {
+        try {
+            factory.getPropHandler(null);
+            verify(factory).newBundle(anyString(), any(), anyString(), any(), anyBoolean());
+        } catch (IOException e) {
+            fail("No exception should have been thrown");
+        }
+    }
+
+    @Test
+    public void testGetPropHandler() {
+        try {
+            String name = "Name";
+            factory.getPropHandler(name);
+            verify(factory).newBundle(anyString(), any(), anyString(), any(), anyBoolean());
+        } catch (IOException e) {
+            fail("No exception should have been thrown");
+        }
+    }
+
     @ParameterizedTest
     @MethodSource("nullParamChecker_data")
     void testNewBundle_NullParamChecker(String base, Locale loc, String form, ClassLoader load) {
         IllegalArgumentException exp = assertThrows(
-            IllegalArgumentException.class, () -> control.newBundle(base, loc, form, load, false)
+            IllegalArgumentException.class, () -> factory.newBundle(base, loc, form, load, false)
         );
         assertEquals("baseName, locale, format and loader cannot be null", exp.getMessage());
     }
@@ -55,7 +80,7 @@ class PropHandlerFactoryTest {
     @Test
     void testNewBundle_invalidFormat() {
         IllegalArgumentException exp = assertThrows(
-            IllegalArgumentException.class, () -> control.newBundle(baseName, locale, "java.properties", loader, false)
+            IllegalArgumentException.class, () -> factory.newBundle(baseName, locale, "java.properties", loader, false)
         );
         assertEquals("format must be xml", exp.getMessage());
     }
@@ -63,7 +88,7 @@ class PropHandlerFactoryTest {
     @Test
     void testNewBundle_invalidResource() {
         try {
-            assertNull(control.newBundle("Invalid", locale, format, loader, false));
+            assertNull(factory.newBundle("Invalid", locale, format, loader, false));
         } catch (IOException e) {
             fail("No exceptions should be thrown.");
         }
@@ -77,7 +102,7 @@ class PropHandlerFactoryTest {
         try {
             when(mLoader.getResource(any())).thenReturn(url);
             when(url.openConnection()).thenReturn(null);
-            assertNull(control.newBundle(baseName, locale, format, mLoader, false));
+            assertNull(factory.newBundle(baseName, locale, format, mLoader, false));
         } catch (IOException e) {
             fail("No exceptions should be thrown.");
         }
@@ -93,7 +118,7 @@ class PropHandlerFactoryTest {
             when(mLoader.getResource(any())).thenReturn(url);
             when(url.openConnection()).thenReturn(connection);
             when(connection.getInputStream()).thenReturn(stream);
-            control.newBundle(baseName, locale, format, mLoader, true);
+            factory.newBundle(baseName, locale, format, mLoader, true);
 
             assertFalse(connection.getUseCaches());
         } catch (IOException e) {
@@ -104,7 +129,7 @@ class PropHandlerFactoryTest {
     @Test
     void testNewBundle() {
         try {
-            Object ret = control.newBundle(baseName, locale, format, loader, true);
+            Object ret = factory.newBundle(baseName, locale, format, loader, true);
             assertNotNull(ret);
             assertTrue(ret instanceof PropHandler);
         } catch (IOException e) {
@@ -114,7 +139,7 @@ class PropHandlerFactoryTest {
 
     @Test
     void testGetFormats() {
-        List<String> ret = control.getFormats(baseName);
+        List<String> ret = factory.getFormats(baseName);
         assertTrue(ret.contains("xml"));
         assertEquals(1, ret.size());
     }

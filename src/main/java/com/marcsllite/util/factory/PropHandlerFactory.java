@@ -16,6 +16,16 @@ public class PropHandlerFactory extends ResourceBundle.Control {
     private static final String XML = "xml";
     private static final List<String> SINGLETON_LIST = Collections.singletonList(XML);
 
+    private final String baseName = PropHandler.PROP_NAME;
+    private final Locale locale = new Locale("en", "US");
+    private final String format = XML;
+    private final ClassLoader loader = ClassLoader.getSystemClassLoader();
+
+    public PropHandler getPropHandler(String name) throws IOException {
+        return (PropHandler) newBundle(name == null? baseName : name,
+            locale, format, loader, false);
+    }
+
     @Override
     public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload)
         throws IOException {
