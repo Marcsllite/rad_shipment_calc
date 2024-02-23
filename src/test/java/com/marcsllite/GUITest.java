@@ -94,7 +94,7 @@ public abstract class GUITest extends FxRobot {
     protected Object getController(){
         return stageHandler
             .getFactory()
-            .getController(this.getClass().getName());
+            .getController(this.getClass().getName().replace("GUITest", ""));
     }
 
     /**

@@ -147,8 +147,8 @@ public class Isotope {
 
     public Isotope(IsotopeModelId isoId, Mass mass, RadUnit radUnit, Nature nature, LimitsModelId limitsId) {
         setPropHandler(new PropHandler());
-        constants = new IsotopeConstants((float) getPropHandler().getDouble("defaultNum"));
-        constants.dbInit(isoId, limitsId);
+        setConstants(new IsotopeConstants((float) getPropHandler().getDouble("defaultNum")));
+        getConstants().dbInit(isoId, limitsId);
         setIsoId(isoId);
         setMass(mass);
         setRadUnit(radUnit);

@@ -143,7 +143,7 @@ public class DBServiceImpl implements DBService {
 
     @Override
     public Limits getAllLimits(LimitsModelId modelId) {
-        LimitsModel model = limitsDao.getAllLimits(modelId);
+        LimitsModel model = limitsDao.getLimits(modelId);
         return model == null? null : new Limits(
             new LimitsModelId(model.getLimitsId().getState(), model.getLimitsId().getForm()),
             model.getIa_limited(),

@@ -25,6 +25,7 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.spy;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -39,7 +40,7 @@ public class StageHandlerTest {
     @BeforeAll
     public void beforeAll() throws TimeoutException {
         stage = FxToolkit.registerPrimaryStage();
-        stageHandler = new StageHandler(stage, new PropHandlerTestObj(), new ControllerFactoryTestObj());
+        stageHandler = spy(new StageHandler(stage, new PropHandlerTestObj(), new ControllerFactoryTestObj()));
     }
 
     @Test

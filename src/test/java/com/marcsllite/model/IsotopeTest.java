@@ -7,12 +7,14 @@ import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.handler.PropHandler;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class IsotopeTest extends DBTest {
     private final float DEFAULT_NUM = -2.0f;
     private static final String DEFAULT_NAME = "Abbreviation";

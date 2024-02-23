@@ -109,8 +109,8 @@ public class LimitsModelId implements Serializable {
     @Override
     public int hashCode() {
         int hash = 57;
-        hash = 67 * hash + (this.state != null ? this.state.hashCode() : 0);
-        hash = 67 * hash + (this.form != null ? this.form.hashCode() : 0);
+        hash = 67 * hash + (this.state != null ? this.state.getVal().hashCode() : 0);
+        hash = 67 * hash + (this.form != null ? this.form.getVal().hashCode() : 0);
         return hash;
     }
 }

@@ -33,27 +33,29 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
         String name = param.getName();
         Object ret = getController(name);
 
-        if(name.equals(MainController.class.getName())) {
-            ret = ret == null? MainController.getInstance() : ret;
-        } else if(name.equals(MenuPaneController.class.getName())) {
-            ret = ret == null? new MenuPaneController() : ret;
-        } else if(name.equals(HomePaneController.class.getName())) {
-            ret = ret == null? new HomePaneController() : ret;
-        } else if(name.equals(ReferencePaneController.class.getName())) {
-            ret = ret == null? new ReferencePaneController() : ret;
-        } else if(name.equals(ModifyController.class.getName())) {
-            ret = ret == null? new ModifyController() : ret;
-        } else if(name.equals(ShipmentDetailsController.class.getName())) {
-            ret = ret == null? new ShipmentDetailsController() : ret;
-        } else if(name.equals(SummaryPaneController.class.getName())) {
-            ret = ret == null? new SummaryPaneController() : ret;
+        if(ret == null) {
+            if(name.equals(MainController.class.getName())) {
+                ret = MainController.getInstance();
+            } else if(name.equals(MenuPaneController.class.getName())) {
+                ret = new MenuPaneController();
+            } else if(name.equals(HomePaneController.class.getName())) {
+                ret = new HomePaneController();
+            } else if(name.equals(ReferencePaneController.class.getName())) {
+                ret = new ReferencePaneController();
+            } else if(name.equals(ModifyController.class.getName())) {
+                ret = new ModifyController();
+            } else if(name.equals(ShipmentDetailsController.class.getName())) {
+                ret = new ShipmentDetailsController();
+            } else if(name.equals(SummaryPaneController.class.getName())) {
+                ret = new SummaryPaneController();
+            }
+
+            if(ret instanceof BaseController ||
+                ret instanceof MainController) {
+                controllerMap.put(name, ret);
+            }
         }
 
-        if((ret instanceof BaseController ||
-            ret instanceof MainController) &&
-            !controllerMap.containsKey(name)) {
-            controllerMap.put(name+ "GUITest", ret);
-        }
         return ret;
     }
 }

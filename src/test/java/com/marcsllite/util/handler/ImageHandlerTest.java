@@ -1,7 +1,6 @@
 package com.marcsllite.util.handler;
 
 import javafx.scene.image.Image;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -57,12 +56,12 @@ class ImageHandlerTest {
     }
   
     @Test
-    void testGetShipmentImage_InvalidColor() {
+    void testGetShipmentImage_NullColor() {
         assertThrows(
             NullPointerException.class, () -> ImageHandler.getShipmentImage(null)
         );
     }
-  
+
     @ParameterizedTest
     @MethodSource("getShipmentImage_data")
     void testGetShipmentImage(String color, String url) {

@@ -4,19 +4,19 @@ import com.marcsllite.model.db.LimitsModel;
 import com.marcsllite.model.db.LimitsModelId;
 
 public class LimitsDaoImpl extends AbstractDao<LimitsModel, LimitsModelId> {
-    public LimitsModel getAllLimits(LimitsModelId modelId) {
+    public LimitsModel getLimits(LimitsModelId modelId) {
         return findById(modelId);
     }
 
     public float getIALimited(LimitsModelId modelId) {
-        return getAllLimits(modelId).getIa_limited();
+        return getLimits(modelId).getIa_limited();
     }
 
     public float getIAPackage(LimitsModelId modelId) {
-        return getAllLimits(modelId).getIa_package();
+        return getLimits(modelId).getIa_package();
     }
 
     public float getLimited(LimitsModelId modelId) {
-        return getAllLimits(modelId).getLimited();
+        return getLimits(modelId).getLimited();
     }
 }

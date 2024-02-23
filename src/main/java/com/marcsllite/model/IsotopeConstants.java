@@ -29,6 +29,18 @@ public class IsotopeConstants {
     public IsotopeConstants(float defaultVal) {
         setDbService(new DBServiceImpl());
         this.defaultVal = defaultVal;
+
+        setA1(getDefaultVal());
+        setA2(getDefaultVal());
+        setDecayConstant(getDefaultVal());
+        setExemptConcentration(getDefaultVal());
+        setExemptLimit(getDefaultVal());
+        setHalfLife(getDefaultVal());
+        setIaLimitedLimit(getDefaultVal());
+        setIaPackageLimit(getDefaultVal());
+        setLimitedLimit(getDefaultVal());
+        setCurieReportQuan(getDefaultVal());
+        setTeraBqReportQuan(getDefaultVal());
     }
 
     public void dbInit(IsotopeModelId isoId, LimitsModelId limitsId) {
