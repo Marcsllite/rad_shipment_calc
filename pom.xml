@@ -204,6 +204,7 @@
                     </dependency>
                 </dependencies>
                 <configuration>
+                    <parallel>classes</parallel>
                     <additionalClasspathElements>
                         <additionalClasspathElement>${basedir}/src/main/resources</additionalClasspathElement>
                     </additionalClasspathElements>
