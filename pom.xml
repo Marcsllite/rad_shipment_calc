@@ -44,7 +44,7 @@
         <jacoco.percentages.min.line>0.89</jacoco.percentages.min.line>
         <jacoco.percentages.max.line>0.90</jacoco.percentages.max.line>
         <jacoco.percentages.min.branch>0.85</jacoco.percentages.min.branch>
-        <jacoco.percentages.max.branch>0.86</jacoco.percentages.max.branch>
+        <jacoco.percentages.max.branch>0.87</jacoco.percentages.max.branch>
         <jacoco.percentages.min.complex>0.87</jacoco.percentages.min.complex>
         <jacoco.percentages.max.complex>0.88</jacoco.percentages.max.complex>
         <jacoco.percentages.min.method>0.89</jacoco.percentages.min.method>
@@ -237,7 +237,7 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${surefire.version}</version>
                 <configuration>
-                    <reuseForks>false</reuseForks> <!-- Creates a new JVM process for each test class. Needed for GUITests -->
+                    <!--<reuseForks>false</reuseForks>  Creates a new JVM process for each test class. Needed for GUITests -->
                     <trimStackTrace>false</trimStackTrace>
                     <includes>
                         <include>**/*GUITest.java</include>
