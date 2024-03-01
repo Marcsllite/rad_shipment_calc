@@ -40,7 +40,7 @@
 
         <!-- Test Coverage -->
         <jacoco.percentages.min.instruct>0.89</jacoco.percentages.min.instruct>
-        <jacoco.percentages.max.instruct>0.90</jacoco.percentages.max.instruct>
+        <jacoco.percentages.max.instruct>0.91</jacoco.percentages.max.instruct>
         <jacoco.percentages.min.line>0.89</jacoco.percentages.min.line>
         <jacoco.percentages.max.line>0.90</jacoco.percentages.max.line>
         <jacoco.percentages.min.branch>0.85</jacoco.percentages.min.branch>
