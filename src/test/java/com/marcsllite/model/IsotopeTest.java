@@ -9,10 +9,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.InjectMocks;
-import org.mockito.Spy;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static org.mockito.Mockito.spy;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class IsotopeTest extends DBTest {
@@ -25,18 +25,18 @@ public class IsotopeTest extends DBTest {
     private final Isotope.Nature DEFAULT_NATURE = Isotope.Nature.REGULAR;
     private final LimitsModelId limitsId = new LimitsModelId();
     private final Isotope.IsoClass DEFAULT_CLASS = Isotope.IsoClass.TBD;
-    @Spy
     @InjectMocks
-    Isotope iso = new Isotope(isoId) {
-        @Override
-        public PropHandler getPropHandler() {
-            return new PropHandlerTestObj();
-        }
-    };
+    Isotope iso;
 
     @BeforeAll
     public void beforeAll() {
         System.setProperty("keepPlatformOpen", "true");
+        iso = spy(new Isotope(isoId) {
+            @Override
+            public PropHandler getPropHandler() {
+                return new PropHandlerTestObj();
+            }
+        });
     }
 
     @Test

@@ -39,11 +39,16 @@
         <pioneer.version>2.2.0</pioneer.version>
 
         <!-- Test Coverage -->
-        <jacoco.percentages.min.instruct>0.70</jacoco.percentages.min.instruct>
-        <jacoco.percentages.min.line>0.68</jacoco.percentages.min.line>
-        <jacoco.percentages.min.branch>0.68</jacoco.percentages.min.branch>
-        <jacoco.percentages.min.complex>0.68</jacoco.percentages.min.complex>
-        <jacoco.percentages.min.method>0.69</jacoco.percentages.min.method>
+        <jacoco.percentages.min.instruct>0.89</jacoco.percentages.min.instruct>
+        <jacoco.percentages.max.instruct>0.90</jacoco.percentages.max.instruct>
+        <jacoco.percentages.min.line>0.89</jacoco.percentages.min.line>
+        <jacoco.percentages.max.line>0.90</jacoco.percentages.max.line>
+        <jacoco.percentages.min.branch>0.85</jacoco.percentages.min.branch>
+        <jacoco.percentages.max.branch>0.86</jacoco.percentages.max.branch>
+        <jacoco.percentages.min.complex>0.87</jacoco.percentages.min.complex>
+        <jacoco.percentages.max.complex>0.88</jacoco.percentages.max.complex>
+        <jacoco.percentages.min.method>0.89</jacoco.percentages.min.method>
+        <jacoco.percentages.max.method>0.90</jacoco.percentages.max.method>
         <jacoco.missed.count.class>0</jacoco.missed.count.class>
     </properties>
 
@@ -204,7 +209,9 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <reuseForks>false</reuseForks> <!-- Creates a new JVM process for each test class. Needed for GUITests -->
+                    <excludes>
+                        <exclude>**/*GUITest.java</exclude>
+                    </excludes>
                     <additionalClasspathElements>
                         <additionalClasspathElement>${basedir}/src/main/resources</additionalClasspathElement>
                     </additionalClasspathElements>
@@ -230,8 +237,20 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${surefire.version}</version>
                 <configuration>
+                    <reuseForks>false</reuseForks> <!-- Creates a new JVM process for each test class. Needed for GUITests -->
                     <trimStackTrace>false</trimStackTrace>
+                    <includes>
+                        <include>**/*GUITest.java</include>
+                    </includes>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -298,26 +317,31 @@
                                             <counter>INSTRUCTION</counter>
                                             <value>COVEREDRATIO</value>
                                             <minimum>${jacoco.percentages.min.instruct}</minimum>
+                                            <maximum>${jacoco.percentages.max.instruct}</maximum>
                                         </limit>
                                         <limit>
                                             <counter>LINE</counter>
                                             <value>COVEREDRATIO</value>
                                             <minimum>${jacoco.percentages.min.line}</minimum>
+                                            <maximum>${jacoco.percentages.max.line}</maximum>
                                         </limit>
                                         <limit>
                                             <counter>BRANCH</counter>
                                             <value>COVEREDRATIO</value>
                                             <minimum>${jacoco.percentages.min.branch}</minimum>
+                                            <maximum>${jacoco.percentages.max.branch}</maximum>
                                         </limit>
                                         <limit>
                                             <counter>COMPLEXITY</counter>
                                             <value>COVEREDRATIO</value>
                                             <minimum>${jacoco.percentages.min.complex}</minimum>
+                                            <maximum>${jacoco.percentages.max.complex}</maximum>
                                         </limit>
                                         <limit>
                                             <counter>METHOD</counter>
                                             <value>COVEREDRATIO</value>
                                             <minimum>${jacoco.percentages.min.method}</minimum>
+                                            <maximum>${jacoco.percentages.max.method}</maximum>
                                         </limit>
                                         <limit>
                                             <counter>CLASS</counter>

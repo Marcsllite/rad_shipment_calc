@@ -83,23 +83,16 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        stageHandler = new StageHandler(stage, getPropHandler(), null);
-        stageHandler.show(getView());
+        setStageHandler(new StageHandler(stage, getPropHandler(), null));
+        getStageHandler().show(getView());
     }
 
     @Override
     public void stop() {
-        if(factory != null && factory.isOpen()) {
-            factory.close();
+        if(getFactory() != null && getFactory().isOpen()) {
+            getFactory().close();
         }
     }
-
-    /**
-     * Getter function to get the StageHandler
-     *
-     * @return the StageHandler
-     */
-    public StageHandler getStageManager() { return stageHandler; }
 
     /**
      * Getter function to get the database service
@@ -117,6 +110,11 @@ public class App extends Application {
         this.factory = factory;
     }
 
+    /**
+     * Getter function to get the StageHandler
+     *
+     * @return the StageHandler
+     */
     public StageHandler getStageHandler() {
         return stageHandler;
     }

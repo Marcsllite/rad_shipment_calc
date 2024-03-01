@@ -3,7 +3,6 @@ package com.marcsllite.util.handler;
 import com.marcsllite.ControllerFactoryTestObj;
 import com.marcsllite.PropHandlerTestObj;
 import com.marcsllite.util.FXMLView;
-import com.marcsllite.util.factory.ControllerFactory;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junitpioneer.jupiter.SetSystemProperty;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.api.FxToolkit;
 
@@ -34,8 +32,6 @@ public class StageHandlerTest {
     final static String defaultMessage = StageHandler.DEFAULT_MSG;
     private StageHandler stageHandler;
     static Stage stage;
-    @Mock
-    private ControllerFactory factory;
     
     @BeforeAll
     public void beforeAll() throws TimeoutException {

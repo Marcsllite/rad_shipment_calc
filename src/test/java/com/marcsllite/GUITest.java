@@ -19,13 +19,13 @@ import org.testfx.framework.junit5.Start;
 import org.testfx.service.finder.NodeFinder;
 import org.testfx.service.query.EmptyNodeQueryException;
 
+import javax.swing.filechooser.FileSystemView;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import static org.testfx.api.FxAssert.assertContext;
 
@@ -46,7 +46,8 @@ public abstract class GUITest extends FxRobot {
 
     public GUITest(FXMLView view) {
         this.view = view;
-        folderHandler = spy(new FolderHandler(new PropHandlerTestObj()));
+        folderHandler = mock(FolderHandler.class);
+        folderHandler.setPropHandler(new PropHandlerTestObj());
         emFactory = mock(EntityManagerFactory.class);
         entityManager = mock(EntityManager.class);
         dbService = mock(DBService.class);
@@ -58,6 +59,7 @@ public abstract class GUITest extends FxRobot {
     @Start
     protected void start(Stage stage) throws IOException, TimeoutException {
         Platform.setImplicitExit(false);
+        when(folderHandler.getDataFolderPath()).thenReturn(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
         when(emFactory.createEntityManager()).thenReturn(entityManager);
 
         app.init(view, new PropHandlerTestObj(), folderHandler, emFactory, dbService);
