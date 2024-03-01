@@ -64,12 +64,15 @@ for:
 
     build_script:
       # - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-      - cmd: mvn clean verify -e -X
+      - cmd: mvn clean verify
       
     test_script:
       - ps: $wc = New-Object 'System.Net.WebClient';
             foreach($file in get-childItem $env:APPVEYOR_BUILD_FOLDER/target/surefire-reports -include TEST-*.xml -name) { `
               $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path .\target\surefire-reports\$file)); }
+      - ps: $wc = New-Object 'System.Net.WebClient';
+            foreach($file in get-childItem $env:APPVEYOR_BUILD_FOLDER/target/failsafe-reports -include TEST-*.xml -name) { `
+              $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path .\target\failsafe-reports\$file)); }
   
     on_success:
       - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
@@ -98,6 +101,8 @@ for:
     test_script:
       - sh: |
           find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
+      - sh: |
+          find "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
     
     on_success:
       - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov &&
@@ -128,6 +133,8 @@ for:
     test_script:
       - sh: |
           find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
+      - sh: |
+          find "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
     
     on_success:
       - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov &&
