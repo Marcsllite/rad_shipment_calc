@@ -23,7 +23,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class FolderHandlerTest {
+class FolderHandlerTest {
     @Mock
     File file;
     @Spy
@@ -32,13 +32,13 @@ public class FolderHandlerTest {
     final static String dataFolderName = "Shipment Calculator";
 
     @Test
-    public void testCreateFolder_NullPath() {
+    void testCreateFolder_NullPath() {
         assertNull(folderHandler.createFolder(null));
     }
 
     @Test
     @EnabledOnOs(org.junit.jupiter.api.condition.OS.WINDOWS)
-    public void testCreateFolder_NotCreated() {
+    void testCreateFolder_NotCreated() {
         String path = "!@#$%^&*(){}:\"<>?;|~<>?,./";
         File val = null;
         try{
@@ -49,7 +49,7 @@ public class FolderHandlerTest {
 
     @Test
     @EnabledOnOs(org.junit.jupiter.api.condition.OS.WINDOWS)
-    public void testSetAppFolderPath_InvalidName() {
+    void testSetAppFolderPath_InvalidName() {
         String name ="?.\"*.*.?";
 
         RuntimeException exception = assertThrows(
@@ -60,7 +60,7 @@ public class FolderHandlerTest {
     }
 
     @Test
-    public void testSetAppFolderPath_MakeNewFolder() {
+    void testSetAppFolderPath_MakeNewFolder() {
         String name ="Default Dir";
         String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + name;
 
@@ -73,7 +73,7 @@ public class FolderHandlerTest {
 
     @ParameterizedTest
     @MethodSource("setAppFolderPathException_data")
-    public void testSetAppFolderPath_NullEmptyName(String dirName, String expected) {
+    void testSetAppFolderPath_NullEmptyName(String dirName, String expected) {
         when(folderHandler.createFolder(anyString())).thenReturn(file);
 
         folderHandler.setAppFolderPath(dirName);
@@ -90,7 +90,7 @@ public class FolderHandlerTest {
     }
 
     @Test
-    public void testSetDataFolder_Exception() {
+    void testSetDataFolder_Exception() {
         when(folderHandler.createFolder(anyString())).thenReturn(null);
 
         RuntimeException ex = assertThrows(
@@ -101,7 +101,7 @@ public class FolderHandlerTest {
     }
 
     @Test
-    public void testSetDataFolder() {
+    void testSetDataFolder() {
         when(folderHandler.getAppFolderPath()).thenReturn("path");
 
         String path = folderHandler.getAppFolderPath() + File.separator + dataFolderName;

@@ -10,14 +10,14 @@ import com.marcsllite.dao.IsotopeDaoImpl;
 import com.marcsllite.dao.LimitsDaoImpl;
 import com.marcsllite.dao.ReportableQuantityDaoImpl;
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class DBServiceImplTest {
+class DBServiceImplTest {
     @Mock
     protected EntityManager em;
     @Mock
@@ -41,107 +41,107 @@ public class DBServiceImplTest {
     @InjectMocks
     private DBServiceImpl dbService;
 
-    @Test
-    public void testSetA1Dao() {
+    @Disabled("Research DB Unit Tests")
+    void testSetA1Dao() {
     }
 
-    @Test
-    public void testSetA2Dao() {
+    @Disabled("Research DB Unit Tests")
+    void testSetA2Dao() {
     }
 
-    @Test
-    public void testSetDecayConstantDao() {
+    @Disabled("Research DB Unit Tests")
+    void testSetDecayConstantDao() {
     }
 
-    @Test
-    public void testSetExemptConDao() {
+    @Disabled("Research DB Unit Tests")
+    void testSetExemptConDao() {
     }
 
-    @Test
-    public void testSetExemptLimitDao() {
+    @Disabled("Research DB Unit Tests")
+    void testSetExemptLimitDao() {
     }
 
-    @Test
-    public void testSetHalfLifeDao() {
+    @Disabled("Research DB Unit Tests")
+    void testSetHalfLifeDao() {
     }
 
-    @Test
-    public void testSetIsotopeDao() {
+    @Disabled("Research DB Unit Tests")
+    void testSetIsotopeDao() {
     }
 
-    @Test
-    public void testSetLimitsDao() {
+    @Disabled("Research DB Unit Tests")
+    void testSetLimitsDao() {
     }
 
-    @Test
-    public void testSetReportableQuanDao() {
+    @Disabled("Research DB Unit Tests")
+    void testSetReportableQuanDao() {
     }
 
-    @Test
-    public void testGetA1() {
+    @Disabled("Research DB Unit Tests")
+    void testGetA1() {
     }
 
-    @Test
-    public void testGetA2() {
+    @Disabled("Research DB Unit Tests")
+    void testGetA2() {
     }
 
-    @Test
-    public void testGetDecayConstant() {
+    @Disabled("Research DB Unit Tests")
+    void testGetDecayConstant() {
     }
 
-    @Test
-    public void testGetExemptConcentration() {
+    @Disabled("Research DB Unit Tests")
+    void testGetExemptConcentration() {
     }
 
-    @Test
-    public void testGetExemptLimit() {
+    @Disabled("Research DB Unit Tests")
+    void testGetExemptLimit() {
     }
 
-    @Test
-    public void testGetHalfLife() {
+    @Disabled("Research DB Unit Tests")
+    void testGetHalfLife() {
     }
 
-    @Test
-    public void testGetMatchingIsotopes() {
+    @Disabled("Research DB Unit Tests")
+    void testGetMatchingIsotopes() {
     }
 
-    @Test
-    public void testGetIsotope() {
+    @Disabled("Research DB Unit Tests")
+    void testGetIsotope() {
     }
 
-    @Test
-    public void testGetIsotopeName() {
+    @Disabled("Research DB Unit Tests")
+    void testGetIsotopeName() {
     }
 
-    @Test
-    public void testGetIsotopeAbbr() {
+    @Disabled("Research DB Unit Tests")
+    void testGetIsotopeAbbr() {
     }
 
-    @Test
-    public void testGetAllLimits() {
+    @Disabled("Research DB Unit Tests")
+    void testGetAllLimits() {
     }
 
-    @Test
-    public void testGetIALimited() {
+    @Disabled("Research DB Unit Tests")
+    void testGetIALimited() {
     }
 
-    @Test
-    public void testGetIAPackage() {
+    @Disabled("Research DB Unit Tests")
+    void testGetIAPackage() {
     }
 
-    @Test
-    public void testGetLimited() {
+    @Disabled("Research DB Unit Tests")
+    void testGetLimited() {
     }
 
-    @Test
-    public void testGetReportQuan() {
+    @Disabled("Research DB Unit Tests")
+    void testGetReportQuan() {
     }
 
-    @Test
-    public void testGetCiReportQuan() {
+    @Disabled("Research DB Unit Tests")
+    void testGetCiReportQuan() {
     }
 
-    @Test
-    public void testGetTBqReportQuan() {
+    @Disabled("Research DB Unit Tests")
+    void testGetTBqReportQuan() {
     }
 }

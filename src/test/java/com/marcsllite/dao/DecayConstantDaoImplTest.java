@@ -10,14 +10,14 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class DecayConstantDaoImplTest extends DBTest {
+class DecayConstantDaoImplTest extends DBTest {
     @InjectMocks
     DecayConstantDaoImpl dao;
     @Mock
     DecayConstantModel model;
 
     @Test
-    public void testGetDecayConstant() {
+    void testGetDecayConstant() {
         String abbr = "abbr";
         float exp = 1f;
 

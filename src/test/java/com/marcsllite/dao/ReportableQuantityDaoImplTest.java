@@ -12,14 +12,14 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class ReportableQuantityDaoImplTest extends DBTest {
+class ReportableQuantityDaoImplTest extends DBTest {
     @InjectMocks
     ReportableQuantityDaoImpl dao;
     @Mock
     ReportableQuantityModel model;
 
     @Test
-    public void testGetReportQuan() {
+    void testGetReportQuan() {
         String abbr = "abbr";
 
         when(em.find(any(), any())).thenReturn(model);
@@ -28,7 +28,7 @@ public class ReportableQuantityDaoImplTest extends DBTest {
     }
 
     @Test
-    public void testGetCi() {
+    void testGetCi() {
         String abbr = "abbr";
         float exp = 1f;
 
@@ -42,7 +42,7 @@ public class ReportableQuantityDaoImplTest extends DBTest {
     }
 
     @Test
-    public void testGetTBq() {
+    void testGetTBq() {
         String abbr = "abbr";
         float exp = 1f;
 

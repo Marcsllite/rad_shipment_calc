@@ -5,28 +5,28 @@ import org.junit.jupiter.api.Test;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
-public class StateAttrConverterTest {
+class StateAttrConverterTest {
     StateAttrConverter converter = new StateAttrConverter();
 
     @Test
-    public void testConvertToDatabaseColumn_NullState() {
+    void testConvertToDatabaseColumn_NullState() {
         assertNull(converter.convertToDatabaseColumn(null));
     }
 
     @Test
-    public void testConvertToDatabaseColumn() {
+    void testConvertToDatabaseColumn() {
         LimitsModelId.State state = LimitsModelId.State.SOLID;
         String expected = state.getVal();
         assertEquals(expected, converter.convertToDatabaseColumn(state));
     }
 
     @Test
-    public void testConvertToEntityAttribute_NullString() {
+    void testConvertToEntityAttribute_NullString() {
         assertNull(converter.convertToEntityAttribute(null));
     }
     
     @Test
-    public void testConvertToEntityAttribute() {
+    void testConvertToEntityAttribute() {
         LimitsModelId.State expected = LimitsModelId.State.SOLID;
         String str = expected.getVal();
         assertEquals(expected, converter.convertToEntityAttribute(str));

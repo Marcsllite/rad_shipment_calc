@@ -10,14 +10,14 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class ExemptLimitDaoImplTest extends DBTest {
+class ExemptLimitDaoImplTest extends DBTest {
     @InjectMocks
     ExemptLimitDaoImpl dao;
     @Mock
     ExemptLimitModel model;
 
     @Test
-    public void testGetExemptLimit() {
+    void testGetExemptLimit() {
         String abbr = "abbr";
         float exp = 1f;
 

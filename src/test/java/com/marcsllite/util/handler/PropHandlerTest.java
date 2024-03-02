@@ -21,13 +21,13 @@ class PropHandlerTest {
     PropHandler handler = new PropHandlerTestObj();
   
     @Test
-    public void testGetOs_NullOS() {
+    void testGetOs_NullOS() {
         handler.setOs(null);
         assertNull(handler.getOS());
     }
 
     @Test
-    public void testParseOS() {
+    void testParseOS() {
         String osName = "win";
         Assertions.assertEquals(OS.WINDOWS, handler.parseOS(osName));
 
@@ -54,7 +54,7 @@ class PropHandlerTest {
   
     @ParameterizedTest
     @MethodSource("replacePropString_data")
-    public void testReplacePropString(String key, String expected, String[] replacement) {
+    void testReplacePropString(String key, String expected, String[] replacement) {
         assertEquals(expected, handler.replacePropString(key, replacement));
     }
   
@@ -98,7 +98,7 @@ class PropHandlerTest {
   
     @ParameterizedTest
     @MethodSource("handleGetObject_data")
-    public void testHandleGetObject(String propName, String expected) {
+    void testHandleGetObject(String propName, String expected) {
         assertEquals(expected, handler.getString(propName));
     }
   
@@ -114,7 +114,7 @@ class PropHandlerTest {
 
     @ParameterizedTest
     @MethodSource("getList_data")
-    public void testGetList(String listName, List<String> expected) {
+    void testGetList(String listName, List<String> expected) {
         assertEquals(expected, handler.getList(listName));
     }
 
@@ -154,7 +154,7 @@ class PropHandlerTest {
   
     @ParameterizedTest
     @CsvSource({"fakeKey", "replacePropString_noReplacements"})
-    public void testGetDouble_InvalidPropName(String propName) {
+    void testGetDouble_InvalidPropName(String propName) {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> handler.getDouble(propName)
         );
@@ -163,7 +163,7 @@ class PropHandlerTest {
   
     @ParameterizedTest
     @MethodSource("getDouble_data")
-    public void testGetDouble(String propName, double expected) {
+    void testGetDouble(String propName, double expected) {
         assertEquals(expected, handler.getDouble(propName));
     }
   
@@ -177,7 +177,7 @@ class PropHandlerTest {
   
     @ParameterizedTest
     @MethodSource("getFileText_data")
-    public void testGetFileText(String file, String expected) {
+    void testGetFileText(String file, String expected) {
         assertEquals(expected, handler.getFileText(file));
     }
   

@@ -95,7 +95,9 @@ public class StageHandler {
             primaryStage.show();
         } catch (Exception exception) {
             logr.catching(Level.FATAL, exception);
-            logr.fatal("Unable to show " + view.getName() + " scene", exception);
+            logr.atLevel(Level.FATAL)
+                .withThrowable(exception)
+                .log("Unable to show {} scene", view.getName());
             // Can only initialize one FX Thread per JVM
             // Do not call Platform.exit when testing because other tests that
             // require the FX Thread will fail or be ignored
@@ -110,10 +112,10 @@ public class StageHandler {
             throw new InvalidParameterException(NULL_ERROR);
         }
 
-        String err_msg = "Unable to load FXML view " + view.getFxmlName();
+        String errMsg = "Unable to load FXML view " + view.getFxmlName();
 
         if(getPropHandler().keySet().isEmpty()) {
-            logAndThrowException(err_msg.concat(": The resource bundle contains no values."), null);
+            logAndThrowException(errMsg.concat(": The resource bundle contains no values."), null);
         }
 
         Parent rootNode = null;
@@ -125,7 +127,7 @@ public class StageHandler {
             rootNode = loader.load();
             Objects.requireNonNull(rootNode, "A Root FXML node must not be null");
         } catch (Exception exception) {
-            logAndThrowException(err_msg, exception);
+            logAndThrowException(errMsg, exception);
             // Can only initialize one FX Thread per JVM
             // Do not call Platform.exit when testing because other tests that
             // require the FX Thread will fail or be ignored

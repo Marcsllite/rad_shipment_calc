@@ -146,8 +146,8 @@ public class DBServiceImpl implements DBService {
         LimitsModel model = limitsDao.getLimits(modelId);
         return model == null? null : new Limits(
             new LimitsModelId(model.getLimitsId().getState(), model.getLimitsId().getForm()),
-            model.getIa_limited(),
-            model.getIa_package(),
+            model.getIaLimited(),
+            model.getIaPackage(),
             model.getLimited()
         );
     }

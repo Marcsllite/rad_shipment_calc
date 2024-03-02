@@ -12,7 +12,7 @@ import org.testfx.matcher.base.NodeMatchers;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-public class MainControllerGUITest extends GUITest {
+class MainControllerGUITest extends GUITest {
     MainController controller;
 
     public MainControllerGUITest(){
@@ -26,14 +26,14 @@ public class MainControllerGUITest extends GUITest {
     }
 
     @Test
-    public void testInit() {
+    void testInit() {
         FxAssert.verifyThat(FXIds.GRIDPANE_MENU, NodeMatchers.isVisible());
         FxAssert.verifyThat(FXIds.GRIDPANE_HOME, NodeMatchers.isVisible());
         FxAssert.verifyThat(FXIds.GRIDPANE_REFERENCE, NodeMatchers.isInvisible());
     }
 
     @Test
-    public void testShowHomePane() {
+    void testShowHomePane() {
         interact(() -> {
             controller.showHomePane();
 
@@ -43,7 +43,7 @@ public class MainControllerGUITest extends GUITest {
     }
 
     @Test
-    public void testShowReferencePane() {
+    void testShowReferencePane() {
         interact(() -> {
             controller.showReferencePane();
 

@@ -9,8 +9,8 @@ public class Limits {
     private final float defaultVal;
     private LimitsModelId.State state;
     private LimitsModelId.Form form;
-    private final SimpleFloatProperty ia_limited = new SimpleFloatProperty();
-    private final SimpleFloatProperty ia_package = new SimpleFloatProperty();
+    private final SimpleFloatProperty iaLimited = new SimpleFloatProperty();
+    private final SimpleFloatProperty iaPackage = new SimpleFloatProperty();
     private final SimpleFloatProperty limited = new SimpleFloatProperty();
 
     public Limits() {
@@ -29,13 +29,13 @@ public class Limits {
         );
     }
 
-    public Limits(LimitsModelId limitsId, Float ia_limited, Float ia_package, Float limited) {
+    public Limits(LimitsModelId limitsId, Float iaLimited, Float iaPackage, Float limited) {
         this.propHandler = new PropHandler();
         this.defaultVal = (float) getPropHandler().getDouble("defaultNum");
         setState(limitsId.getState());
         setForm(limitsId.getForm());
-        setIa_limited(ia_limited == null? defaultVal : ia_limited);
-        setIa_package(ia_package == null? defaultVal : ia_package);
+        setIaLimited(iaLimited == null? defaultVal : iaLimited);
+        setIaPackage(iaPackage == null? defaultVal : iaPackage);
         setLimited(limited == null? defaultVal : limited);
     }
 
@@ -67,28 +67,28 @@ public class Limits {
         this.form = form;
     }
 
-    public float getIa_limited() {
-        return ia_limitedProperty().get();
+    public float getIaLimited() {
+        return iaLimitedProperty().get();
     }
 
-    public SimpleFloatProperty ia_limitedProperty() {
-        return ia_limited;
+    public SimpleFloatProperty iaLimitedProperty() {
+        return iaLimited;
     }
 
-    public void setIa_limited(float ia_limited) {
-        ia_limitedProperty().set(ia_limited);
+    public void setIaLimited(float iaLimited) {
+        iaLimitedProperty().set(iaLimited);
     }
 
-    public float getIa_package() {
-        return ia_packageProperty().get();
+    public float getIaPackage() {
+        return iaPackageProperty().get();
     }
 
-    public SimpleFloatProperty ia_packageProperty() {
-        return ia_package;
+    public SimpleFloatProperty iaPackageProperty() {
+        return iaPackage;
     }
 
-    public void setIa_package(float ia_package) {
-        ia_packageProperty().set(ia_package);
+    public void setIaPackage(float iaPackage) {
+        iaPackageProperty().set(iaPackage);
     }
 
     public float getLimited() {

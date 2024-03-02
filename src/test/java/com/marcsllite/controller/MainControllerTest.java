@@ -7,9 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MainControllerTest {
+class MainControllerTest {
     @Test
-    public void testRegisterController_NullParam() {
+    void testRegisterController_NullParam() {
         MainController controller = MainController.getInstance();
         IllegalArgumentException exception = assertThrows(
             IllegalArgumentException.class, () -> controller.registerController(null)
@@ -18,7 +18,7 @@ public class MainControllerTest {
     }
 
     @Test
-    public void testRegisterController_BaseController() {
+    void testRegisterController_BaseController() {
         BaseController controller = new BaseController(){
             @Override
             public void show() {}
@@ -35,7 +35,7 @@ public class MainControllerTest {
     }
 
     @Test
-    public void testRegisterController_MenuPaneController() {
+    void testRegisterController_MenuPaneController() {
         MenuPaneController controller = new MenuPaneController();
         
         MainController.getInstance().registerController(controller);
@@ -44,7 +44,7 @@ public class MainControllerTest {
     }
 
     @Test
-    public void testRegisterController_HomePaneController() {
+    void testRegisterController_HomePaneController() {
         HomePaneController controller = new HomePaneController();
 
         MainController.getInstance().registerController(controller);
@@ -53,7 +53,7 @@ public class MainControllerTest {
     }
 
     @Test
-    public void testRegisterController_ReferencePaneController() {
+    void testRegisterController_ReferencePaneController() {
         ReferencePaneController controller = new ReferencePaneController();
 
         MainController.getInstance().registerController(controller);

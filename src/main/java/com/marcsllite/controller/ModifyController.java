@@ -60,7 +60,9 @@ public class ModifyController extends BaseController {
 
     private static final Logger logr = LogManager.getLogger();
 
-    @FXML public void initialize(){
+    @Override
+    @FXML public void initialize() {
+        super.initialize();
         // adding values to the choice boxes
         choiceBoxA0Prefix.setItems(Conversions.SIPrefix.getFxValues());
         choiceBoxA0Name.setItems(Isotope.RadUnit.getFxValues());

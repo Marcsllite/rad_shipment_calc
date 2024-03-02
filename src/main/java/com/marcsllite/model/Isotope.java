@@ -155,7 +155,7 @@ public class Isotope {
         setNature(nature);
         setLimitsId(limitsId);
         setIsoClass(IsoClass.TBD);
-        logr.debug("Created new Isotope " + getIsoId().getAbbr() + " and initialized it with the following data:\n" + getConstants());
+        logr.debug("Created new Isotope {} and initialized it with the following data:\n {}", getIsoId().getAbbr(), getConstants());
     }
 
     public PropHandler getPropHandler() {

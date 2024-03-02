@@ -12,7 +12,7 @@ class MenuPaneControllerTest {
     MenuPaneController controller = new MenuPaneController();
 
     @Test
-    public void testSetButtonColor_NullBtn_NullColor() {
+    void testSetButtonColor_NullBtn_NullColor() {
         InvalidParameterException ex = assertThrows(
             InvalidParameterException.class, 
             () -> controller.setButtonColor(null, null)
@@ -22,7 +22,7 @@ class MenuPaneControllerTest {
     }
 
     @Test
-    public void testSetButtonColor_NullBtn_ProperColor() {
+    void testSetButtonColor_NullBtn_ProperColor() {
         InvalidParameterException ex = assertThrows(
             InvalidParameterException.class, 
             () -> controller.setButtonColor(null, ImageHandler.Colors.UML_BLUE)
@@ -31,7 +31,7 @@ class MenuPaneControllerTest {
     }
 
     @Test
-    public void testSetCurrentButton_NullParam() {
+    void testSetCurrentButton_NullParam() {
         InvalidParameterException ex = assertThrows(
             InvalidParameterException.class, 
             () -> controller.setCurrentButton(null)
@@ -40,7 +40,7 @@ class MenuPaneControllerTest {
     }
 
     @Test
-    public void testMenuPaneHandler_NullParam() {
+    void testMenuPaneHandler_NullParam() {
         InvalidParameterException ex = assertThrows(
             InvalidParameterException.class, 
             () -> controller.menuPaneHandler(null)

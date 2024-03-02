@@ -11,21 +11,21 @@ class HalfLifeModelTest {
     HalfLifeModel model = new HalfLifeModel(DEFAULT_ABBR, DEFAULT_VAL);
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         assertEquals(DEFAULT_ABBR, model.getAbbr());
         assertEquals(DEFAULT_VAL, model.getValue(), 0.0f);
         assertNull(model.getBasePrefix());
     }
 
     @Test
-    public void setAbbr() {
+    void setAbbr() {
         String abbr = "newAbbr";
         model.setAbbr(abbr);
         assertEquals(abbr, model.getAbbr());
     }
 
     @Test
-    public void setValue() {
+    void setValue() {
         float val = 45.2f;
         model.setValue(val);
         assertEquals(val, model.getValue(), 0.0f);

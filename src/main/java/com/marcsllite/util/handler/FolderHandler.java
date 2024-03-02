@@ -11,7 +11,7 @@ public class FolderHandler {
     private static final Logger logr = LogManager.getLogger();
     private String appFolderPath;
     private String dataFolderPath;
-    private final String DATA_FOLDER_NAME = "Shipment Calculator";
+    private static final String DATA_FOLDER_NAME = "Shipment Calculator";
     private PropHandler propHandler;
 
     public FolderHandler() {

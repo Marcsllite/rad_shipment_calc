@@ -13,7 +13,7 @@ import org.testfx.matcher.base.NodeMatchers;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-public class ReferencePaneControllerGUITest extends GUITest {
+class ReferencePaneControllerGUITest extends GUITest {
     ReferencePaneController controller;
 
     public ReferencePaneControllerGUITest() {
@@ -27,12 +27,12 @@ public class ReferencePaneControllerGUITest extends GUITest {
     }
 
     @Test
-    public void testInit() {
+    void testInit() {
         FxAssert.verifyThat(FXIds.GRIDPANE_REFERENCE, NodeMatchers.isVisible());
     }
 
     @Test
-    public void testHideShow() {
+    void testHideShow() {
         interact(() -> {
             GridPane refPane = getNode(FXIds.GRIDPANE_REFERENCE);
 

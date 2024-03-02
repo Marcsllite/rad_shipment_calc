@@ -26,11 +26,11 @@ public class MenuPaneController extends BaseController {
 
     private static final Logger logr = LogManager.getLogger();
     // color to make the button corresponding to the current page
-    private final ImageHandler.Colors CURRENT_COLOR = ImageHandler.Colors.UML_BLUE;
+    private static final ImageHandler.Colors CURRENT_COLOR = ImageHandler.Colors.UML_BLUE;
     // color to make idle buttons
-    private final ImageHandler.Colors IDLE_COLOR = ImageHandler.Colors.DEFAULT_GREY;
+    private static final ImageHandler.Colors IDLE_COLOR = ImageHandler.Colors.DEFAULT_GREY;
     // color to make buttons when mouse is hovering over
-    private final ImageHandler.Colors HOVER_COLOR = ImageHandler.Colors.DEFAULT_WHITE;
+    private static final ImageHandler.Colors HOVER_COLOR = ImageHandler.Colors.DEFAULT_WHITE;
     private Page currentPage;
 
     public enum Page {
@@ -146,11 +146,11 @@ public class MenuPaneController extends BaseController {
         unsetCurrentPage();
 
         if(btnCurrent.equals(btnShipment)) {
-            setButtonColor(btnShipment, CURRENT_COLOR);  // setting the single button and icon to be the current color
+            setButtonColor(btnShipment, getCurrentColor());  // setting the single button and icon to be the current color
             currentPage = Page.SHIPMENT;
             logr.debug("Navigated to {} page.", btnShipment.getText());
         } else if(btnCurrent.equals(btnReference)) {
-            setButtonColor(btnReference, CURRENT_COLOR);  // setting the multiple button and icon to be the current color
+            setButtonColor(btnReference, getCurrentColor());  // setting the multiple button and icon to be the current color
             currentPage = Page.REFERENCE;
             logr.debug("Navigated to {} page.", btnReference.getText());
         }
@@ -163,8 +163,8 @@ public class MenuPaneController extends BaseController {
         currentPage = Page.EMPTY;
 
         // changing the color of the buttons to the idle color
-        setButtonColor(btnShipment, IDLE_COLOR);  // setting the single button and icon to be the current color
-        setButtonColor(btnReference, IDLE_COLOR);  // setting the multiple button and icon to be the current color
+        setButtonColor(btnShipment, getIdleColor());  // setting the single button and icon to be the current color
+        setButtonColor(btnReference, getIdleColor());  // setting the multiple button and icon to be the current color
     }
 
     /**
@@ -221,32 +221,32 @@ public class MenuPaneController extends BaseController {
     /**
      * FXML function to handle mouse hovering over single button
      */
-    @FXML protected void mouseShipmentEnter(){ setButtonColor(btnShipment, HOVER_COLOR); }
+    @FXML protected void mouseShipmentEnter(){ setButtonColor(btnShipment, getHoverColor()); }
 
     /**
      * FXML function to handle mouse leaving single button
      */
     @FXML protected void mouseShipmentExit(){
         if(getCurrentPage() == Page.SHIPMENT) {
-            setButtonColor(btnShipment, CURRENT_COLOR);
+            setButtonColor(btnShipment, getCurrentColor());
         } else {
-            setButtonColor(btnShipment, IDLE_COLOR);
+            setButtonColor(btnShipment, getIdleColor());
         }
     }
 
     /**
      * FXML function to handle mouse hovering over multiple button
      */
-    @FXML protected void mouseReferenceEnter(){ setButtonColor(btnReference, HOVER_COLOR); }
+    @FXML protected void mouseReferenceEnter(){ setButtonColor(btnReference, getHoverColor()); }
 
     /**
      * FXML function to handle mouse leaving multiple button
      */
     @FXML protected void mouseReferenceExit(){
         if(getCurrentPage() == Page.REFERENCE) {
-            setButtonColor(btnReference, CURRENT_COLOR);
+            setButtonColor(btnReference, getCurrentColor());
         } else {
-            setButtonColor(btnReference, IDLE_COLOR);
+            setButtonColor(btnReference, getIdleColor());
         }
     }
 
@@ -254,22 +254,20 @@ public class MenuPaneController extends BaseController {
 
     /**
      * Getter function to get the current menu button
-     *      0: Shipment Page Button
-     *      1: ReferencePage Button
      *
      * @return the current button in integer form
      */
     public Page getCurrentPage() { return currentPage; }
 
-    public ImageHandler.Colors getCURRENT_COLOR() {
+    public ImageHandler.Colors getCurrentColor() {
         return CURRENT_COLOR;
     }
 
-    public ImageHandler.Colors getIDLE_COLOR() {
+    public ImageHandler.Colors getIdleColor() {
         return IDLE_COLOR;
     }
 
-    public ImageHandler.Colors getHOVER_COLOR() {
+    public ImageHandler.Colors getHoverColor() {
         return HOVER_COLOR;
     }
 }

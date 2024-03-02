@@ -15,22 +15,22 @@ import static junit.framework.Assert.assertTrue;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-public class ControllerFactoryTest {
+class ControllerFactoryTest {
     ControllerFactory factory = new ControllerFactory();
 
     @Test
-    public void testGetController_NullName() {
+    void testGetController_NullName() {
         assertNull(factory.getController(null));
     }
 
     @Test
-    public void testGetController_NotInMap() {
+    void testGetController_NotInMap() {
         factory.controllerMap.clear();
         assertNull(factory.getController("name"));
     }
 
     @Test
-    public void testGetController() {
+    void testGetController() {
         String name = "name";
         String value = "value";
         factory.controllerMap.put(name, value);
@@ -38,7 +38,7 @@ public class ControllerFactoryTest {
     }
 
     @Test
-    public void testCall_InMap() {
+    void testCall_InMap() {
         String name = this.getClass().getName();
         String value = "value";
         
@@ -50,7 +50,7 @@ public class ControllerFactoryTest {
     }
 
     @Test
-    public void testCall() {
+    void testCall() {
         factory.controllerMap.clear();
         // Create new Controller
         Class clazz = MainController.class;

@@ -6,21 +6,21 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-public class LimitsModelIdTest {
+class LimitsModelIdTest {
     @Test
-    public void testEquals_NullObj() {
+    void testEquals_NullObj() {
         LimitsModelId limitsId = new LimitsModelId();
         assertNotEquals(null, limitsId);
     }
 
     @Test
-    public void testEquals_WrongClass() {
+    void testEquals_WrongClass() {
         LimitsModelId limitsId = new LimitsModelId();
         assertNotEquals(limitsId, new Object());
     }
 
     @Test
-    public void testEquals_DiffState() {
+    void testEquals_DiffState() {
         LimitsModelId limitsId = new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL);
         LimitsModelId limitsId2 = new LimitsModelId(LimitsModelId.State.LIQUID, LimitsModelId.Form.NORMAL);
         assertNotEquals(limitsId, limitsId2);
@@ -28,7 +28,7 @@ public class LimitsModelIdTest {
     }
 
     @Test
-    public void testEquals_DiffForm() {
+    void testEquals_DiffForm() {
         LimitsModelId limitsId = new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL);
         LimitsModelId limitsId2 = new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.SPECIAL);
         assertNotEquals(limitsId, limitsId2);
@@ -36,7 +36,7 @@ public class LimitsModelIdTest {
     }
 
     @Test
-    public void testEquals() {
+    void testEquals() {
         LimitsModelId limitsId = new LimitsModelId();
         LimitsModelId limitsId2 = new LimitsModelId();
         assertEquals(limitsId, limitsId2);

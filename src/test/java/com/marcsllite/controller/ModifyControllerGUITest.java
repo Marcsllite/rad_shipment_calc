@@ -20,7 +20,7 @@ import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
 
-public class ModifyControllerGUITest extends GUITest {
+class ModifyControllerGUITest extends GUITest {
     ModifyController controller;
 
     public ModifyControllerGUITest() {
@@ -34,7 +34,7 @@ public class ModifyControllerGUITest extends GUITest {
     }
 
     @Test
-    public void testInit() {
+    void testInit() {
         FxAssert.verifyThat(FXIds.STACKPANE_MODIFY, NodeMatchers.isVisible());
 
         interact(() -> {
@@ -69,7 +69,7 @@ public class ModifyControllerGUITest extends GUITest {
         vBoxSecondPage.setVisible(pageNum == 2);
     }
     @Test
-    public void testHideShow() {
+    void testHideShow() {
         interact(() -> {
             StackPane modifyPane = getNode(FXIds.STACKPANE_MODIFY);
 
@@ -84,7 +84,7 @@ public class ModifyControllerGUITest extends GUITest {
     }
 
     @Test
-    public void testModifyHandler_btnNext() {
+    void testModifyHandler_btnNext() {
         interact(()-> {
             goToPage(1);
 
@@ -93,7 +93,7 @@ public class ModifyControllerGUITest extends GUITest {
     }
 
     @Test
-    public void testModifyHandler_chckBoxSameMass() {
+    void testModifyHandler_chckBoxSameMass() {
         interact(()-> {
             goToPage(2);
 
@@ -101,7 +101,7 @@ public class ModifyControllerGUITest extends GUITest {
     }
 
     @Test
-    public void testModifyHandler_chckBoxSameNSF() {
+    void testModifyHandler_chckBoxSameNSF() {
         interact(()-> {
             goToPage(2);
 
@@ -109,7 +109,7 @@ public class ModifyControllerGUITest extends GUITest {
     }
 
     @Test
-    public void testModifyHandler_btnBack() {
+    void testModifyHandler_btnBack() {
         interact(()-> {
             goToPage(2);
 
@@ -117,7 +117,7 @@ public class ModifyControllerGUITest extends GUITest {
     }
 
     @Test
-    public void testModifyHandler_btnFinish() {
+    void testModifyHandler_btnFinish() {
         interact(()-> {
             goToPage(2);
 

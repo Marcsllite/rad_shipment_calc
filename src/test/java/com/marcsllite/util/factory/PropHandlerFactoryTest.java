@@ -38,7 +38,7 @@ class PropHandlerFactoryTest {
     private static final ClassLoader loader = ClassLoader.getSystemClassLoader();
 
     @Test
-    public void testGetPropHandler_NullName() {
+    void testGetPropHandler_NullName() {
         try {
             factory.getPropHandler(null);
             verify(factory).newBundle(anyString(), any(), anyString(), any(), anyBoolean());
@@ -48,7 +48,7 @@ class PropHandlerFactoryTest {
     }
 
     @Test
-    public void testGetPropHandler() {
+    void testGetPropHandler() {
         try {
             String name = "Name";
             factory.getPropHandler(name);

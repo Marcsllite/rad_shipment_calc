@@ -14,7 +14,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class LimitsDaoImplTest extends DBTest {
+class LimitsDaoImplTest extends DBTest {
     @InjectMocks
     LimitsDaoImpl dao;
     LimitsDaoImpl daoSpy;
@@ -27,7 +27,7 @@ public class LimitsDaoImplTest extends DBTest {
     }
 
     @Test
-    public void testGetLimits() {
+    void testGetLimits() {
         LimitsModelId limitsId = new LimitsModelId();
 
         when(em.find(any(), any())).thenReturn(model);
@@ -36,12 +36,12 @@ public class LimitsDaoImplTest extends DBTest {
     }
 
     @Test
-    public void testGetIALimited() {
+    void testGetIALimited() {
         LimitsModelId limitsId = new LimitsModelId();
         float exp = 1f;
 
         when(em.find(any(), any())).thenReturn(model);
-        when(model.getIa_limited()).thenReturn(exp);
+        when(model.getIaLimited()).thenReturn(exp);
 
         assertEquals(exp, daoSpy.getIALimited(limitsId));
 
@@ -49,12 +49,12 @@ public class LimitsDaoImplTest extends DBTest {
     }
 
     @Test
-    public void testGetIAPackage() {
+    void testGetIAPackage() {
         LimitsModelId limitsId = new LimitsModelId();
         float exp = 1f;
 
         when(em.find(any(), any())).thenReturn(model);
-        when(model.getIa_package()).thenReturn(exp);
+        when(model.getIaPackage()).thenReturn(exp);
 
         assertEquals(exp, daoSpy.getIAPackage(limitsId));
 
@@ -62,7 +62,7 @@ public class LimitsDaoImplTest extends DBTest {
     }
 
     @Test
-    public void testGetLimited() {
+    void testGetLimited() {
         LimitsModelId limitsId = new LimitsModelId();
         float exp = 1f;
 

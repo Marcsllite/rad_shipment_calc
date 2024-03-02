@@ -4,18 +4,18 @@ import jakarta.persistence.Query;
 
 import java.util.List;
 
-public interface Dao<ENTITY, ID> {
-    ENTITY findById(ID id);
+public interface Dao<E, I> {
+    E findById(I id);
 
-    List<ENTITY> findAll();
+    List<E> findAll();
 
-    List<ENTITY> findSingleResult(Query query);
+    List<E> findSingleResult(Query query);
 
-    ENTITY attach(ENTITY entity);
+    E attach(E entity);
 
-    void remove(ID id);
+    void remove(I id);
 
     void flush();
 
-    void persist(ENTITY entity);
+    void persist(E entity);
 }

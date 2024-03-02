@@ -13,7 +13,7 @@ import org.testfx.matcher.base.NodeMatchers;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-public class ShipmentDetailsControllerGUITest extends GUITest {
+class ShipmentDetailsControllerGUITest extends GUITest {
     ShipmentDetailsController controller;
 
     public ShipmentDetailsControllerGUITest() {
@@ -27,12 +27,12 @@ public class ShipmentDetailsControllerGUITest extends GUITest {
     }
 
     @Test
-    public void testStart() {
+    void testStart() {
         FxAssert.verifyThat(FXIds.STACKPANE_SHIPMENT_DETAILS, NodeMatchers.isVisible());
     }
 
     @Test
-    public void testHideShow() {
+    void testHideShow() {
         interact(() -> {
             StackPane detailsPane = getNode(FXIds.STACKPANE_SHIPMENT_DETAILS);
 
@@ -47,7 +47,7 @@ public class ShipmentDetailsControllerGUITest extends GUITest {
     }
 
     @Test
-    public void testShipmentDetailsHandler_btnNext() {
+    void testShipmentDetailsHandler_btnNext() {
         clickOn(FXIds.BTN_SAVE);
     }
 }

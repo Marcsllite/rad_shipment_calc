@@ -7,7 +7,7 @@ public abstract class BaseController {
     private MainController main;
     private PropHandler propHandler;
 
-    public BaseController() {
+    protected BaseController() {
         setPropHandler(new PropHandler());
         setMain(MainController.getInstance());
     }

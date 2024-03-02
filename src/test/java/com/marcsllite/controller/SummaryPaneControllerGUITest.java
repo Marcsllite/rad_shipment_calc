@@ -13,7 +13,7 @@ import org.testfx.matcher.base.NodeMatchers;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-public class SummaryPaneControllerGUITest extends GUITest {
+class SummaryPaneControllerGUITest extends GUITest {
     SummaryPaneController controller;
 
     public SummaryPaneControllerGUITest() {
@@ -27,12 +27,12 @@ public class SummaryPaneControllerGUITest extends GUITest {
     }
 
     @Test
-    public void testStart() {
+    void testStart() {
         FxAssert.verifyThat(FXIds.ANCHORPANE_SUMMARY, NodeMatchers.isVisible());
     }
 
     @Test
-    public void testHideShow() {
+    void testHideShow() {
         interact(() -> {
             AnchorPane summaryPane = getNode(FXIds.ANCHORPANE_SUMMARY);
 
@@ -47,7 +47,7 @@ public class SummaryPaneControllerGUITest extends GUITest {
     }
 
     @Test
-    public void testSummaryPaneHandler_btnNext() {
+    void testSummaryPaneHandler_btnNext() {
         clickOn(FXIds.BTN_SAVE);
     }
 }

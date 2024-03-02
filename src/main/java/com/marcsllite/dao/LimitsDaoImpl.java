@@ -9,11 +9,11 @@ public class LimitsDaoImpl extends AbstractDao<LimitsModel, LimitsModelId> {
     }
 
     public float getIALimited(LimitsModelId modelId) {
-        return getLimits(modelId).getIa_limited();
+        return getLimits(modelId).getIaLimited();
     }
 
     public float getIAPackage(LimitsModelId modelId) {
-        return getLimits(modelId).getIa_package();
+        return getLimits(modelId).getIaPackage();
     }
 
     public float getLimited(LimitsModelId modelId) {

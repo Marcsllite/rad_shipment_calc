@@ -12,13 +12,13 @@ class IsotopeModelTest {
     IsotopeModel model = new IsotopeModel(DEFAULT_ISO_ID);
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         assertEquals(DEFAULT_ISO_ID, model.getIsotopeId());
         assertNull(model.getBasePrefix());
     }
 
     @Test
-    public void testSetIsoId() {
+    void testSetIsoId() {
         IsotopeModelId isoId = new IsotopeModelId("Testing", "123");
         model.setIsotopeId(isoId);
         assertEquals(isoId, model.getIsotopeId());

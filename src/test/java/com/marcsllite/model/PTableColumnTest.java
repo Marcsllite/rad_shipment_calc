@@ -11,14 +11,14 @@ class PTableColumnTest {
     PTableColumn<String, String> tableColumn = new PTableColumn<>();
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         tableColumn = new PTableColumn<>();
         assertEquals(1.0, tableColumn.getPercentageWidth());
     }
 
     @ParameterizedTest
     @MethodSource("testSetPercentageWidth_data")
-    public void testSetPercentageWidth_InvalidValue(double val, String errMsg) {
+    void testSetPercentageWidth_InvalidValue(double val, String errMsg) {
         IllegalArgumentException ex = assertThrows(
             IllegalArgumentException.class, () -> tableColumn.setPercentageWidth(val)
         );
@@ -35,7 +35,7 @@ class PTableColumnTest {
     }
 
     @Test
-    public void testSetPercentageWidth() {
+    void testSetPercentageWidth() {
         double val = 0.5;
         tableColumn.setPercentageWidth(val);
         assertEquals(val, tableColumn.getPercentageWidth(), 0.0);

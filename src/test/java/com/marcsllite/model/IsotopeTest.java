@@ -15,7 +15,7 @@ import static junit.framework.Assert.assertNotNull;
 import static org.mockito.Mockito.spy;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class IsotopeTest extends DBTest {
+class IsotopeTest extends DBTest {
     private final float DEFAULT_NUM = -2.0f;
     private static final String DEFAULT_NAME = "Abbreviation";
     private static final String DEFAULT_ABBR = "Abbr";
@@ -40,7 +40,7 @@ public class IsotopeTest extends DBTest {
     }
 
     @Test
-    public void testInit() {
+    void testInit() {
         assertEquals(isoId, iso.getIsoId());
         assertEquals(DEFAULT_NATURE, iso.getNature());
         assertEquals(limitsId, iso.getLimitsId());

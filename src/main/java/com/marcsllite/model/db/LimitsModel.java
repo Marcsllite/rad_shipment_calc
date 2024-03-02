@@ -14,10 +14,10 @@ public class LimitsModel extends BaseModel {
     private LimitsModelId limitsId;
 
     @Column(name = "IA_Limited")
-    private float ia_limited;
+    private float iaLimited;
 
     @Column(name = "IA_Package")
-    private float ia_package;
+    private float iaPackage;
 
     @Column(name = "Limited")
     private float limited;
@@ -29,10 +29,10 @@ public class LimitsModel extends BaseModel {
             -2.0f);
     }
 
-    public LimitsModel(LimitsModelId limitsId, float ia_limited, float ia_package, float limited) {
+    public LimitsModel(LimitsModelId limitsId, float iaLimited, float iaPackage, float limited) {
         setLimitsId(limitsId);
-        setIa_limited(ia_limited);
-        setIa_package(ia_package);
+        setIaLimited(iaLimited);
+        setIaPackage(iaPackage);
         setLimited(limited);
     }
 
@@ -44,20 +44,20 @@ public class LimitsModel extends BaseModel {
         this.limitsId = limitsId;
     }
 
-    public float getIa_limited() {
-        return ia_limited;
+    public float getIaLimited() {
+        return iaLimited;
     }
 
-    public void setIa_limited(float ia_limited) {
-        this.ia_limited = ia_limited;
+    public void setIaLimited(float iaLimited) {
+        this.iaLimited = iaLimited;
     }
 
-    public float getIa_package() {
-        return ia_package;
+    public float getIaPackage() {
+        return iaPackage;
     }
 
-    public void setIa_package(float ia_package) {
-        this.ia_package = ia_package;
+    public void setIaPackage(float iaPackage) {
+        this.iaPackage = iaPackage;
     }
 
     public float getLimited() {

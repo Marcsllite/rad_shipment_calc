@@ -21,7 +21,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.spy;
 
-public class MenuPaneControllerGUITest extends GUITest {
+class MenuPaneControllerGUITest extends GUITest {
     MainController mainController;
     MenuPaneController controller;
     ImageHandler.Colors CURRENT_COLOR;
@@ -40,21 +40,21 @@ public class MenuPaneControllerGUITest extends GUITest {
         mainController = spy(controller.getMain());
         controller.setMain(mainController);
 
-        CURRENT_COLOR = controller.getCURRENT_COLOR();
-        IDLE_COLOR = controller.getIDLE_COLOR();
-        HOVER_COLOR = controller.getHOVER_COLOR();
+        CURRENT_COLOR = controller.getCurrentColor();
+        IDLE_COLOR = controller.getIdleColor();
+        HOVER_COLOR = controller.getHoverColor();
 
         doNothing().when(mainController).showHomePane();
         doNothing().when(mainController).showReferencePane();
     }
 
     @Test
-    public void testInit() {
+    void testInit() {
         FxAssert.verifyThat(FXIds.GRIDPANE_MENU, NodeMatchers.isVisible());
     }
 
     @Test
-    public void testHideShow() {
+    void testHideShow() {
         interact(() -> {
             GridPane menuPane = getNode(FXIds.GRIDPANE_MENU);
 
@@ -69,12 +69,12 @@ public class MenuPaneControllerGUITest extends GUITest {
     }
 
     @Test
-    public void testMenuPaneHandler_imgViewLogo() {
+    void testMenuPaneHandler_imgViewLogo() {
         clickOn(FXIds.IMGVIEW_COLOR_LOGO);
     }
 
     @Test
-    public void testMenuPaneHandler_btnShipment() {
+    void testMenuPaneHandler_btnShipment() {
         Button btnShip = getNode(FXIds.BTN_SHIPMENT);
         ImageView imgViewShip = getNode(FXIds.IMGVIEW_SHIPMENT);
         String imgUrl = ImageHandler.getShipmentImage(CURRENT_COLOR).getUrl();
@@ -89,7 +89,7 @@ public class MenuPaneControllerGUITest extends GUITest {
     }
 
     @Test
-    public void testMenuPaneHandler_btnReference() {
+    void testMenuPaneHandler_btnReference() {
         Button btnRef = getNode(FXIds.BTN_REFERENCE);
         ImageView imgViewRef = getNode(FXIds.IMGVIEW_REFERENCE);
         String imgUrl = ImageHandler.getReferenceImage(CURRENT_COLOR).getUrl();

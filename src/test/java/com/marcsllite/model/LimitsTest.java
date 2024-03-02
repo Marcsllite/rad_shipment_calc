@@ -20,17 +20,17 @@ class LimitsTest {
     private final LimitsModelId.Form DEFAULT_FORM = LimitsModelId.Form.NORMAL;
     
     @Test
-    public void testConstructor_PropHandler() {
+    void testConstructor_PropHandler() {
         assertEquals(DEFAULT_NUM, limits.getDefaultVal());
         assertEquals(DEFAULT_STATE, limits.getState());
         assertEquals(DEFAULT_FORM, limits.getForm());
-        assertEquals(DEFAULT_NUM, limits.getIa_limited(), 0.0f);
-        assertEquals(DEFAULT_NUM, limits.getIa_package(), 0.0f);
+        assertEquals(DEFAULT_NUM, limits.getIaLimited(), 0.0f);
+        assertEquals(DEFAULT_NUM, limits.getIaPackage(), 0.0f);
         assertEquals(DEFAULT_NUM, limits.getLimited(), 0.0f);
     }
 
     @Test
-    public void testConstructor_WithValues() {
+    void testConstructor_WithValues() {
         float val = 2.5f;
         LimitsModelId limitsId = new LimitsModelId(LimitsModelId.State.LIQUID,
             LimitsModelId.Form.SPECIAL);
@@ -45,8 +45,8 @@ class LimitsTest {
         assertEquals(DEFAULT_NUM, limits.getDefaultVal());
         assertEquals(limitsId.getState(), limits.getState());
         assertEquals(limitsId.getForm(), limits.getForm());
-        assertEquals(val, limits.getIa_limited(), 0.0f);
-        assertEquals(val, limits.getIa_package(), 0.0f);
+        assertEquals(val, limits.getIaLimited(), 0.0f);
+        assertEquals(val, limits.getIaPackage(), 0.0f);
         assertEquals(val, limits.getLimited(), 0.0f);
     }
 }

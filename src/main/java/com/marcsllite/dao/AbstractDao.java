@@ -17,29 +17,29 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-public abstract class AbstractDao<ENTITY extends Serializable, ID> implements Dao<ENTITY, ID> {
+public abstract class AbstractDao<E extends Serializable, I> implements Dao<E, I> {
     @PersistenceContext
     private EntityManager em;
-    private final Class<ENTITY> entityClass;
+    private final Class<E> entityClass;
     private static final Logger logr = LogManager.getLogger();
     private static final String COUNT_ENTITIES_QUERY = "select count(a) from %s as a";
     private static final String QUERY_ALL = "select a from %s as a";
 
-    public AbstractDao() {
-        entityClass = (Class<ENTITY>) (
+    protected AbstractDao() {
+        entityClass = (Class<E>) (
             (ParameterizedType) getClass().getGenericSuperclass()
         ).getActualTypeArguments()[0];
     }
 
-    public AbstractDao(EntityManager em) {
+    protected AbstractDao(EntityManager em) {
         this();
         if(em != null) {
             setEntityManager(em);
         }
     }
 
-    public ENTITY findById(ID id) {
-        ENTITY entity = getEntityManager().find(entityClass, id);
+    public E findById(I id) {
+        E entity = getEntityManager().find(entityClass, id);
         if(entity == null) {
             String msg = String.format("Attempted to fetch an entity that does not exist. ID: %s", id);
             var nre = new NoResultException(msg);
@@ -49,13 +49,13 @@ public abstract class AbstractDao<ENTITY extends Serializable, ID> implements Da
         return entity;
     }
 
-    public List<ENTITY> findAll() {
+    public List<E> findAll() {
         String query = String.format(QUERY_ALL, getEntityName());
         return getEntityManager().createQuery(query).getResultList();
     }
 
-    public List<ENTITY> findSingleResult(Query query) {
-        List<ENTITY> res = query.getResultList();
+    public List<E> findSingleResult(Query query) {
+        List<E> res = query.getResultList();
         if(res.isEmpty()) {
             var nre = new NoResultException();
             logr.throwing(nre);
@@ -74,9 +74,9 @@ public abstract class AbstractDao<ENTITY extends Serializable, ID> implements Da
         return ((Long) getEntityManager().createQuery(query).getSingleResult()).intValue();
     }
 
-    public ENTITY attach(ENTITY entity) {
+    public E attach(E entity) {
         try {
-            ENTITY mergedEntity = getEntityManager().merge(entity);
+            E mergedEntity = getEntityManager().merge(entity);
             flush();
             return mergedEntity;
         } catch (OptimisticLockException ole) {
@@ -87,8 +87,8 @@ public abstract class AbstractDao<ENTITY extends Serializable, ID> implements Da
         }
     }
 
-    public void remove(ID id) {
-        ENTITY ref;
+    public void remove(I id) {
+        E ref;
         try {
             ref = getEntityManager().getReference(entityClass, id);
             getEntityManager().remove(ref);
@@ -104,7 +104,7 @@ public abstract class AbstractDao<ENTITY extends Serializable, ID> implements Da
         getEntityManager().flush();
     }
 
-    public void persist(ENTITY entity) {
+    public void persist(E entity) {
         getEntityManager().persist(entity);
     }
 

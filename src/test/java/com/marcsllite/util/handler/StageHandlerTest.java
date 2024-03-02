@@ -27,7 +27,7 @@ import static org.mockito.Mockito.spy;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class StageHandlerTest {
+class StageHandlerTest {
     final static String propMsg = "This is a proper message";
     final static String defaultMessage = StageHandler.DEFAULT_MSG;
     private StageHandler stageHandler;
@@ -40,7 +40,7 @@ public class StageHandlerTest {
     }
 
     @Test
-    public void testSwitchScene_NullView() {
+    void testSwitchScene_NullView() {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> stageHandler.switchScene(null)
         );
@@ -48,7 +48,7 @@ public class StageHandlerTest {
     }
 
     @Test
-    public void testShow_NullView() {
+    void testShow_NullView() {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> stageHandler.show(null)
         );
@@ -57,7 +57,7 @@ public class StageHandlerTest {
   
     @Test
     @SetSystemProperty(key = "keepPlatformOpen",value = "true")
-    public void testShow_EmptyView() {
+    void testShow_EmptyView() {
         FXMLView view = FXMLView.TEST;
         try {
             stageHandler.show(view);
@@ -67,7 +67,7 @@ public class StageHandlerTest {
     }
 
     @Test
-    public void testLoadViewNodeHierarchy_NullView() {
+    void testLoadViewNodeHierarchy_NullView() {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> stageHandler.loadViewNodeHierarchy(null)
         );
@@ -75,7 +75,7 @@ public class StageHandlerTest {
     }
 
     @Test
-    public void testLoadViewNodeHierarchy_EmptyProperties() {
+    void testLoadViewNodeHierarchy_EmptyProperties() {
         stageHandler = new StageHandler(stage);
         PropHandler propHandler = stageHandler.getPropHandler();
         propHandler.setProp(new Properties());
@@ -88,7 +88,7 @@ public class StageHandlerTest {
     }
 
     @Test
-    public void testLoadViewNodeHierarchy_EmptyView() {
+    void testLoadViewNodeHierarchy_EmptyView() {
         FXMLView view = FXMLView.TEST;
 
         RuntimeException exception = assertThrows(
@@ -102,7 +102,7 @@ public class StageHandlerTest {
   
     @ParameterizedTest
     @MethodSource("logAndThrowException_data")
-    public void testLogAndThrowException(String errorMsg, Exception exception, String expectedMsg) {
+    void testLogAndThrowException(String errorMsg, Exception exception, String expectedMsg) {
         RuntimeException except = assertThrows(
             RuntimeException.class, () -> stageHandler.logAndThrowException(errorMsg, exception)
         );

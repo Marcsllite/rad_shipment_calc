@@ -18,7 +18,7 @@ class ReportableQuantityTest {
     private final float DEFAULT_NUM = -2.0f;
 
     @Test
-    public void testConstructor_NoValues() {
+    void testConstructor_NoValues() {
         assertEquals(DEFAULT_NUM, reportQuan.getDefaultVal());
         assertEquals(DEFAULT_ABBR, reportQuan.getAbbr());
         assertEquals(DEFAULT_NUM, reportQuan.getCurie(), 0.0f);
@@ -26,7 +26,7 @@ class ReportableQuantityTest {
     }
 
     @Test
-    public void testConstructor_WithValues() {
+    void testConstructor_WithValues() {
         String abbr = "abracadabra";
         float val = 5.2f;
         reportQuan = new ReportableQuantity(abbr, val, val){

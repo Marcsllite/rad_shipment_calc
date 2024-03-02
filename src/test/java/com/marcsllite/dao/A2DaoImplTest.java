@@ -10,14 +10,14 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class A2DaoImplTest extends DBTest {
+class A2DaoImplTest extends DBTest {
     @InjectMocks
     A2DaoImpl dao;
     @Mock
     A2Model model;
 
     @Test
-    public void testGetA2() {
+    void testGetA2() {
         String abbr = "abbr";
         float exp = 1f;
 

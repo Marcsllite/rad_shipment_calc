@@ -14,7 +14,7 @@ import org.testfx.matcher.base.NodeMatchers;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-public class HomePaneControllerGUITest extends GUITest {
+class HomePaneControllerGUITest extends GUITest {
     @Spy
     HomePaneController controller;
 
@@ -29,12 +29,12 @@ public class HomePaneControllerGUITest extends GUITest {
     }
 
     @Test
-    public void testInit() {
+    void testInit() {
         FxAssert.verifyThat(FXIds.GRIDPANE_HOME, NodeMatchers.isVisible());
     }
 
     @Test
-    public void testHideShow() {
+    void testHideShow() {
         interact(() -> {
             GridPane homePane = getNode(FXIds.GRIDPANE_HOME);
 
@@ -49,22 +49,22 @@ public class HomePaneControllerGUITest extends GUITest {
     }
 
     @Test
-    public void testHomePaneHandler_btnAdd() {
+    void testHomePaneHandler_btnAdd() {
         clickOn(FXIds.BTN_ADD);
     }
 
     @Test
-    public void testHomePaneHandler_btnEdit() {
+    void testHomePaneHandler_btnEdit() {
         clickOn(FXIds.BTN_EDIT);
     }
 
     @Test
-    public void testHomePaneHandler_btnRemove() {
+    void testHomePaneHandler_btnRemove() {
         clickOn(FXIds.BTN_REMOVE);
     }
 
     @Test
-    public void testHomePaneHandler_btnCalculate() {
+    void testHomePaneHandler_btnCalculate() {
         clickOn(FXIds.BTN_CALCULATE);
     }
 }

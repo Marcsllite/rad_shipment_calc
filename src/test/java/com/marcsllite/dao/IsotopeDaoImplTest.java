@@ -19,7 +19,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class IsotopeDaoImplTest extends DBTest {
+class IsotopeDaoImplTest extends DBTest {
     @InjectMocks
     IsotopeDaoImpl dao;
     IsotopeDaoImpl daoSpy;
@@ -32,7 +32,7 @@ public class IsotopeDaoImplTest extends DBTest {
     }
 
     @Test
-    public void testGetMatchingIsotopes() {
+    void testGetMatchingIsotopes() {
         Query querySpy = spy(query);
         String substr = "substr";
         List<IsotopeModel> list = new ArrayList<>();
@@ -50,7 +50,7 @@ public class IsotopeDaoImplTest extends DBTest {
     }
 
     @Test
-    public void testGetIsotope() {
+    void testGetIsotope() {
         IsotopeModelId isoId = new IsotopeModelId("", "");
 
         when(em.find(any(), any())).thenReturn(model);
@@ -59,7 +59,7 @@ public class IsotopeDaoImplTest extends DBTest {
     }
 
     @Test
-    public void testIsotopeName() {
+    void testIsotopeName() {
         IsotopeModelId isoId1 = new IsotopeModelId(null, null);
         IsotopeModelId isoId2 = new IsotopeModelId(null, "Abbr2");
         IsotopeModelId isoId3 = new IsotopeModelId("Name3", null);
@@ -80,7 +80,7 @@ public class IsotopeDaoImplTest extends DBTest {
     }
 
     @Test
-    public void testIsotopeAbbr() {
+    void testIsotopeAbbr() {
         IsotopeModelId isoId1 = new IsotopeModelId(null, null);
         IsotopeModelId isoId2 = new IsotopeModelId(null, "Abbr2");
         IsotopeModelId isoId3 = new IsotopeModelId("Name3", null);

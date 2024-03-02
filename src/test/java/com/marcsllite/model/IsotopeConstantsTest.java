@@ -43,7 +43,7 @@ class IsotopeConstantsTest extends DBTest {
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         constants = new IsotopeConstants(DEFAULT_NUM);
 
         assertEquals(DEFAULT_NUM, constants.getDefaultVal(), 0.0f);
@@ -62,7 +62,7 @@ class IsotopeConstantsTest extends DBTest {
 
     @Test
     @SetSystemProperty(key = "keepPlatformOpen",value = "true")
-    public void testDbInit_Exception() {
+    void testDbInit_Exception() {
         IsotopeModelId isoId = new IsotopeModelId(DEFAULT_NAME, DEFAULT_ABBR);
         LimitsModelId limitsId = new LimitsModelId(DEFAULT_STATE, DEFAULT_FORM);
 
@@ -78,7 +78,7 @@ class IsotopeConstantsTest extends DBTest {
 
     @Test
     @SetSystemProperty(key = "keepPlatformOpen",value = "true")
-    public void testDbInit() {
+    void testDbInit() {
         IsotopeModelId isoId = new IsotopeModelId(DEFAULT_NAME, DEFAULT_ABBR);
         LimitsModelId limitsId = new LimitsModelId(DEFAULT_STATE, DEFAULT_FORM);
         float expected = 3.14159f;
