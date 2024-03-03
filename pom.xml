@@ -16,6 +16,7 @@
         -Dtestfx.headless=true
         -Djavafx.verbose=true
         -Dprism.text=t2k
+        -Dprism.order=sw
         -Dprism.debug=true <!-- Reports what config has been detected. -->
         </argLine>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
