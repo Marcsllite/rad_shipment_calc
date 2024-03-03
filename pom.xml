@@ -30,7 +30,7 @@
         <assertj.version>3.20.2</assertj.version>
         <testfx.version>4.0.15-alpha</testfx.version>
         <surefire.version>3.0.0-M5</surefire.version>
-        <monocle.version>jdk-11+26</monocle.version>
+        <monocle.version>11.0.2</monocle.version>
         <h2.version>2.2.224</h2.version>
         <hibernate-core.version>6.4.4.Final</hibernate-core.version>
         <pioneer.version>2.2.0</pioneer.version>
@@ -213,8 +213,7 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <!--suppress UnresolvedMavenProperty -->
-                    <argLine>${surefire.jacoco.args}</argLine>
+                    <argLine>@{surefire.jacoco.args}</argLine>
                     <excludes>
                         <exclude>**/*GUITest.java</exclude>
                     </excludes>
@@ -243,8 +242,7 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${surefire.version}</version>
                 <configuration>
-                    <!--suppress UnresolvedMavenProperty -->
-                    <argLine>${failsafe.jacoco.args}</argLine>
+                    <argLine>@{failsafe.jacoco.args}</argLine>
                     <trimStackTrace>false</trimStackTrace>
                     <includes>
                         <include>**/*GUITest.java</include>
