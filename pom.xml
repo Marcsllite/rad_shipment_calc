@@ -6,7 +6,7 @@
     <groupId>com.marcsllite</groupId>
     <artifactId>rad_shipment_calc</artifactId>
     <version>1.0.0</version>
-
+<!--  -->
     <properties>
         <argLine>
         -Djdk.gtk.version=2
@@ -16,9 +16,9 @@
         -Dtestfx.robot=glass
         -Dtestfx.headless=true
         -Djavafx.verbose=true
-        -Dprism.order=sw
-        -Dprism.text=t2k
-        -Dprism.debug=true
+            <!-- -Dprism.order=sw  Disables any hardware accelerated rending. -->
+        -Dprism.text=t2k <!--  -->
+        -Dprism.debug=true <!-- Reports what config has been detected. -->
         </argLine>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>11</maven.compiler.release>
