@@ -42,7 +42,7 @@ environment:
       appveyor_build_worker_image: Visual Studio 2019
 
     - job_name: Mac build
-      appveyor_build_worker_image: macos-ventura
+      appveyor_build_worker_image: macos-monterey
 
     - job_name: Linux build
       appveyor_build_worker_image: Ubuntu2004
@@ -91,7 +91,6 @@ for:
     install:
       - sh: export HOMEBREW_NO_INSTALL_CLEANUP=1 &&
             export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
-      - sh: brew install mvnvm
 
     build_script:
       # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-vnc.sh' | bash -e -
