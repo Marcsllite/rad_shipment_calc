@@ -6,7 +6,6 @@
     <groupId>com.marcsllite</groupId>
     <artifactId>rad_shipment_calc</artifactId>
     <version>1.0.0</version>
-<!--  -->
     <properties>
         <argLine>
         -Djdk.gtk.version=2
@@ -16,8 +15,7 @@
         -Dtestfx.robot=glass
         -Dtestfx.headless=true
         -Djavafx.verbose=true
-            <!-- -Dprism.order=sw  Disables any hardware accelerated rending. -->
-        -Dprism.text=t2k <!--  -->
+        -Dprism.text=t2k
         -Dprism.debug=true <!-- Reports what config has been detected. -->
         </argLine>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -45,16 +43,16 @@
         <sonar.language>java</sonar.language>
 
         <!-- Test Coverage -->
-        <jacoco.percentages.min.instruct>0.89</jacoco.percentages.min.instruct>
-        <jacoco.percentages.max.instruct>0.91</jacoco.percentages.max.instruct>
-        <jacoco.percentages.min.line>0.89</jacoco.percentages.min.line>
-        <jacoco.percentages.max.line>0.90</jacoco.percentages.max.line>
-        <jacoco.percentages.min.branch>0.85</jacoco.percentages.min.branch>
-        <jacoco.percentages.max.branch>0.87</jacoco.percentages.max.branch>
-        <jacoco.percentages.min.complex>0.87</jacoco.percentages.min.complex>
-        <jacoco.percentages.max.complex>0.88</jacoco.percentages.max.complex>
-        <jacoco.percentages.min.method>0.89</jacoco.percentages.min.method>
-        <jacoco.percentages.max.method>0.90</jacoco.percentages.max.method>
+        <jacoco.percentages.min.instruct>0.93</jacoco.percentages.min.instruct>
+        <jacoco.percentages.max.instruct>0.95</jacoco.percentages.max.instruct>
+        <jacoco.percentages.min.line>0.92</jacoco.percentages.min.line>
+        <jacoco.percentages.max.line>0.93</jacoco.percentages.max.line>
+        <jacoco.percentages.min.branch>0.88</jacoco.percentages.min.branch>
+        <jacoco.percentages.max.branch>0.90</jacoco.percentages.max.branch>
+        <jacoco.percentages.min.complex>0.91</jacoco.percentages.min.complex>
+        <jacoco.percentages.max.complex>0.93</jacoco.percentages.max.complex>
+        <jacoco.percentages.min.method>0.94</jacoco.percentages.min.method>
+        <jacoco.percentages.max.method>0.95</jacoco.percentages.max.method>
         <jacoco.missed.count.class>0</jacoco.missed.count.class>
     </properties>
 

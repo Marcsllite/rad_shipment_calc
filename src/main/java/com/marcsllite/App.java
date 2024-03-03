@@ -3,13 +3,11 @@ package com.marcsllite;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.FXMLView;
+import com.marcsllite.util.handler.EntityManagerHandler;
 import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.FolderHandler;
 import com.marcsllite.util.handler.PropHandler;
 import com.marcsllite.util.handler.StageHandler;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import jakarta.persistence.PersistenceUnit;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -24,9 +22,6 @@ import java.io.IOException;
  */
 public class App extends Application {
     private static final Logger logr = LogManager.getLogger();
-    private static final String PERSISTENCE_UNIT_NAME = "com.marcsllite.db";
-    @PersistenceUnit
-    private EntityManagerFactory factory;
     private StageHandler stageHandler;
     private FolderHandler folderHandler;
     private DBService dbService;
@@ -40,7 +35,7 @@ public class App extends Application {
     protected App(boolean doInit) {
         if(doInit) {
             try {
-                init(null, null, null, null, null);
+                init(null, null, null, null);
             } catch (IOException e) {
                 logr.catching(Level.FATAL, e);
                 logr.fatal("Failed to start application");
@@ -54,7 +49,7 @@ public class App extends Application {
         }
     }
 
-    protected void init(FXMLView view, PropHandler propHandler, FolderHandler folderHandler, EntityManagerFactory emFactory, DBService dbService) throws IOException {
+    protected void init(FXMLView view, PropHandler propHandler, FolderHandler folderHandler, DBService dbService) throws IOException {
         setView(view == null?
             FXMLView.MAIN:
             view);
@@ -70,11 +65,6 @@ public class App extends Application {
             folderHandler);
         System.setProperty("h2.baseDir", getFolderHandler().getDataFolderPath());
 
-        // Init JPA
-        setFactory(emFactory == null?
-            Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME):
-            emFactory);
-
         // init DB
         setDbService(dbService == null?
             new DBServiceImpl():
@@ -89,8 +79,10 @@ public class App extends Application {
 
     @Override
     public void stop() {
-        if(getFactory() != null && getFactory().isOpen()) {
-            getFactory().close();
+        if(EntityManagerHandler.getInstance() != null &&
+            EntityManagerHandler.getInstance().getFactory() != null &&
+            EntityManagerHandler.getInstance().getFactory().isOpen()) {
+            EntityManagerHandler.getInstance().getFactory().close();
         }
     }
 
@@ -101,14 +93,6 @@ public class App extends Application {
      */
     public DBService getDbService() { return dbService; }
 
-
-    public EntityManagerFactory getFactory() {
-        return factory;
-    }
-
-    public void setFactory(EntityManagerFactory factory) {
-        this.factory = factory;
-    }
 
     /**
      * Getter function to get the StageHandler

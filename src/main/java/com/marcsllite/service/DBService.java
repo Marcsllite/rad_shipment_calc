@@ -21,7 +21,7 @@ public interface DBService {
 
     float getHalfLife(String abbr);
 
-    List<Isotope> getMatchingIsotopes(String substr);
+    List<Isotope> getMatchingIsotopes(String str);
 
     Isotope getIsotope(IsotopeModelId modelId);
 
@@ -29,7 +29,7 @@ public interface DBService {
 
     String getIsotopeAbbr(IsotopeModelId modelId);
 
-    Limits getAllLimits(LimitsModelId modelId);
+    Limits getLimits(LimitsModelId modelId);
 
     float getIALimited(LimitsModelId modelId);
 

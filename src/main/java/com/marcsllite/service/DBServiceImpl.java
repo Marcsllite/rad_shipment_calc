@@ -23,167 +23,195 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DBServiceImpl implements DBService {
-    private final PropHandler propHandler;
-    private A1DaoImpl a1Dao;
-    private A2DaoImpl a2Dao;
-    private DecayConstantDaoImpl decayConstantDao;
-    private ExemptConcentrationDaoImpl exemptConDao;
-    private ExemptLimitDaoImpl exemptLimitDao;
-    private HalfLifeDaoImpl halfLifeDao;
-    private IsotopeDaoImpl isotopeDao;
-    private LimitsDaoImpl limitsDao;
-    private ReportableQuantityDaoImpl reportableQuanDao;
+    private PropHandler propHandler;
+    private final A1DaoImpl a1Dao;
+    private final A2DaoImpl a2Dao;
+    private final DecayConstantDaoImpl decayConstantDao;
+    private final ExemptConcentrationDaoImpl exemptConDao;
+    private final ExemptLimitDaoImpl exemptLimitDao;
+    private final HalfLifeDaoImpl halfLifeDao;
+    private final IsotopeDaoImpl isotopeDao;
+    private final LimitsDaoImpl limitsDao;
+    private final ReportableQuantityDaoImpl reportableQuanDao;
 
     public DBServiceImpl() {
-        this.propHandler = new PropHandler();
-        setA1Dao(new A1DaoImpl());
-        setA2Dao(new A2DaoImpl());
-        setDecayConstantDao(new DecayConstantDaoImpl());
-        setExemptConDao(new ExemptConcentrationDaoImpl());
-        setExemptLimitDao(new ExemptLimitDaoImpl());
-        setHalfLifeDao(new HalfLifeDaoImpl());
-        setIsotopeDao(new IsotopeDaoImpl());
-        setLimitsDao(new LimitsDaoImpl());
-        setReportableQuanDao(new ReportableQuantityDaoImpl());
+        this(null);
+    }
+
+    public DBServiceImpl(PropHandler propHandler) {
+        setPropHandler(propHandler == null? new PropHandler() : propHandler);
+
+        a1Dao = new A1DaoImpl();
+        a2Dao = new A2DaoImpl();
+        decayConstantDao = new DecayConstantDaoImpl();
+        exemptConDao = new ExemptConcentrationDaoImpl();
+        exemptLimitDao = new ExemptLimitDaoImpl();
+        halfLifeDao = new HalfLifeDaoImpl();
+        isotopeDao = new IsotopeDaoImpl();
+        limitsDao = new LimitsDaoImpl();
+        reportableQuanDao = new ReportableQuantityDaoImpl();
     }
 
     public PropHandler getPropHandler() {
         return propHandler;
     }
 
-    public void setA1Dao(A1DaoImpl a1Dao) {
-        this.a1Dao = a1Dao;
+    public void setPropHandler(PropHandler propHandler) {
+        this.propHandler = propHandler;
     }
 
-    public void setA2Dao(A2DaoImpl a2Dao) {
-        this.a2Dao = a2Dao;
+    public A1DaoImpl getA1Dao() {
+        return a1Dao;
     }
 
-    public void setDecayConstantDao(DecayConstantDaoImpl decayConstantDao) {
-        this.decayConstantDao = decayConstantDao;
+    public A2DaoImpl getA2Dao() {
+        return  a2Dao;
     }
 
-    public void setExemptConDao(ExemptConcentrationDaoImpl exemptConDao) {
-        this.exemptConDao = exemptConDao;
+    public DecayConstantDaoImpl getDecayConstantDao() {
+        return  decayConstantDao;
     }
 
-    public void setExemptLimitDao(ExemptLimitDaoImpl exemptLimitDao) {
-        this.exemptLimitDao = exemptLimitDao;
+    public ExemptConcentrationDaoImpl getExemptConDao() {
+        return  exemptConDao;
     }
 
-    public void setHalfLifeDao(HalfLifeDaoImpl halfLifeDao) {
-        this.halfLifeDao = halfLifeDao;
+    public ExemptLimitDaoImpl getExemptLimitDao() {
+        return  exemptLimitDao;
     }
 
-    public void setIsotopeDao(IsotopeDaoImpl isotopeDao) {
-        this.isotopeDao = isotopeDao;
+    public HalfLifeDaoImpl getHalfLifeDao() {
+        return  halfLifeDao;
     }
 
-    public void setLimitsDao(LimitsDaoImpl limitsDao) {
-        this.limitsDao = limitsDao;
+    public IsotopeDaoImpl getIsotopeDao() {
+        return  isotopeDao;
     }
 
-    public void setReportableQuanDao(ReportableQuantityDaoImpl reportableQuanDao) {
-        this.reportableQuanDao = reportableQuanDao;
+    public LimitsDaoImpl getLimitsDao() {
+        return limitsDao;
+    }
+
+    public ReportableQuantityDaoImpl getReportableQuanDao() {
+        return reportableQuanDao;
     }
 
     @Override
     public float getA1(String abbr) {
-        return a1Dao.getA1(abbr);
+        return getA1Dao().getA1(abbr);
     }
 
     @Override
     public float getA2(String abbr) {
-        return a2Dao.getA2(abbr);
+        return getA2Dao().getA2(abbr);
     }
 
     @Override
     public float getDecayConstant(String abbr) {
-        return decayConstantDao.getDecayConstant(abbr);
+        return getDecayConstantDao().getDecayConstant(abbr);
     }
 
     @Override
     public float getExemptConcentration(String abbr) {
-        return exemptConDao.getExemptConcentration(abbr);
+        return getExemptConDao().getExemptConcentration(abbr);
     }
 
     @Override
     public float getExemptLimit(String abbr) {
-        return exemptLimitDao.getExemptLimit(abbr);
+        return getExemptLimitDao().getExemptLimit(abbr);
     }
 
     @Override
     public float getHalfLife(String abbr) {
-        return halfLifeDao.getHalfLife(abbr);
+        return getHalfLifeDao().getHalfLife(abbr);
     }
 
     @Override
-    public List<Isotope> getMatchingIsotopes(String substr) {
-        return isotopeDao.getMatchingIsotopes(substr)
+    public List<Isotope> getMatchingIsotopes(String str) {
+        return getIsotopeDao().getMatchingIsotopes(str)
             .stream()
-            .map(model -> new Isotope(new IsotopeModelId(model.getIsotopeId().getName(), model.getIsotopeId().getAbbr())))
+            .map(model -> new Isotope(model.getIsotopeId()){
+                @Override
+                public PropHandler getPropHandler() {
+                    return DBServiceImpl.this.getPropHandler();
+                }
+            })
             .collect(Collectors.toList());
     }
 
     @Override
     public Isotope getIsotope(IsotopeModelId modelId) {
-        IsotopeModel model = isotopeDao.getIsotope(modelId);
-        return model == null? null : new Isotope(new IsotopeModelId(model.getIsotopeId().getName(), model.getIsotopeId().getAbbr()));
+        IsotopeModel model = getIsotopeDao().getIsotope(modelId);
+        return model == null? null : new Isotope(model.getIsotopeId()) {
+            @Override
+            public PropHandler getPropHandler() {
+                return DBServiceImpl.this.getPropHandler();
+            }
+        };
     }
 
     @Override
     public String getIsotopeName(IsotopeModelId modelId) {
-        return isotopeDao.getIsotopeName(modelId);
+        return getIsotopeDao().getIsotopeName(modelId);
     }
 
     @Override
     public String getIsotopeAbbr(IsotopeModelId modelId) {
-        return isotopeDao.getIsotopeAbbr(modelId);
+        return getIsotopeDao().getIsotopeAbbr(modelId);
     }
 
     @Override
-    public Limits getAllLimits(LimitsModelId modelId) {
-        LimitsModel model = limitsDao.getLimits(modelId);
-        return model == null? null : new Limits(
-            new LimitsModelId(model.getLimitsId().getState(), model.getLimitsId().getForm()),
+    public Limits getLimits(LimitsModelId modelId) {
+        LimitsModel model = getLimitsDao().getLimits(modelId);
+        return model == null? null : new Limits(model.getLimitsId(),
             model.getIaLimited(),
             model.getIaPackage(),
             model.getLimited()
-        );
+        ) {
+            @Override
+            public PropHandler getPropHandler() {
+                return DBServiceImpl.this.getPropHandler();
+            }
+        };
     }
 
     @Override
     public float getIALimited(LimitsModelId modelId) {
-        return limitsDao.getIALimited(modelId);
+        return getLimitsDao().getIALimited(modelId);
     }
 
     @Override
     public float getIAPackage(LimitsModelId modelId) {
-        return limitsDao.getIAPackage(modelId);
+        return getLimitsDao().getIAPackage(modelId);
     }
 
     @Override
     public float getLimited(LimitsModelId modelId) {
-        return limitsDao.getLimited(modelId);
+        return getLimitsDao().getLimited(modelId);
     }
 
     @Override
     public ReportableQuantity getReportQuan(String abbr) {
-        ReportableQuantityModel model = reportableQuanDao.getReportQuan(abbr);
+        ReportableQuantityModel model = getReportableQuanDao().getReportQuan(abbr);
         return model == null? null : new ReportableQuantity(
             model.getAbbr(),
             model.getCurie(),
             model.getTeraBq()
-        );
+        ) {
+            @Override
+            public PropHandler getPropHandler() {
+                return DBServiceImpl.this.getPropHandler();
+            }
+        };
     }
 
     @Override
     public float getCiReportQuan(String abbr) {
-        return reportableQuanDao.getCi(abbr);
+        return getReportableQuanDao().getCi(abbr);
     }
 
     @Override
     public float getTBqReportQuan(String abbr) {
-        return reportableQuanDao.getTBq(abbr);
+        return getReportableQuanDao().getTBq(abbr);
     }
 }

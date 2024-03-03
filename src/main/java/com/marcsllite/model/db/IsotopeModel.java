@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "ISOTOPES")
 @NamedNativeQuery(name = IsotopeModel.GET_MATCHING_ISOTOPES,
-    query = "select i from ISOTOPES where Abbr like :substr or Name like :substr")
+    query = "select i from ISOTOPES where Abbr like :str or Name like :str")
 public class IsotopeModel extends BaseModel {
     private static final long serialVersionUID = -4943560854632091343L;
     public static final String GET_MATCHING_ISOTOPES = "IsotopeModel.getMatchingIsotope";

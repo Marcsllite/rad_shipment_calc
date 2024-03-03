@@ -23,6 +23,7 @@ class LimitsDaoImplTest extends DBTest {
 
     @BeforeEach
     public void setUp() {
+        super.setUp();
         daoSpy = spy(dao);
     }
 

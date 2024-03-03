@@ -1,13 +1,14 @@
 package com.marcsllite.dao;
 
+import com.marcsllite.util.handler.EntityManagerHandler;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.OptimisticLockException;
-import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.StaleStateException;
@@ -18,8 +19,6 @@ import java.util.List;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractDao<E extends Serializable, I> implements Dao<E, I> {
-    @PersistenceContext
-    private EntityManager em;
     private final Class<E> entityClass;
     private static final Logger logr = LogManager.getLogger();
     private static final String COUNT_ENTITIES_QUERY = "select count(a) from %s as a";
@@ -31,14 +30,7 @@ public abstract class AbstractDao<E extends Serializable, I> implements Dao<E, I
         ).getActualTypeArguments()[0];
     }
 
-    protected AbstractDao(EntityManager em) {
-        this();
-        if(em != null) {
-            setEntityManager(em);
-        }
-    }
-
-    public E findById(I id) {
+    public E findById(I id) throws NoResultException {
         E entity = getEntityManager().find(entityClass, id);
         if(entity == null) {
             String msg = String.format("Attempted to fetch an entity that does not exist. ID: %s", id);
@@ -54,7 +46,7 @@ public abstract class AbstractDao<E extends Serializable, I> implements Dao<E, I
         return getEntityManager().createQuery(query).getResultList();
     }
 
-    public List<E> findSingleResult(Query query) {
+    public List<E> findSingleResult(Query query) throws NoResultException, NonUniqueResultException {
         List<E> res = query.getResultList();
         if(res.isEmpty()) {
             var nre = new NoResultException();
@@ -74,7 +66,7 @@ public abstract class AbstractDao<E extends Serializable, I> implements Dao<E, I
         return ((Long) getEntityManager().createQuery(query).getSingleResult()).intValue();
     }
 
-    public E attach(E entity) {
+    public E attach(E entity) throws StaleStateException {
         try {
             E mergedEntity = getEntityManager().merge(entity);
             flush();
@@ -87,7 +79,7 @@ public abstract class AbstractDao<E extends Serializable, I> implements Dao<E, I
         }
     }
 
-    public void remove(I id) {
+    public void remove(I id) throws NoResultException {
         E ref;
         try {
             ref = getEntityManager().getReference(entityClass, id);
@@ -117,11 +109,12 @@ public abstract class AbstractDao<E extends Serializable, I> implements Dao<E, I
         return name;
     }
 
-    public EntityManager getEntityManager() {
-        return em;
-    }
-
-    public void setEntityManager(EntityManager em) {
-        this.em = em;
+    public EntityManager getEntityManager() throws IllegalStateException {
+        if(EntityManagerHandler.getInstance() == null) {
+            IllegalStateException ise = new IllegalStateException("Entity Manager Handler cannot be null.");
+            logr.throwing(Level.FATAL, ise);
+            throw ise;
+        }
+        return EntityManagerHandler.getInstance().getEntityManager();
     }
 }

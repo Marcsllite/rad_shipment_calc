@@ -7,8 +7,7 @@ import javafx.beans.property.SimpleFloatProperty;
 public class Limits {
     private PropHandler propHandler;
     private final float defaultVal;
-    private LimitsModelId.State state;
-    private LimitsModelId.Form form;
+    private LimitsModelId limitsId;
     private final SimpleFloatProperty iaLimited = new SimpleFloatProperty();
     private final SimpleFloatProperty iaPackage = new SimpleFloatProperty();
     private final SimpleFloatProperty limited = new SimpleFloatProperty();
@@ -32,8 +31,7 @@ public class Limits {
     public Limits(LimitsModelId limitsId, Float iaLimited, Float iaPackage, Float limited) {
         this.propHandler = new PropHandler();
         this.defaultVal = (float) getPropHandler().getDouble("defaultNum");
-        setState(limitsId.getState());
-        setForm(limitsId.getForm());
+        setLimitsId(limitsId);
         setIaLimited(iaLimited == null? defaultVal : iaLimited);
         setIaPackage(iaPackage == null? defaultVal : iaPackage);
         setLimited(limited == null? defaultVal : limited);
@@ -51,20 +49,12 @@ public class Limits {
         return defaultVal;
     }
 
-    public LimitsModelId.State getState() {
-        return state;
+    public LimitsModelId getLimitsId() {
+        return limitsId;
     }
 
-    public void setState(LimitsModelId.State state) {
-        this.state = state;
-    }
-
-    public LimitsModelId.Form getForm() {
-        return form;
-    }
-
-    public void setForm(LimitsModelId.Form form) {
-        this.form = form;
+    public void setLimitsId(LimitsModelId limitsId) {
+        this.limitsId = limitsId;
     }
 
     public float getIaLimited() {

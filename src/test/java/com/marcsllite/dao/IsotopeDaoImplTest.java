@@ -28,13 +28,14 @@ class IsotopeDaoImplTest extends DBTest {
 
     @BeforeEach
     public void setUp() {
+        super.setUp();
         daoSpy = spy(dao);
     }
 
     @Test
     void testGetMatchingIsotopes() {
         Query querySpy = spy(query);
-        String substr = "substr";
+        String str = "str";
         List<IsotopeModel> list = new ArrayList<>();
         list.add(model);
 
@@ -42,11 +43,11 @@ class IsotopeDaoImplTest extends DBTest {
         when(querySpy.setParameter(anyString(), any())).thenReturn(querySpy);
         when(querySpy.getResultList()).thenReturn(list);
 
-        List<IsotopeModel> ret = daoSpy.getMatchingIsotopes(substr);
+        List<IsotopeModel> ret = daoSpy.getMatchingIsotopes(str);
 
         assertEquals(1, ret.size());
         assertEquals(model, ret.get(0));
-        verify(querySpy).setParameter("substr", substr);
+        verify(querySpy).setParameter("str", str);
     }
 
     @Test

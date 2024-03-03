@@ -7,10 +7,10 @@ import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class IsotopeDaoImpl extends AbstractDao<IsotopeModel, IsotopeModelId> {
-    public List<IsotopeModel> getMatchingIsotopes(String substr) {
+    public List<IsotopeModel> getMatchingIsotopes(String str) {
         return getEntityManager()
             .createNamedQuery(IsotopeModel.GET_MATCHING_ISOTOPES)
-            .setParameter("substr", substr)
+            .setParameter("str", str)
             .getResultList();
     }
 
