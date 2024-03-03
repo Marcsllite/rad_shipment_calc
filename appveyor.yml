@@ -42,7 +42,7 @@ environment:
       appveyor_build_worker_image: Visual Studio 2019
 
     - job_name: Mac build
-      appveyor_build_worker_image: macos-monterey
+      appveyor_build_worker_image: macos-ventura
 
     - job_name: Linux build
       appveyor_build_worker_image: Ubuntu2004
