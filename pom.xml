@@ -46,7 +46,7 @@
         <jacoco.percentages.min.instruct>0.93</jacoco.percentages.min.instruct>
         <jacoco.percentages.max.instruct>0.95</jacoco.percentages.max.instruct>
         <jacoco.percentages.min.line>0.92</jacoco.percentages.min.line>
-        <jacoco.percentages.max.line>0.93</jacoco.percentages.max.line>
+        <jacoco.percentages.max.line>0.94</jacoco.percentages.max.line>
         <jacoco.percentages.min.branch>0.88</jacoco.percentages.min.branch>
         <jacoco.percentages.max.branch>0.90</jacoco.percentages.max.branch>
         <jacoco.percentages.min.complex>0.91</jacoco.percentages.min.complex>
