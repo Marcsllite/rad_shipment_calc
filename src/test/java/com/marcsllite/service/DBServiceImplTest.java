@@ -23,6 +23,7 @@ import com.marcsllite.util.handler.EntityManagerHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.SetSystemProperty;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -138,6 +139,7 @@ class DBServiceImplTest extends DBTest {
     }
 
     @Test
+    @SetSystemProperty(key = "keepPlatformOpen",value = "true")
     void testGetMatchingIsotopes() {
         String str = "str";
 
@@ -154,6 +156,7 @@ class DBServiceImplTest extends DBTest {
     }
 
     @Test
+    @SetSystemProperty(key = "keepPlatformOpen",value = "true")
     void testGetIsotope_Null() {
         String name = "name";
         String abbr = "abbr";
@@ -167,6 +170,7 @@ class DBServiceImplTest extends DBTest {
     }
 
     @Test
+    @SetSystemProperty(key = "keepPlatformOpen",value = "true")
     void testGetIsotope() {
         String name = "name";
         String abbr = "abbr";
