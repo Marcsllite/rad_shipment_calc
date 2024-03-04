@@ -30,6 +30,7 @@ public class StageHandler {
 
     public StageHandler(Stage stage, PropHandler propHandler, ControllerFactory factory) {
         primaryStage = stage;
+        getPrimaryStage().setOnCloseRequest((e) -> Platform.exit());
         setPropHandler(propHandler == null? new PropHandler() : propHandler);
         setFactory(factory == null? new ControllerFactory() : factory);
         setCurView(null);
@@ -71,16 +72,16 @@ public class StageHandler {
         }
 
         Parent root = loadViewNodeHierarchy(view);
-        primaryStage.setScene(new Scene(root, view.getWidth(), view.getHeight()));
-        primaryStage.setMinWidth(view.getWidth());
-        primaryStage.setMinHeight(view.getHeight());
-        primaryStage.setMaxWidth(view.getMaxWidth());
-        primaryStage.setMaxHeight(view.getMaxHeight());
-        primaryStage.setFullScreen(false);
-        primaryStage.setMaximized(false);
-        primaryStage.setTitle(view.getTitle());
-        primaryStage.getIcons().add(view.getIconImage());
-        primaryStage.centerOnScreen();
+        getPrimaryStage().setScene(new Scene(root, view.getWidth(), view.getHeight()));
+        getPrimaryStage().setMinWidth(view.getWidth());
+        getPrimaryStage().setMinHeight(view.getHeight());
+        getPrimaryStage().setMaxWidth(view.getMaxWidth());
+        getPrimaryStage().setMaxHeight(view.getMaxHeight());
+        getPrimaryStage().setFullScreen(false);
+        getPrimaryStage().setMaximized(false);
+        getPrimaryStage().setTitle(view.getTitle());
+        getPrimaryStage().getIcons().add(view.getIconImage());
+        getPrimaryStage().centerOnScreen();
 
         curView = view;
     }
@@ -92,7 +93,7 @@ public class StageHandler {
 
         try {
             switchScene(view);
-            primaryStage.show();
+            getPrimaryStage().show();
         } catch (Exception exception) {
             logr.catching(Level.FATAL, exception);
             logr.atLevel(Level.FATAL)
@@ -102,9 +103,13 @@ public class StageHandler {
             // Do not call Platform.exit when testing because other tests that
             // require the FX Thread will fail or be ignored
             if(System.getProperty("keepPlatformOpen") == null) {
-                Platform.exit();
+                close();
             }
         }
+    }
+
+    public void close() {
+        getPrimaryStage().close();
     }
 
     public Parent loadViewNodeHierarchy(FXMLView view) throws RuntimeException {
@@ -132,7 +137,7 @@ public class StageHandler {
             // Do not call Platform.exit when testing because other tests that
             // require the FX Thread will fail or be ignored
             if(System.getProperty("keepPlatformOpen") == null) {
-                Platform.exit();
+                close();
             }
         }
         return rootNode;

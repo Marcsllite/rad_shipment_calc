@@ -89,6 +89,10 @@ for:
         - job_name: Mac build
 
     install:
+      # - sh: cd /tmp &&
+      #       curl -O https://download2.gluonhq.com/openjfx/17.0.10/openjfx-17.0.10_osx-x64_bin-sdk.zip
+      #       unzip /tmp/openjfx-17*.zip -d ~ &&
+      #       export MAVEN_OPTS="--module-path /Users/appveyor/javafx-sdk-17.0.10/lib --add-modules=javafx.base,javafx.controls,javafx.fxml,javafx.graphics"
       - sh: export HOMEBREW_NO_INSTALL_CLEANUP=1 &&
             export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
       # mvnvm depends on JDK 21.0.2, need to revert default java back to jdk 11

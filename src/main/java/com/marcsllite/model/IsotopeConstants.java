@@ -4,7 +4,6 @@ import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleFloatProperty;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -59,12 +58,6 @@ public class IsotopeConstants {
         } catch (Exception e) {
             logr.fatal("Failed to initialize {} isotope constants from db", isoId.getName());
             logr.catching(Level.FATAL, e);
-            // Can only initialize one FX Thread per JVM
-            // Do not call Platform.exit when testing because other tests that
-            // require the FX Thread will fail or be ignored
-            if(System.getProperty("keepPlatformOpen") == null) {
-                Platform.exit();
-            }
         }
     }
 

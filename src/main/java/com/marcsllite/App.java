@@ -3,13 +3,12 @@ package com.marcsllite;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.FXMLView;
-import com.marcsllite.util.handler.EntityManagerHandler;
 import com.marcsllite.util.factory.PropHandlerFactory;
+import com.marcsllite.util.handler.EntityManagerHandler;
 import com.marcsllite.util.handler.FolderHandler;
 import com.marcsllite.util.handler.PropHandler;
 import com.marcsllite.util.handler.StageHandler;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -43,7 +42,7 @@ public class App extends Application {
                 // Do not call Platform.exit when testing because other tests that
                 // require the FX Thread will fail or be ignored
                 if(System.getProperty("keepPlatformOpen") == null) {
-                    Platform.exit();
+                    getStageHandler().close();
                 }
             }
         }
