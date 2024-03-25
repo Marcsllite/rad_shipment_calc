@@ -1,5 +1,6 @@
 package com.marcsllite.controller;
 
+import com.marcsllite.util.handler.PropHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -26,6 +27,14 @@ public class ShipmentDetailsController extends BaseController {
     @FXML private Button btnSave;
 
     private static final Logger logr = LogManager.getLogger();
+
+    public ShipmentDetailsController() {
+        this(null);
+    }
+
+    public ShipmentDetailsController(PropHandler propHandler) {
+        super(propHandler);
+    }
 
     @Override
     public void show() {

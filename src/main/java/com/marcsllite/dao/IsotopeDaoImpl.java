@@ -5,13 +5,9 @@ import com.marcsllite.model.db.IsotopeModelId;
 
 import java.util.List;
 
-@SuppressWarnings("unchecked")
 public class IsotopeDaoImpl extends AbstractDao<IsotopeModel, IsotopeModelId> {
-    public List<IsotopeModel> getMatchingIsotopes(String str) {
-        return getEntityManager()
-            .createNamedQuery(IsotopeModel.GET_MATCHING_ISOTOPES)
-            .setParameter("str", str)
-            .getResultList();
+    public List<IsotopeModel> getAllIsotopes() {
+        return findAll();
     }
 
     public IsotopeModel getIsotope(IsotopeModelId isoId) {

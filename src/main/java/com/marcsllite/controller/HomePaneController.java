@@ -2,35 +2,47 @@ package com.marcsllite.controller;
 
 import com.marcsllite.model.Isotope;
 import com.marcsllite.model.PTableColumn;
+import com.marcsllite.util.handler.PropHandler;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.security.InvalidParameterException;
+import java.util.Date;
 
 public class HomePaneController extends BaseController {
     @FXML GridPane homePane;
     @FXML Button btnAdd;
     @FXML Button btnEdit;
     @FXML Button btnRemove;
-    @FXML TableView<Isotope> tableView;
-    @FXML PTableColumn<Isotope, Label> tableColIsotope;
-    @FXML PTableColumn<Isotope, Label> tableColHalfLife;
-    @FXML PTableColumn<Isotope, Label> tableColActivity;
-    @FXML PTableColumn<Isotope, Label> tableColRefDate;
-    @FXML PTableColumn<Isotope, Label> tableColMass;
+    @FXML TableView<Isotope> tableViewHome;
+    @FXML PTableColumn<Isotope, String> tableColIsotope;
+    @FXML PTableColumn<Isotope, Float> tableColHalfLife;
+    @FXML PTableColumn<Isotope, Float> tableColActivity;
+    @FXML PTableColumn<Isotope, Date> tableColRefDate;
+    @FXML PTableColumn<Isotope, Float> tableColMass;
     @FXML Button btnCalculate;
 
     private static final Logger logr = LogManager.getLogger();
 
+    public HomePaneController() {
+        this(null);
+    }
+
+    public HomePaneController(PropHandler propHandler) {
+        super(propHandler);
+    }
+
     @Override
     @FXML public void initialize() {
         super.initialize();
+        initTable();
     }
 
     @Override
@@ -71,6 +83,12 @@ public class HomePaneController extends BaseController {
     }
 
     /*/////////////////////////////////////////////////// HELPERS ////////////////////////////////////////////////////*/
+
+    protected void initTable() {
+        tableColIsotope.setCellValueFactory(i -> new SimpleStringProperty(i.getValue().getIsoId().getAbbr()));
+        tableColHalfLife.setCellValueFactory(i -> i.getValue().getConstants().halfLifeProperty().asObject());
+        tableColMass.setCellValueFactory(new PropertyValueFactory<>("mass"));
+    }
 
     /**
      * Helper function to handle the add button being pressed

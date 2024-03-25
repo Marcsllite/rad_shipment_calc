@@ -1,5 +1,6 @@
 package com.marcsllite.model;
 
+import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.beans.property.SimpleFloatProperty;
 
@@ -17,7 +18,7 @@ public class ReportableQuantity {
     }
 
     public ReportableQuantity(String abbr, Float curie, Float teraBq) {
-        this.propHandler = new PropHandler();
+        this.propHandler = new PropHandlerFactory().getPropHandler(null);
         this.defaultVal = (float) getPropHandler().getDouble("defaultNum");
 
         setAbbr(abbr);
@@ -63,5 +64,11 @@ public class ReportableQuantity {
 
     public void setTeraBq(float teraBq) {
         teraBqProperty().set(teraBq);
+    }
+
+    @Override
+    public String toString() {
+        return "Reportable Quantity for " + getAbbr() + ": " +
+             getTeraBq() + " TBq, " + getCurie() + " Ci}";
     }
 }

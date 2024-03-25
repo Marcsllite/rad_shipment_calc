@@ -1,6 +1,7 @@
 package com.marcsllite.controller;
 
 import com.marcsllite.util.handler.ImageHandler;
+import com.marcsllite.util.handler.PropHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -51,6 +52,14 @@ public class MenuPaneController extends BaseController {
         }
     }
 
+    public MenuPaneController() {
+        this(null);
+    }
+
+    public MenuPaneController(PropHandler propHandler) {
+        super(propHandler);
+    }
+
     /**
      * FXML Function to initialize GUI (run when the menuPane.fxml file is loaded by the FXMLLoader)
      */
@@ -98,14 +107,6 @@ public class MenuPaneController extends BaseController {
     }
 
     /*/////////////////////////////////////////////////// HELPERS ////////////////////////////////////////////////////*/
-
-    /**
-     * Helper function to handle the UMass Lowell logo being pressed
-     */
-    @FXML protected void logoImgViewHandler(){
-        logr.debug("User clicked the UMass logo on the menu pane");
-        // TODO: implement clicking on menu logo
-    }
 
     /**
      * Helper function to handle the shipment button being pressed

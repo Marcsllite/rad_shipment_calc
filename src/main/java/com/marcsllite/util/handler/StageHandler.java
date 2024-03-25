@@ -2,6 +2,7 @@ package com.marcsllite.util.handler;
 
 import com.marcsllite.util.FXMLView;
 import com.marcsllite.util.factory.ControllerFactory;
+import com.marcsllite.util.factory.PropHandlerFactory;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -30,8 +31,8 @@ public class StageHandler {
 
     public StageHandler(Stage stage, PropHandler propHandler, ControllerFactory factory) {
         primaryStage = stage;
-        getPrimaryStage().setOnCloseRequest((e) -> Platform.exit());
-        setPropHandler(propHandler == null? new PropHandler() : propHandler);
+        getPrimaryStage().setOnCloseRequest(e -> Platform.exit());
+        setPropHandler(propHandler == null? new PropHandlerFactory().getPropHandler(null) : propHandler);
         setFactory(factory == null? new ControllerFactory() : factory);
         setCurView(null);
     }

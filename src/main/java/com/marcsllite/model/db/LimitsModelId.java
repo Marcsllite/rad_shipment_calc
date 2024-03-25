@@ -113,4 +113,9 @@ public class LimitsModelId implements Serializable {
         hash = 67 * hash + (this.form != null ? this.form.getVal().hashCode() : 0);
         return hash;
     }
+
+    @Override
+    public String toString() {
+        return "(State: " + getState() + ", Form: " + getForm() + ")";
+    }
 }

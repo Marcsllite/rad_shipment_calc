@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.text.Font?>
-<GridPane fx:id="menuPane" nodeOrientation="LEFT_TO_RIGHT" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #232323;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.marcsllite.controller.MenuPaneController">
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<GridPane fx:id="menuPane" nodeOrientation="LEFT_TO_RIGHT" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #232323;" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcsllite.controller.MenuPaneController">
    <columnConstraints>
       <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
    </columnConstraints>
@@ -27,10 +21,10 @@
       <GridPane.margin>
          <Insets top="10.0" />
       </GridPane.margin>
-      <ImageView fx:id="imgViewColorLogo" fitHeight="114.0" fitWidth="102.0" layoutX="10.0" layoutY="10.0" onMouseClicked="#logoImgViewHandler" pickOnBounds="true" preserveRatio="true" styleClass="imgViewColorLogo" visible="false">
+      <ImageView fx:id="imgViewColorLogo" fitHeight="114.0" fitWidth="102.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" styleClass="imgViewColorLogo" visible="false">
          <Image url="@../images/color_UMass_logo_background.png" />
       </ImageView>
-      <ImageView fx:id="imgViewGreyLogo" fitHeight="114.0" fitWidth="102.0" onMouseClicked="#logoImgViewHandler" pickOnBounds="true" preserveRatio="true" styleClass="imgViewGreyLogo">
+      <ImageView fx:id="imgViewGreyLogo" fitHeight="114.0" fitWidth="102.0" pickOnBounds="true" preserveRatio="true" styleClass="imgViewGreyLogo">
          <Image url="@../images/grey_UMass_logo.png" />
       </ImageView>
    </StackPane>

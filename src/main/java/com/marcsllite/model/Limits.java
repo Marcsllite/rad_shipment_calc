@@ -1,6 +1,7 @@
 package com.marcsllite.model;
 
 import com.marcsllite.model.db.LimitsModelId;
+import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.beans.property.SimpleFloatProperty;
 
@@ -29,7 +30,7 @@ public class Limits {
     }
 
     public Limits(LimitsModelId limitsId, Float iaLimited, Float iaPackage, Float limited) {
-        this.propHandler = new PropHandler();
+        this.propHandler = new PropHandlerFactory().getPropHandler(null);
         this.defaultVal = (float) getPropHandler().getDouble("defaultNum");
         setLimitsId(limitsId);
         setIaLimited(iaLimited == null? defaultVal : iaLimited);
@@ -91,5 +92,13 @@ public class Limits {
 
     public void setLimited(float limited) {
         limitedProperty().set(limited);
+    }
+
+    @Override
+    public String toString() {
+        return "Limits for " + getLimitsId() +
+            ": {\n\tInstruments/Articles Limited Limit: " + getIaLimited() +
+            "\n\tInstruments/Articles Package Limit: " + getIaPackage() +
+            "\n\tNormal Limited Limit: " + getLimited() + "TBq\n}";
     }
 }

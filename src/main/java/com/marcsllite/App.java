@@ -3,6 +3,7 @@ package com.marcsllite;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.FXMLView;
+import com.marcsllite.util.factory.ControllerFactory;
 import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.EntityManagerHandler;
 import com.marcsllite.util.handler.FolderHandler;
@@ -14,8 +15,6 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-
 /**
  * JavaFX App
  */
@@ -25,6 +24,7 @@ public class App extends Application {
     private FolderHandler folderHandler;
     private DBService dbService;
     private PropHandler propHandler;
+    private ControllerFactory controllerFactory;
     private FXMLView view;
 
     public App() {
@@ -34,8 +34,8 @@ public class App extends Application {
     protected App(boolean doInit) {
         if(doInit) {
             try {
-                init(null, null, null, null);
-            } catch (IOException e) {
+                init(null, null, null, null, null);
+            } catch (RuntimeException e) {
                 logr.catching(Level.FATAL, e);
                 logr.fatal("Failed to start application");
                 // Can only initialize one FX Thread per JVM
@@ -48,7 +48,9 @@ public class App extends Application {
         }
     }
 
-    protected void init(FXMLView view, PropHandler propHandler, FolderHandler folderHandler, DBService dbService) throws IOException {
+    protected void init(FXMLView view, PropHandler propHandler, FolderHandler folderHandler, DBService dbService, ControllerFactory controllerFactory) throws RuntimeException {
+        setControllerFactory(controllerFactory);
+
         setView(view == null?
             FXMLView.MAIN:
             view);
@@ -72,7 +74,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        setStageHandler(new StageHandler(stage, getPropHandler(), null));
+        setStageHandler(new StageHandler(stage, getPropHandler(), getControllerFactory()));
         getStageHandler().show(getView());
     }
 
@@ -124,6 +126,14 @@ public class App extends Application {
 
     public void setPropHandler(PropHandler propHandler) {
         this.propHandler = propHandler;
+    }
+
+    public ControllerFactory getControllerFactory() {
+        return controllerFactory;
+    }
+
+    public void setControllerFactory(ControllerFactory controllerFactory) {
+        this.controllerFactory = controllerFactory;
     }
 
     public FXMLView getView() {

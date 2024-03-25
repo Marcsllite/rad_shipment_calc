@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 
 <StackPane fx:id="modifyPane" prefHeight="250.0" prefWidth="450.0" styleClass="root" stylesheets="@../css/modify.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcsllite.controller.ModifyController">
-   <VBox fx:id="vBoxFirstPage" alignment="CENTER" spacing="15.0" styleClass="vBoxFirstPage" visible="false">
+   <VBox fx:id="vBoxFirstPage" alignment="CENTER" spacing="15.0" styleClass="vBoxFirstPage">
       <StackPane.margin>
          <Insets />
       </StackPane.margin>
@@ -70,7 +70,7 @@
          </VBox.margin>
       </Button>
    </VBox>
-   <VBox fx:id="vBoxSecondPage" styleClass="vBoxSecondPage">
+   <VBox fx:id="vBoxSecondPage" styleClass="vBoxSecondPage" visible="false">
       <HBox styleClass="hBoxAdd">
          <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="modifyTxt" text="Reference Date:" />
          <DatePicker fx:id="datePicker" />

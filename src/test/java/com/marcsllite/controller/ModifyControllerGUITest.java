@@ -4,7 +4,7 @@ import com.marcsllite.GUITest;
 import com.marcsllite.model.Isotope;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.Conversions;
-import com.marcsllite.util.FXIds;
+import com.marcsllite.FXIds;
 import com.marcsllite.util.FXMLView;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.StackPane;

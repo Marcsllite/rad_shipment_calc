@@ -1,7 +1,7 @@
 package com.marcsllite.controller;
 
 import com.marcsllite.GUITest;
-import com.marcsllite.util.FXIds;
+import com.marcsllite.FXIds;
 import com.marcsllite.util.FXMLView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;

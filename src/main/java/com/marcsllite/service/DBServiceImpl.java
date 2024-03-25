@@ -17,9 +17,11 @@ import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModel;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.model.db.ReportableQuantityModel;
+import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class DBServiceImpl implements DBService {
@@ -39,7 +41,7 @@ public class DBServiceImpl implements DBService {
     }
 
     public DBServiceImpl(PropHandler propHandler) {
-        setPropHandler(propHandler == null? new PropHandler() : propHandler);
+        setPropHandler(propHandler == null? new PropHandlerFactory().getPropHandler(null) : propHandler);
 
         a1Dao = new A1DaoImpl();
         a2Dao = new A2DaoImpl();
@@ -127,16 +129,16 @@ public class DBServiceImpl implements DBService {
     }
 
     @Override
-    public List<Isotope> getMatchingIsotopes(String str) {
-        return getIsotopeDao().getMatchingIsotopes(str)
+    public ObservableList<Isotope> getAllIsotopes() {
+        return getIsotopeDao().getAllIsotopes()
             .stream()
-            .map(model -> new Isotope(model.getIsotopeId()){
+            .map(model -> new Isotope(model.getIsotopeId()) {
                 @Override
                 public PropHandler getPropHandler() {
                     return DBServiceImpl.this.getPropHandler();
                 }
             })
-            .collect(Collectors.toList());
+            .collect(Collectors.toCollection(FXCollections::observableArrayList));
     }
 
     @Override

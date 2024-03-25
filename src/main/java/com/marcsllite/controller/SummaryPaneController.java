@@ -1,5 +1,6 @@
 package com.marcsllite.controller;
 
+import com.marcsllite.util.handler.PropHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,6 +17,14 @@ public class SummaryPaneController extends BaseController {
     @FXML Button btnSave;
 
     private static final Logger logr = LogManager.getLogger();
+
+    public SummaryPaneController() {
+        this(null);
+    }
+
+    public SummaryPaneController(PropHandler propHandler) {
+        super(propHandler);
+    }
 
     @Override
     public void show() {

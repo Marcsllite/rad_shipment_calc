@@ -1,6 +1,7 @@
 package com.marcsllite;
 
 import com.marcsllite.service.DBService;
+import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.FXMLView;
 import com.marcsllite.util.handler.EntityManagerHandler;
 import com.marcsllite.util.handler.FolderHandler;
@@ -32,6 +33,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import static org.testfx.api.FxAssert.assertContext;
 
@@ -56,12 +58,13 @@ public abstract class GUITest extends FxRobot {
     public GUITest(FXMLView view) {
         this.view = view;
         folderHandler = mock(FolderHandler.class);
-        folderHandler.setPropHandler(new PropHandlerTestObj());
+        PropHandlerTestObj testPropHandler = new PropHandlerTestObj();
+        folderHandler.setPropHandler(testPropHandler);
         emHandler = mock(EntityManagerHandler.class);
         staticEmHandler = mockStatic(EntityManagerHandler.class);
         factory = mock(EntityManagerFactory.class);
         em = mock(EntityManager.class);
-        dbService = mock(DBService.class);
+        dbService = spy(new DBServiceImpl(testPropHandler));
         app = new App(false);
     }
 
@@ -78,7 +81,7 @@ public abstract class GUITest extends FxRobot {
         when(emHandler.getFactory()).thenReturn(factory);
         when(emHandler.getEntityManager()).thenReturn(em);
 
-        app.init(view, new PropHandlerTestObj(), folderHandler, dbService);
+        app.init(view, new PropHandlerTestObj(), folderHandler, dbService, new ControllerFactoryTestObj());
 
         app.start(stage);
         stageHandler = app.getStageHandler();

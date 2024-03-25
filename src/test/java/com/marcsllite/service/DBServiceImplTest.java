@@ -140,19 +140,17 @@ class DBServiceImplTest extends DBTest {
 
     @Test
     @SetSystemProperty(key = "keepPlatformOpen",value = "true")
-    void testGetMatchingIsotopes() {
-        String str = "str";
-
+    void testGetAllIsotopes() {
         IsotopeModel model = new IsotopeModel();
         List<IsotopeModel> exp = new ArrayList<>();
         exp.add(model);
 
         when(service.getIsotopeDao()).thenReturn(isotopeDao);
-        when(isotopeDao.getMatchingIsotopes(str)).thenReturn(exp);
+        when(isotopeDao.getAllIsotopes()).thenReturn(exp);
 
-        List<Isotope> actual = service.getMatchingIsotopes(str);
-        assertEquals(exp.get(0).getIsotopeId(), actual.get(0).getIsoId());
-        verify(isotopeDao).getMatchingIsotopes(str);
+        List<Isotope> actual = service.getAllIsotopes();
+        assertEquals(model.getIsotopeId(), actual.get(0).getIsoId());
+        verify(isotopeDao).getAllIsotopes();
     }
 
     @Test

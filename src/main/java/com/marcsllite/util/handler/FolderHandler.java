@@ -1,5 +1,6 @@
 package com.marcsllite.util.handler;
 
+import com.marcsllite.util.factory.PropHandlerFactory;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,7 +20,7 @@ public class FolderHandler {
     }
 
     public FolderHandler(PropHandler propHandler) {
-        setPropHandler(propHandler == null? new PropHandler() : propHandler);
+        setPropHandler(propHandler == null? new PropHandlerFactory().getPropHandler(null) : propHandler);
         setAppFolderPath(getPropHandler().getString("appFolderName"));
     }
 

@@ -1,6 +1,9 @@
 package com.marcsllite.util.factory;
 
 import com.marcsllite.util.handler.PropHandler;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -13,14 +16,22 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class PropHandlerFactory extends ResourceBundle.Control {
+    private static final Logger logr = LogManager.getLogger();
     private static final String XML = "xml";
     private static final List<String> SINGLETON_LIST = Collections.singletonList(XML);
     private final Locale locale = new Locale("en", "US");
     private final ClassLoader loader = ClassLoader.getSystemClassLoader();
 
-    public PropHandler getPropHandler(String name) throws IOException {
-        return (PropHandler) newBundle(name == null? PropHandler.PROP_NAME : name,
-            locale, XML, loader, false);
+    public PropHandler getPropHandler(String name) throws RuntimeException {
+        try {
+            return (PropHandler) newBundle(name == null ? PropHandler.PROP_NAME : name,
+                locale, XML, loader, false);
+        } catch(IOException ioe) {
+            logr.catching(Level.FATAL, ioe);
+            RuntimeException rte = new RuntimeException("Failed to get PropHandler");
+            logr.throwing(rte);
+            throw rte;
+        }
     }
 
     @Override

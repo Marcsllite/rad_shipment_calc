@@ -2,6 +2,7 @@ package com.marcsllite.model;
 
 import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
+import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -146,7 +147,7 @@ public class Isotope {
     }
 
     public Isotope(IsotopeModelId isoId, Mass mass, RadUnit radUnit, Nature nature, LimitsModelId limitsId) {
-        setPropHandler(new PropHandler());
+        setPropHandler(new PropHandlerFactory().getPropHandler(null));
         setConstants(new IsotopeConstants((float) getPropHandler().getDouble("defaultNum")));
         getConstants().dbInit(isoId, limitsId);
         setIsoId(isoId);
@@ -155,7 +156,7 @@ public class Isotope {
         setNature(nature);
         setLimitsId(limitsId);
         setIsoClass(IsoClass.TBD);
-        logr.debug("Created new Isotope {} and initialized it with the following data:\n {}", getIsoId().getAbbr(), getConstants());
+        logr.debug("Created new Isotope {}", this::toString);
     }
 
     public PropHandler getPropHandler() {
@@ -220,5 +221,15 @@ public class Isotope {
 
     public void setIsoClass(IsoClass isoClass) {
         this.isoClass = isoClass;
+    }
+
+    @Override
+    public String toString() {
+        return "Isotope: {\n\t" + getIsoId() +
+            "\n\tClass: " + getIsoClass() +
+            "\n\tMass: " + getMass() + " " + getRadUnit() +
+            "\n\tNature: " + getNature() +
+            "\n\t" + getLimitsId() +
+            "\n\t" + getConstants() + "\n}";
     }
 }

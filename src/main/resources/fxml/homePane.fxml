@@ -44,7 +44,7 @@
       <font>
          <Font size="14.0" />
       </font></Button>
-    <TableView fx:id="tableView" GridPane.columnSpan="2147483647" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.rowSpan="3" GridPane.vgrow="ALWAYS">
+    <TableView fx:id="tableViewHome" GridPane.columnSpan="2147483647" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.rowSpan="3" GridPane.vgrow="ALWAYS">
       <columns>
           <PTableColumn fx:id="tableColIsotope" styleClass="tableColumn" editable="false" percentageWidth="0.2" text="Isotope" />
           <PTableColumn fx:id="tableColHalfLife" styleClass="tableColumn" editable="false" percentageWidth="0.2" text="HalfLife" />

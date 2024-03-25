@@ -7,10 +7,14 @@
            Below pattern outputs class, line number and method name. -->
       <PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss,SSS} %-5level %class{36}.%M:%L - %msg%xEx%n"/>
     </Console>
-    <!-- TODO: Stop using hardcoded "UMass Lowell Radiation Safety" app folder name -->
-    <File name="file" fileName="${sys:user.home}/UMass Lowell Radiation Safety/Shipment Calculator/logs/shipmentCalc.log" append="false">
+    <!-- default value for appFolderName is ${sys:user.home}/UMass Lowell Radiation Safety -->
+    <RollingFile name="file"
+                 fileName="${sys:appFolderName:-${sys:user.home}/UMass Lowell Radiation Safety}/Shipment Calculator/logs/shipmentCalc.log"
+                 filePattern="${sys:appFolderName:-${sys:user.home}/UMass Lowell Radiation Safety}/Shipment Calculator/logs/shipmentCalc.%d{MM-dd-yyyy}.log.zip"
+                 append="false">
       <PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss,SSS} %-5level %class{36}.%M:%L - %msg%xEx%n"/>
-    </File>
+      <TimeBasedTriggeringPolicy/>
+    </RollingFile>
   </Appenders>
   <Loggers>
     <Root level="all">

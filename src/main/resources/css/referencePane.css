@@ -23,3 +23,11 @@
     -fx-background-insets: inherit;
     -fx-background-radius: inherit;
 }
+
+.separator:horizontal {
+    -fx-focus-traversable: false;
+    -fx-opacity: 0.29;
+    -fx-pref-width: 200;
+    -fx-background-color: -fx-grey-color;
+    -fx-valignment: BOTTOM;
+}

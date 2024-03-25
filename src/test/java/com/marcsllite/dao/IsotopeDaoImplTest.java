@@ -35,19 +35,16 @@ class IsotopeDaoImplTest extends DBTest {
     @Test
     void testGetMatchingIsotopes() {
         Query querySpy = spy(query);
-        String str = "str";
         List<IsotopeModel> list = new ArrayList<>();
         list.add(model);
 
-        when(em.createNamedQuery(any())).thenReturn(querySpy);
-        when(querySpy.setParameter(anyString(), any())).thenReturn(querySpy);
+        when(em.createQuery(anyString())).thenReturn(querySpy);
         when(querySpy.getResultList()).thenReturn(list);
 
-        List<IsotopeModel> ret = daoSpy.getMatchingIsotopes(str);
+        List<IsotopeModel> ret = daoSpy.getAllIsotopes();
 
         assertEquals(1, ret.size());
         assertEquals(model, ret.get(0));
-        verify(querySpy).setParameter("str", str);
     }
 
     @Test

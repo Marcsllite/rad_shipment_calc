@@ -1,14 +1,23 @@
 package com.marcsllite.controller;
 
+import com.marcsllite.service.DBService;
+import com.marcsllite.service.DBServiceImpl;
+import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.fxml.FXML;
 
 public abstract class BaseController {
     private MainController main;
     private PropHandler propHandler;
+    private DBService dbService;
 
     protected BaseController() {
-        setPropHandler(new PropHandler());
+        this(null);
+    }
+
+    protected BaseController(PropHandler propHandler) {
+        setPropHandler(propHandler == null? new PropHandlerFactory().getPropHandler(null): propHandler);
+        setDbService(new DBServiceImpl(getPropHandler()));
         setMain(MainController.getInstance());
     }
 
@@ -37,6 +46,14 @@ public abstract class BaseController {
 
     public void setPropHandler(PropHandler propHandler) {
         this.propHandler = propHandler;
+    }
+
+    public DBService getDbService() {
+        return dbService;
+    }
+
+    public void setDbService(DBService dbService) {
+        this.dbService = dbService;
     }
 
     public MainController getMain() {

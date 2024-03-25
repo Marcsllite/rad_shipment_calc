@@ -3,6 +3,7 @@ package com.marcsllite.controller;
 import com.marcsllite.model.Isotope;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.Conversions;
+import com.marcsllite.util.handler.PropHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -59,6 +60,14 @@ public class ModifyController extends BaseController {
     @FXML private Text txtSecondPageStatus;
 
     private static final Logger logr = LogManager.getLogger();
+
+    public ModifyController() {
+        this(null);
+    }
+
+    public ModifyController(PropHandler propHandler) {
+        super(propHandler);
+    }
 
     @Override
     @FXML public void initialize() {

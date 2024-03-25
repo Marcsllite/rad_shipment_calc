@@ -207,15 +207,15 @@ public class IsotopeConstants {
 
     @Override
     public String toString() {
-        return "Isotope Constants: {\n\tA1: " + getA1() + " TBq\n" +
-            "\tA2: " + getA2() + " TBq\n" +
-            "\tDecay Constant: " + getDecayConstant() + " \n" +
-            "\tExempt Concentration: " + getExemptConcentration() + " Bq/g\n" +
-            "\tExempt Limit: " + getExemptLimit() + " Bq\n" +
-            "\tHalfLife: " + getHalfLife() + " days\n" +
-            "\tInstruments/Articles Limited Limit: " + getIaLimitedLimit() + " \n" +
-            "\tInstruments/Articles Package Limit: " + getIaPackageLimit() + " \n" +
-            "\tNormal Limited Limit: " + getLimitedLimit() + " TBq\n" +
-            "\tReportable Quantity: " + getCurieReportQuan() + " TBq\n}";
+        return "Isotope Constants: {\n\tA1: " + getA1() + " TBq" +
+            "\n\tA2: " + getA2() + " TBq" +
+            "\n\tDecay Constant: " + getDecayConstant() +
+            "\n\tExempt Concentration: " + getExemptConcentration() + " Bq/g" +
+            "\n\tExempt Limit: " + getExemptLimit() + " Bq" +
+            "\n\tHalfLife: " + getHalfLife() + " days" +
+            "\n\tInstruments/Articles Limited Limit: " + getIaLimitedLimit() +
+            "\n\tInstruments/Articles Package Limit: " + getIaPackageLimit() +
+            "\n\tNormal Limited Limit: " + getLimitedLimit() + " TBq" +
+            "\n\tReportable Quantity: " + getTeraBqReportQuan() + " TBq\n}";
     }
 }

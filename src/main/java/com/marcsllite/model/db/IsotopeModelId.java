@@ -16,6 +16,9 @@ public class IsotopeModelId implements Serializable {
     @Column(name = "Abbr", length = 15, nullable = false)
     private String abbr;
 
+    public IsotopeModelId() {
+        this("Name", "Abbr");
+    }
     public IsotopeModelId(String name, String abbr) {
         setName(name);
         setAbbr(abbr);
@@ -58,5 +61,10 @@ public class IsotopeModelId implements Serializable {
         hash = 17 * hash + (this.name != null ? this.name.hashCode() : 0);
         hash = 17 * hash + (this.abbr != null ? this.abbr.hashCode() : 0);
         return hash;
+    }
+
+    @Override
+    public String toString() {
+        return "(Name: " + getName() + ", Abbr: " + getAbbr() + ")";
     }
 }

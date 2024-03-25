@@ -1,4 +1,4 @@
-package com.marcsllite.util;
+package com.marcsllite;
 
 /**
  * Test Class holding Constants in order to improve maintenance and centralize all
@@ -25,13 +25,26 @@ public class FXIds {
     public static final String BTN_ADD = "#btnAdd";
     public static final String BTN_EDIT = "#btnEdit";
     public static final String BTN_REMOVE = "#btnRemove";
-    public static final String TABLEVIEW = "#tableView";
+    public static final String TABLEVIEW_HOME = "#tableViewHome";
     public static final String TABLE_COL_ISOTOPES = "#tableColIsotope";
     public static final String TABLE_COL_HALF_LIFE = "#tableColHalfLife";
     public static final String TABLE_COL_ACTIVITY = "#tableColActivity";
     public static final String TABLE_COL_REF_DATE = "#tableColRefDate";
     public static final String TABLE_COL_MASS = "#tableColMass";
     public static final String BTN_CALCULATE = "#btnCalculate";
+
+    // Reference Pane
+    public static final String TXTFIELD_SEARCH = "#txtFieldSearch";
+    public static final String TABLEVIEW_SEARCH = "#tableViewSearch";
+    public static final String TABLE_COL_REF_ABBR = "#tableColRefAbbr";
+    public static final String TABLE_COL_REF_NAME = "#tableColRefName";
+    public static final String LABEL_A1 = "#labelA1";
+    public static final String LABEL_A2 = "#labelA2";
+    public static final String LABEL_DECAY_CONSTANT = "#labelDecayConst";
+    public static final String LABEL_EXEMPT_CONCENTRATION = "#labelExemptCon";
+    public static final String LABEL_EXEMPT_LIMIT = "#labelExemptLim";
+    public static final String LABEL_HALF_LIFE = "#labelHalfLife";
+    public static final String LABEL_REPORTABLE_QUANTITY = "#labelReportQuan";
 
     // Modify
     public static final String STACKPANE_MODIFY = "#modifyPane";

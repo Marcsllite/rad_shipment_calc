@@ -5,8 +5,7 @@ import com.marcsllite.model.Limits;
 import com.marcsllite.model.ReportableQuantity;
 import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
-
-import java.util.List;
+import javafx.collections.ObservableList;
 
 public interface DBService {
     float getA1(String abbr);
@@ -21,7 +20,7 @@ public interface DBService {
 
     float getHalfLife(String abbr);
 
-    List<Isotope> getMatchingIsotopes(String str);
+    ObservableList<Isotope> getAllIsotopes();
 
     Isotope getIsotope(IsotopeModelId modelId);
 
