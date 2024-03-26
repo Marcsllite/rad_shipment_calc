@@ -46,10 +46,10 @@
         <!-- Test Coverage -->
         <jacoco.percentages.min.instruct>0.93</jacoco.percentages.min.instruct>
         <jacoco.percentages.max.instruct>0.95</jacoco.percentages.max.instruct>
-        <jacoco.percentages.min.line>0.92</jacoco.percentages.min.line>
-        <jacoco.percentages.max.line>0.94</jacoco.percentages.max.line>
-        <jacoco.percentages.min.branch>0.87</jacoco.percentages.min.branch>
-        <jacoco.percentages.max.branch>0.89</jacoco.percentages.max.branch>
+        <jacoco.percentages.min.line>0.93</jacoco.percentages.min.line>
+        <jacoco.percentages.max.line>0.95</jacoco.percentages.max.line>
+        <jacoco.percentages.min.branch>0.88</jacoco.percentages.min.branch>
+        <jacoco.percentages.max.branch>0.90</jacoco.percentages.max.branch>
         <jacoco.percentages.min.complex>0.90</jacoco.percentages.min.complex>
         <jacoco.percentages.max.complex>0.92</jacoco.percentages.max.complex>
         <jacoco.percentages.min.method>0.94</jacoco.percentages.min.method>
@@ -174,7 +174,8 @@
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
                 <excludes>
-                    <exclude>${basedir}/src/main/resources/databaseAudit/*</exclude>
+                    <exclude>databaseAudit/*</exclude>
+                    <exclude>scripts/*</exclude>
                 </excludes>
             </resource>
         </resources>
@@ -182,18 +183,16 @@
         <testOutputDirectory>${basedir}/target/test-classes</testOutputDirectory>
         <testResources>
             <testResource>
-                <directory>${basedir}/src/main/resources</directory>
-                <excludes>
-                    <exclude>${basedir}/src/main/resources/css/*</exclude>
-                    <exclude>${basedir}/src/main/resources/csv/*</exclude>
-                    <exclude>${basedir}/src/main/resources/databaseAudit/*</exclude>
-                    <exclude>${basedir}/src/main/resources/font/*</exclude>
-                    <exclude>${basedir}/src/main/resources/META-INF/*</exclude>
-                    <exclude>${basedir}/src/main/resources/scripts/*</exclude>
-                </excludes>
+                <directory>${basedir}/src/test/resources</directory>
             </testResource>
             <testResource>
-                <directory>${basedir}/src/test/resources</directory>
+                <directory>${basedir}/src/main/resources</directory>
+                <excludes>
+                    <exclude>csv/*</exclude>
+                    <exclude>databaseAudit/*</exclude>
+                    <exclude>META-INF/*</exclude>
+                    <exclude>scripts/*</exclude>
+                </excludes>
             </testResource>
         </testResources>
         <plugins>

@@ -65,6 +65,6 @@ public class IsotopeModelId implements Serializable {
 
     @Override
     public String toString() {
-        return "(Name: " + getName() + ", Abbr: " + getAbbr() + ")";
+        return "(Name: \"" + getName() + "\", Abbr: \"" + getAbbr() + "\")";
     }
 }

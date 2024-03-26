@@ -2,6 +2,7 @@ package com.marcsllite.dao;
 
 import com.marcsllite.DBTest;
 import com.marcsllite.model.db.A2Model;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -15,6 +16,21 @@ class A2DaoImplTest extends DBTest {
     A2DaoImpl dao;
     @Mock
     A2Model model;
+
+    @BeforeEach
+    public void setUp() {
+        super.setUp();
+        when(emHandler.getEntityManager()).thenReturn(em);
+    }
+
+    @Test
+    void testGetA2_NoResult() {
+        String abbr = "abbr";
+
+        when(em.find(any(), any())).thenReturn(null);
+
+        assertEquals(-123456789.0f, dao.getA2(abbr));
+    }
 
     @Test
     void testGetA2() {

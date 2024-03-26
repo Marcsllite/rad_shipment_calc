@@ -19,7 +19,6 @@ import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModel;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.model.db.ReportableQuantityModel;
-import com.marcsllite.util.handler.EntityManagerHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +32,7 @@ import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -62,8 +62,18 @@ class DBServiceImplTest extends DBTest {
 
     @BeforeEach
     public void setUp() {
-        staticEmHandler.when(EntityManagerHandler::getInstance).thenReturn(emHandler);
+        super.setUp();
         service = spy(new DBServiceImpl(new PropHandlerTestObj()));
+    }
+
+    @Test
+    void testValidateDB() {
+        int exp = 1;
+
+        when(service.getIsotopeDao()).thenReturn(isotopeDao);
+        when(isotopeDao.findSingleResult(anyString())).thenReturn(exp);
+
+        assertEquals(exp, service.validateDb());
     }
 
     @Test
@@ -139,12 +149,23 @@ class DBServiceImplTest extends DBTest {
     }
 
     @Test
+    void testCountALlIsotopes() {
+        int exp = 10;
+
+        when(service.getIsotopeDao()).thenReturn(isotopeDao);
+        when(isotopeDao.count()).thenReturn(exp);
+
+        assertEquals(exp, service.countAllIsotopes());
+    }
+
+    @Test
     @SetSystemProperty(key = "keepPlatformOpen",value = "true")
     void testGetAllIsotopes() {
         IsotopeModel model = new IsotopeModel();
         List<IsotopeModel> exp = new ArrayList<>();
         exp.add(model);
 
+        when(emHandler.getEntityManager()).thenReturn(em);
         when(service.getIsotopeDao()).thenReturn(isotopeDao);
         when(isotopeDao.getAllIsotopes()).thenReturn(exp);
 
@@ -175,6 +196,7 @@ class DBServiceImplTest extends DBTest {
         IsotopeModelId isoId = new IsotopeModelId(name, abbr);
         IsotopeModel model = new IsotopeModel(isoId);
 
+        when(emHandler.getEntityManager()).thenReturn(em);
         when(service.getIsotopeDao()).thenReturn(isotopeDao);
         when(isotopeDao.getIsotope(isoId)).thenReturn(model);
 

@@ -116,6 +116,6 @@ public class LimitsModelId implements Serializable {
 
     @Override
     public String toString() {
-        return "(State: " + getState() + ", Form: " + getForm() + ")";
+        return "(State: \"" + getState() + "\", Form: \"" + getForm() + "\")";
     }
 }

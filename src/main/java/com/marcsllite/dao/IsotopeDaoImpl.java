@@ -15,10 +15,12 @@ public class IsotopeDaoImpl extends AbstractDao<IsotopeModel, IsotopeModelId> {
     }
 
     public String getIsotopeName(IsotopeModelId isoId) {
-        return getIsotope(isoId).getIsotopeId().getName();
+        IsotopeModel model = getIsotope(isoId);
+        return model == null? "" : model.getIsotopeId().getName();
     }
 
     public String getIsotopeAbbr(IsotopeModelId isoId) {
-        return getIsotope(isoId).getIsotopeId().getAbbr();
+        IsotopeModel model = getIsotope(isoId);
+        return model == null? "" : model.getIsotopeId().getAbbr();
     }
 }

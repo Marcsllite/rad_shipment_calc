@@ -21,7 +21,7 @@ public class StateAttrConverter implements AttributeConverter<LimitsModelId.Stat
             return null;
         }
         return Stream.of(LimitsModelId.State.values())
-            .filter(s -> s.getVal().equals(str))
+            .filter(s -> s.getVal().equalsIgnoreCase(str))
             .findFirst()
             .orElseThrow(IllegalArgumentException::new);
     }

@@ -29,8 +29,8 @@ environment:
   # Mac VNC Debugging
   # APPVEYOR_VNC_BLOCK: true
   # Windows RDP Debugging
-  APPVEYOR_RDP_PASSWORD:
-    secure: Jrjywnv+EXOkMCVKLVB+lA==
+  # APPVEYOR_RDP_PASSWORD:
+  #   secure: Jrjywnv+EXOkMCVKLVB+lA==
   MAVEN_VERSION: 3.6.3
   WIN_JDK: C:\Program Files\Java\jdk11
   GITHUB_TOKEN:
@@ -41,8 +41,8 @@ environment:
     - job_name: Windows build
       appveyor_build_worker_image: Visual Studio 2019
 
-#    - job_name: Mac build
-#      appveyor_build_worker_image: macos-monterey
+    # - job_name: Mac build
+    #   appveyor_build_worker_image: macos-monterey
 
     - job_name: Linux build
       appveyor_build_worker_image: Ubuntu2004
@@ -63,8 +63,8 @@ for:
       - set PATH=%JDK_HOME%\bin;%PATH%
 
     build_script:
-      - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-      # - cmd: mvn clean verify
+      # - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+      - cmd: mvn clean verify
       
     test_script:
       - ps: $wc = New-Object 'System.Net.WebClient';

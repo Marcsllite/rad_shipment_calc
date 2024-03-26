@@ -13,11 +13,10 @@ import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public abstract class DBTest {
-    protected final MockedStatic<EntityManagerHandler> staticEmHandler;
+    protected MockedStatic<EntityManagerHandler> staticEmHandler;
     @Mock
     protected EntityManagerHandler emHandler;
     @Mock
@@ -29,14 +28,10 @@ public abstract class DBTest {
     @Mock
     protected DBService dbService;
 
-    public DBTest() {
-        staticEmHandler = mockStatic(EntityManagerHandler.class);
-    }
-
     @BeforeEach
     public void setUp() {
+        staticEmHandler = mockStatic(EntityManagerHandler.class);
         staticEmHandler.when(EntityManagerHandler::getInstance).thenReturn(emHandler);
-        when(emHandler.getEntityManager()).thenReturn(em);
     }
 
     @AfterEach

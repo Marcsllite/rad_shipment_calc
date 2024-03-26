@@ -25,6 +25,7 @@ import javafx.collections.ObservableList;
 import java.util.stream.Collectors;
 
 public class DBServiceImpl implements DBService {
+    protected static final String VALIDATION_QUERY = "select 1";
     private PropHandler propHandler;
     private final A1DaoImpl a1Dao;
     private final A2DaoImpl a2Dao;
@@ -52,6 +53,10 @@ public class DBServiceImpl implements DBService {
         isotopeDao = new IsotopeDaoImpl();
         limitsDao = new LimitsDaoImpl();
         reportableQuanDao = new ReportableQuantityDaoImpl();
+    }
+
+    public int validateDb() {
+        return (Integer) getIsotopeDao().findSingleResult(VALIDATION_QUERY);
     }
 
     public PropHandler getPropHandler() {
@@ -126,6 +131,11 @@ public class DBServiceImpl implements DBService {
     @Override
     public float getHalfLife(String abbr) {
         return getHalfLifeDao().getHalfLife(abbr);
+    }
+
+    @Override
+    public int countAllIsotopes() {
+        return getIsotopeDao().count();
     }
 
     @Override

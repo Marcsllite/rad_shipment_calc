@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetSystemProperty;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.fail;
 import static org.mockito.Mockito.when;
 
 class IsotopeConstantsTest extends DBTest {
@@ -34,6 +33,7 @@ class IsotopeConstantsTest extends DBTest {
 
     @BeforeEach
     public void setUp() {
+        super.setUp();
         constants = new IsotopeConstants(DEFAULT_NUM) {
             @Override
             public DBService getDbService() {
@@ -62,22 +62,6 @@ class IsotopeConstantsTest extends DBTest {
 
     @Test
     @SetSystemProperty(key = "keepPlatformOpen",value = "true")
-    void testDbInit_Exception() {
-        IsotopeModelId isoId = new IsotopeModelId(DEFAULT_NAME, DEFAULT_ABBR);
-        LimitsModelId limitsId = new LimitsModelId(DEFAULT_STATE, DEFAULT_FORM);
-
-        when(dbService.getA1(isoId.getAbbr())).thenThrow(new RuntimeException());
-
-        try {
-            constants.dbInit(isoId, limitsId);
-            assertEquals(DEFAULT_NUM, constants.getA1(), 0.0f);
-        } catch(Exception e) {
-            fail("No exception should be thrown");
-        }
-    }
-
-    @Test
-    @SetSystemProperty(key = "keepPlatformOpen",value = "true")
     void testDbInit() {
         IsotopeModelId isoId = new IsotopeModelId(DEFAULT_NAME, DEFAULT_ABBR);
         LimitsModelId limitsId = new LimitsModelId(DEFAULT_STATE, DEFAULT_FORM);
@@ -95,22 +79,18 @@ class IsotopeConstantsTest extends DBTest {
         when(dbService.getCiReportQuan(isoId.getAbbr())).thenReturn(expected);
         when(dbService.getTBqReportQuan(isoId.getAbbr())).thenReturn(expected);
 
-        try {
-            constants.dbInit(isoId, limitsId);
+        constants.dbInit(isoId, limitsId);
 
-            assertEquals(expected, constants.getA1(), 0.0f);
-            assertEquals(expected, constants.getA2(), 0.0f);
-            assertEquals(expected, constants.getDecayConstant(), 0.0f);
-            assertEquals(expected, constants.getExemptConcentration(), 0.0f);
-            assertEquals(expected, constants.getExemptLimit(), 0.0f);
-            assertEquals(expected, constants.getHalfLife(), 0.0f);
-            assertEquals(expected, constants.getIaLimitedLimit(), 0.0f);
-            assertEquals(expected, constants.getIaPackageLimit(), 0.0f);
-            assertEquals(expected, constants.getLimitedLimit(), 0.0f);
-            assertEquals(expected, constants.getCurieReportQuan(), 0.0f);
-            assertEquals(expected, constants.getTeraBqReportQuan(), 0.0f);
-        } catch(Exception e) {
-            fail("No exception should be thrown");
-        }
+        assertEquals(expected, constants.getA1(), 0.0f);
+        assertEquals(expected, constants.getA2(), 0.0f);
+        assertEquals(expected, constants.getDecayConstant(), 0.0f);
+        assertEquals(expected, constants.getExemptConcentration(), 0.0f);
+        assertEquals(expected, constants.getExemptLimit(), 0.0f);
+        assertEquals(expected, constants.getHalfLife(), 0.0f);
+        assertEquals(expected, constants.getIaLimitedLimit(), 0.0f);
+        assertEquals(expected, constants.getIaPackageLimit(), 0.0f);
+        assertEquals(expected, constants.getLimitedLimit(), 0.0f);
+        assertEquals(expected, constants.getCurieReportQuan(), 0.0f);
+        assertEquals(expected, constants.getTeraBqReportQuan(), 0.0f);
     }
 }

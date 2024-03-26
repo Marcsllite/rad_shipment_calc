@@ -4,10 +4,8 @@ import com.marcsllite.DBTest;
 import com.marcsllite.PropHandlerTestObj;
 import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
-import com.marcsllite.util.handler.EntityManagerHandler;
 import com.marcsllite.util.handler.PropHandler;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.InjectMocks;
@@ -39,11 +37,6 @@ class IsotopeTest extends DBTest {
                 return new PropHandlerTestObj();
             }
         });
-    }
-
-    @BeforeEach
-    public void setUp() {
-        staticEmHandler.when(EntityManagerHandler::getInstance).thenReturn(emHandler);
     }
 
     @Test

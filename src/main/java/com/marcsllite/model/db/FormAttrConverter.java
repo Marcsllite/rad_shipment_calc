@@ -21,7 +21,7 @@ public class FormAttrConverter implements AttributeConverter<LimitsModelId.Form,
             return null;
         }
         return Stream.of(LimitsModelId.Form.values())
-            .filter(f -> f.getVal().equals(str))
+            .filter(f -> f.getVal().equalsIgnoreCase(str))
             .findFirst()
             .orElseThrow(IllegalArgumentException::new);
     }

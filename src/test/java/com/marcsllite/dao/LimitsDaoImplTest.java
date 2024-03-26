@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -24,7 +25,15 @@ class LimitsDaoImplTest extends DBTest {
     @BeforeEach
     public void setUp() {
         super.setUp();
+        when(emHandler.getEntityManager()).thenReturn(em);
         daoSpy = spy(dao);
+    }
+
+    @Test
+    void testGetLimits_NoResults() {
+        when(em.find(any(), any())).thenReturn(null);
+
+        assertNull(dao.getLimits(new LimitsModelId()));
     }
 
     @Test
@@ -34,6 +43,18 @@ class LimitsDaoImplTest extends DBTest {
         when(em.find(any(), any())).thenReturn(model);
 
         assertEquals(model, dao.getLimits(limitsId));
+    }
+
+    @Test
+    void testGetIALimited_NoResults() {
+        LimitsModelId limitsId = new LimitsModelId();
+        float exp = -123456789.0f;
+
+        when(em.find(any(), any())).thenReturn(null);
+
+        assertEquals(exp, daoSpy.getIALimited(limitsId));
+
+        verify(daoSpy).getLimits(limitsId);
     }
 
     @Test
@@ -50,6 +71,18 @@ class LimitsDaoImplTest extends DBTest {
     }
 
     @Test
+    void testGetIAPackage_NoResults() {
+        LimitsModelId limitsId = new LimitsModelId();
+        float exp = -123456789.0f;
+
+        when(em.find(any(), any())).thenReturn(null);
+
+        assertEquals(exp, daoSpy.getIAPackage(limitsId));
+
+        verify(daoSpy).getLimits(limitsId);
+    }
+
+    @Test
     void testGetIAPackage() {
         LimitsModelId limitsId = new LimitsModelId();
         float exp = 1f;
@@ -58,6 +91,18 @@ class LimitsDaoImplTest extends DBTest {
         when(model.getIaPackage()).thenReturn(exp);
 
         assertEquals(exp, daoSpy.getIAPackage(limitsId));
+
+        verify(daoSpy).getLimits(limitsId);
+    }
+
+    @Test
+    void testGetLimited_NoResults() {
+        LimitsModelId limitsId = new LimitsModelId();
+        float exp = -123456789.0f;
+
+        when(em.find(any(), any())).thenReturn(null);
+
+        assertEquals(exp, daoSpy.getLimited(limitsId));
 
         verify(daoSpy).getLimits(limitsId);
     }

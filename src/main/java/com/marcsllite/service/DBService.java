@@ -8,6 +8,8 @@ import com.marcsllite.model.db.LimitsModelId;
 import javafx.collections.ObservableList;
 
 public interface DBService {
+    int validateDb();
+
     float getA1(String abbr);
 
     float getA2(String abbr);
@@ -19,6 +21,8 @@ public interface DBService {
     float getExemptLimit(String abbr);
 
     float getHalfLife(String abbr);
+
+    int countAllIsotopes();
 
     ObservableList<Isotope> getAllIsotopes();
 

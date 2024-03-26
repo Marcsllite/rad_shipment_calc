@@ -5,12 +5,8 @@ import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import javafx.beans.property.SimpleFloatProperty;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class IsotopeConstants {
-    private static final Logger logr = LogManager.getLogger();
     private DBService dbService;
     private final float defaultVal;
     private final SimpleFloatProperty a1 = new SimpleFloatProperty();
@@ -43,22 +39,17 @@ public class IsotopeConstants {
     }
 
     public void dbInit(IsotopeModelId isoId, LimitsModelId limitsId) {
-        try {
-            setA1(getDbService().getA1(isoId.getAbbr()));
-            setA2(getDbService().getA2(isoId.getAbbr()));
-            setDecayConstant(getDbService().getDecayConstant(isoId.getAbbr()));
-            setExemptConcentration(getDbService().getExemptConcentration(isoId.getAbbr()));
-            setExemptLimit(getDbService().getExemptLimit(isoId.getAbbr()));
-            setHalfLife(getDbService().getHalfLife(isoId.getAbbr()));
-            setIaLimitedLimit(getDbService().getIALimited(limitsId));
-            setIaPackageLimit(getDbService().getIAPackage(limitsId));
-            setLimitedLimit(getDbService().getLimited(limitsId));
-            setCurieReportQuan(getDbService().getCiReportQuan(isoId.getAbbr()));
-            setTeraBqReportQuan(getDbService().getTBqReportQuan(isoId.getAbbr()));
-        } catch (Exception e) {
-            logr.fatal("Failed to initialize {} isotope constants from db", isoId.getName());
-            logr.catching(Level.FATAL, e);
-        }
+        setA1(getDbService().getA1(isoId.getAbbr()));
+        setA2(getDbService().getA2(isoId.getAbbr()));
+        setDecayConstant(getDbService().getDecayConstant(isoId.getAbbr()));
+        setExemptConcentration(getDbService().getExemptConcentration(isoId.getAbbr()));
+        setExemptLimit(getDbService().getExemptLimit(isoId.getAbbr()));
+        setHalfLife(getDbService().getHalfLife(isoId.getAbbr()));
+        setIaLimitedLimit(getDbService().getIALimited(limitsId));
+        setIaPackageLimit(getDbService().getIAPackage(limitsId));
+        setLimitedLimit(getDbService().getLimited(limitsId));
+        setCurieReportQuan(getDbService().getCiReportQuan(isoId.getAbbr()));
+        setTeraBqReportQuan(getDbService().getTBqReportQuan(isoId.getAbbr()));
     }
 
     public DBService getDbService() {

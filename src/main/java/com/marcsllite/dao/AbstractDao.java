@@ -5,9 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.NoResultException;
-import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.OptimisticLockException;
-import jakarta.persistence.Query;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,13 +28,10 @@ public abstract class AbstractDao<E extends Serializable, I> implements Dao<E, I
         ).getActualTypeArguments()[0];
     }
 
-    public E findById(I id) throws NoResultException {
+    public E findById(I id) {
         E entity = getEntityManager().find(entityClass, id);
         if(entity == null) {
-            String msg = String.format("Attempted to fetch an entity that does not exist. ID: %s", id);
-            var nre = new NoResultException(msg);
-            logr.throwing(nre);
-            throw nre;
+            logr.error("Attempted to fetch {} entity that does not exist. ID: \"{}\"", entityClass.getSimpleName(), id);
         }
         return entity;
     }
@@ -46,19 +41,10 @@ public abstract class AbstractDao<E extends Serializable, I> implements Dao<E, I
         return getEntityManager().createQuery(query).getResultList();
     }
 
-    public List<E> findSingleResult(Query query) throws NoResultException, NonUniqueResultException {
-        List<E> res = query.getResultList();
-        if(res.isEmpty()) {
-            var nre = new NoResultException();
-            logr.throwing(nre);
-            throw nre;
-        }
-        if(res.size() > 1) {
-            var nure = new NonUniqueResultException();
-            logr.throwing(nure);
-            throw nure;
-        }
-        return res;
+    public Object findSingleResult(String query) {
+        return getEntityManager()
+            .createQuery(query)
+            .getSingleResult();
     }
 
     public int count() {
@@ -72,8 +58,9 @@ public abstract class AbstractDao<E extends Serializable, I> implements Dao<E, I
             flush();
             return mergedEntity;
         } catch (OptimisticLockException ole) {
+            String msg = String.format("Attempted to attach a stale %s entity", entityClass.getSimpleName());
             logr.catching(ole);
-            var sse = new StaleStateException("Attempted to attach a stale entity");
+            var sse = new StaleStateException(msg);
             logr.throwing(sse);
             throw sse;
         }
@@ -86,9 +73,7 @@ public abstract class AbstractDao<E extends Serializable, I> implements Dao<E, I
             getEntityManager().remove(ref);
         } catch (EntityNotFoundException enf) {
             logr.catching(enf);
-            String msg = String.format("Attempted to remove an unknown entity object. ID: %s", id);
-            var nre = new NoResultException(msg);
-            logr.throwing(nre);
+            logr.warn("Attempted to remove an unknown {} entity. ID: \"{}\"", entityClass.getSimpleName(), id);
         }
     }
 

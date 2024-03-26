@@ -1,7 +1,5 @@
 package com.marcsllite.dao;
 
-import jakarta.persistence.Query;
-
 import java.util.List;
 
 public interface Dao<E, I> {
@@ -9,7 +7,7 @@ public interface Dao<E, I> {
 
     List<E> findAll();
 
-    List<E> findSingleResult(Query query);
+    Object findSingleResult(String query);
 
     E attach(E entity);
 

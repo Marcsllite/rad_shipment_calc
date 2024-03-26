@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.spy;
@@ -30,10 +31,11 @@ class IsotopeDaoImplTest extends DBTest {
     public void setUp() {
         super.setUp();
         daoSpy = spy(dao);
+        when(emHandler.getEntityManager()).thenReturn(em);
     }
 
     @Test
-    void testGetMatchingIsotopes() {
+    void testGetAllIsotopes() {
         Query querySpy = spy(query);
         List<IsotopeModel> list = new ArrayList<>();
         list.add(model);
@@ -48,12 +50,33 @@ class IsotopeDaoImplTest extends DBTest {
     }
 
     @Test
+    void testGetIsotope_NoResults() {
+        IsotopeModelId isoId = new IsotopeModelId("", "");
+
+        when(em.find(any(), any())).thenReturn(null);
+
+        assertNull(dao.getIsotope(isoId));
+    }
+
+    @Test
     void testGetIsotope() {
         IsotopeModelId isoId = new IsotopeModelId("", "");
 
         when(em.find(any(), any())).thenReturn(model);
 
         assertEquals(model, dao.getIsotope(isoId));
+    }
+
+    @Test
+    void testIsotopeName_NoResults() {
+        IsotopeModelId isoId = new IsotopeModelId("", "");
+        String exp = "";
+
+        when(em.find(any(), any())).thenReturn(null);
+
+        assertEquals(exp, daoSpy.getIsotopeName(isoId));
+
+        verify(daoSpy).getIsotope(isoId);
     }
 
     @Test
@@ -75,6 +98,18 @@ class IsotopeDaoImplTest extends DBTest {
         verify(daoSpy).getIsotope(isoId2);
         verify(daoSpy).getIsotope(isoId3);
         verify(daoSpy).getIsotope(isoId4);
+    }
+
+    @Test
+    void testIsotopeAbbr_NoResults() {
+        IsotopeModelId isoId = new IsotopeModelId("", "");
+        String exp = "";
+
+        when(em.find(any(), any())).thenReturn(null);
+
+        assertEquals(exp, daoSpy.getIsotopeAbbr(isoId));
+
+        verify(daoSpy).getIsotope(isoId);
     }
 
     @Test

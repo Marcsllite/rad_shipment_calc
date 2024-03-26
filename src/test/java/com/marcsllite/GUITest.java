@@ -3,21 +3,16 @@ package com.marcsllite;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.FXMLView;
-import com.marcsllite.util.handler.EntityManagerHandler;
 import com.marcsllite.util.handler.FolderHandler;
 import com.marcsllite.util.handler.StageHandler;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockedStatic;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationExtension;
@@ -32,7 +27,6 @@ import java.util.concurrent.TimeoutException;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import static org.testfx.api.FxAssert.assertContext;
@@ -47,30 +41,23 @@ import static org.testfx.api.FxAssert.assertContext;
 public abstract class GUITest extends FxRobot {
     protected FXMLView view;
     private StageHandler stageHandler;
-    private final FolderHandler folderHandler;
-    private final DBService dbService;
-    private final MockedStatic<EntityManagerHandler> staticEmHandler;
-    private final EntityManagerHandler emHandler;
-    private final EntityManagerFactory factory;
-    private final EntityManager em;
-    private final App app;
+    private FolderHandler folderHandler;
+    private DBService dbService;
+    private App app;
 
     public GUITest(FXMLView view) {
         this.view = view;
-        folderHandler = mock(FolderHandler.class);
-        PropHandlerTestObj testPropHandler = new PropHandlerTestObj();
-        folderHandler.setPropHandler(testPropHandler);
-        emHandler = mock(EntityManagerHandler.class);
-        staticEmHandler = mockStatic(EntityManagerHandler.class);
-        factory = mock(EntityManagerFactory.class);
-        em = mock(EntityManager.class);
-        dbService = spy(new DBServiceImpl(testPropHandler));
-        app = new App(false);
     }
 
     @BeforeAll
     public void beforeAll() {
-        staticEmHandler.when(EntityManagerHandler::getInstance).thenReturn(emHandler);
+        app = new App(false);
+
+        PropHandlerTestObj testPropHandler = new PropHandlerTestObj();
+        folderHandler = mock(FolderHandler.class);
+        folderHandler.setPropHandler(testPropHandler);
+        dbService = spy(new DBServiceImpl(testPropHandler));
+        assertEquals(1, dbService.validateDb());
     }
 
     @Start
@@ -78,18 +65,10 @@ public abstract class GUITest extends FxRobot {
         Platform.setImplicitExit(false);
         when(folderHandler.getDataFolderPath()).thenReturn(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
 
-        when(emHandler.getFactory()).thenReturn(factory);
-        when(emHandler.getEntityManager()).thenReturn(em);
-
         app.init(view, new PropHandlerTestObj(), folderHandler, dbService, new ControllerFactoryTestObj());
 
         app.start(stage);
         stageHandler = app.getStageHandler();
-    }
-
-    @AfterAll
-    public void afterAll() {
-        staticEmHandler.close();
     }
 
     @BeforeEach

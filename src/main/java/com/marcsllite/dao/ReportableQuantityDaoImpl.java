@@ -8,10 +8,12 @@ public class ReportableQuantityDaoImpl extends AbstractDao<ReportableQuantityMod
     }
 
     public float getCi(String abbr) {
-        return getReportQuan(abbr).getCurie();
+        ReportableQuantityModel model = getReportQuan(abbr);
+        return model == null? -123456789.0f : model.getCurie();
     }
 
     public float getTBq(String abbr) {
-        return getReportQuan(abbr).getTeraBq();
+        ReportableQuantityModel model = getReportQuan(abbr);
+        return model == null? -123456789.0f : model.getTeraBq();
     }
 }
