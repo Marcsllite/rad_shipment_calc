@@ -21,10 +21,14 @@ import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.stream.Collectors;
 
 public class DBServiceImpl implements DBService {
+    private static final Logger logr = LogManager.getLogger();
     protected static final String VALIDATION_QUERY = "select 1";
     private PropHandler propHandler;
     private final A1DaoImpl a1Dao;
@@ -42,7 +46,11 @@ public class DBServiceImpl implements DBService {
     }
 
     public DBServiceImpl(PropHandler propHandler) {
-        setPropHandler(propHandler == null? new PropHandlerFactory().getPropHandler(null) : propHandler);
+        try {
+            setPropHandler(propHandler == null? new PropHandlerFactory().getPropHandler(null) : propHandler);
+        } catch (IOException e) {
+            logr.catching(e);
+        }
 
         a1Dao = new A1DaoImpl();
         a2Dao = new A2DaoImpl();

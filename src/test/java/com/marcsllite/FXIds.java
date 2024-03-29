@@ -38,20 +38,30 @@ public class FXIds {
     public static final String TABLEVIEW_SEARCH = "#tableViewSearch";
     public static final String TABLE_COL_REF_ABBR = "#tableColRefAbbr";
     public static final String TABLE_COL_REF_NAME = "#tableColRefName";
-    public static final String LABEL_A1 = "#labelA1";
+    public static final String TXTFIELD_A1 = "#txtFieldA1";
+    public static final String COMBOBOX_REF_A1_PREFIX = "#comboBoxRefA1Prefix";
+    public static final String CHOICEBOX_REF_A1_RAD_UNIT = "#choiceBoxRefA1RadUnit";
     public static final String LABEL_A2 = "#labelA2";
+    public static final String COMBOBOX_REF_A2_PREFIX = "#comboBoxRefA2Prefix";
+    public static final String CHOICEBOX_REF_A2_RAD_UNIT = "#choiceBoxRefA2RadUnit";
     public static final String LABEL_DECAY_CONSTANT = "#labelDecayConst";
     public static final String LABEL_EXEMPT_CONCENTRATION = "#labelExemptCon";
+    public static final String COMBOBOX_REF_EXEMPT_CON_PREFIX = "#comboBoxRefExemptConPrefix";
+    public static final String CHOICEBOX_REF_EXEMPT_CON_RAD_UNIT = "#choiceBoxRefExemptConRadUnit";
     public static final String LABEL_EXEMPT_LIMIT = "#labelExemptLim";
+    public static final String COMBOBOX_REF_EXEMPT_LIM_PREFIX = "#comboBoxRefExemptLimPrefix";
+    public static final String CHOICEBOX_REF_EXEMPT_LIM_RAD_UNIT = "#choiceBoxRefExemptLimRadUnit";
     public static final String LABEL_HALF_LIFE = "#labelHalfLife";
     public static final String LABEL_REPORTABLE_QUANTITY = "#labelReportQuan";
+    public static final String COMBOBOX_REF_REPORT_QUAN_PREFIX = "#comboBoxRefReportQuanPrefix";
+    public static final String CHOICEBOX_REF_REPORT_QUAN_RAD_UNIT = "#choiceBoxRefReportQuanRadUnit";
 
     // Modify
     public static final String STACKPANE_MODIFY = "#modifyPane";
     public static final String VBOX_FIRST_PAGE = "#vBoxFirstPage";
     public static final String TXTFIELD_ISO_NAME = "#txtFieldIsoName";
     public static final String TXTFIELD_A0 = "#txtFieldA0";
-    public static final String CHOICEBOX_A0_PREFIX = "#choiceBoxA0Prefix";
+    public static final String COMBOBOX_A0_PREFIX = "#comboBoxA0Prefix";
     public static final String CHOICEBOX_AO_NAME = "#choiceBoxA0Name";
     public static final String VBOX_MORE_INFO = "#vBoxMoreInfo";
     public static final String HBOX_ADD_INFO_TOP = "#hBoxAddInfoTop";
@@ -70,31 +80,31 @@ public class FXIds {
     public static final String VBOX_SECOND_PAGE = "#vBoxSecondPage";
     public static final String DATE_PICKER = "#datePicker";
     public static final String TXTFIELD_MASS = "#txtFieldMass";
-    public static final String CHOICE_MASS_PREFIX = "#choiceBoxMassPrefix";
-    public static final String CHOICE_MASS_NAME = "#choiceBoxMassName";
-    public static final String CHOICE_NATURE = "#choiceBoxNature";
-    public static final String CHOICE_STATE = "#choiceBoxState";
-    public static final String CHOICE_FORM = "#choiceBoxForm";
+    public static final String COMBOBOX_MASS_PREFIX = "#comboBoxMassPrefix";
+    public static final String CHOICEBOX_MASS_NAME = "#choiceBoxMassName";
+    public static final String CHOICEBOX_NATURE = "#choiceBoxNature";
+    public static final String CHOICEBOX_STATE = "#choiceBoxState";
+    public static final String CHOICEBOX_FORM = "#choiceBoxForm";
     public static final String CHCKBOX_SAME_MASS = "#chckBoxSameMass";
-    public static final String CHCBOX_SAME_NSF = "#chckBoxSameNSF";
+    public static final String CHCKBOX_SAME_NSF = "#chckBoxSameNSF";
     public static final String BTN_BACK = "#btnBack";
     public static final String BTN_FINISH = "#btnFinish";
     public static final String TXT_SECOND_PAGE_STATUS = "#txtSecondPageStatus";
 
     // Shipment Details
     public static final String STACKPANE_SHIPMENT_DETAILS = "#shipmentDetails";
-    public static final String VBOX_SHIPMENT_DETAILS = "#vBoxShipmentDetails";
-    // DATE_PICKER
-    // TXTFIELD_MASS
-    // CHOICE_MASS_PREFIX
-    // CHOICE_MASS_NAME
-    // CHOICE_NATURE
-    // CHOICE_STATE
-    // CHOICE_FORM
-    public static final String BTN_SAVE = "#btnSave";
+    public static final String VBOX_SHIP_DETAILS = "#vBoxShipDetails";
+    public static final String DATE_PICKER_SHIP_DETAILS = "#datePickerShipDetails";
+    public static final String TXTFIELD_MASS_SHIP_DETAILS = "#txtFieldMassShipDetails";
+    public static final String COMBOBOX_MASS_PREFIX_SHIP_DETAILS = "#comboBoxMassPrefixShipDetails";
+    public static final String CHOICEBOX_MASS_NAME_SHIP_DETAILS = "#choiceBoxMassNameShipDetails";
+    public static final String CHOICEBOX_NATURE_SHIP_DETAILS = "#choiceBoxNatureShipDetails";
+    public static final String CHOICEBOX_STATE_SHIP_DETAILS = "#choiceBoxStateShipDetails";
+    public static final String CHOICEBOX_FORM_SHIP_DETAILS = "#choiceBoxFormShipDetails";
+    public static final String BTN_SAVE_SHIP_DETAILS = "#btnSaveShipDetails";
 
     // Summary
     public static final String ANCHORPANE_SUMMARY = "#summaryPane";
     public static final String TXTAREA_SUMMARY = "#txtAreaSummary";
-    // BTN_SAVE
+    public static final String BTN_SAVE_SUMMARY = "#btnSaveSummary";
 }

@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.Objects;
 
@@ -25,11 +26,11 @@ public class StageHandler {
     private static final String NULL_ERROR = "FXML View is null";
     protected static final String DEFAULT_MSG = "No Message";
 
-    public StageHandler(Stage stage) {
+    public StageHandler(Stage stage) throws IOException {
         this(stage, null, null);
     }
 
-    public StageHandler(Stage stage, PropHandler propHandler, ControllerFactory factory) {
+    public StageHandler(Stage stage, PropHandler propHandler, ControllerFactory factory) throws IOException {
         primaryStage = stage;
         getPrimaryStage().setOnCloseRequest(e -> Platform.exit());
         setPropHandler(propHandler == null? new PropHandlerFactory().getPropHandler(null) : propHandler);
@@ -65,7 +66,7 @@ public class StageHandler {
         this.propHandler = propHandler;
     }
 
-    public void switchScene(FXMLView view) {
+    public void switchScene(FXMLView view) throws RuntimeException {
         if (view == null) {
             throw new InvalidParameterException(NULL_ERROR);
         } else if(view.equals(getCurrentView())) {

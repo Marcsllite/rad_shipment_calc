@@ -6,16 +6,18 @@ import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.fxml.FXML;
 
+import java.io.IOException;
+
 public abstract class BaseController {
     private MainController main;
     private PropHandler propHandler;
     private DBService dbService;
 
-    protected BaseController() {
+    protected BaseController() throws IOException {
         this(null);
     }
 
-    protected BaseController(PropHandler propHandler) {
+    protected BaseController(PropHandler propHandler) throws IOException {
         setPropHandler(propHandler == null? new PropHandlerFactory().getPropHandler(null): propHandler);
         setDbService(new DBServiceImpl(getPropHandler()));
         setMain(MainController.getInstance());

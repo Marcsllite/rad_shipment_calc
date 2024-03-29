@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
+import java.io.IOException;
 
 public class FolderHandler {
     private static final Logger logr = LogManager.getLogger();
@@ -15,11 +16,11 @@ public class FolderHandler {
     private static final String DATA_FOLDER_NAME = "Shipment Calculator";
     private PropHandler propHandler;
 
-    public FolderHandler() {
+    public FolderHandler() throws IOException {
         this(null);
     }
 
-    public FolderHandler(PropHandler propHandler) {
+    public FolderHandler(PropHandler propHandler) throws IOException {
         setPropHandler(propHandler == null? new PropHandlerFactory().getPropHandler(null) : propHandler);
         setAppFolderPath(getPropHandler().getString("appFolderName"));
     }
@@ -30,14 +31,14 @@ public class FolderHandler {
      * @param appFolderName the name of the default directory
      */
 
-    public void setAppFolderPath(String appFolderName) throws RuntimeException {
-        if (appFolderName == null || appFolderName.isEmpty()) appFolderName = getPropHandler().getString("appFolderName");
+    public void setAppFolderPath(String appFolderName) throws IOException {
+        if (appFolderName == null || appFolderName.isBlank()) appFolderName = getPropHandler().getString("appFolderName");
         
         String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + appFolderName;
         var toBeCreated = createFolder(path);
         
         if (toBeCreated == null) {
-            var e = new RuntimeException("Failed to set up app folder");
+            var e = new IOException("Failed to set up app folder");
             logr.throwing(Level.FATAL, e);
             throw e;
         }

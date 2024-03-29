@@ -30,10 +30,24 @@ public class LimitsModelId implements Serializable {
             return val;
         }
 
+        public static State toState(String value) {
+            for (State enumValue : values()) {
+                if (enumValue.getVal().equalsIgnoreCase(value)) {
+                    return enumValue;
+                }
+            }
+            return null;
+        }
+        
         public static ObservableList<String> getFxValues() {
             return Arrays.stream(State.values())
                 .map(State::getVal)
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        @Override
+        public String toString() {
+            return getVal();
         }
     }
 
@@ -51,10 +65,24 @@ public class LimitsModelId implements Serializable {
             return val;
         }
 
+        public static Form toForm(String value) {
+            for (Form enumValue : values()) {
+                if (enumValue.getVal().equalsIgnoreCase(value)) {
+                    return enumValue;
+                }
+            }
+            return null;
+        }
+
         public static ObservableList<String> getFxValues() {
             return Arrays.stream(Form.values())
                 .map(Form::getVal)
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        @Override
+        public String toString() {
+            return getVal();
         }
     }
 
@@ -116,6 +144,6 @@ public class LimitsModelId implements Serializable {
 
     @Override
     public String toString() {
-        return "(State: \"" + getState() + "\", Form: \"" + getForm() + "\")";
+        return "State: " + getState() + ", Form: " + getForm();
     }
 }

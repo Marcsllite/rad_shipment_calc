@@ -8,6 +8,16 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class IsotopeModelIdTest {
     @Test
+    void testGetters_ValueTrimmed() {
+        String exp = "expected";
+        String value = "  " + exp + "   ";
+
+        IsotopeModelId isoId = new IsotopeModelId(value, value);
+        assertEquals(exp, isoId.getName());
+        assertEquals(exp, isoId.getAbbr());
+    }
+
+    @Test
     void testEquals_NullObj() {
         IsotopeModelId isoId = new IsotopeModelId("", "");
         assertNotEquals(null, isoId);

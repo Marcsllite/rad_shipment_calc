@@ -15,6 +15,8 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
+
 /**
  * JavaFX App
  */
@@ -35,7 +37,7 @@ public class App extends Application {
         if(doInit) {
             try {
                 init(null, null, null, null, null);
-            } catch (RuntimeException e) {
+            } catch (IOException e) {
                 logr.catching(Level.FATAL, e);
                 logr.fatal("Failed to start application");
                 // Can only initialize one FX Thread per JVM
@@ -48,7 +50,7 @@ public class App extends Application {
         }
     }
 
-    protected void init(FXMLView view, PropHandler propHandler, FolderHandler folderHandler, DBService dbService, ControllerFactory controllerFactory) throws RuntimeException {
+    protected void init(FXMLView view, PropHandler propHandler, FolderHandler folderHandler, DBService dbService, ControllerFactory controllerFactory) throws IOException {
         setControllerFactory(controllerFactory);
 
         setView(view == null?
@@ -73,7 +75,7 @@ public class App extends Application {
     }
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws IOException {
         setStageHandler(new StageHandler(stage, getPropHandler(), getControllerFactory()));
         getStageHandler().show(getView());
     }

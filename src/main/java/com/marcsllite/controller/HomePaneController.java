@@ -13,6 +13,7 @@ import javafx.scene.layout.GridPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.Date;
 
@@ -31,11 +32,11 @@ public class HomePaneController extends BaseController {
 
     private static final Logger logr = LogManager.getLogger();
 
-    public HomePaneController() {
+    public HomePaneController() throws IOException {
         this(null);
     }
 
-    public HomePaneController(PropHandler propHandler) {
+    public HomePaneController(PropHandler propHandler) throws IOException {
         super(propHandler);
     }
 

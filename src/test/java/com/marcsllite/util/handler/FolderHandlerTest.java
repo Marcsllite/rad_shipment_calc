@@ -1,24 +1,27 @@
 package com.marcsllite.util.handler;
 
 import com.marcsllite.PropHandlerTestObj;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -26,10 +29,25 @@ import static org.mockito.Mockito.when;
 class FolderHandlerTest {
     @Mock
     File file;
-    @Spy
-    FolderHandler folderHandler = new FolderHandler(new PropHandlerTestObj());
+    FolderHandler folderHandler;
     final static String appFolderName = "UMass Lowell Radiation Safety";
     final static String dataFolderName = "Shipment Calculator";
+
+    @BeforeEach
+    public void setUp() throws IOException {
+        folderHandler = spy(new FolderHandler(new PropHandlerTestObj()));
+    }
+
+    @Test
+    void testController_NullPropHandler() {
+        FolderHandler handler = null;
+        try {
+            handler = new FolderHandler(null);
+        } catch (IOException e) {
+            fail("No error should be thrown");
+        }
+        assertNotNull(handler.getPropHandler());
+    }
 
     @Test
     void testCreateFolder_NullPath() {
@@ -52,8 +70,8 @@ class FolderHandlerTest {
     void testSetAppFolderPath_InvalidName() {
         String name ="?.\"*.*.?";
 
-        RuntimeException exception = assertThrows(
-            RuntimeException.class, () -> folderHandler.setAppFolderPath(name)
+        IOException exception = assertThrows(
+            IOException.class, () -> folderHandler.setAppFolderPath(name)
         );
         
         assertTrue(exception.getMessage().contains("Failed to set up app folder"));
@@ -66,7 +84,11 @@ class FolderHandlerTest {
 
         when(folderHandler.createFolder(anyString())).thenReturn(file);
 
-        folderHandler.setAppFolderPath(name);
+        try {
+            folderHandler.setAppFolderPath(name);
+        } catch (IOException e) {
+            fail("No exception should be thrown");
+        }
         assertEquals(path, folderHandler.getAppFolderPath());
         verify(folderHandler).setDataFolder();
     }
@@ -76,7 +98,11 @@ class FolderHandlerTest {
     void testSetAppFolderPath_NullEmptyName(String dirName, String expected) {
         when(folderHandler.createFolder(anyString())).thenReturn(file);
 
-        folderHandler.setAppFolderPath(dirName);
+        try {
+            folderHandler.setAppFolderPath(dirName);
+        } catch (IOException e) {
+            fail("No exception should be thrown");
+        }
         assertEquals(expected, folderHandler.getAppFolderPath());
         verify(folderHandler).setDataFolder();
     }

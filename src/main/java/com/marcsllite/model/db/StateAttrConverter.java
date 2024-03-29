@@ -12,7 +12,7 @@ public class StateAttrConverter implements AttributeConverter<LimitsModelId.Stat
         if(state == null) {
             return null;
         }
-        return state.getVal();
+        return state.getVal().toLowerCase();
     }
 
     @Override

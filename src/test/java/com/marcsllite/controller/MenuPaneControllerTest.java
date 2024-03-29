@@ -1,15 +1,23 @@
 package com.marcsllite.controller;
 
+import com.marcsllite.PropHandlerTestObj;
 import com.marcsllite.util.handler.ImageHandler;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.security.InvalidParameterException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MenuPaneControllerTest {
-    MenuPaneController controller = new MenuPaneController();
+    MenuPaneController controller;
+
+    @BeforeEach
+    public void setUp() throws IOException {
+        controller = new MenuPaneController(new PropHandlerTestObj());
+    }
 
     @Test
     void testSetButtonColor_NullBtn_NullColor() {

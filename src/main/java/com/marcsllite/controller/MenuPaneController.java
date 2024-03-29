@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.security.InvalidParameterException;
 
 public class MenuPaneController extends BaseController {
@@ -52,11 +53,11 @@ public class MenuPaneController extends BaseController {
         }
     }
 
-    public MenuPaneController() {
+    public MenuPaneController() throws IOException {
         this(null);
     }
 
-    public MenuPaneController(PropHandler propHandler) {
+    public MenuPaneController(PropHandler propHandler) throws IOException {
         super(propHandler);
     }
 

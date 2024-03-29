@@ -14,6 +14,7 @@ import org.junitpioneer.jupiter.SetSystemProperty;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.api.FxToolkit;
 
+import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.Properties;
 import java.util.concurrent.TimeoutException;
@@ -36,7 +37,11 @@ class StageHandlerTest {
     @BeforeAll
     public void beforeAll() throws TimeoutException {
         stage = FxToolkit.registerPrimaryStage();
-        stageHandler = spy(new StageHandler(stage, new PropHandlerTestObj(), new ControllerFactoryTestObj()));
+        try {
+            stageHandler = spy(new StageHandler(stage, new PropHandlerTestObj(), new ControllerFactoryTestObj()));
+        } catch (IOException e) {
+            fail("Failed to initialize test object");
+        }
     }
 
     @Test
@@ -76,7 +81,11 @@ class StageHandlerTest {
 
     @Test
     void testLoadViewNodeHierarchy_EmptyProperties() {
-        stageHandler = new StageHandler(stage);
+        try {
+            stageHandler = new StageHandler(stage);
+        } catch (IOException e) {
+            fail("Failed to initialize test object");
+        }
         PropHandler propHandler = stageHandler.getPropHandler();
         propHandler.setProp(new Properties());
         stageHandler.setPropHandler(propHandler);

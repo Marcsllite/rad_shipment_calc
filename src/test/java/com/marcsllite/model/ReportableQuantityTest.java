@@ -4,6 +4,7 @@ import com.marcsllite.PropHandlerTestObj;
 import com.marcsllite.util.handler.PropHandler;
 import org.junit.jupiter.api.Test;
 
+import static junit.framework.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ReportableQuantityTest {
@@ -42,4 +43,20 @@ class ReportableQuantityTest {
         assertEquals(val, reportQuan.getTeraBq(), 0.0f);
     }
 
+    @Test
+    void testToString() {
+        String abbr = "abracadabra";
+        float val = 5.2f;
+        reportQuan = new ReportableQuantity(abbr, val, val){
+            @Override
+            public PropHandler getPropHandler() {
+                return new PropHandlerTestObj();
+            }
+        };
+
+        String actual = reportQuan.toString();
+        assertTrue(actual.contains(abbr));
+        assertTrue(actual.contains(val + " TBq"));
+        assertTrue(actual.contains(val + " Ci"));
+    }
 }

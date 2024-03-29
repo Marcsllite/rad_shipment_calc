@@ -1,14 +1,23 @@
 package com.marcsllite.controller;
 
+import com.marcsllite.PropHandlerTestObj;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.security.InvalidParameterException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SummaryPaneControllerTest {
-    ShipmentDetailsController controller = new ShipmentDetailsController();
+    ShipmentDetailsController controller;
+
+    @BeforeEach
+    public void setUp() throws IOException {
+        controller = new ShipmentDetailsController(new PropHandlerTestObj());
+    }
+
     @Test
     void testMenuPaneHandler_NullParam() {
         InvalidParameterException ex = assertThrows(

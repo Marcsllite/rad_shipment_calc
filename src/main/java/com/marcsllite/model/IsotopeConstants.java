@@ -206,7 +206,7 @@ public class IsotopeConstants {
             "\n\tHalfLife: " + getHalfLife() + " days" +
             "\n\tInstruments/Articles Limited Limit: " + getIaLimitedLimit() +
             "\n\tInstruments/Articles Package Limit: " + getIaPackageLimit() +
-            "\n\tNormal Limited Limit: " + getLimitedLimit() + " TBq" +
+            "\n\tNormal Limited Limit: " + getLimitedLimit() +
             "\n\tReportable Quantity: " + getTeraBqReportQuan() + " TBq\n}";
     }
 }

@@ -4,21 +4,22 @@ import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.beans.property.SimpleFloatProperty;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
 
 public class Limits {
+    private static final Logger logr = LogManager.getLogger();
     private PropHandler propHandler;
-    private final float defaultVal;
+    private float defaultVal;
     private LimitsModelId limitsId;
     private final SimpleFloatProperty iaLimited = new SimpleFloatProperty();
     private final SimpleFloatProperty iaPackage = new SimpleFloatProperty();
     private final SimpleFloatProperty limited = new SimpleFloatProperty();
 
     public Limits() {
-        this(new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL),
-            null,
-            null,
-            null
-        );
+        this(new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL));
     }
 
     public Limits(LimitsModelId limitsId) {
@@ -30,8 +31,13 @@ public class Limits {
     }
 
     public Limits(LimitsModelId limitsId, Float iaLimited, Float iaPackage, Float limited) {
-        this.propHandler = new PropHandlerFactory().getPropHandler(null);
-        this.defaultVal = (float) getPropHandler().getDouble("defaultNum");
+        try {
+            setPropHandler(new PropHandlerFactory().getPropHandler(null));
+            setDefaultVal((float) getPropHandler().getDouble("defaultNum"));
+        } catch (IOException e) {
+            logr.catching(e);
+            setDefaultVal(-2.0f);
+        }
         setLimitsId(limitsId);
         setIaLimited(iaLimited == null? defaultVal : iaLimited);
         setIaPackage(iaPackage == null? defaultVal : iaPackage);
@@ -48,6 +54,10 @@ public class Limits {
 
     public float getDefaultVal() {
         return defaultVal;
+    }
+
+    public void setDefaultVal(float defaultVal) {
+        this.defaultVal = defaultVal;
     }
 
     public LimitsModelId getLimitsId() {

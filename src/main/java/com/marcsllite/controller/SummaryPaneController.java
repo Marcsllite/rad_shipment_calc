@@ -9,20 +9,21 @@ import javafx.scene.layout.AnchorPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.security.InvalidParameterException;
 
 public class SummaryPaneController extends BaseController {
     @FXML AnchorPane summaryPane;
     @FXML TextArea txtAreaSummary;
-    @FXML Button btnSave;
+    @FXML Button btnSaveSummary;
 
     private static final Logger logr = LogManager.getLogger();
 
-    public SummaryPaneController() {
+    public SummaryPaneController() throws IOException {
         this(null);
     }
 
-    public SummaryPaneController(PropHandler propHandler) {
+    public SummaryPaneController(PropHandler propHandler) throws IOException {
         super(propHandler);
     }
 
@@ -50,7 +51,7 @@ public class SummaryPaneController extends BaseController {
             var e = new InvalidParameterException("action event cannot be null");
             logr.throwing(e);
             throw e;
-        } else if(event.getSource() == btnSave) {
+        } else if(event.getSource() == btnSaveSummary) {
             addBtnHandler();
         }
     }

@@ -36,7 +36,9 @@ public abstract class DBTest {
 
     @AfterEach
     public void tearDown() {
-        staticEmHandler.close();
+        if(!staticEmHandler.isClosed()) {
+            staticEmHandler.close();
+        }
     }
 
 }

@@ -44,8 +44,8 @@ class IsotopeTest extends DBTest {
         assertEquals(isoId, iso.getIsoId());
         assertEquals(DEFAULT_NATURE, iso.getNature());
         assertEquals(limitsId, iso.getLimitsId());
-        assertEquals(DEFAULT_MASS, iso.getMass());
-        assertEquals(DEFAULT_RAD_UNIT, iso.getRadUnit());
+        assertEquals(DEFAULT_MASS, iso.getMassUnit());
+        assertEquals(DEFAULT_RAD_UNIT, iso.getInitActivityUnit());
         assertEquals(DEFAULT_CLASS, iso.getIsoClass());
         assertNotNull(iso.getConstants());
         System.out.println(iso.getConstants().toString());

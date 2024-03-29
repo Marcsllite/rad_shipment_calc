@@ -24,7 +24,7 @@
     -fx-background-radius: inherit;
 }
 
-.separator:horizontal {
+.separator {
     -fx-focus-traversable: false;
     -fx-opacity: 0.29;
     -fx-pref-width: 200;

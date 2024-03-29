@@ -20,7 +20,7 @@
          <Insets left="5.0" right="20.0" />
       </GridPane.margin>
    </TextField>
-     <TableView fx:id="tableViewSearch" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.rowSpan="2147483647">
+     <TableView fx:id="tableViewSearch" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" GridPane.rowSpan="3">
          <columns>
              <PTableColumn fx:id="tableColRefAbbr" editable="false" percentageWidth="0.5" styleClass="tableColumn" text="Abbreviation" />
              <PTableColumn fx:id="tableColRefName" editable="false" percentageWidth="0.5" styleClass="tableColumn" text="Full Name" />
@@ -29,93 +29,133 @@
          <Insets bottom="15.0" left="15.0" right="15.0" />
       </GridPane.margin>
      </TableView>
-   <Separator focusTraversable="false" layoutX="310.0" layoutY="132.0" opacity="0.29" prefWidth="200.0" style="-fx-background-color: #8a8a8a;" stylesheets="@../css/referencePane.css" GridPane.columnIndex="3" GridPane.columnSpan="2147483647" GridPane.valignment="BOTTOM">
-      <GridPane.margin>
-         <Insets right="10.0" />
-      </GridPane.margin>
-   </Separator>
-       <Label text="A1:" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+       <Label text="A1:" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
       <font>
          <Font name="System Bold" size="14.0" />
       </font>
    </Label>
-       <Label fx:id="labelA1" text="Value Unit" wrapText="true" GridPane.columnIndex="4" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-   <Separator focusTraversable="false" opacity="0.29" prefWidth="200.0" stylesheets="@../css/referencePane.css" GridPane.columnIndex="3" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+    <VBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4">
+        <TextField fx:id="txtFieldA1" alignment="CENTER" opacity="0.7" promptText="A1 Value">
+         <font>
+            <Font size="15.0" />
+         </font></TextField>
+        <HBox alignment="CENTER">
+            <ComboBox fx:id="comboBoxRefA1Prefix" visibleRowCount="5"/>
+            <ChoiceBox fx:id="choiceBoxRefA1RadUnit"/>
+        </HBox>
+    </VBox>
+   <Separator focusTraversable="false" layoutX="10.0" layoutY="40.0" opacity="0.29" prefWidth="200.0" stylesheets="@../css/referencePane.css" GridPane.columnSpan="2147483647" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
       <GridPane.margin>
-         <Insets right="10.0" />
-      </GridPane.margin></Separator>
-       <Label text="A2:" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+         <Insets left="15.0" right="15.0" />
+      </GridPane.margin>
+   </Separator>
+       <Label text="A2:" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
            <font>
                <Font name="System Bold" size="14.0" />
            </font>
    </Label>
-          <Label fx:id="labelA2" text="Value Unit" wrapText="true" GridPane.columnIndex="4" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-   <Separator focusTraversable="false" layoutX="310.0" layoutY="132.0" opacity="0.29" prefWidth="200.0" stylesheets="@../css/referencePane.css" GridPane.columnIndex="3" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+    <VBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5">
+        <Label fx:id="labelA2" text="Value Unit" wrapText="true">
+         <padding>
+            <Insets right="5.0" />
+         </padding>
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+        <HBox alignment="CENTER">
+            <ComboBox fx:id="comboBoxRefA2Prefix" visibleRowCount="5"/>
+            <ChoiceBox fx:id="choiceBoxRefA2RadUnit"/>
+        </HBox>
+    </VBox>
+   <Separator focusTraversable="false" layoutX="10.0" layoutY="40.0" opacity="0.29" prefWidth="200.0" stylesheets="@../css/referencePane.css" GridPane.columnSpan="2147483647" GridPane.rowIndex="5" GridPane.valignment="BOTTOM">
       <GridPane.margin>
-         <Insets right="10.0" />
+         <Insets left="15.0" right="15.0" />
       </GridPane.margin>
    </Separator>
-       <Label text="Decay Constant:" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+       <Label text="Decay Constant:" textAlignment="CENTER" wrapText="true" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
            <font>
                <Font name="System Bold" size="14.0" />
            </font>
    </Label>
-       <Label fx:id="labelDecayConst" text="Value Unit" wrapText="true" GridPane.columnIndex="4" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
-   <Separator focusTraversable="false" layoutX="10.0" layoutY="40.0" opacity="0.29" prefWidth="200.0" stylesheets="@../css/referencePane.css" GridPane.columnIndex="3" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
-      <GridPane.margin>
-         <Insets right="10.0" />
-      </GridPane.margin>
-   </Separator>
+       <Label fx:id="labelDecayConst" text="Value Unit" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+      <font>
+         <Font size="15.0" />
+      </font></Label>
        <Label text="Exempt Concentration:" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
            <font>
                <Font name="System Bold" size="14.0" />
            </font>
    </Label>
-       <Label fx:id="labelExemptCon" text="Value Unit" wrapText="true" GridPane.columnIndex="4" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
-   <Separator focusTraversable="false" layoutX="10.0" layoutY="40.0" opacity="0.29" prefWidth="200.0" stylesheets="@../css/referencePane.css" GridPane.columnIndex="3" GridPane.columnSpan="2147483647" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
-      <GridPane.margin>
-         <Insets right="10.0" />
-      </GridPane.margin>
-   </Separator>
+    <VBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="4">
+        <Label fx:id="labelExemptCon" text="Value Unit" wrapText="true">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+        <HBox alignment="CENTER">
+            <ComboBox fx:id="comboBoxRefExemptConPrefix" visibleRowCount="5"/>
+            <ChoiceBox fx:id="choiceBoxRefExemptConRadUnit"/>
+            <Label text="/g" wrapText="true"/>
+        </HBox>
+    </VBox>
        <Label text="Exempt Limit:" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
            <font>
                <Font name="System Bold" size="14.0" />
            </font>
    </Label>
-       <Label fx:id="labelExemptLim" text="Value Unit" wrapText="true" GridPane.columnIndex="4" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
-   <Separator focusTraversable="false" layoutX="10.0" layoutY="40.0" opacity="0.29" prefWidth="200.0" stylesheets="@../css/referencePane.css" GridPane.columnIndex="3" GridPane.columnSpan="2147483647" GridPane.rowIndex="5" GridPane.valignment="BOTTOM">
-      <GridPane.margin>
-         <Insets right="10.0" />
-      </GridPane.margin>
-   </Separator>
+    <VBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="5">
+        <Label fx:id="labelExemptLim" text="Value Unit" wrapText="true">
+         <padding>
+            <Insets right="5.0" />
+         </padding>
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+        <HBox alignment="CENTER">
+            <ComboBox fx:id="comboBoxRefExemptLimPrefix" visibleRowCount="5"/>
+            <ChoiceBox fx:id="choiceBoxRefExemptLimRadUnit"/>
+        </HBox>
+    </VBox>
        <Label text="Half Life:" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
            <font>
                <Font name="System Bold" size="14.0" />
            </font>
    </Label>
-       <Label fx:id="labelHalfLife" text="Value Unit" wrapText="true" GridPane.columnIndex="4" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
-   <Separator focusTraversable="false" layoutX="10.0" layoutY="40.0" opacity="0.29" prefWidth="200.0" stylesheets="@../css/referencePane.css" GridPane.columnIndex="3" GridPane.columnSpan="2147483647" GridPane.rowIndex="6" GridPane.valignment="BOTTOM">
+    <HBox alignment="CENTER" spacing="5.0" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="6">
+        <Label fx:id="labelHalfLife" text="Value Unit" wrapText="true">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+        <Label text="days" wrapText="true" />
+    </HBox>
+   <Separator focusTraversable="false" layoutX="10.0" layoutY="40.0" opacity="0.29" prefWidth="200.0" stylesheets="@../css/referencePane.css" GridPane.columnSpan="2147483647" GridPane.rowIndex="6" GridPane.valignment="BOTTOM">
       <GridPane.margin>
-         <Insets right="10.0" />
+         <Insets left="15.0" right="15.0" />
       </GridPane.margin>
    </Separator>
-       <Label text="Reportable Quantity:" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="TOP">
+       <Label text="Reportable Quantity:" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER">
            <font>
                <Font name="System Bold" size="14.0" />
            </font>
    </Label>
-       <Label fx:id="labelReportQuan" text="Value Unit" wrapText="true" GridPane.columnIndex="4" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
-   <Separator focusTraversable="false" layoutX="10.0" layoutY="40.0" opacity="0.29" prefWidth="200.0" stylesheets="@../css/referencePane.css" GridPane.columnIndex="3" GridPane.columnSpan="2147483647" GridPane.rowIndex="7" GridPane.valignment="BOTTOM">
-      <GridPane.margin>
-         <Insets right="10.0" />
-      </GridPane.margin>
-   </Separator>
+    <VBox alignment="TOP_CENTER" spacing="10.0" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="7">
+        <Label fx:id="labelReportQuan" text="Value Unit" wrapText="true">
+         <padding>
+            <Insets right="5.0" />
+         </padding>
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+        <HBox alignment="CENTER">
+            <ComboBox fx:id="comboBoxRefReportQuanPrefix" visibleRowCount="5"/>
+            <ChoiceBox fx:id="choiceBoxRefReportQuanRadUnit"/>
+        </HBox>
+    </VBox>
    <columnConstraints>
-      <ColumnConstraints percentWidth="50.0" />
+      <ColumnConstraints percentWidth="40.0" />
       <ColumnConstraints percentWidth="50.0" />
       <ColumnConstraints minWidth="10.0" percentWidth="50.0" prefWidth="100.0" />
-      <ColumnConstraints minWidth="10.0" percentWidth="62.0" prefWidth="100.0" />
-      <ColumnConstraints minWidth="10.0" percentWidth="38.0" prefWidth="100.0" />
+      <ColumnConstraints minWidth="10.0" percentWidth="65.0" prefWidth="100.0" />
+      <ColumnConstraints minWidth="10.0" percentWidth="45.0" prefWidth="100.0" />
       <ColumnConstraints minWidth="10.0" percentWidth="50.0" prefWidth="100.0" />
    </columnConstraints>
    <rowConstraints>

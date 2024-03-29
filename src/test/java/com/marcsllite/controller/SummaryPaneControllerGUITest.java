@@ -1,8 +1,10 @@
 package com.marcsllite.controller;
 
-import com.marcsllite.GUITest;
 import com.marcsllite.FXIds;
+import com.marcsllite.GUITest;
 import com.marcsllite.util.FXMLView;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,9 @@ import java.util.concurrent.TimeoutException;
 
 class SummaryPaneControllerGUITest extends GUITest {
     SummaryPaneController controller;
+    AnchorPane anchorPaneSummary;
+    TextArea txtAreaSummary;
+    Button btnSaveSummary;
 
     public SummaryPaneControllerGUITest() {
         super(FXMLView.SUMMARY);
@@ -24,30 +29,31 @@ class SummaryPaneControllerGUITest extends GUITest {
     public void start(Stage stage) throws IOException, TimeoutException {
         super.start(stage);
         controller = (SummaryPaneController) getController();
+        anchorPaneSummary = getNode(FXIds.ANCHORPANE_SUMMARY);
+        txtAreaSummary = getNode(FXIds.TXTAREA_SUMMARY);
+        btnSaveSummary = getNode(FXIds.BTN_SAVE_SUMMARY);
     }
 
     @Test
     void testStart() {
-        FxAssert.verifyThat(FXIds.ANCHORPANE_SUMMARY, NodeMatchers.isVisible());
+        FxAssert.verifyThat(anchorPaneSummary, NodeMatchers.isVisible());
     }
 
     @Test
     void testHideShow() {
         interact(() -> {
-            AnchorPane summaryPane = getNode(FXIds.ANCHORPANE_SUMMARY);
-
             controller.hide();
 
-            FxAssert.verifyThat(summaryPane, NodeMatchers.isInvisible());
+            FxAssert.verifyThat(anchorPaneSummary, NodeMatchers.isInvisible());
 
             controller.show();
 
-            FxAssert.verifyThat(summaryPane, NodeMatchers.isVisible());
+            FxAssert.verifyThat(anchorPaneSummary, NodeMatchers.isVisible());
         });
     }
 
     @Test
     void testSummaryPaneHandler_btnNext() {
-        clickOn(FXIds.BTN_SAVE);
+        clickOn(btnSaveSummary);
     }
 }

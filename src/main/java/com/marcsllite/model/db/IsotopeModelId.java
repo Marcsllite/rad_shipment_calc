@@ -25,7 +25,7 @@ public class IsotopeModelId implements Serializable {
     }
 
     public String getName() {
-        return name;
+        return name == null? null : name.trim();
     }
 
     public void setName(String name) {
@@ -33,7 +33,7 @@ public class IsotopeModelId implements Serializable {
     }
 
     public String getAbbr() {
-        return abbr;
+        return abbr == null? null : abbr.trim();
     }
 
     public void setAbbr(String abbr) {

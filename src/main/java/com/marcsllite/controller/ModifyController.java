@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -20,6 +21,7 @@ import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.security.InvalidParameterException;
 
 public class ModifyController extends BaseController {
@@ -28,7 +30,7 @@ public class ModifyController extends BaseController {
     @FXML private VBox vBoxFirstPage;
     @FXML private TextField txtFieldIsoName;
     @FXML private TextField txtFieldA0;
-    @FXML private ChoiceBox<String> choiceBoxA0Prefix;
+    @FXML private ComboBox<String> comboBoxA0Prefix;
     @FXML private ChoiceBox<String> choiceBoxA0Name;
     @FXML private VBox vBoxMoreInfo;
     @FXML private HBox hBoxAddInfoTop;
@@ -48,7 +50,7 @@ public class ModifyController extends BaseController {
     @FXML private VBox vBoxSecondPage;
     @FXML private DatePicker datePicker;
     @FXML private TextField txtFieldMass;
-    @FXML private ChoiceBox<String> choiceBoxMassPrefix;
+    @FXML private ComboBox<String> comboBoxMassPrefix;
     @FXML private ChoiceBox<String> choiceBoxMassName;
     @FXML private ChoiceBox<String> choiceBoxNature;
     @FXML private ChoiceBox<String> choiceBoxState;
@@ -61,11 +63,11 @@ public class ModifyController extends BaseController {
 
     private static final Logger logr = LogManager.getLogger();
 
-    public ModifyController() {
+    public ModifyController() throws IOException {
         this(null);
     }
 
-    public ModifyController(PropHandler propHandler) {
+    public ModifyController(PropHandler propHandler) throws IOException {
         super(propHandler);
     }
 
@@ -73,18 +75,18 @@ public class ModifyController extends BaseController {
     @FXML public void initialize() {
         super.initialize();
         // adding values to the choice boxes
-        choiceBoxA0Prefix.setItems(Conversions.SIPrefix.getFxValues());
+        comboBoxA0Prefix.setItems(Conversions.SIPrefix.getFxValues());
         choiceBoxA0Name.setItems(Isotope.RadUnit.getFxValues());
-        choiceBoxMassPrefix.setItems(Conversions.SIPrefix.getFxValues());
+        comboBoxMassPrefix.setItems(Conversions.SIPrefix.getFxValues());
         choiceBoxMassName.setItems(Isotope.Mass.getFxValues());
         choiceBoxNature.setItems(Isotope.Nature.getFxValues());
         choiceBoxState.setItems(LimitsModelId.State.getFxValues());
         choiceBoxForm.setItems(LimitsModelId.Form.getFxValues());
 
         // Default value for choice boxes
-        choiceBoxA0Prefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
+        comboBoxA0Prefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
         choiceBoxA0Name.getSelectionModel().select(Isotope.RadUnit.CURIE.getVal());
-        choiceBoxMassPrefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
+        comboBoxMassPrefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
         choiceBoxMassName.getSelectionModel().select(Isotope.Mass.GRAMS.getVal());
     }
 

@@ -38,6 +38,21 @@ class PropHandlerFactoryTest {
     private static final ClassLoader loader = ClassLoader.getSystemClassLoader();
 
     @Test
+    void testGetPropHandler_Exception() {
+        String name = "name";
+        try {
+            when(factory.newBundle(name, locale, format, loader, false)).thenThrow(new IOException());
+        } catch (IOException ioe) {
+            fail("No Exception should be thrown");
+        }
+
+        IOException rte = assertThrows(
+            IOException.class, () -> factory.getPropHandler(name)
+        );
+        assertEquals("Failed to get PropHandler", rte.getMessage());
+    }
+
+    @Test
     void testGetPropHandler_NullName() {
         try {
             factory.getPropHandler(null);

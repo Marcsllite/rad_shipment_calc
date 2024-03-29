@@ -28,10 +28,11 @@ public abstract class AbstractDao<E extends Serializable, I> implements Dao<E, I
         ).getActualTypeArguments()[0];
     }
 
-    public E findById(I id) {
-        E entity = getEntityManager().find(entityClass, id);
+    public E findById(I id) throws IllegalArgumentException {
+        if(id == null) throw new IllegalArgumentException("id cannot be null");
+        E entity = getEntityManager().find(getEntityClass(), id);
         if(entity == null) {
-            logr.error("Attempted to fetch {} entity that does not exist. ID: \"{}\"", entityClass.getSimpleName(), id);
+            logr.error("Attempted to fetch {} entity that does not exist. ID: \"{}\"", getEntityClass().getSimpleName(), id);
         }
         return entity;
     }
@@ -41,7 +42,8 @@ public abstract class AbstractDao<E extends Serializable, I> implements Dao<E, I
         return getEntityManager().createQuery(query).getResultList();
     }
 
-    public Object findSingleResult(String query) {
+    public Object findSingleResult(String query) throws IllegalArgumentException {
+        if(query == null) throw new IllegalArgumentException("query cannot be null");
         return getEntityManager()
             .createQuery(query)
             .getSingleResult();
@@ -52,13 +54,14 @@ public abstract class AbstractDao<E extends Serializable, I> implements Dao<E, I
         return ((Long) getEntityManager().createQuery(query).getSingleResult()).intValue();
     }
 
-    public E attach(E entity) throws StaleStateException {
+    public E attach(E entity) throws IllegalArgumentException, StaleStateException {
+        if(entity == null) throw new IllegalArgumentException("entity cannot be null");
         try {
             E mergedEntity = getEntityManager().merge(entity);
             flush();
             return mergedEntity;
         } catch (OptimisticLockException ole) {
-            String msg = String.format("Attempted to attach a stale %s entity", entityClass.getSimpleName());
+            String msg = String.format("Attempted to attach a stale %s entity", getEntityName());
             logr.catching(ole);
             var sse = new StaleStateException(msg);
             logr.throwing(sse);
@@ -66,14 +69,15 @@ public abstract class AbstractDao<E extends Serializable, I> implements Dao<E, I
         }
     }
 
-    public void remove(I id) throws NoResultException {
+    public void remove(I id) throws IllegalArgumentException, NoResultException {
+        if(id == null) throw new IllegalArgumentException("id cannot be null");
         E ref;
         try {
-            ref = getEntityManager().getReference(entityClass, id);
+            ref = getEntityManager().getReference(getEntityClass(), id);
             getEntityManager().remove(ref);
         } catch (EntityNotFoundException enf) {
             logr.catching(enf);
-            logr.warn("Attempted to remove an unknown {} entity. ID: \"{}\"", entityClass.getSimpleName(), id);
+            logr.warn("Attempted to remove an unknown {} entity. ID: \"{}\"", getEntityClass().getSimpleName(), id);
         }
     }
 
@@ -81,15 +85,20 @@ public abstract class AbstractDao<E extends Serializable, I> implements Dao<E, I
         getEntityManager().flush();
     }
 
-    public void persist(E entity) {
+    public void persist(E entity) throws IllegalArgumentException {
+        if(entity == null) throw new IllegalArgumentException("entity cannot be null");
         getEntityManager().persist(entity);
     }
 
+    public Class<E> getEntityClass() {
+        return entityClass;
+    }
+
     protected String getEntityName() {
-        Entity entity = entityClass.getAnnotation(Entity.class);
+        Entity entity = getEntityClass().getAnnotation(Entity.class);
         String name = entity.name();
         if(name.isBlank()) {
-            name = entityClass.getSimpleName();
+            name = getEntityClass().getSimpleName();
         }
         return name;
     }

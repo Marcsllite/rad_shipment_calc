@@ -13,9 +13,7 @@ public class PTableColumn<S, T> extends TableColumn<S, T> {
 
     public PTableColumn() {
         tableViewProperty().addListener((ov, t, t1) -> {
-            if(PTableColumn.this.prefWidthProperty().isBound()) {
-                PTableColumn.this.prefWidthProperty().unbind();
-            }
+            PTableColumn.this.prefWidthProperty().unbind();
 
             PTableColumn.this.prefWidthProperty().bind(t1.widthProperty().multiply(percentageWidth));
         });

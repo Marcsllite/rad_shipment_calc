@@ -16,7 +16,7 @@ class StateAttrConverterTest {
     @Test
     void testConvertToDatabaseColumn() {
         LimitsModelId.State state = LimitsModelId.State.SOLID;
-        String expected = state.getVal();
+        String expected = state.getVal().toLowerCase();
         assertEquals(expected, converter.convertToDatabaseColumn(state));
     }
 
@@ -30,5 +30,6 @@ class StateAttrConverterTest {
         LimitsModelId.State expected = LimitsModelId.State.SOLID;
         String str = expected.getVal();
         assertEquals(expected, converter.convertToEntityAttribute(str));
+        assertEquals(expected, converter.convertToEntityAttribute(str.toUpperCase()));
     }
 }

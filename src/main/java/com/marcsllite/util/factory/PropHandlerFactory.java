@@ -22,13 +22,13 @@ public class PropHandlerFactory extends ResourceBundle.Control {
     private final Locale locale = new Locale("en", "US");
     private final ClassLoader loader = ClassLoader.getSystemClassLoader();
 
-    public PropHandler getPropHandler(String name) throws RuntimeException {
+    public PropHandler getPropHandler(String name) throws IOException {
         try {
             return (PropHandler) newBundle(name == null ? PropHandler.PROP_NAME : name,
                 locale, XML, loader, false);
         } catch(IOException ioe) {
             logr.catching(Level.FATAL, ioe);
-            RuntimeException rte = new RuntimeException("Failed to get PropHandler");
+            IOException rte = new IOException("Failed to get PropHandler");
             logr.throwing(rte);
             throw rte;
         }

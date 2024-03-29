@@ -16,7 +16,7 @@ class FormAttrConverterTest {
     @Test
     void testConvertToDatabaseColumn() {
         LimitsModelId.Form form = LimitsModelId.Form.NORMAL;
-        String expected = form.getVal();
+        String expected = form.getVal().toLowerCase();
         assertEquals(expected, converter.convertToDatabaseColumn(form));
     }
 

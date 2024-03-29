@@ -28,7 +28,7 @@
          <TextField fx:id="txtFieldA0" promptText="Initial Activity" styleClass="validTxtField" />
       </HBox>
       <HBox styleClass="hBoxAdd">
-         <ChoiceBox fx:id="choiceBoxA0Prefix" />
+         <ComboBox fx:id="comboBoxA0Prefix" visibleRowCount="5" />
          <ChoiceBox fx:id="choiceBoxA0Name" />
       </HBox>
       <VBox fx:id="vBoxMoreInfo" spacing="5.0" styleClass="vBoxAdditionalInfo">
@@ -78,7 +78,7 @@
       <HBox alignment="CENTER" spacing="10.0" styleClass="hBoxAdd">
          <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="modifyTxt" text="Mass:" />
          <TextField fx:id="txtFieldMass" promptText="Mass" styleClass="validTxtField" />
-         <ChoiceBox fx:id="choiceBoxMassPrefix" />
+         <ComboBox fx:id="comboBoxMassPrefix" visibleRowCount="5"/>
          <ChoiceBox fx:id="choiceBoxMassName" layoutX="350.0" layoutY="10.0" />
       </HBox>
       <HBox alignment="CENTER" spacing="10.0" styleClass="hBoxAdd">

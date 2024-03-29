@@ -3,10 +3,15 @@ package com.marcsllite.model;
 import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.beans.property.SimpleFloatProperty;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
 
 public class ReportableQuantity {
-    private final PropHandler propHandler;
-    private final float defaultVal;
+    private static final Logger logr = LogManager.getLogger();
+    private PropHandler propHandler;
+    private float defaultVal;
     private String abbr;
     private final SimpleFloatProperty curie = new SimpleFloatProperty();
     private final SimpleFloatProperty teraBq = new SimpleFloatProperty();
@@ -18,8 +23,13 @@ public class ReportableQuantity {
     }
 
     public ReportableQuantity(String abbr, Float curie, Float teraBq) {
-        this.propHandler = new PropHandlerFactory().getPropHandler(null);
-        this.defaultVal = (float) getPropHandler().getDouble("defaultNum");
+        try {
+            setPropHandler(new PropHandlerFactory().getPropHandler(null));
+            setDefaultVal((float) getPropHandler().getDouble("defaultNum"));
+        } catch (IOException e) {
+            logr.catching(e);
+            setDefaultVal(-2.0f);
+        }
 
         setAbbr(abbr);
         setCurie(curie == null? defaultVal : curie);
@@ -30,8 +40,16 @@ public class ReportableQuantity {
         return propHandler;
     }
 
+    public void setPropHandler(PropHandler propHandler) {
+        this.propHandler = propHandler;
+    }
+
     public float getDefaultVal() {
         return defaultVal;
+    }
+
+    public void setDefaultVal(float defaultVal) {
+        this.defaultVal = defaultVal;
     }
 
     public String getAbbr() {

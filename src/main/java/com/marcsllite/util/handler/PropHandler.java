@@ -49,13 +49,13 @@ public class PropHandler extends ResourceBundle {
     protected Object handleGetObject(String key) {
         if(key == null || key.isBlank()) return "";
 
-        String ret = Objects.requireNonNull(prop, "Properties has not been initialized").getProperty(key);
+        String ret = Objects.requireNonNull(getProp(), "Properties has not been initialized").getProperty(key);
         return (ret == null)? "" : ret;
     }
 
     @Override
     public Enumeration<String> getKeys() {
-        Set<String> handleKeys = Objects.requireNonNull(prop, "Properties has not been initialized").stringPropertyNames();
+        Set<String> handleKeys = Objects.requireNonNull(getProp(), "Properties has not been initialized").stringPropertyNames();
         return Collections.enumeration(handleKeys);
     }
 
@@ -76,8 +76,8 @@ public class PropHandler extends ResourceBundle {
      */
     public void setProp(InputStream stream) throws InvalidParameterException{
         try {
-            prop = new Properties();
-            prop.loadFromXML(stream);
+            setProp(new Properties());
+            getProp().loadFromXML(stream);
         } catch (IOException | NullPointerException e) {
             logr.catching(Level.FATAL, e);
             var ee = new InvalidParameterException("Failed to set properties from stream: " + stream.toString());
@@ -137,7 +137,7 @@ public class PropHandler extends ResourceBundle {
     public String getFileText(String resourceFilePath) throws InvalidParameterException {
         try {
             if (resourceFilePath == null || resourceFilePath.isBlank()) {
-                var e = new InvalidParameterException("resourceFilepath (" + resourceFilePath + ") is invalid");
+                var e = new InvalidParameterException("resourceFilepath \"" + resourceFilePath + "\" is invalid");
                 logr.throwing(e);
                 throw e;
             } 
@@ -205,7 +205,7 @@ public class PropHandler extends ResourceBundle {
             ret = Double.parseDouble(value);
         } catch (NumberFormatException ee) {
             logr.catching(Level.DEBUG, ee);
-            var e = new InvalidParameterException(value + " is not a number");
+            var e = new InvalidParameterException("\"" + value + "\" is not a number");
             logr.throwing(e);
             throw e;
         }

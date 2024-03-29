@@ -12,7 +12,7 @@ public class FormAttrConverter implements AttributeConverter<LimitsModelId.Form,
         if(form == null) {
             return null;
         }
-        return form.getVal();
+        return form.getVal().toLowerCase();
     }
 
     @Override

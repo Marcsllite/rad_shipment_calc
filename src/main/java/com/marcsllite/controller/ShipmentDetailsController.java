@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
@@ -12,27 +13,28 @@ import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.security.InvalidParameterException;
 
 public class ShipmentDetailsController extends BaseController {
     @FXML private StackPane shipmentDetails;
-    @FXML private VBox vBoxShipmentDetails;
-    @FXML private DatePicker datePicker;
-    @FXML private TextField txtFieldMass;
-    @FXML private ChoiceBox<String> choiceBoxMassPrefix;
-    @FXML private ChoiceBox<String> choiceBoxMassName;
-    @FXML private ChoiceBox<String> choiceBoxNature;
-    @FXML private ChoiceBox<String> choiceBoxState;
-    @FXML private ChoiceBox<String> choiceBoxForm;
-    @FXML private Button btnSave;
+    @FXML private VBox vBoxShipDetails;
+    @FXML private DatePicker datePickerShipDetails;
+    @FXML private TextField txtFieldMassShipDetails;
+    @FXML private ComboBox<String> comboBoxMassPrefixShipDetails;
+    @FXML private ChoiceBox<String> choiceBoxMassNameShipDetails;
+    @FXML private ChoiceBox<String> choiceBoxNatureShipDetails;
+    @FXML private ChoiceBox<String> choiceBoxStateShipDetails;
+    @FXML private ChoiceBox<String> choiceBoxFormShipDetails;
+    @FXML private Button btnSaveShipDetails;
 
     private static final Logger logr = LogManager.getLogger();
 
-    public ShipmentDetailsController() {
+    public ShipmentDetailsController() throws IOException {
         this(null);
     }
 
-    public ShipmentDetailsController(PropHandler propHandler) {
+    public ShipmentDetailsController(PropHandler propHandler) throws IOException {
         super(propHandler);
     }
 
@@ -56,7 +58,7 @@ public class ShipmentDetailsController extends BaseController {
             var e = new InvalidParameterException("action event cannot be null");
             logr.throwing(e);
             throw e;
-        } else if(event.getSource() == btnSave) {
+        } else if(event.getSource() == btnSaveShipDetails) {
             saveBtnHandler();
         }
     }

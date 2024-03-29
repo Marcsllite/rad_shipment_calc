@@ -9,11 +9,15 @@ import com.marcsllite.controller.ReferencePaneController;
 import com.marcsllite.controller.ShipmentDetailsController;
 import com.marcsllite.controller.SummaryPaneController;
 import javafx.util.Callback;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ControllerFactory implements Callback<Class<?>, Object> {
+    private static final Logger logr = LogManager.getLogger();
     protected final Map<String, Object> controllerMap;
 
     public ControllerFactory() {
@@ -33,29 +37,34 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
         String name = param.getName();
         Object ret = getController(name);
 
-        if(ret == null) {
-            if(name.equals(MainController.class.getName())) {
-                ret = MainController.getInstance();
-            } else if(name.equals(MenuPaneController.class.getName())) {
-                ret = new MenuPaneController();
-            } else if(name.equals(HomePaneController.class.getName())) {
-                ret = new HomePaneController();
-            } else if(name.equals(ReferencePaneController.class.getName())) {
-                ret = new ReferencePaneController();
-            } else if(name.equals(ModifyController.class.getName())) {
-                ret = new ModifyController();
-            } else if(name.equals(ShipmentDetailsController.class.getName())) {
-                ret = new ShipmentDetailsController();
-            } else if(name.equals(SummaryPaneController.class.getName())) {
-                ret = new SummaryPaneController();
+        try {
+            if(ret == null) {
+                if(name.equals(MainController.class.getName())) {
+                    ret = MainController.getInstance();
+                } else if(name.equals(MenuPaneController.class.getName())) {
+                    ret = new MenuPaneController();
+                } else if(name.equals(HomePaneController.class.getName())) {
+                    ret = new HomePaneController();
+                } else if(name.equals(ReferencePaneController.class.getName())) {
+                    ret = new ReferencePaneController();
+                } else if(name.equals(ModifyController.class.getName())) {
+                    ret = new ModifyController();
+                } else if(name.equals(ShipmentDetailsController.class.getName())) {
+                    ret = new ShipmentDetailsController();
+                } else if(name.equals(SummaryPaneController.class.getName())) {
+                    ret = new SummaryPaneController();
+                }
+
+                if(ret instanceof BaseController ||
+                    ret instanceof MainController) {
+                    controllerMap.put(name, ret);
+                }
             }
 
-            if(ret instanceof BaseController ||
-                ret instanceof MainController) {
-                controllerMap.put(name, ret);
-            }
+            return ret;
+        } catch (IOException ioe) {
+            logr.catching(ioe);
+            return null;
         }
-
-        return ret;
     }
 }
