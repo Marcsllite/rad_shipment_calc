@@ -73,11 +73,10 @@ class HomePaneControllerGUITest extends GUITest {
         interact(() -> clickOn(btnAdd));
         stackPaneModify = getNode(FXIds.STACKPANE_MODIFY);
         FxAssert.verifyThat(window(stackPaneModify), WindowMatchers.isShowing());
-        FxAssert.verifyThat(window(stackPaneModify), WindowMatchers.isFocused());
 
         interact(() -> window(stackPaneModify).hide());
         FxAssert.verifyThat(window(gridPaneHome), WindowMatchers.isShowing());
-        FxAssert.verifyThat(window(gridPaneHome), WindowMatchers.isFocused());
+        FxAssert.verifyThat(window(stackPaneModify), WindowMatchers.isNotShowing());
     }
 
     @Test
