@@ -41,18 +41,18 @@ public class FXIds {
     public static final String TXTFIELD_A1 = "#txtFieldA1";
     public static final String COMBOBOX_REF_A1_PREFIX = "#comboBoxRefA1Prefix";
     public static final String CHOICEBOX_REF_A1_RAD_UNIT = "#choiceBoxRefA1RadUnit";
-    public static final String LABEL_A2 = "#labelA2";
+    public static final String TXTFIELD_A2 = "#txtFieldA2";
     public static final String COMBOBOX_REF_A2_PREFIX = "#comboBoxRefA2Prefix";
     public static final String CHOICEBOX_REF_A2_RAD_UNIT = "#choiceBoxRefA2RadUnit";
-    public static final String LABEL_DECAY_CONSTANT = "#labelDecayConst";
-    public static final String LABEL_EXEMPT_CONCENTRATION = "#labelExemptCon";
+    public static final String TXTFIELD_DECAY_CONSTANT = "#txtFieldDecayConst";
+    public static final String TXTFIELD_EXEMPT_CON = "#txtFieldExemptCon";
     public static final String COMBOBOX_REF_EXEMPT_CON_PREFIX = "#comboBoxRefExemptConPrefix";
     public static final String CHOICEBOX_REF_EXEMPT_CON_RAD_UNIT = "#choiceBoxRefExemptConRadUnit";
-    public static final String LABEL_EXEMPT_LIMIT = "#labelExemptLim";
+    public static final String TXTFIELD_EXEMPT_LIMIT = "#txtFieldExemptLim";
     public static final String COMBOBOX_REF_EXEMPT_LIM_PREFIX = "#comboBoxRefExemptLimPrefix";
     public static final String CHOICEBOX_REF_EXEMPT_LIM_RAD_UNIT = "#choiceBoxRefExemptLimRadUnit";
-    public static final String LABEL_HALF_LIFE = "#labelHalfLife";
-    public static final String LABEL_REPORTABLE_QUANTITY = "#labelReportQuan";
+    public static final String TXTFIELD_HALF_LIFE = "#txtFieldHalfLife";
+    public static final String TXTFIELD_REPORTABLE_QUANTITY = "#txtFieldReportQuan";
     public static final String COMBOBOX_REF_REPORT_QUAN_PREFIX = "#comboBoxRefReportQuanPrefix";
     public static final String CHOICEBOX_REF_REPORT_QUAN_RAD_UNIT = "#choiceBoxRefReportQuanRadUnit";
 

@@ -1,9 +1,11 @@
 package com.marcsllite.controller;
 
+import com.marcsllite.App;
 import com.marcsllite.model.Isotope;
 import com.marcsllite.model.PTableColumn;
+import com.marcsllite.util.FXMLView;
 import com.marcsllite.util.handler.PropHandler;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -38,12 +40,18 @@ public class HomePaneController extends BaseController {
 
     public HomePaneController(PropHandler propHandler) throws IOException {
         super(propHandler);
+        setPage(Page.HOME);
     }
 
     @Override
     @FXML public void initialize() {
         super.initialize();
         initTable();
+
+        btnEdit.disableProperty().bind(Bindings.notEqual(1, Bindings.size(tableViewHome.getItems())));
+        btnRemove.disableProperty().bind(Bindings.equal(0, Bindings.size(tableViewHome.getItems())));
+        btnCalculate.disableProperty().bind(Bindings.isEmpty(tableViewHome.getItems()));
+        setInit(true);
     }
 
     @Override
@@ -86,7 +94,7 @@ public class HomePaneController extends BaseController {
     /*/////////////////////////////////////////////////// HELPERS ////////////////////////////////////////////////////*/
 
     protected void initTable() {
-        tableColIsotope.setCellValueFactory(i -> new SimpleStringProperty(i.getValue().getIsoId().getAbbr()));
+        tableColIsotope.setCellValueFactory(new PropertyValueFactory<>("abbr"));
         tableColHalfLife.setCellValueFactory(i -> i.getValue().getConstants().halfLifeProperty().asObject());
         tableColMass.setCellValueFactory(new PropertyValueFactory<>("mass"));
     }
@@ -94,23 +102,23 @@ public class HomePaneController extends BaseController {
     /**
      * Helper function to handle the add button being pressed
      */
-    @FXML protected void addBtnHandler(){
+    @FXML protected void addBtnHandler() {
         logr.debug("User clicked the Add button on the home pane");
-        // TODO: implement clicking on add button
+        App.getStageHandler().showModal(FXMLView.MODIFY, Page.ADD);
     }
 
     /**
      * Helper function to handle the edit button being pressed
      */
-    @FXML protected void editBtnHandler(){
+    @FXML protected void editBtnHandler() {
         logr.debug("User clicked the Edit button on the home pane");
-        // TODO: implement clicking on edit button
+        App.getStageHandler().showModal(FXMLView.MODIFY, Page.EDIT);
     }
 
     /**
      * Helper function to handle the remove button being pressed
      */
-    @FXML protected void removeBtnHandler(){
+    @FXML protected void removeBtnHandler() {
         logr.debug("User clicked the Remove button on the home pane");
         // TODO: implement clicking on remove button
     }
@@ -118,7 +126,7 @@ public class HomePaneController extends BaseController {
     /**
      * Helper function to handle the calculate button being pressed
      */
-    @FXML protected void calculateBtnHandler(){
+    @FXML protected void calculateBtnHandler() {
         logr.debug("User clicked the Calculate button on the home pane");
         // TODO: implement clicking on calculate button
     }

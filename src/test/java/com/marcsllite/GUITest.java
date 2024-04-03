@@ -1,5 +1,6 @@
 package com.marcsllite;
 
+import com.marcsllite.controller.BaseController;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.FXMLView;
@@ -44,9 +45,35 @@ public abstract class GUITest extends FxRobot {
     private FolderHandler folderHandler;
     private DBService dbService;
     private App app;
+    private boolean isModal = false;
+    private BaseController.Page modType = null;
 
     public GUITest(FXMLView view) {
+        this(view, null);
+    }
+
+    public GUITest(FXMLView view, BaseController.Page modType) {
         this.view = view;
+        if(modType != null) {
+            setModal(true);
+            setPage(modType);
+        }
+    }
+
+    public boolean isModal() {
+        return isModal;
+    }
+
+    public void setModal(boolean modal) {
+        isModal = modal;
+    }
+
+    public BaseController.Page getPage() {
+        return modType;
+    }
+
+    public void setPage(BaseController.Page modType) {
+        this.modType = modType;
     }
 
     @BeforeAll
@@ -66,9 +93,11 @@ public abstract class GUITest extends FxRobot {
         when(folderHandler.getDataFolderPath()).thenReturn(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
 
         app.init(view, new PropHandlerTestObj(), folderHandler, dbService, new ControllerFactoryTestObj());
+        app.setModal(isModal());
+        app.setPage(getPage());
 
         app.start(stage);
-        stageHandler = app.getStageHandler();
+        stageHandler = App.getStageHandler();
     }
 
     @BeforeEach
@@ -91,15 +120,17 @@ public abstract class GUITest extends FxRobot {
         assertFalse(stage.getIcons().isEmpty());
     }
 
+    protected StageHandler getStageHandler() {
+        return stageHandler;
+    }
+
     /**
      * Helper function to get the initialized controller that is used
      * for the current FXMLView that is used in the GUITest
      * @return  The controller class of the FXMLView or null if not found
      */
     protected Object getController(){
-        return stageHandler
-            .getFactory()
-            .getController(this.getClass().getName().replace("GUITest", ""));
+        return stageHandler.getController();
     }
 
     /**

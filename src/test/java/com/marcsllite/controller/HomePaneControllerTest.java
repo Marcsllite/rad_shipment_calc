@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -16,6 +17,7 @@ class HomePaneControllerTest {
     @BeforeEach
     public void setUp() throws IOException {
         controller = new HomePaneController(new PropHandlerTestObj());
+        assertEquals(BaseController.Page.HOME, controller.getPage());
     }
 
     @Test

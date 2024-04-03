@@ -20,7 +20,7 @@ import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Locale;
+import java.util.function.Predicate;
 
 public class ReferencePaneController extends BaseController {
     @FXML GridPane referencePane;
@@ -31,18 +31,18 @@ public class ReferencePaneController extends BaseController {
     @FXML TextField txtFieldA1;
     @FXML ComboBox<String> comboBoxRefA1Prefix;
     @FXML ChoiceBox<String> choiceBoxRefA1RadUnit;
-    @FXML Label labelA2;
+    @FXML TextField txtFieldA2;
     @FXML ComboBox<String> comboBoxRefA2Prefix;
     @FXML ChoiceBox<String> choiceBoxRefA2RadUnit;
-    @FXML Label labelDecayConst;
-    @FXML Label labelExemptCon;
+    @FXML TextField txtFieldDecayConst;
+    @FXML TextField txtFieldExemptCon;
     @FXML ComboBox<String> comboBoxRefExemptConPrefix;
     @FXML ChoiceBox<String> choiceBoxRefExemptConRadUnit;
-    @FXML Label labelExemptLim;
+    @FXML TextField txtFieldExemptLim;
     @FXML ComboBox<String> comboBoxRefExemptLimPrefix;
     @FXML ChoiceBox<String> choiceBoxRefExemptLimRadUnit;
-    @FXML Label labelHalfLife;
-    @FXML Label labelReportQuan;
+    @FXML TextField txtFieldHalfLife;
+    @FXML TextField txtFieldReportQuan;
     @FXML ComboBox<String> comboBoxRefReportQuanPrefix;
     @FXML ChoiceBox<String> choiceBoxRefReportQuanRadUnit;
 
@@ -52,6 +52,7 @@ public class ReferencePaneController extends BaseController {
 
     public ReferencePaneController(PropHandler propHandler) throws IOException {
         super(propHandler);
+        setPage(Page.REFERENCE);
     }
 
     @Override
@@ -59,6 +60,7 @@ public class ReferencePaneController extends BaseController {
         super.initialize();
         setupDropDownItems();
         initTable();
+        setInit(true);
     }
 
     @Override
@@ -78,6 +80,7 @@ public class ReferencePaneController extends BaseController {
         tableColRefName.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         tableViewSearch.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        tableViewSearch.getSelectionModel().clearSelection();
 
         setupSearchFiltering(getDbService().getAllIsotopes());
     }
@@ -103,28 +106,28 @@ public class ReferencePaneController extends BaseController {
             radUnitListener(txtFieldA1, oldV, newV)
         ));
         comboBoxRefA2Prefix.getSelectionModel().selectedItemProperty().addListener(((observable, oldV, newV) ->
-            prefixListener(labelA2, oldV, newV)
+            prefixListener(txtFieldA2, oldV, newV)
         ));
         choiceBoxRefA2RadUnit.getSelectionModel().selectedItemProperty().addListener(((observable, oldV, newV) ->
-            radUnitListener(labelA2, oldV, newV)
+            radUnitListener(txtFieldA2, oldV, newV)
         ));
         comboBoxRefExemptConPrefix.getSelectionModel().selectedItemProperty().addListener(((observable, oldV, newV) ->
-            prefixListener(labelExemptCon, oldV, newV)
+            prefixListener(txtFieldExemptCon, oldV, newV)
         ));
         choiceBoxRefExemptConRadUnit.getSelectionModel().selectedItemProperty().addListener(((observable, oldV, newV) ->
-            radUnitListener(labelExemptCon, oldV, newV)
+            radUnitListener(txtFieldExemptCon, oldV, newV)
         ));
         comboBoxRefExemptLimPrefix.getSelectionModel().selectedItemProperty().addListener(((observable, oldV, newV) ->
-            prefixListener(labelExemptLim, oldV, newV)
+            prefixListener(txtFieldExemptLim, oldV, newV)
         ));
         choiceBoxRefExemptLimRadUnit.getSelectionModel().selectedItemProperty().addListener(((observable, oldV, newV) ->
-            radUnitListener(labelExemptLim, oldV, newV)
+            radUnitListener(txtFieldExemptLim, oldV, newV)
         ));
         comboBoxRefReportQuanPrefix.getSelectionModel().selectedItemProperty().addListener(((observable, oldV, newV) ->
-            prefixListener(labelReportQuan, oldV, newV)
+            prefixListener(txtFieldReportQuan, oldV, newV)
         ));
         choiceBoxRefReportQuanRadUnit.getSelectionModel().selectedItemProperty().addListener(((observable, oldV, newV) ->
-            radUnitListener(labelReportQuan, oldV, newV)
+            radUnitListener(txtFieldReportQuan, oldV, newV)
         ));
     }
 
@@ -144,14 +147,14 @@ public class ReferencePaneController extends BaseController {
     protected void selectDropDownItem(Control list, String selection) {
         if (list instanceof ChoiceBox) {
             ((ChoiceBox<String>) list).getSelectionModel().select(selection);
-        } else if (list instanceof ComboBox) {
+        }
+        if (list instanceof ComboBox) {
             ((ComboBox<String>) list).getSelectionModel().select(selection);
         }
     }
 
-    protected void radUnitListener(Control control, String oldV, String newV) {
-        if (control instanceof TextField) {
-            TextField field = (TextField) control;
+    protected void radUnitListener(TextField field, String oldV, String newV) {
+        try {
             BigDecimal prev = new BigDecimal(field.getText());
             unbindControl(field);
 
@@ -162,71 +165,37 @@ public class ReferencePaneController extends BaseController {
                 Isotope.RadUnit.CURIE.getVal().equals(newV)) {
                 field.setText(Conversions.bqToCi(prev).toString());
             }
-        } else if (control instanceof Label) {
-            try {
-                Label lbl = (Label) control;
-                BigDecimal prev = new BigDecimal(lbl.getText());
-                unbindControl(lbl);
-
-                if(Isotope.RadUnit.CURIE.getVal().equals(oldV) &&
-                    Isotope.RadUnit.BECQUEREL.getVal().equals(newV)) {
-                    lbl.setText(Conversions.ciToBq(prev).toString());
-                } else if(Isotope.RadUnit.BECQUEREL.getVal().equals(oldV) &&
-                    Isotope.RadUnit.CURIE.getVal().equals(newV)) {
-                    lbl.setText(Conversions.bqToCi(prev).toString());
-                }
-            } catch (NumberFormatException ignored) {
-                // ignored
-            }
+        } catch (NumberFormatException ignored) {
+            // ignored
         }
     }
 
-    protected void prefixListener(Control control, String oldV, String newV) {
+    protected void prefixListener(TextField field, String oldV, String newV) {
         try {
-            if (control instanceof TextField) {
-                TextField field = (TextField) control;
+            BigDecimal converted = Conversions.convertToPrefix(
+                new BigDecimal(field.getText()),
+                Conversions.SIPrefix.toSIPrefix(oldV),
+                Conversions.SIPrefix.toSIPrefix(newV));
 
-                BigDecimal converted = Conversions.convertToPrefix(
-                    new BigDecimal(field.getText()),
-                    Conversions.SIPrefix.toSIPrefix(oldV),
-                    Conversions.SIPrefix.toSIPrefix(newV));
-
-                unbindControl(field);
-                field.setText(converted.toString());
-            } else if (control instanceof Label) {
-                Label lbl = (Label) control;
-
-                BigDecimal converted = Conversions.convertToPrefix(
-                    new BigDecimal(lbl.getText()),
-                    Conversions.SIPrefix.toSIPrefix(oldV),
-                    Conversions.SIPrefix.toSIPrefix(newV));
-
-                unbindControl(lbl);
-                lbl.setText(converted.toString());
-            }
+            unbindControl(field);
+            field.setText(converted.toString());
         } catch (NumberFormatException ignored) {
             // ignored
         }
     }
 
     protected void setupSearchFiltering(ObservableList<Isotope> list) {
-        FilteredList<Isotope> filteredData =  new FilteredList<>(list, b -> true);
+        FilteredList<Isotope> filteredData =  new FilteredList<>(list, isotope -> true);
 
-        txtFieldSearch.textProperty().addListener((observable, oldV, newV) -> filteredData.setPredicate(isotope -> {
-            tableViewSearch.getSelectionModel().clearSelection();
+        txtFieldSearch.textProperty().addListener(
+            (observable, oldV, newV) -> {
+                if (newV != null && !newV.isBlank()) {
+                    tableViewSearch.getSelectionModel().clearSelection();
+                }
 
-            if(newV == null|| newV.isBlank()) {
-                return true;
+                filteredData.setPredicate(searchFilteringPredicate(newV));
             }
-
-            String searchStr = newV.toLowerCase(Locale.ROOT);
-
-            if(isotope.getIsoId().getAbbr().toLowerCase().contains(searchStr)) {
-                return true;
-            } else {
-                return isotope.getIsoId().getName().toLowerCase().contains(searchStr);
-            }
-        }));
+        );
 
         SortedList<Isotope> sortedData = new SortedList<>(filteredData);
         sortedData.comparatorProperty().bind(tableViewSearch.comparatorProperty());
@@ -234,6 +203,23 @@ public class ReferencePaneController extends BaseController {
         tableViewSearch.getSelectionModel().selectedItemProperty().addListener(((observable, oldV, newV) ->
             setupTableDataLinking(newV)
         ));
+    }
+
+    protected Predicate<Isotope> searchFilteringPredicate(String str) {
+        return isotope -> doesIsotopeNameMatch(isotope, str);
+    }
+
+    protected boolean doesIsotopeNameMatch(Isotope isotope, String str) {
+        if(isotope == null) {
+            return false;
+        }
+        if (str == null || str.isBlank()) {
+            return true;
+        }
+        String searchStr = str.toLowerCase();
+
+        return isotope.getIsoId().getAbbr().toLowerCase().contains(searchStr) ||
+            isotope.getIsoId().getName().toLowerCase().contains(searchStr);
     }
 
     protected void setupTableDataLinking(Isotope isotope) {
@@ -247,22 +233,22 @@ public class ReferencePaneController extends BaseController {
     protected void bindIsotopeConstants(Isotope isotope) {
         if(isotope != null) {
             txtFieldA1.textProperty().bind(isotope.getConstants().a1Property().asString());
-            labelA2.textProperty().bind(isotope.getConstants().a2Property().asString());
-            labelDecayConst.textProperty().bind(isotope.getConstants().decayConstantProperty().asString());
-            labelExemptCon.textProperty().bind(isotope.getConstants().exemptConcentrationProperty().asString());
-            labelExemptLim.textProperty().bind(isotope.getConstants().exemptLimitProperty().asString());
-            labelHalfLife.textProperty().bind(isotope.getConstants().halfLifeProperty().asString());
-            labelReportQuan.textProperty().bind(isotope.getConstants().teraBqReportQuanProperty().asString());
+            txtFieldA2.textProperty().bind(isotope.getConstants().a2Property().asString());
+            txtFieldDecayConst.textProperty().bind(isotope.getConstants().decayConstantProperty().asString());
+            txtFieldExemptCon.textProperty().bind(isotope.getConstants().exemptConcentrationProperty().asString());
+            txtFieldExemptLim.textProperty().bind(isotope.getConstants().exemptLimitProperty().asString());
+            txtFieldHalfLife.textProperty().bind(isotope.getConstants().halfLifeProperty().asString());
+            txtFieldReportQuan.textProperty().bind(isotope.getConstants().teraBqReportQuanProperty().asString());
         }
     }
     protected void unbindIsotopeConstants() {
         unbindControl(txtFieldA1);
-        unbindControl(labelA2);
-        unbindControl(labelDecayConst);
-        unbindControl(labelExemptCon);
-        unbindControl(labelExemptLim);
-        unbindControl(labelHalfLife);
-        unbindControl(labelReportQuan);
+        unbindControl(txtFieldA2);
+        unbindControl(txtFieldDecayConst);
+        unbindControl(txtFieldExemptCon);
+        unbindControl(txtFieldExemptLim);
+        unbindControl(txtFieldHalfLife);
+        unbindControl(txtFieldReportQuan);
     }
 
     protected void unbindControl(Control control) {
@@ -270,7 +256,8 @@ public class ReferencePaneController extends BaseController {
             TextField field = (TextField) control;
             field.textProperty().unbind();
             field.textProperty().set("");
-        } else if (control instanceof Label) {
+        }
+        if (control instanceof Label) {
             Label lbl = (Label) control;
             lbl.textProperty().unbind();
             lbl.textProperty().set("");

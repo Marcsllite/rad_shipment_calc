@@ -3,6 +3,7 @@ package com.marcsllite.service;
 import com.marcsllite.model.Isotope;
 import com.marcsllite.model.Limits;
 import com.marcsllite.model.ReportableQuantity;
+import com.marcsllite.model.db.IsotopeModel;
 import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
 import javafx.collections.ObservableList;
@@ -23,6 +24,8 @@ public interface DBService {
     float getHalfLife(String abbr);
 
     int countAllIsotopes();
+
+    ObservableList<IsotopeModel> getAllIsotopeModels();
 
     ObservableList<Isotope> getAllIsotopes();
 

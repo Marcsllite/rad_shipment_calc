@@ -1,5 +1,6 @@
 package com.marcsllite;
 
+import com.marcsllite.controller.BaseController;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.FXMLView;
@@ -22,12 +23,14 @@ import java.io.IOException;
  */
 public class App extends Application {
     private static final Logger logr = LogManager.getLogger();
-    private StageHandler stageHandler;
+    private static StageHandler stageHandler;
     private FolderHandler folderHandler;
     private DBService dbService;
     private PropHandler propHandler;
     private ControllerFactory controllerFactory;
     private FXMLView view;
+    private boolean isModal = false;
+    private BaseController.Page page = BaseController.Page.NONE;
 
     public App() {
         this(true);
@@ -77,7 +80,11 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         setStageHandler(new StageHandler(stage, getPropHandler(), getControllerFactory()));
-        getStageHandler().show(getView());
+        if(getPage() == null || BaseController.Page.NONE.equals(getPage())) {
+            getStageHandler().show(getView());
+        } else {
+            getStageHandler().showModal(getView(), getPage());
+        }
     }
 
     @Override
@@ -102,12 +109,14 @@ public class App extends Application {
      *
      * @return the StageHandler
      */
-    public StageHandler getStageHandler() {
+    public static StageHandler getStageHandler() {
         return stageHandler;
     }
 
-    public void setStageHandler(StageHandler stageHandler) {
-        this.stageHandler = stageHandler;
+    public static void setStageHandler(StageHandler stageHandler) {
+        if(App.stageHandler == null) {
+            App.stageHandler = stageHandler;
+        }
     }
 
     public FolderHandler getFolderHandler() {
@@ -144,5 +153,21 @@ public class App extends Application {
 
     public void setView(FXMLView view) {
         this.view = view;
+    }
+
+    public boolean isModal() {
+        return isModal;
+    }
+
+    public void setModal(boolean modal) {
+        isModal = modal;
+    }
+
+    public BaseController.Page getPage() {
+        return page;
+    }
+
+    public void setPage(BaseController.Page page) {
+        this.page = page;
     }
 }

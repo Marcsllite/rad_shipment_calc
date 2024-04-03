@@ -9,7 +9,6 @@ import com.marcsllite.util.FXMLView;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -22,12 +21,16 @@ import org.testfx.matcher.base.NodeMatchers;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 
 class ReferencePaneControllerGUITest extends GUITest {
     ReferencePaneController controller;
@@ -37,18 +40,18 @@ class ReferencePaneControllerGUITest extends GUITest {
     TextField txtFieldA1;
     ComboBox<String> comboBoxRefA1Prefix;
     ChoiceBox<String> choiceBoxRefA1RadUnit;
-    Label labelA2;
+    TextField txtFieldA2;
     ComboBox<String> comboBoxRefA2Prefix;
     ChoiceBox<String> choiceBoxRefA2RadUnit;
-    Label labelDecayConst;
-    Label labelExemptCon;
+    TextField txtFieldDecayConst;
+    TextField txtFieldExemptCon;
     ComboBox<String> comboBoxRefExemptConPrefix;
     ChoiceBox<String> choiceBoxRefExemptConRadUnit;
-    Label labelExemptLim;
+    TextField txtFieldExemptLim;
     ComboBox<String> comboBoxRefExemptLimPrefix;
     ChoiceBox<String> choiceBoxRefExemptLimRadUnit;
-    Label labelHalfLife;
-    Label labelReportQuan;
+    TextField txtFieldHalfLife;
+    TextField txtFieldReportQuan;
     ComboBox<String> comboBoxRefReportQuanPrefix;
     ChoiceBox<String> choiceBoxRefReportQuanRadUnit;
 
@@ -66,18 +69,18 @@ class ReferencePaneControllerGUITest extends GUITest {
         txtFieldA1 = getNode(FXIds.TXTFIELD_A1);
         comboBoxRefA1Prefix = getNode(FXIds.COMBOBOX_REF_A1_PREFIX);
         choiceBoxRefA1RadUnit = getNode(FXIds.CHOICEBOX_REF_A1_RAD_UNIT);
-        labelA2 = getNode(FXIds.LABEL_A2);
+        txtFieldA2 = getNode(FXIds.TXTFIELD_A2);
         comboBoxRefA2Prefix = getNode(FXIds.COMBOBOX_REF_A2_PREFIX);
         choiceBoxRefA2RadUnit = getNode(FXIds.CHOICEBOX_REF_A2_RAD_UNIT);
-        labelDecayConst = getNode(FXIds.LABEL_DECAY_CONSTANT);
-        labelExemptCon = getNode(FXIds.LABEL_EXEMPT_CONCENTRATION);
+        txtFieldDecayConst = getNode(FXIds.TXTFIELD_DECAY_CONSTANT);
+        txtFieldExemptCon = getNode(FXIds.TXTFIELD_EXEMPT_CON);
         comboBoxRefExemptConPrefix = getNode(FXIds.COMBOBOX_REF_EXEMPT_CON_PREFIX);
         choiceBoxRefExemptConRadUnit = getNode(FXIds.CHOICEBOX_REF_EXEMPT_CON_RAD_UNIT);
-        labelExemptLim = getNode(FXIds.LABEL_EXEMPT_LIMIT);
+        txtFieldExemptLim = getNode(FXIds.TXTFIELD_EXEMPT_LIMIT);
         comboBoxRefExemptLimPrefix = getNode(FXIds.COMBOBOX_REF_EXEMPT_LIM_PREFIX);
         choiceBoxRefExemptLimRadUnit = getNode(FXIds.CHOICEBOX_REF_EXEMPT_LIM_RAD_UNIT);
-        labelHalfLife = getNode(FXIds.LABEL_HALF_LIFE);
-        labelReportQuan = getNode(FXIds.LABEL_REPORTABLE_QUANTITY);
+        txtFieldHalfLife = getNode(FXIds.TXTFIELD_HALF_LIFE);
+        txtFieldReportQuan = getNode(FXIds.TXTFIELD_REPORTABLE_QUANTITY);
         comboBoxRefReportQuanPrefix = getNode(FXIds.COMBOBOX_REF_REPORT_QUAN_PREFIX);
         choiceBoxRefReportQuanRadUnit = getNode(FXIds.CHOICEBOX_REF_REPORT_QUAN_RAD_UNIT);
     }
@@ -128,228 +131,173 @@ class ReferencePaneControllerGUITest extends GUITest {
 
     @Test
     void testHideShow() {
-        interact(() -> {
-            controller.hide();
+        interact(() -> controller.hide());
 
-            FxAssert.verifyThat(gridPaneReference, NodeMatchers.isInvisible());
+        FxAssert.verifyThat(gridPaneReference, NodeMatchers.isInvisible());
 
-            controller.show();
+        interact(() -> controller.show());
 
-            FxAssert.verifyThat(gridPaneReference, NodeMatchers.isVisible());
-        });
+        FxAssert.verifyThat(gridPaneReference, NodeMatchers.isVisible());
     }
 
     @Test
     void testTableDataLinking() {
-        interact(() -> {
-            ObservableList<Isotope> tableItems = tableViewSearch.getItems();
-            assertEquals(1, tableItems.size());
+        assertNull(tableViewSearch.getSelectionModel().getSelectedItem());
+        validateRefTextFields(txtFieldA1, "A1");
+        validateRefTextFields(txtFieldA2, "A2");
+        validateRefTextFields(txtFieldDecayConst, "Decay Constant");
+        validateRefTextFields(txtFieldExemptCon, "Exempt Concentration");
+        validateRefTextFields(txtFieldExemptLim, "Exempt Limit");
+        validateRefTextFields(txtFieldHalfLife, "Half Life");
+        validateRefTextFields(txtFieldReportQuan, "Reportable Quantity");
 
-            IsotopeConstants isoConstants = tableItems.get(0).getConstants();
+        ObservableList<Isotope> tableItems = tableViewSearch.getItems();
+        assertEquals(2, tableItems.size());
 
-            assertNull(tableViewSearch.getSelectionModel().getSelectedItem());
-            assertTrue(txtFieldA1.getText().isEmpty());
-            assertFalse(labelA2.getText().isEmpty());
-            assertFalse(labelDecayConst.getText().isEmpty());
-            assertFalse(labelExemptCon.getText().isEmpty());
-            assertFalse(labelExemptLim.getText().isEmpty());
-            assertFalse(labelHalfLife.getText().isEmpty());
-            assertFalse(labelReportQuan.getText().isEmpty());
+        interact(() -> selectRow(0));
+        validateSelectedRow(0);
 
-            tableViewSearch.getSelectionModel().select(0);
+        interact(() -> selectRow(1));
+        validateSelectedRow(1);
+        interact(this::clearSelection);
+    }
 
-            assertEquals(String.valueOf(isoConstants.getA1()), txtFieldA1.getText());
-            assertEquals(String.valueOf(isoConstants.getA2()), labelA2.getText());
-            assertEquals(String.valueOf(isoConstants.getDecayConstant()), labelDecayConst.getText());
-            assertEquals(String.valueOf(isoConstants.getExemptConcentration()), labelExemptCon.getText());
-            assertEquals(String.valueOf(isoConstants.getExemptLimit()), labelExemptLim.getText());
-            assertEquals(String.valueOf(isoConstants.getHalfLife()), labelHalfLife.getText());
-            assertEquals(String.valueOf(isoConstants.getTeraBqReportQuan()), labelReportQuan.getText());
-        });
+    protected void validateSelectedRow(int index) {
+        IsotopeConstants isoConstants = tableViewSearch.getItems().get(index).getConstants();
+
+        assertEquals(String.valueOf(isoConstants.getA1()), txtFieldA1.getText());
+        assertEquals(String.valueOf(isoConstants.getA2()), txtFieldA2.getText());
+        assertEquals(String.valueOf(isoConstants.getDecayConstant()), txtFieldDecayConst.getText());
+        assertEquals(String.valueOf(isoConstants.getExemptConcentration()), txtFieldExemptCon.getText());
+        assertEquals(String.valueOf(isoConstants.getExemptLimit()), txtFieldExemptLim.getText());
+        assertEquals(String.valueOf(isoConstants.getHalfLife()), txtFieldHalfLife.getText());
+        assertEquals(String.valueOf(isoConstants.getTeraBqReportQuan()), txtFieldReportQuan.getText());
+    }
+
+    protected void validateRefTextFields(TextField field, String promptTxt) {
+        assertTrue(field.getText().isEmpty());
+        assertFalse(field.isEditable());
+        assertEquals(promptTxt, field.getPromptText());
     }
 
     @Test
     void testRadUnitListener() {
+        interact(() -> selectRow(0));
+
+        IsotopeConstants isoConstants = tableViewSearch.getItems().get(0).getConstants();
+
         interact(() -> {
-            tableViewSearch.getSelectionModel().select(0);
-
-            IsotopeConstants isoConstants = tableViewSearch.getItems().get(0).getConstants();
-            BigDecimal a1 = BigDecimal.valueOf(isoConstants.getA1());
-            BigDecimal a2 = BigDecimal.valueOf(isoConstants.getA2());
-            BigDecimal exemptCon = BigDecimal.valueOf(isoConstants.getExemptConcentration());
-            BigDecimal exemptLim = BigDecimal.valueOf(isoConstants.getExemptLimit());
-            BigDecimal reportQuan = BigDecimal.valueOf(isoConstants.getTeraBqReportQuan());
-
-            // A1
-            String exp = String.valueOf(isoConstants.getA1());
-            assertEquals(exp, txtFieldA1.getText());
-
-            choiceBoxRefA1RadUnit.getSelectionModel().select(Isotope.RadUnit.CURIE.getVal());
-            exp = Conversions.bqToCi(a1).toString();
-            assertEquals(exp, txtFieldA1.getText());
-
-            choiceBoxRefA1RadUnit.getSelectionModel().select(Isotope.RadUnit.BECQUEREL.getVal());
-            exp = String.valueOf(isoConstants.getA1());
-            assertEquals(exp, txtFieldA1.getText());
-
-            // A2
-            exp = String.valueOf(isoConstants.getA2());
-            assertEquals(exp, labelA2.getText());
-
-            choiceBoxRefA2RadUnit.getSelectionModel().select(Isotope.RadUnit.CURIE.getVal());
-            exp = Conversions.bqToCi(a2).toString();
-            assertEquals(exp, labelA2.getText());
-
-            choiceBoxRefA2RadUnit.getSelectionModel().select(Isotope.RadUnit.BECQUEREL.getVal());
-            exp = String.valueOf(isoConstants.getA2());
-            assertEquals(exp, labelA2.getText());
-
-            // Exempt Concentration
-            exp = String.valueOf(isoConstants.getExemptConcentration());
-            assertEquals(exp, labelExemptCon.getText());
-
-            choiceBoxRefExemptConRadUnit.getSelectionModel().select(Isotope.RadUnit.CURIE.getVal());
-            exp = Conversions.bqToCi(exemptCon).toString();
-            assertEquals(exp, labelExemptCon.getText());
-
-            choiceBoxRefExemptConRadUnit.getSelectionModel().select(Isotope.RadUnit.BECQUEREL.getVal());
-            exp = String.valueOf(isoConstants.getExemptConcentration());
-            assertEquals(exp, labelExemptCon.getText());
-
-            // Exempt Limit
-            exp = String.valueOf(isoConstants.getExemptLimit());
-            assertEquals(exp, labelExemptLim.getText());
-
-            choiceBoxRefExemptLimRadUnit.getSelectionModel().select(Isotope.RadUnit.CURIE.getVal());
-            exp = Conversions.bqToCi(exemptLim).toString();
-            assertEquals(exp, labelExemptLim.getText());
-
-            choiceBoxRefExemptLimRadUnit.getSelectionModel().select(Isotope.RadUnit.BECQUEREL.getVal());
-            exp = String.valueOf(isoConstants.getExemptLimit());
-            assertEquals(exp, labelExemptLim.getText());
-
-            //  Reportable Quantity
-            exp = String.valueOf(isoConstants.getTeraBqReportQuan());
-            assertEquals(exp, labelReportQuan.getText());
-
-            choiceBoxRefReportQuanRadUnit.getSelectionModel().select(Isotope.RadUnit.CURIE.getVal());
-            exp = Conversions.bqToCi(reportQuan).toString();
-            assertEquals(exp, labelReportQuan.getText());
-
-            choiceBoxRefReportQuanRadUnit.getSelectionModel().select(Isotope.RadUnit.BECQUEREL.getVal());
-            exp = String.valueOf(isoConstants.getTeraBqReportQuan());
-            assertEquals(exp, labelReportQuan.getText());
+            verifyRadUnitConversions(choiceBoxRefA1RadUnit, txtFieldA1, isoConstants.getA1());
+            verifyRadUnitConversions(choiceBoxRefA2RadUnit, txtFieldA2, isoConstants.getA2());
+            verifyRadUnitConversions(choiceBoxRefExemptConRadUnit, txtFieldExemptCon, isoConstants.getExemptConcentration());
+            verifyRadUnitConversions(choiceBoxRefExemptLimRadUnit, txtFieldExemptLim, isoConstants.getExemptLimit());
+            verifyRadUnitConversions(choiceBoxRefReportQuanRadUnit, txtFieldReportQuan, isoConstants.getTeraBqReportQuan());
         });
+        interact(this::clearSelection);
+    }
+
+    protected void verifyRadUnitConversions(ChoiceBox<String> choiceBox, TextField field, float original) {
+        String exp = String.valueOf(original);
+        assertEquals(exp, field.getText());
+
+        choiceBox.getSelectionModel().select(Isotope.RadUnit.CURIE.getVal());
+        exp = Conversions.bqToCi(BigDecimal.valueOf(original)).toString();
+        assertEquals(exp, field.getText());
+
+        choiceBox.getSelectionModel().select(Isotope.RadUnit.BECQUEREL.getVal());
+        exp = String.valueOf(original);
+        assertEquals(exp, field.getText());
     }
 
     @Test
     void testPrefixListener() {
+        interact(() -> selectRow(0));
+
+        IsotopeConstants isoConstants = tableViewSearch.getItems().get(0).getConstants();
+
         interact(() -> {
-            tableViewSearch.getSelectionModel().select(0);
-
-            IsotopeConstants isoConstants = tableViewSearch.getItems().get(0).getConstants();
-            BigDecimal a1 = BigDecimal.valueOf(isoConstants.getA1());
-            BigDecimal a2 = BigDecimal.valueOf(isoConstants.getA2());
-            BigDecimal exemptCon = BigDecimal.valueOf(isoConstants.getExemptConcentration());
-            BigDecimal exemptLim = BigDecimal.valueOf(isoConstants.getExemptLimit());
-            BigDecimal reportQuan = BigDecimal.valueOf(isoConstants.getTeraBqReportQuan());
-
-            // A1
-            String exp = String.valueOf(isoConstants.getA1());
-            assertEquals(exp, txtFieldA1.getText());
-
-            comboBoxRefA1Prefix.getSelectionModel().select(Conversions.SIPrefix.PICO.getVal());
-            exp = Conversions.convertToPrefix(a1, Conversions.SIPrefix.TERA, Conversions.SIPrefix.PICO).toString();
-            assertEquals(exp, txtFieldA1.getText());
-
-            comboBoxRefA1Prefix.getSelectionModel().select(Conversions.SIPrefix.TERA.getVal());
-            exp = String.valueOf(isoConstants.getA1());
-            assertEquals(exp, txtFieldA1.getText());
-
-            // A2
-            exp = String.valueOf(isoConstants.getA2());
-            assertEquals(exp, labelA2.getText());
-
-            comboBoxRefA2Prefix.getSelectionModel().select(Conversions.SIPrefix.YOTTA.getVal());
-            exp = Conversions.convertToPrefix(a2, Conversions.SIPrefix.TERA, Conversions.SIPrefix.YOTTA).toString();
-            assertEquals(exp, labelA2.getText());
-
-            comboBoxRefA2Prefix.getSelectionModel().select(Conversions.SIPrefix.TERA.getVal());
-            exp = String.valueOf(isoConstants.getA2());
-            assertEquals(exp, labelA2.getText());
-
-            // Exempt Concentration
-            exp = String.valueOf(isoConstants.getExemptConcentration());
-            assertEquals(exp, labelExemptCon.getText());
-
-            comboBoxRefExemptConPrefix.getSelectionModel().select(Conversions.SIPrefix.MEGA.getVal());
-            exp = Conversions.convertToPrefix(exemptCon, Conversions.SIPrefix.BASE, Conversions.SIPrefix.MEGA).toString();
-            assertEquals(exp, labelExemptCon.getText());
-
-            comboBoxRefExemptConPrefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
-            exp = String.valueOf(isoConstants.getExemptConcentration());
-            assertEquals(exp, labelExemptCon.getText());
-
-            // Exempt Limit
-            exp = String.valueOf(isoConstants.getExemptLimit());
-            assertEquals(exp, labelExemptLim.getText());
-
-            comboBoxRefExemptLimPrefix.getSelectionModel().select(Conversions.SIPrefix.EXA.getVal());
-            exp = Conversions.convertToPrefix(exemptLim, Conversions.SIPrefix.BASE, Conversions.SIPrefix.EXA).toString();
-            assertEquals(exp, labelExemptLim.getText());
-
-            comboBoxRefExemptLimPrefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
-            exp = String.valueOf(isoConstants.getExemptLimit());
-            assertEquals(exp, labelExemptLim.getText());
-
-            //  Reportable Quantity
-            exp = String.valueOf(isoConstants.getTeraBqReportQuan());
-            assertEquals(exp, labelReportQuan.getText());
-
-            comboBoxRefReportQuanPrefix.getSelectionModel().select(Conversions.SIPrefix.MICRO.getVal());
-            exp = Conversions.convertToPrefix(reportQuan, Conversions.SIPrefix.TERA, Conversions.SIPrefix.MICRO).toString();
-            assertEquals(exp, labelReportQuan.getText());
-
-            comboBoxRefReportQuanPrefix.getSelectionModel().select(Conversions.SIPrefix.TERA.getVal());
-            exp = String.valueOf(isoConstants.getTeraBqReportQuan());
-            assertEquals(exp, labelReportQuan.getText());
+            verifyPrefixConversions(comboBoxRefA1Prefix, txtFieldA1, Conversions.SIPrefix.TERA, isoConstants.getA1());
+            verifyPrefixConversions(comboBoxRefA2Prefix, txtFieldA2, Conversions.SIPrefix.TERA, isoConstants.getA2());
+            verifyPrefixConversions(comboBoxRefExemptConPrefix, txtFieldExemptCon, Conversions.SIPrefix.BASE, isoConstants.getExemptConcentration());
+            verifyPrefixConversions(comboBoxRefExemptLimPrefix, txtFieldExemptLim, Conversions.SIPrefix.BASE, isoConstants.getExemptLimit());
+            verifyPrefixConversions(comboBoxRefReportQuanPrefix, txtFieldReportQuan, Conversions.SIPrefix.TERA, isoConstants.getTeraBqReportQuan());
         });
+        interact(this::clearSelection);
+    }
+
+    protected void verifyPrefixConversions(ComboBox<String> comboBox, TextField field, Conversions.SIPrefix start, float original) {
+        String exp = String.valueOf(original);
+        assertEquals(exp, field.getText());
+
+        Optional<Conversions.SIPrefix> end = Arrays.stream(Conversions.SIPrefix.values()).findAny();
+        assertTrue(end.isPresent());
+
+        comboBox.getSelectionModel().select(end.get().getVal());
+        exp = Conversions.convertToPrefix(BigDecimal.valueOf(original),
+                start,
+                end.get()).toString();
+        assertEquals(exp, field.getText());
+
+        comboBox.getSelectionModel().select(start.getVal());
+        exp = String.valueOf(original);
+        assertEquals(exp, field.getText());
     }
 
     @Test
     void testUnselectRowOnSearch() {
-        interact(() -> {
-            assertEquals(1, tableViewSearch.getItems().size());
-            tableViewSearch.getSelectionModel().select(0);
-            txtFieldSearch.setText("z");
+        interact(() -> selectRow(0));
 
-            assertNull(tableViewSearch.getSelectionModel().getSelectedItem());
-        });
+        interact(() ->txtFieldSearch.setText(null));
+        assertNotNull(tableViewSearch.getSelectionModel().getSelectedItem());
+
+        interact(() ->txtFieldSearch.setText(""));
+        assertNotNull(tableViewSearch.getSelectionModel().getSelectedItem());
+
+        interact(() ->txtFieldSearch.setText(" "));
+        assertNotNull(tableViewSearch.getSelectionModel().getSelectedItem());
+
+        interact(() ->txtFieldSearch.setText("z"));
+        assertNull(tableViewSearch.getSelectionModel().getSelectedItem());
+
+        interact(() ->txtFieldSearch.setText(null));
+        assertNull(tableViewSearch.getSelectionModel().getSelectedItem());
+    }
+
+    protected void selectRow(int index) {
+        if(tableViewSearch.getItems().isEmpty()) {
+            fail("Table has no items to select from");
+        }
+
+        tableViewSearch.getSelectionModel().select(index);
+        assertNotNull(tableViewSearch.getSelectionModel().getSelectedItem());
+    }
+
+    protected void clearSelection() {
+        tableViewSearch.getSelectionModel().clearSelection();
+        assertNull(tableViewSearch.getSelectionModel().getSelectedItem());
     }
 
     @Test
     void testSearchFiltering() {
-        interact(() -> {
-            txtFieldSearch.setText(null);
-            assertEquals(1, tableViewSearch.getItems().size());
+        interact(() -> txtFieldSearch.setText(null));
+        assertEquals(2, tableViewSearch.getItems().size());
 
-            txtFieldSearch.setText("");
-            assertEquals(1, tableViewSearch.getItems().size());
+        interact(() -> txtFieldSearch.setText(""));
+        assertEquals(2, tableViewSearch.getItems().size());
 
-            txtFieldSearch.setText("A");
-            assertEquals(1, tableViewSearch.getItems().size());
+        interact(() -> txtFieldSearch.setText("A"));
+        assertEquals(2, tableViewSearch.getItems().size());
 
-            txtFieldSearch.setText("Ab");
-            assertEquals(1, tableViewSearch.getItems().size());
+        interact(() -> txtFieldSearch.setText("Ab"));
+        assertEquals(1, tableViewSearch.getItems().size());
 
-            txtFieldSearch.setText("Abb");
-            assertEquals(1, tableViewSearch.getItems().size());
+        interact(() -> txtFieldSearch.setText("Abb"));
+        assertEquals(1, tableViewSearch.getItems().size());
 
-            txtFieldSearch.setText("Abbz");
-            assertTrue(tableViewSearch.getItems().isEmpty());
+        interact(() -> txtFieldSearch.setText("Abbz"));
+        assertTrue(tableViewSearch.getItems().isEmpty());
 
-            txtFieldSearch.setText("Abbr");
-            assertEquals(1, tableViewSearch.getItems().size());
-        });
+        interact(() -> txtFieldSearch.setText("Abbr"));
+        assertEquals(1, tableViewSearch.getItems().size());
     }
 }

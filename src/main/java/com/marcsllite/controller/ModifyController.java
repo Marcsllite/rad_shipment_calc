@@ -1,9 +1,13 @@
 package com.marcsllite.controller;
 
 import com.marcsllite.model.Isotope;
+import com.marcsllite.model.db.IsotopeModel;
+import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.Conversions;
 import com.marcsllite.util.handler.PropHandler;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -23,8 +27,15 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ModifyController extends BaseController {
+    private static final Logger logr = LogManager.getLogger();
     @FXML private StackPane modifyPane;
     // First Page
     @FXML private VBox vBoxFirstPage;
@@ -60,34 +71,43 @@ public class ModifyController extends BaseController {
     @FXML private Button btnBack;
     @FXML private Button btnFinish;
     @FXML private Text txtSecondPageStatus;
-
-    private static final Logger logr = LogManager.getLogger();
+    ObservableList<IsotopeModel> isotopes = getDbService().getAllIsotopeModels();
 
     public ModifyController() throws IOException {
-        this(null);
+        this(Page.NONE);
     }
 
-    public ModifyController(PropHandler propHandler) throws IOException {
+    public ModifyController(BaseController.Page page) throws IOException {
+        this(page, null);
+    }
+
+    public ModifyController(BaseController.Page page, PropHandler propHandler) throws IOException {
         super(propHandler);
+        setPage(page);
     }
 
     @Override
     @FXML public void initialize() {
         super.initialize();
-        // adding values to the choice boxes
-        comboBoxA0Prefix.setItems(Conversions.SIPrefix.getFxValues());
-        choiceBoxA0Name.setItems(Isotope.RadUnit.getFxValues());
-        comboBoxMassPrefix.setItems(Conversions.SIPrefix.getFxValues());
-        choiceBoxMassName.setItems(Isotope.Mass.getFxValues());
-        choiceBoxNature.setItems(Isotope.Nature.getFxValues());
-        choiceBoxState.setItems(LimitsModelId.State.getFxValues());
-        choiceBoxForm.setItems(LimitsModelId.Form.getFxValues());
 
-        // Default value for choice boxes
-        comboBoxA0Prefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
-        choiceBoxA0Name.getSelectionModel().select(Isotope.RadUnit.CURIE.getVal());
-        comboBoxMassPrefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
-        choiceBoxMassName.getSelectionModel().select(Isotope.Mass.GRAMS.getVal());
+        setupDropDownItems();
+
+        // visibility of the node will decide if it is rendered by the parent pane
+        hBoxAddInfoTop.managedProperty().bind(hBoxAddInfoTop.visibleProperty());
+        vBoxShortLong.managedProperty().bind(vBoxShortLong.visibleProperty());
+        vBoxLungAbs.managedProperty().bind(vBoxLungAbs.visibleProperty());
+        txtFirstPageStatus.managedProperty().bind(txtFirstPageStatus.visibleProperty());
+        txtSecondPageStatus.managedProperty().bind(txtSecondPageStatus.visibleProperty());
+        btnBack.managedProperty().bind(btnBack.visibleProperty());
+
+        if(Page.ADD.equals(getPage())) {
+            initAddPage();
+        } else if(Page.EDIT.equals(getPage())) {
+            initEditPage();
+        }
+
+        showPage(1);
+        setInit(true);
     }
 
     @Override
@@ -100,6 +120,110 @@ public class ModifyController extends BaseController {
     public void hide() {
         modifyPane.setVisible(false);
         modifyPane.toBack();
+    }
+
+    protected void initAddPage() {
+        // Default value for choice boxes
+        comboBoxA0Prefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
+        choiceBoxA0Name.getSelectionModel().select(Isotope.RadUnit.CURIE.getVal());
+        comboBoxMassPrefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
+        choiceBoxMassName.getSelectionModel().select(Isotope.Mass.GRAMS.getVal());
+
+        setupNameListener();
+
+        txtFirstPageStatus.setVisible(false);
+        setShortLong(false);
+        setLungAbs(false);
+    }
+
+    protected void initEditPage() {
+        initAddPage();
+    }
+
+    protected void setupDropDownItems() {
+        comboBoxA0Prefix.setItems(Conversions.SIPrefix.getFxValues());
+        choiceBoxA0Name.setItems(Isotope.RadUnit.getFxValues());
+        comboBoxMassPrefix.setItems(Conversions.SIPrefix.getFxValues());
+        choiceBoxMassName.setItems(Isotope.Mass.getFxValues());
+        choiceBoxNature.setItems(Isotope.Nature.getFxValues());
+        choiceBoxState.setItems(LimitsModelId.State.getFxValues());
+        choiceBoxForm.setItems(LimitsModelId.Form.getFxValues());
+    }
+
+    protected void showPage(int pageNum) {
+        if(pageNum == 1) {
+            vBoxFirstPage.setVisible(true);
+            vBoxSecondPage.setVisible(false);
+            vBoxSecondPage.toBack();
+        } else {
+            vBoxFirstPage.setVisible(false);
+            vBoxFirstPage.toBack();
+            vBoxSecondPage.setVisible(true);
+        }
+    }
+
+    protected void setShortLong(boolean isShortLong) {
+        hBoxAddInfoTop.setVisible(isShortLong || vBoxLungAbs.isVisible());
+        vBoxShortLong.setVisible(isShortLong);
+    }
+
+    protected void setLungAbs(boolean isLungAbs) {
+        hBoxAddInfoTop.setVisible(isLungAbs || vBoxShortLong.isVisible());
+        vBoxLungAbs.setVisible(isLungAbs);
+    }
+
+    protected void setupNameListener() {
+        FilteredList<IsotopeModel> filteredLungAbsIsos =  new FilteredList<>(isotopes, isotope -> true);
+
+        txtFieldIsoName.textProperty().addListener(
+            (observable, oldV, newV) -> {
+                if(newV != null && !newV.isBlank()) {
+                    filteredLungAbsIsos.setPredicate(lungAbsFilteringPredicate(newV));
+                    setShortLong(isShortLongIso(newV));
+                    setLungAbs(!isShortLongIso(newV) && !filteredLungAbsIsos.isEmpty());
+                }
+            }
+        );
+    }
+
+    protected Predicate<IsotopeModel> lungAbsFilteringPredicate(String str) {
+        if (str == null || str.isBlank()) {
+            return isotope -> true;
+        }
+        return isotope -> isLungAbsIso(isotope, str);
+    }
+
+    protected boolean isLungAbsIso(IsotopeModel isotope, String str) {
+        if(isotope == null || str == null || str.isBlank()) {
+            return false;
+        }
+
+        String searchStr = str.toLowerCase(Locale.ROOT);
+
+        String abbr = isotope.getIsotopeId().getAbbr().toLowerCase();
+        String name = isotope.getIsotopeId().getName().toLowerCase();
+        Pattern pattern = Pattern.compile("[sfm]$");
+        Matcher matchAbbr = pattern.matcher(abbr);
+        Matcher matchName = pattern.matcher(name);
+
+        return (abbr.contains(searchStr) && matchAbbr.find()) ||
+            (name.contains(searchStr) && matchName.find());
+    }
+
+    protected boolean isShortLongIso(String str) {
+        List<IsotopeModelId> shortLongIsoModels = new ArrayList<>(2);
+        shortLongIsoModels.add(new IsotopeModelId("Europium-150","Eu-150"));
+        shortLongIsoModels.add(new IsotopeModelId("Neptunium-236", "Np-236"));
+
+        if (str == null || str.isBlank()) {
+            return false;
+        }
+
+        String searchStr = str.toLowerCase(Locale.ROOT);
+
+        return shortLongIsoModels.stream().anyMatch(modelId ->
+            modelId.getAbbr().toLowerCase().contains(searchStr) ||
+                modelId.getName().toLowerCase().contains(searchStr));
     }
 
     /*///////////////////////////////////////////// HOME PANE CONTROLLER /////////////////////////////////////////////*/

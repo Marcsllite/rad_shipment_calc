@@ -56,8 +56,8 @@ public enum FXMLView {
     public String getFxmlLoc() { return "/test.fxml"; }
   };
 
-  public final double SIDE_500 = 500.0;
-  public final double SIDE_600 = 600.0;
+  public final double SIDE_550 = 550.0;
+  public final double SIDE_650 = 650.0;
 
   public abstract String getName();
   
@@ -65,9 +65,9 @@ public enum FXMLView {
     return "Rad Shipment Calculator - " + getName(); 
   }
   
-  public double getHeight() { return SIDE_500; }
+  public double getHeight() { return SIDE_550; }
     
-  public double getWidth() { return SIDE_600; }
+  public double getWidth() { return SIDE_650; }
   
   public double getMaxHeight() { return getHeight(); }
     

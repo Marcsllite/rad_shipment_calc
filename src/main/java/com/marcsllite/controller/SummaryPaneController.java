@@ -25,6 +25,13 @@ public class SummaryPaneController extends BaseController {
 
     public SummaryPaneController(PropHandler propHandler) throws IOException {
         super(propHandler);
+        setPage(Page.SUMMARY);
+    }
+
+    @Override
+    @FXML public void initialize() {
+        super.initialize();
+        setInit(true);
     }
 
     @Override

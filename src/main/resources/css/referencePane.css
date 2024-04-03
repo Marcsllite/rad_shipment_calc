@@ -28,6 +28,6 @@
     -fx-focus-traversable: false;
     -fx-opacity: 0.29;
     -fx-pref-width: 200;
-    -fx-background-color: -fx-grey-color;
+    -fx-background-color: -fx-blue-color;
     -fx-valignment: BOTTOM;
 }

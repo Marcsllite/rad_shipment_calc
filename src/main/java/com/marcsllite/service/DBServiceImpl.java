@@ -147,6 +147,13 @@ public class DBServiceImpl implements DBService {
     }
 
     @Override
+    public ObservableList<IsotopeModel> getAllIsotopeModels() {
+        return getIsotopeDao().getAllIsotopes()
+            .stream()
+            .collect(Collectors.toCollection(FXCollections::observableArrayList));
+    }
+
+    @Override
     public ObservableList<Isotope> getAllIsotopes() {
         return getIsotopeDao().getAllIsotopes()
             .stream()

@@ -78,7 +78,7 @@
       <HBox alignment="CENTER" spacing="10.0" styleClass="hBoxAdd">
          <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="modifyTxt" text="Mass:" />
          <TextField fx:id="txtFieldMass" promptText="Mass" styleClass="validTxtField" />
-         <ComboBox fx:id="comboBoxMassPrefix" visibleRowCount="5"/>
+         <ComboBox fx:id="comboBoxMassPrefix" visibleRowCount="5" />
          <ChoiceBox fx:id="choiceBoxMassName" layoutX="350.0" layoutY="10.0" />
       </HBox>
       <HBox alignment="CENTER" spacing="10.0" styleClass="hBoxAdd">

@@ -12,6 +12,9 @@ public abstract class BaseController {
     private MainController main;
     private PropHandler propHandler;
     private DBService dbService;
+    private Page page;
+    private boolean init = false;
+    public enum Page {NONE, MENU, HOME, REFERENCE, ADD, EDIT, DETAILS, SUMMARY}
 
     protected BaseController() throws IOException {
         this(null);
@@ -28,8 +31,24 @@ public abstract class BaseController {
      * Links controller to main controller (mediator)
      */
     @FXML
-    public void initialize(){
+    public void initialize() {
         getMain().registerController(this);
+    }
+
+    public Page getPage() {
+        return page == null? Page.NONE : page;
+    }
+
+    public void setPage(Page page) {
+        this.page = page;
+    }
+
+    public boolean isInit() {
+        return init;
+    }
+
+    public void setInit(boolean init) {
+        this.init = init;
     }
 
     /**

@@ -2,6 +2,7 @@ package com.marcsllite.util.handler;
 
 import com.marcsllite.ControllerFactoryTestObj;
 import com.marcsllite.PropHandlerTestObj;
+import com.marcsllite.controller.BaseController;
 import com.marcsllite.util.FXMLView;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeAll;
@@ -53,9 +54,25 @@ class StageHandlerTest {
     }
 
     @Test
+    void testSwitchSceneModal_NullView() {
+        InvalidParameterException exception = assertThrows(
+            InvalidParameterException.class, () -> stageHandler.switchSceneModal(null, BaseController.Page.NONE)
+        );
+        assertEquals("FXML View is null", exception.getMessage());
+    }
+
+    @Test
     void testShow_NullView() {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> stageHandler.show(null)
+        );
+        assertEquals("FXML View is null", exception.getMessage());
+    }
+
+    @Test
+    void testShowModal_NullView() {
+        InvalidParameterException exception = assertThrows(
+            InvalidParameterException.class, () -> stageHandler.showModal(null, BaseController.Page.NONE)
         );
         assertEquals("FXML View is null", exception.getMessage());
     }

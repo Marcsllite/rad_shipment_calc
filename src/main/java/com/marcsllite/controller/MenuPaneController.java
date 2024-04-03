@@ -59,6 +59,7 @@ public class MenuPaneController extends BaseController {
 
     public MenuPaneController(PropHandler propHandler) throws IOException {
         super(propHandler);
+        setPage(BaseController.Page.MENU);
     }
 
     /**
@@ -72,6 +73,7 @@ public class MenuPaneController extends BaseController {
         mouseReferenceExit();
 
         setCurrentButton(btnShipment);
+        setInit(true);
     }
 
     @Override

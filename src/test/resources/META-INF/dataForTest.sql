@@ -18,20 +18,22 @@ create table if not exists LIMITS (State char(6) not null, Form char(7) not null
 create table if not exists REPORTABLE_QUANTITY (Abbr char(15) not null, Ci real, TBq real, version bigint default 0, primary key (Abbr));
 
 -- Adding Data
-merge into A_ONE(Abbr, Val, version) values('Abbr', 1.0, -1);
-
-merge into A_TWO(Abbr, Val, version) values('Abbr', 1.0, -1);
-
-merge into DECAY_CONSTANT(Abbr, Val, version) values('Abbr', 1.0, -1);
-
-merge into EXEMPT_CONCENTRATION(Abbr, Val, version) values('Abbr', 1.0, -1);
-
-merge into EXEMPT_LIMIT(Abbr, Val, version) values('Abbr', 1.0, -1);
-
-merge into HALF_LIFE(Abbr, Val, version) values('Abbr', 1.0, -1);
-
-merge into ISOTOPES(Name, Abbr, version) values('Abbreviation', 'Abbr', -1);
-
 merge into LIMITS(State, Form, IA_Limited, IA_Package, Limited, version) values('solid', 'normal', 1.5, 2.0, 3.5, -1);
 
+merge into ISOTOPES(Name, Abbr, version) values('Abbreviation', 'Abbr', -1);
+merge into A_ONE(Abbr, Val, version) values('Abbr', 1.0, -1);
+merge into A_TWO(Abbr, Val, version) values('Abbr', 1.0, -1);
+merge into DECAY_CONSTANT(Abbr, Val, version) values('Abbr', 1.0, -1);
+merge into EXEMPT_CONCENTRATION(Abbr, Val, version) values('Abbr', 1.0, -1);
+merge into EXEMPT_LIMIT(Abbr, Val, version) values('Abbr', 1.0, -1);
+merge into HALF_LIFE(Abbr, Val, version) values('Abbr', 1.0, -1);
 merge into REPORTABLE_QUANTITY(Abbr, Ci, TBq, version) values('Abbr', 1, 0.037, -1);
+
+merge into ISOTOPES(Name, Abbr, version) values('Annual', 'Anny', -1);
+merge into A_ONE(Abbr, Val, version) values('Anny', 2.0, -1);
+merge into A_TWO(Abbr, Val, version) values('Anny', 2.0, -1);
+merge into DECAY_CONSTANT(Abbr, Val, version) values('Anny', 2.0, -1);
+merge into EXEMPT_CONCENTRATION(Abbr, Val, version) values('Anny', 2.0, -1);
+merge into EXEMPT_LIMIT(Abbr, Val, version) values('Anny', 2.0, -1);
+merge into HALF_LIFE(Abbr, Val, version) values('Anny', 2.0, -1);
+merge into REPORTABLE_QUANTITY(Abbr, Ci, TBq, version) values('Anny', 2, 0.074, -1);

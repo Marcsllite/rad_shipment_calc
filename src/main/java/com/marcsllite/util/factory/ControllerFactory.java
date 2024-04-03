@@ -13,52 +13,39 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ControllerFactory implements Callback<Class<?>, Object> {
     private static final Logger logr = LogManager.getLogger();
-    protected final Map<String, Object> controllerMap;
+    private BaseController.Page page;
 
-    public ControllerFactory() {
-        controllerMap = new HashMap<>();
+    public BaseController.Page getPage() {
+        return page;
     }
 
-    public Object getController(String name) {
-        if(name == null) {
-            return null;
-        }
-
-        return controllerMap.get(name);
+    public void setPage(BaseController.Page page) {
+        this.page = page;
     }
 
     @Override
     public Object call(Class<?> param) {
         String name = param.getName();
-        Object ret = getController(name);
+        Object ret = null;
 
         try {
-            if(ret == null) {
-                if(name.equals(MainController.class.getName())) {
-                    ret = MainController.getInstance();
-                } else if(name.equals(MenuPaneController.class.getName())) {
-                    ret = new MenuPaneController();
-                } else if(name.equals(HomePaneController.class.getName())) {
-                    ret = new HomePaneController();
-                } else if(name.equals(ReferencePaneController.class.getName())) {
-                    ret = new ReferencePaneController();
-                } else if(name.equals(ModifyController.class.getName())) {
-                    ret = new ModifyController();
-                } else if(name.equals(ShipmentDetailsController.class.getName())) {
-                    ret = new ShipmentDetailsController();
-                } else if(name.equals(SummaryPaneController.class.getName())) {
-                    ret = new SummaryPaneController();
-                }
-
-                if(ret instanceof BaseController ||
-                    ret instanceof MainController) {
-                    controllerMap.put(name, ret);
-                }
+            if(name.equals(MainController.class.getName())) {
+                ret = MainController.getInstance();
+            } else if(name.equals(MenuPaneController.class.getName())) {
+                ret = new MenuPaneController();
+            } else if(name.equals(HomePaneController.class.getName())) {
+                ret = new HomePaneController();
+            } else if(name.equals(ReferencePaneController.class.getName())) {
+                ret = new ReferencePaneController();
+            } else if(name.equals(ModifyController.class.getName())) {
+                ret = new ModifyController(getPage());
+            } else if(name.equals(ShipmentDetailsController.class.getName())) {
+                ret = new ShipmentDetailsController();
+            } else if(name.equals(SummaryPaneController.class.getName())) {
+                ret = new SummaryPaneController();
             }
 
             return ret;
