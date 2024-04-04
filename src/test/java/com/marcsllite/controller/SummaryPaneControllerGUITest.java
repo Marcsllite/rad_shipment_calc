@@ -22,7 +22,7 @@ class SummaryPaneControllerGUITest extends GUITest {
     Button btnSaveSummary;
 
     public SummaryPaneControllerGUITest() {
-        super(FXMLView.SUMMARY);
+        super(FXMLView.SUMMARY, BaseController.Page.SUMMARY);
     }
 
     @Start

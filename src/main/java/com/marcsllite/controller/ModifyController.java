@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -72,9 +71,10 @@ public class ModifyController extends BaseController {
     @FXML private Button btnFinish;
     @FXML private Text txtSecondPageStatus;
     ObservableList<IsotopeModel> isotopes = getDbService().getAllIsotopeModels();
+    FilteredList<IsotopeModel> searchFilteredIsos =  new FilteredList<>(isotopes, null);
 
     public ModifyController() throws IOException {
-        this(Page.NONE);
+        this(null);
     }
 
     public ModifyController(BaseController.Page page) throws IOException {
@@ -86,11 +86,32 @@ public class ModifyController extends BaseController {
         setPage(page);
     }
 
+    public FilteredList<IsotopeModel> getSearchFilteredIsos() {
+        return searchFilteredIsos;
+    }
+
     @Override
     @FXML public void initialize() {
         super.initialize();
 
         setupDropDownItems();
+
+        txtFieldA0.textProperty().addListener((observable, oldV, newV) -> {
+            if(newV == null || newV.isBlank()) {
+                btnNext.setDisable(true);
+            } else {
+                // if user inputs any non-numerical characters, remove them
+                String newTxt = newV.replaceAll("\\D", "");
+                String name = txtFieldIsoName.getText();
+                btnNext.setDisable(name == null || name.isBlank() ||
+                        searchFilteredIsos.size() != 1 || newTxt.isBlank());
+
+                txtFieldA0.setText(newTxt);
+            }
+        });
+
+        bindMassInputDisabledProp();
+        bindNSFInputDisableProp();
 
         // visibility of the node will decide if it is rendered by the parent pane
         hBoxAddInfoTop.managedProperty().bind(hBoxAddInfoTop.visibleProperty());
@@ -123,6 +144,8 @@ public class ModifyController extends BaseController {
     }
 
     protected void initAddPage() {
+        btnNext.setDisable(true);
+
         // Default value for choice boxes
         comboBoxA0Prefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
         choiceBoxA0Name.getSelectionModel().select(Isotope.RadUnit.CURIE.getVal());
@@ -151,14 +174,13 @@ public class ModifyController extends BaseController {
     }
 
     protected void showPage(int pageNum) {
+        vBoxFirstPage.setVisible(pageNum == 1);
+        vBoxSecondPage.setVisible(pageNum == 2);
+
         if(pageNum == 1) {
-            vBoxFirstPage.setVisible(true);
-            vBoxSecondPage.setVisible(false);
             vBoxSecondPage.toBack();
         } else {
-            vBoxFirstPage.setVisible(false);
             vBoxFirstPage.toBack();
-            vBoxSecondPage.setVisible(true);
         }
     }
 
@@ -173,24 +195,65 @@ public class ModifyController extends BaseController {
     }
 
     protected void setupNameListener() {
-        FilteredList<IsotopeModel> filteredLungAbsIsos =  new FilteredList<>(isotopes, isotope -> true);
+        FilteredList<IsotopeModel> filteredLungAbsIsos =  new FilteredList<>(isotopes, null);
 
         txtFieldIsoName.textProperty().addListener(
             (observable, oldV, newV) -> {
-                if(newV != null && !newV.isBlank()) {
+                if (newV == null || newV.isBlank()) {
+                    searchFilteredIsos.setPredicate(isotope -> false);
+                    filteredLungAbsIsos.setPredicate(isotope -> false);
+                    setShortLong(false);
+                    setLungAbs(false);
+                    btnNext.setDisable(true);
+                } else {
+                    searchFilteredIsos.setPredicate(validIsoFilteringPredicate(newV));
                     filteredLungAbsIsos.setPredicate(lungAbsFilteringPredicate(newV));
                     setShortLong(isShortLongIso(newV));
                     setLungAbs(!isShortLongIso(newV) && !filteredLungAbsIsos.isEmpty());
+                    String a0 = txtFieldA0.getText();
+                    btnNext.setDisable(searchFilteredIsos.size() != 1 ||
+                        a0 == null || a0.isBlank());
                 }
             }
         );
     }
 
+    protected void bindMassInputDisabledProp() {
+        txtFieldMass.disableProperty().bind(chckBoxSameMass.selectedProperty());
+        comboBoxMassPrefix.disableProperty().bind(chckBoxSameMass.selectedProperty());
+        choiceBoxMassName.disableProperty().bind(chckBoxSameMass.selectedProperty());
+    }
+
+    protected void bindNSFInputDisableProp() {
+        choiceBoxNature.disableProperty().bind(chckBoxSameNSF.selectedProperty());
+        choiceBoxState.disableProperty().bind(chckBoxSameNSF.selectedProperty());
+        choiceBoxForm.disableProperty().bind(chckBoxSameNSF.selectedProperty());
+    }
+
+    protected Predicate<IsotopeModel> validIsoFilteringPredicate(String str) {
+        if (str == null || str.isBlank()) {
+            return null;
+        }
+        return isotope -> isValidIso(isotope, str);
+    }
+
     protected Predicate<IsotopeModel> lungAbsFilteringPredicate(String str) {
         if (str == null || str.isBlank()) {
-            return isotope -> true;
+            return null;
         }
         return isotope -> isLungAbsIso(isotope, str);
+    }
+
+    protected boolean isValidIso(IsotopeModel isotope, String str) {
+        if(isotope == null || str == null || str.isBlank()) {
+            return false;
+        }
+
+
+        String abbr = isotope.getIsotopeId().getAbbr();
+        String name = isotope.getIsotopeId().getName();
+
+        return abbr.equalsIgnoreCase(str) || name.equalsIgnoreCase(str);
     }
 
     protected boolean isLungAbsIso(IsotopeModel isotope, String str) {
@@ -198,7 +261,7 @@ public class ModifyController extends BaseController {
             return false;
         }
 
-        String searchStr = str.toLowerCase(Locale.ROOT);
+        String searchStr = str.toLowerCase();
 
         String abbr = isotope.getIsotopeId().getAbbr().toLowerCase();
         String name = isotope.getIsotopeId().getName().toLowerCase();
@@ -219,7 +282,7 @@ public class ModifyController extends BaseController {
             return false;
         }
 
-        String searchStr = str.toLowerCase(Locale.ROOT);
+        String searchStr = str.toLowerCase();
 
         return shortLongIsoModels.stream().anyMatch(modelId ->
             modelId.getAbbr().toLowerCase().contains(searchStr) ||
@@ -242,10 +305,6 @@ public class ModifyController extends BaseController {
 
         else if(event.getSource() == btnNext) {
             nextBtnHandler();
-        } else if(event.getSource() == chckBoxSameMass) {
-            sameMassChckBoxHandler();
-        } else if(event.getSource() == chckBoxSameNSF) {
-            sameNSFChckBoxHandler();
         } else if(event.getSource() == btnBack) {
             backBtnHandler();
         } else if(event.getSource() == btnFinish) {
@@ -259,39 +318,23 @@ public class ModifyController extends BaseController {
      * Helper function to handle the next button being pressed
      */
     @FXML protected void nextBtnHandler(){
-        logr.debug("User clicked the Next button on the modify pane");
-        // TODO: implement clicking on next button
-    }
-
-    /**
-     * Helper function to handle the same mass being pressed
-     */
-    @FXML protected void sameMassChckBoxHandler(){
-        logr.debug("User clicked the Same Mass checkbox on the modify pane");
-        // TODO: implement clicking on same mass checkbox
-    }
-
-    /**
-     * Helper function to handle the same nature,state,form checkbox being clicked
-     */
-    @FXML protected void sameNSFChckBoxHandler(){
-        logr.debug("User clicked the Same Nature, State, Form checkbox on the modify pane");
-        // TODO: implement clicking on same nature,state,form checkbox
+        logr.debug("User clicked the Next button on the {} pane", getPage());
+        showPage(2);
     }
 
     /**
      * Helper function to handle the add button being pressed
      */
     @FXML protected void backBtnHandler(){
-        logr.debug("User clicked the Back button on the modify pane");
-        // TODO: implement clicking on back button
+        logr.debug("User clicked the Back button on the {} pane", getPage());
+        showPage(1);
     }
 
     /**
      * Helper function to handle the finish button being pressed
      */
     @FXML protected void finishBtnHandler(){
-        logr.debug("User clicked the Finish button on the modify pane");
+        logr.debug("User clicked the Finish button on the {} pane", getPage());
         // TODO: implement clicking on finish button
     }
 }

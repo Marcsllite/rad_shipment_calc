@@ -2,7 +2,6 @@ package com.marcsllite.util.handler;
 
 import com.marcsllite.ControllerFactoryTestObj;
 import com.marcsllite.PropHandlerTestObj;
-import com.marcsllite.controller.BaseController;
 import com.marcsllite.util.FXMLView;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeAll;
@@ -48,7 +47,7 @@ class StageHandlerTest {
     @Test
     void testSwitchScene_NullView() {
         InvalidParameterException exception = assertThrows(
-            InvalidParameterException.class, () -> stageHandler.switchScene(null)
+            InvalidParameterException.class, () -> stageHandler.switchScene(null, null)
         );
         assertEquals("FXML View is null", exception.getMessage());
     }
@@ -56,7 +55,7 @@ class StageHandlerTest {
     @Test
     void testSwitchSceneModal_NullView() {
         InvalidParameterException exception = assertThrows(
-            InvalidParameterException.class, () -> stageHandler.switchSceneModal(null, BaseController.Page.NONE)
+            InvalidParameterException.class, () -> stageHandler.switchSceneModal(null, null)
         );
         assertEquals("FXML View is null", exception.getMessage());
     }
@@ -64,7 +63,7 @@ class StageHandlerTest {
     @Test
     void testShow_NullView() {
         InvalidParameterException exception = assertThrows(
-            InvalidParameterException.class, () -> stageHandler.show(null)
+            InvalidParameterException.class, () -> stageHandler.show(null, null)
         );
         assertEquals("FXML View is null", exception.getMessage());
     }
@@ -72,7 +71,7 @@ class StageHandlerTest {
     @Test
     void testShowModal_NullView() {
         InvalidParameterException exception = assertThrows(
-            InvalidParameterException.class, () -> stageHandler.showModal(null, BaseController.Page.NONE)
+            InvalidParameterException.class, () -> stageHandler.showModal(null, null)
         );
         assertEquals("FXML View is null", exception.getMessage());
     }
@@ -82,7 +81,7 @@ class StageHandlerTest {
     void testShow_EmptyView() {
         FXMLView view = FXMLView.TEST;
         try {
-            stageHandler.show(view);
+            stageHandler.show(view, null);
         } catch(Exception e) {
             fail("An exception should not have been thrown");
         }

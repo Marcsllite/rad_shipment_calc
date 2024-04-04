@@ -44,16 +44,16 @@
         <sonar.language>java</sonar.language>
 
         <!-- Test Coverage -->
-        <jacoco.percentages.min.instruct>0.91</jacoco.percentages.min.instruct>
-        <jacoco.percentages.max.instruct>0.93</jacoco.percentages.max.instruct>
-        <jacoco.percentages.min.line>0.91</jacoco.percentages.min.line>
-        <jacoco.percentages.max.line>0.93</jacoco.percentages.max.line>
-        <jacoco.percentages.min.branch>0.77</jacoco.percentages.min.branch>
-        <jacoco.percentages.max.branch>0.79</jacoco.percentages.max.branch>
+        <jacoco.percentages.min.instruct>0.93</jacoco.percentages.min.instruct>
+        <jacoco.percentages.max.instruct>0.95</jacoco.percentages.max.instruct>
+        <jacoco.percentages.min.line>0.92</jacoco.percentages.min.line>
+        <jacoco.percentages.max.line>0.94</jacoco.percentages.max.line>
+        <jacoco.percentages.min.branch>0.80</jacoco.percentages.min.branch>
+        <jacoco.percentages.max.branch>0.82</jacoco.percentages.max.branch>
         <jacoco.percentages.min.complex>0.86</jacoco.percentages.min.complex>
         <jacoco.percentages.max.complex>0.89</jacoco.percentages.max.complex>
-        <jacoco.percentages.min.method>0.94</jacoco.percentages.min.method>
-        <jacoco.percentages.max.method>0.95</jacoco.percentages.max.method>
+        <jacoco.percentages.min.method>0.95</jacoco.percentages.min.method>
+        <jacoco.percentages.max.method>0.96</jacoco.percentages.max.method>
         <jacoco.missed.count.class>0</jacoco.missed.count.class>
     </properties>
 

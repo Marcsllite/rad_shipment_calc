@@ -14,7 +14,7 @@ public abstract class BaseController {
     private DBService dbService;
     private Page page;
     private boolean init = false;
-    public enum Page {NONE, MENU, HOME, REFERENCE, ADD, EDIT, DETAILS, SUMMARY}
+    public enum Page {NONE, MAIN, MENU, HOME, REFERENCE, ADD, EDIT, DETAILS, SUMMARY}
 
     protected BaseController() throws IOException {
         this(null);
@@ -36,11 +36,11 @@ public abstract class BaseController {
     }
 
     public Page getPage() {
-        return page == null? Page.NONE : page;
+        return page;
     }
 
     public void setPage(Page page) {
-        this.page = page;
+        this.page = page == null? Page.NONE : page;
     }
 
     public boolean isInit() {

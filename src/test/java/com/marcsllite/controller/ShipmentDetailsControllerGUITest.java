@@ -33,7 +33,7 @@ class ShipmentDetailsControllerGUITest extends GUITest {
     Button btnSaveShipDetails;
 
     public ShipmentDetailsControllerGUITest() {
-        super(FXMLView.DETAILS);
+        super(FXMLView.DETAILS, BaseController.Page.DETAILS);
     }
 
     @Start

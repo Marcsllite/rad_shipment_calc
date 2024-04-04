@@ -84,16 +84,12 @@ public class App extends Application {
         if(isShowSplash()) {
             App.getStageHandler().showSplashScreen();
         } else {
-            App.loadPrimaryStage();
+            App.getStageHandler().show(App.getView(), App.getPage());
         }
     }
 
     public static void loadPrimaryStage() {
-        if(App.getPage() == null || BaseController.Page.NONE.equals(App.getPage())) {
-            App.getStageHandler().show(getView());
-        } else {
-            App.getStageHandler().showModal(getView(), App.getPage());
-        }
+        App.getStageHandler().show(App.getView(), App.getPage());
     }
 
     @Override
@@ -177,6 +173,6 @@ public class App extends Application {
     }
 
     public static void setPage(BaseController.Page page) {
-        App.page = page;
+        App.page = page == null? BaseController.Page.NONE : page;
     }
 }

@@ -18,6 +18,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.testfx.api.FxAssert;
 import org.testfx.framework.junit5.Start;
@@ -27,8 +28,11 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
 
-class ModifyControllerGUITest extends GUITest {
+class ModifyControllerAddGUITest extends GUITest {
     ModifyController controller;
     StackPane stackPaneModify;
     
@@ -65,8 +69,8 @@ class ModifyControllerGUITest extends GUITest {
     Button btnFinish;
     Text txtSecondPageStatus;
 
-    public ModifyControllerGUITest() {
-        super(FXMLView.MODIFY);
+    public ModifyControllerAddGUITest() {
+        super(FXMLView.MODIFY, BaseController.Page.ADD);
     }
 
     @Start
@@ -110,21 +114,20 @@ class ModifyControllerGUITest extends GUITest {
     @Test
     void testInit() {
         FxAssert.verifyThat(FXIds.STACKPANE_MODIFY, NodeMatchers.isVisible());
+        Assertions.assertEquals(BaseController.Page.ADD, controller.getPage());
 
-        interact(() -> {
-            assertEquals(Conversions.SIPrefix.getFxValues(), comboBoxA0Prefix.getItems());
-            assertEquals(Isotope.RadUnit.getFxValues(), choiceBoxA0Name.getItems());
-            assertEquals(Conversions.SIPrefix.getFxValues(), comboBoxMassPrefix.getItems());
-            assertEquals(Isotope.Mass.getFxValues(), choiceBoxMassName.getItems());
-            assertEquals(Isotope.Nature.getFxValues(), choiceBoxNature.getItems());
-            assertEquals(LimitsModelId.State.getFxValues(), choiceBoxState.getItems());
-            assertEquals(LimitsModelId.Form.getFxValues(), choiceBoxForm.getItems());
+        assertEquals(Conversions.SIPrefix.getFxValues(), comboBoxA0Prefix.getItems());
+        assertEquals(Isotope.RadUnit.getFxValues(), choiceBoxA0Name.getItems());
+        assertEquals(Conversions.SIPrefix.getFxValues(), comboBoxMassPrefix.getItems());
+        assertEquals(Isotope.Mass.getFxValues(), choiceBoxMassName.getItems());
+        assertEquals(Isotope.Nature.getFxValues(), choiceBoxNature.getItems());
+        assertEquals(LimitsModelId.State.getFxValues(), choiceBoxState.getItems());
+        assertEquals(LimitsModelId.Form.getFxValues(), choiceBoxForm.getItems());
 
-            assertEquals(Conversions.SIPrefix.BASE.getVal(), comboBoxA0Prefix.getSelectionModel().getSelectedItem());
-            assertEquals(Isotope.RadUnit.CURIE.getVal(), choiceBoxA0Name.getSelectionModel().getSelectedItem());
-            assertEquals(Conversions.SIPrefix.BASE.getVal(), comboBoxMassPrefix.getSelectionModel().getSelectedItem());
-            assertEquals(Isotope.Mass.GRAMS.getVal(), choiceBoxMassName.getSelectionModel().getSelectedItem());
-        });
+        assertEquals(Conversions.SIPrefix.BASE.getVal(), comboBoxA0Prefix.getSelectionModel().getSelectedItem());
+        assertEquals(Isotope.RadUnit.CURIE.getVal(), choiceBoxA0Name.getSelectionModel().getSelectedItem());
+        assertEquals(Conversions.SIPrefix.BASE.getVal(), comboBoxMassPrefix.getSelectionModel().getSelectedItem());
+        assertEquals(Isotope.Mass.GRAMS.getVal(), choiceBoxMassName.getSelectionModel().getSelectedItem());
     }
 
     private void goToPage(int pageNum) {
@@ -147,8 +150,47 @@ class ModifyControllerGUITest extends GUITest {
     @Test
     void testModifyHandler_btnNext() {
         goToPage(1);
+        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
 
+        interact(() -> txtFieldIsoName.setText(" "));
+        assertEquals(0, controller.getSearchFilteredIsos().size());
+        setInitialActivity(null);
+        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
+
+        interact(() -> txtFieldIsoName.setText(null));
+        assertEquals(0, controller.getSearchFilteredIsos().size());
+        setInitialActivity("1sdf23");
+        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
+
+        interact(() -> txtFieldIsoName.setText("A"));
+        assertEquals(0, controller.getSearchFilteredIsos().size());
+        setInitialActivity("1sdf23");
+        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
+
+        interact(() -> txtFieldIsoName.setText("Anny"));
+        assertEquals(1, controller.getSearchFilteredIsos().size());
+        setInitialActivity("123");
+        FxAssert.verifyThat(btnNext, NodeMatchers.isEnabled());
+        
         clickOn(btnNext);
+        FxAssert.verifyThat(vBoxFirstPage, NodeMatchers.isInvisible());
+        FxAssert.verifyThat(vBoxSecondPage, NodeMatchers.isVisible());
+    }
+
+    protected void setInitialActivity(String str) {
+        interact(() ->txtFieldA0.setText(str));
+
+        if(str != null) {
+            try {
+                float initialActivity = Float.parseFloat(str);
+                assertEquals(initialActivity, Float.valueOf(txtFieldA0.getText()));
+            } catch (Exception e) {
+                String replacedStr = str.replaceAll("\\D", "");
+                assertEquals(replacedStr, txtFieldA0.getText());
+            }
+        } else {
+            assertNull(txtFieldA0.getText());
+        }
     }
 
     @Test
@@ -156,6 +198,18 @@ class ModifyControllerGUITest extends GUITest {
         goToPage(2);
 
         clickOn(chckBoxSameMass);
+        assertTrue(chckBoxSameMass.isSelected());
+        
+        FxAssert.verifyThat(txtFieldMass, NodeMatchers.isDisabled());
+        FxAssert.verifyThat(comboBoxMassPrefix, NodeMatchers.isDisabled());
+        FxAssert.verifyThat(choiceBoxMassName, NodeMatchers.isDisabled());
+
+        clickOn(chckBoxSameMass);
+        assertFalse(chckBoxSameMass.isSelected());
+
+        FxAssert.verifyThat(txtFieldMass, NodeMatchers.isEnabled());
+        FxAssert.verifyThat(comboBoxMassPrefix, NodeMatchers.isEnabled());
+        FxAssert.verifyThat(choiceBoxMassName, NodeMatchers.isEnabled());
     }
 
     @Test
@@ -163,6 +217,18 @@ class ModifyControllerGUITest extends GUITest {
         goToPage(2);
 
         clickOn(chckBoxSameNSF);
+        assertTrue(chckBoxSameNSF.isSelected());
+
+        FxAssert.verifyThat(choiceBoxNature, NodeMatchers.isDisabled());
+        FxAssert.verifyThat(choiceBoxState, NodeMatchers.isDisabled());
+        FxAssert.verifyThat(choiceBoxForm, NodeMatchers.isDisabled());
+
+        clickOn(chckBoxSameNSF);
+        assertFalse(chckBoxSameNSF.isSelected());
+
+        FxAssert.verifyThat(choiceBoxNature, NodeMatchers.isEnabled());
+        FxAssert.verifyThat(choiceBoxState, NodeMatchers.isEnabled());
+        FxAssert.verifyThat(choiceBoxForm, NodeMatchers.isEnabled());
     }
 
     @Test
@@ -170,6 +236,9 @@ class ModifyControllerGUITest extends GUITest {
         goToPage(2);
 
         clickOn(btnBack);
+
+        FxAssert.verifyThat(vBoxFirstPage, NodeMatchers.isVisible());
+        FxAssert.verifyThat(vBoxSecondPage, NodeMatchers.isInvisible());
     }
 
     @Test

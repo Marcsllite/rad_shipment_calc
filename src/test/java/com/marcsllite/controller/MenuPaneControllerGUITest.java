@@ -38,7 +38,7 @@ class MenuPaneControllerGUITest extends GUITest {
     ImageHandler.Colors HOVER_COLOR;
 
     public MenuPaneControllerGUITest() {
-        super(FXMLView.MENU);
+        super(FXMLView.MENU, BaseController.Page.MENU);
     }
 
     @Start

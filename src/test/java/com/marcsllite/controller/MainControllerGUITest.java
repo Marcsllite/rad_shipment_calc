@@ -20,7 +20,7 @@ class MainControllerGUITest extends GUITest {
     GridPane gridPaneRef;
 
     public MainControllerGUITest(){
-        super(FXMLView.MAIN);
+        super(FXMLView.MAIN, BaseController.Page.MAIN);
     }
 
     @Start

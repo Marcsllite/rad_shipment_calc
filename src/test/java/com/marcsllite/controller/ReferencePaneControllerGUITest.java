@@ -56,7 +56,7 @@ class ReferencePaneControllerGUITest extends GUITest {
     ChoiceBox<String> choiceBoxRefReportQuanRadUnit;
 
     public ReferencePaneControllerGUITest() {
-        super(FXMLView.REFERENCE);
+        super(FXMLView.REFERENCE, BaseController.Page.REFERENCE);
     }
 
     @Start

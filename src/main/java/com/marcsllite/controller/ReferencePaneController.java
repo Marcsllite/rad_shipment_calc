@@ -185,7 +185,7 @@ public class ReferencePaneController extends BaseController {
     }
 
     protected void setupSearchFiltering(ObservableList<Isotope> list) {
-        FilteredList<Isotope> filteredData =  new FilteredList<>(list, isotope -> true);
+        FilteredList<Isotope> filteredData =  new FilteredList<>(list, null);
 
         txtFieldSearch.textProperty().addListener(
             (observable, oldV, newV) -> {

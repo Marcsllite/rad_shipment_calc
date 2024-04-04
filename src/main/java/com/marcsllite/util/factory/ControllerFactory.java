@@ -24,7 +24,7 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
     }
 
     public void setPage(BaseController.Page page) {
-        this.page = page;
+        this.page = page == null? BaseController.Page.NONE : page;
     }
 
     @Override

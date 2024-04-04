@@ -34,7 +34,7 @@ class HomePaneControllerGUITest extends GUITest {
     StackPane stackPaneModify;
 
     public HomePaneControllerGUITest() {
-        super(FXMLView.HOME);
+        super(FXMLView.HOME, BaseController.Page.HOME);
     }
 
     @Start

@@ -1,5 +1,6 @@
 package com.marcsllite;
 
+import com.marcsllite.controller.BaseController;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.FXMLView;
@@ -44,9 +45,11 @@ public abstract class GUITest extends FxRobot {
     private FolderHandler folderHandler;
     private DBService dbService;
     private App app;
+    private BaseController.Page page = BaseController.Page.NONE;
 
-    public GUITest(FXMLView view) {
+    public GUITest(FXMLView view, BaseController.Page page) {
         this.view = view;
+        setPage(page == null? BaseController.Page.NONE : page);
     }
 
     @BeforeAll
@@ -66,6 +69,7 @@ public abstract class GUITest extends FxRobot {
         when(folderHandler.getDataFolderPath()).thenReturn(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
 
         app.init(view, new PropHandlerTestObj(), folderHandler, dbService, new ControllerFactoryTestObj());
+        App.setPage(getPage());
 
         app.start(stage);
         setStageHandler(App.getStageHandler());
@@ -87,6 +91,14 @@ public abstract class GUITest extends FxRobot {
         assertFalse(stage.isFullScreen());
         assertFalse(stage.isMaximized());
         assertFalse(stage.getIcons().isEmpty());
+    }
+
+    public BaseController.Page getPage() {
+        return page;
+    }
+
+    public void setPage(BaseController.Page page) {
+        this.page = page == null? BaseController.Page.NONE : page;
     }
 
     public DBService getDbService() {

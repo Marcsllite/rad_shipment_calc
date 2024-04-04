@@ -92,13 +92,14 @@ public class StageHandler {
         return getLoader() == null? null: getLoader().getController();
     }
 
-    public void switchScene(FXMLView view) throws RuntimeException {
+    public void switchScene(FXMLView view, BaseController.Page page) throws RuntimeException {
         if (view == null) {
             throw new InvalidParameterException(NULL_ERROR);
         } else if(view.equals(getCurrentView())) {
             return;
         }
 
+        getFactory().setPage(page);
         Parent root = loadViewNodeHierarchy(view);
         getPrimaryStage().setScene(new Scene(root, view.getWidth(), view.getHeight()));
         getPrimaryStage().setMinWidth(view.getWidth());
@@ -174,13 +175,13 @@ public class StageHandler {
         }
     }
 
-    public void show(FXMLView view) throws RuntimeException {
+    public void show(FXMLView view, BaseController.Page page) throws RuntimeException {
         if (view == null) {
             throw new InvalidParameterException(NULL_ERROR);
         }
 
         try {
-            switchScene(view);
+            switchScene(view, page);
             getPrimaryStage().show();
         } catch (Exception exception) {
             logr.catching(Level.FATAL, exception);
