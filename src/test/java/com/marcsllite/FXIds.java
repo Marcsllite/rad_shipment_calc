@@ -7,6 +7,11 @@ package com.marcsllite;
 public class FXIds {
     private FXIds() {}
 
+    // Splash Screen
+    public static final String GRIDPANE_SPLASH = "#gridPaneSplash";
+    public static final String LABEL_SPLASH = "#labelSplash";
+    public static final String PROGRESS_SPLASH = "#progressSplash";
+
     // Main
     public static final String GRIDPANE_MENU = "#menuPane";
     public static final String GRIDPANE_HOME = "#homePane";

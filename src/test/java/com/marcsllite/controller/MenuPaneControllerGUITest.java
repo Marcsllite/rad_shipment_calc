@@ -72,15 +72,13 @@ class MenuPaneControllerGUITest extends GUITest {
 
     @Test
     void testHideShow() {
-        interact(() -> {
-            controller.hide();
+        interact(() ->controller.hide());
 
-            FxAssert.verifyThat(gridPaneMenu, NodeMatchers.isInvisible());
+        FxAssert.verifyThat(gridPaneMenu, NodeMatchers.isInvisible());
 
-            controller.show();
+        interact(() ->controller.show());
 
-            FxAssert.verifyThat(gridPaneMenu, NodeMatchers.isVisible());
-        });
+        FxAssert.verifyThat(gridPaneMenu, NodeMatchers.isVisible());
     }
 
     @Test

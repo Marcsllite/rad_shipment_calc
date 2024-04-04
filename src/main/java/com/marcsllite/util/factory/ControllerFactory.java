@@ -7,6 +7,7 @@ import com.marcsllite.controller.MenuPaneController;
 import com.marcsllite.controller.ModifyController;
 import com.marcsllite.controller.ReferencePaneController;
 import com.marcsllite.controller.ShipmentDetailsController;
+import com.marcsllite.controller.SplashScreenController;
 import com.marcsllite.controller.SummaryPaneController;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
@@ -32,7 +33,9 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
         Object ret = null;
 
         try {
-            if(name.equals(MainController.class.getName())) {
+            if(name.equals(SplashScreenController.class.getName())) {
+                ret = new SplashScreenController();
+            } else if(name.equals(MainController.class.getName())) {
                 ret = MainController.getInstance();
             } else if(name.equals(MenuPaneController.class.getName())) {
                 ret = new MenuPaneController();

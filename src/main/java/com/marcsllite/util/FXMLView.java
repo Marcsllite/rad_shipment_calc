@@ -4,7 +4,17 @@ import com.marcsllite.util.handler.ImageHandler;
 import javafx.scene.image.Image;
 
 public enum FXMLView {
-  MAIN {
+  SPLASH {
+    public String getName() { return "Splash Screen"; }
+
+    @Override public String getTitle() { return "UMass Lowell - Rad Shipment Calculator"; }
+
+    @Override public double getHeight() { return 350.0; }
+
+    @Override public double getWidth() { return 450.0; }
+
+    public String getFxmlLoc() { return "/fxml/splashScreen.fxml"; }
+  },MAIN {
     public String getName() { return "Main Page"; }
 
     @Override public String getTitle() { return "UMass Lowell - Rad Shipment Calculator"; }

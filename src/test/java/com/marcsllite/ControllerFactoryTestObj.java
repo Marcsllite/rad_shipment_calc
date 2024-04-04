@@ -6,6 +6,7 @@ import com.marcsllite.controller.MenuPaneController;
 import com.marcsllite.controller.ModifyController;
 import com.marcsllite.controller.ReferencePaneController;
 import com.marcsllite.controller.ShipmentDetailsController;
+import com.marcsllite.controller.SplashScreenController;
 import com.marcsllite.controller.SummaryPaneController;
 import com.marcsllite.util.factory.ControllerFactory;
 import com.marcsllite.util.handler.PropHandler;
@@ -20,7 +21,9 @@ public class ControllerFactoryTestObj extends ControllerFactory {
 
         try {
             PropHandler propHandler = new PropHandlerTestObj();
-            if(name.equals(MainController.class.getName())) {
+            if(name.equals(SplashScreenController.class.getName())) {
+                ret = new SplashScreenController(propHandler);
+            } else if(name.equals(MainController.class.getName())) {
                 ret = MainController.getInstance();
             } else if(name.equals(MenuPaneController.class.getName())) {
                 ret = new MenuPaneController(propHandler);

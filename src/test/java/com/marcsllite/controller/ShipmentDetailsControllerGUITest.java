@@ -59,15 +59,13 @@ class ShipmentDetailsControllerGUITest extends GUITest {
 
     @Test
     void testHideShow() {
-        interact(() -> {
-            controller.hide();
+        interact(() ->controller.hide());
 
-            FxAssert.verifyThat(stackPaneShipmentDetails, NodeMatchers.isInvisible());
+        FxAssert.verifyThat(stackPaneShipmentDetails, NodeMatchers.isInvisible());
 
-            controller.show();
+        interact(() ->controller.show());
 
-            FxAssert.verifyThat(stackPaneShipmentDetails, NodeMatchers.isVisible());
-        });
+        FxAssert.verifyThat(stackPaneShipmentDetails, NodeMatchers.isVisible());
     }
 
     @Test

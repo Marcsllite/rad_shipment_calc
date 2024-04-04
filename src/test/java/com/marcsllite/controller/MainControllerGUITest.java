@@ -41,21 +41,17 @@ class MainControllerGUITest extends GUITest {
 
     @Test
     void testShowHomePane() {
-        interact(() -> {
-            controller.showHomePane();
+        interact(() ->controller.showHomePane());
 
-            FxAssert.verifyThat(gridPaneHome, NodeMatchers.isVisible());
-            FxAssert.verifyThat(gridPaneRef, NodeMatchers.isInvisible());
-        });
+        FxAssert.verifyThat(gridPaneHome, NodeMatchers.isVisible());
+        FxAssert.verifyThat(gridPaneRef, NodeMatchers.isInvisible());
     }
 
     @Test
     void testShowReferencePane() {
-        interact(() -> {
-            controller.showReferencePane();
+        interact(() ->controller.showReferencePane());
 
-            FxAssert.verifyThat(gridPaneHome, NodeMatchers.isInvisible());
-            FxAssert.verifyThat(gridPaneRef, NodeMatchers.isVisible());
-        });
+        FxAssert.verifyThat(gridPaneHome, NodeMatchers.isInvisible());
+        FxAssert.verifyThat(gridPaneRef, NodeMatchers.isVisible());
     }
 }

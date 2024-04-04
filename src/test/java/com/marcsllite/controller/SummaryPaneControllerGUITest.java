@@ -41,15 +41,13 @@ class SummaryPaneControllerGUITest extends GUITest {
 
     @Test
     void testHideShow() {
-        interact(() -> {
-            controller.hide();
+        interact(() ->controller.hide());
 
-            FxAssert.verifyThat(anchorPaneSummary, NodeMatchers.isInvisible());
+        FxAssert.verifyThat(anchorPaneSummary, NodeMatchers.isInvisible());
 
-            controller.show();
+        interact(() ->controller.show());
 
-            FxAssert.verifyThat(anchorPaneSummary, NodeMatchers.isVisible());
-        });
+        FxAssert.verifyThat(anchorPaneSummary, NodeMatchers.isVisible());
     }
 
     @Test

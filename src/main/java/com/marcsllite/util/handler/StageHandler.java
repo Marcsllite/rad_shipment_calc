@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,12 +22,13 @@ import java.util.Objects;
 public class StageHandler {
     private static final Logger logr = LogManager.getLogger();
     private final Stage primaryStage;
-    private Stage modalStage;
+    private Stage secondaryStage;
     private FXMLLoader loader;
     private ControllerFactory factory;
     private FXMLView curView;
     private PropHandler propHandler;
     private static final String NULL_ERROR = "FXML View is null";
+    private static final String FATAL_ERROR = "Unable to show {} scene";
     protected static final String DEFAULT_MSG = "No Message";
     private static final String KEEP_PLATFORM_OPEN_PROPERTY = "keepPlatformOpen";
 
@@ -46,12 +48,12 @@ public class StageHandler {
         return primaryStage;
     }
 
-    public Stage getModalStage() {
-        return modalStage;
+    public Stage getSecondaryStage() {
+        return secondaryStage;
     }
 
-    public void setModalStage(Stage modalStage) {
-        this.modalStage = modalStage;
+    public void setSecondaryStage(Stage secondaryStage) {
+        this.secondaryStage = secondaryStage;
     }
 
     public FXMLLoader getLoader() {
@@ -121,21 +123,55 @@ public class StageHandler {
 
         getFactory().setPage(page);
         Parent root = loadViewNodeHierarchy(view);
-        setModalStage(new Stage());
-        getModalStage().initModality(Modality.APPLICATION_MODAL);
-        getModalStage().setScene(new Scene(root, view.getWidth(), view.getHeight()));
-        getModalStage().setMinWidth(view.getWidth());
-        getModalStage().setMinHeight(view.getHeight());
-        getModalStage().setMaxWidth(view.getMaxWidth());
-        getModalStage().setMaxHeight(view.getMaxHeight());
-        getModalStage().setFullScreen(false);
-        getModalStage().setMaximized(false);
-        getModalStage().setResizable(false);
-        getModalStage().setTitle(view.getTitle());
-        getModalStage().getIcons().add(view.getIconImage());
-        getModalStage().centerOnScreen();
+        setSecondaryStage(new Stage());
+        getSecondaryStage().initModality(Modality.APPLICATION_MODAL);
+        getSecondaryStage().setScene(new Scene(root, view.getWidth(), view.getHeight()));
+        getSecondaryStage().setMinWidth(view.getWidth());
+        getSecondaryStage().setMinHeight(view.getHeight());
+        getSecondaryStage().setMaxWidth(view.getMaxWidth());
+        getSecondaryStage().setMaxHeight(view.getMaxHeight());
+        getSecondaryStage().setFullScreen(false);
+        getSecondaryStage().setMaximized(false);
+        getSecondaryStage().setResizable(false);
+        getSecondaryStage().setTitle(view.getTitle());
+        getSecondaryStage().getIcons().add(view.getIconImage());
+        getSecondaryStage().centerOnScreen();
 
         setCurView(view);
+    }
+
+    public void showSplashScreen() throws RuntimeException {
+        setCurView(FXMLView.SPLASH);
+
+        try {
+            Parent root = loadViewNodeHierarchy(getCurrentView());
+            setSecondaryStage(new Stage());
+            getSecondaryStage().initStyle(StageStyle.UNDECORATED);
+            getSecondaryStage().setScene(new Scene(root, getCurrentView().getWidth(), getCurrentView().getHeight()));
+            getSecondaryStage().setMinWidth(getCurrentView().getWidth());
+            getSecondaryStage().setMinHeight(getCurrentView().getHeight());
+            getSecondaryStage().setMaxWidth(getCurrentView().getMaxWidth());
+            getSecondaryStage().setMaxHeight(getCurrentView().getMaxHeight());
+            getSecondaryStage().setFullScreen(false);
+            getSecondaryStage().setMaximized(false);
+            getSecondaryStage().setResizable(false);
+            getSecondaryStage().setTitle(getCurrentView().getTitle());
+            getSecondaryStage().getIcons().add(getCurrentView().getIconImage());
+            getSecondaryStage().centerOnScreen();
+
+            getSecondaryStage().show();
+        } catch (Exception exception) {
+            logr.catching(Level.FATAL, exception);
+            logr.atLevel(Level.FATAL)
+                .withThrowable(exception)
+                .log(FATAL_ERROR, getCurrentView().getName());
+            // Can only initialize one FX Thread per JVM
+            // Do not call Platform.exit when testing because other tests that
+            // require the FX Thread will fail or be ignored
+            if(System.getProperty(KEEP_PLATFORM_OPEN_PROPERTY) == null) {
+                closePrimary();
+            }
+        }
     }
 
     public void show(FXMLView view) throws RuntimeException {
@@ -150,12 +186,12 @@ public class StageHandler {
             logr.catching(Level.FATAL, exception);
             logr.atLevel(Level.FATAL)
                 .withThrowable(exception)
-                .log("Unable to show {} scene", view.getName());
+                .log(FATAL_ERROR, view.getName());
             // Can only initialize one FX Thread per JVM
             // Do not call Platform.exit when testing because other tests that
             // require the FX Thread will fail or be ignored
             if(System.getProperty(KEEP_PLATFORM_OPEN_PROPERTY) == null) {
-                close();
+                closePrimary();
             }
         }
     }
@@ -168,15 +204,15 @@ public class StageHandler {
         try {
             switchSceneModal(view, page);
             BaseController controller = (BaseController) getController();
-            getModalStage().setOnCloseRequest(e -> {
+            getSecondaryStage().setOnCloseRequest(e -> {
                 e.consume();
                 logr.debug("Closing the {}", view.getName());
-                getModalStage().close();
+                getSecondaryStage().close();
             });
             
 
             if(controller.isInit()) {
-                getModalStage().showAndWait();
+                getSecondaryStage().showAndWait();
                 logr.debug("Opening the {}", view.getName());
             } else {
                 String msg = String.format("Failed to initialize modal window %s", view.getName());
@@ -188,18 +224,24 @@ public class StageHandler {
             logr.catching(Level.FATAL, exception);
             logr.atLevel(Level.FATAL)
                 .withThrowable(exception)
-                .log("Unable to show {} scene", view.getName());
+                .log(FATAL_ERROR, view.getName());
             // Can only initialize one FX Thread per JVM
             // Do not call Platform.exit when testing because other tests that
             // require the FX Thread will fail or be ignored
             if(System.getProperty(KEEP_PLATFORM_OPEN_PROPERTY) == null) {
-                close();
+                closePrimary();
             }
         }
     }
 
-    public void close() {
+    public void closePrimary() {
         getPrimaryStage().close();
+    }
+
+    public void closeSecondary() {
+        if(getSecondaryStage() != null) {
+            getSecondaryStage().close();
+        }
     }
 
     public Parent loadViewNodeHierarchy(FXMLView view) throws RuntimeException {
@@ -227,7 +269,7 @@ public class StageHandler {
             // Do not call Platform.exit when testing because other tests that
             // require the FX Thread will fail or be ignored
             if(System.getProperty(KEEP_PLATFORM_OPEN_PROPERTY) == null) {
-                close();
+                closePrimary();
             }
         }
         return rootNode;

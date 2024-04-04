@@ -1,0 +1,40 @@
+/*
+    Copyright (c) 2019 by Marc Pierre. All rights reserved.
+    Author: Marc Pierre, Marc.Pierre@student.uml.edu,
+    updated by Marc Pierre on October 23, 2019
+    Description: CSS to make the home pane look like it does
+*/
+
+/* Creating variables to hold values that show up multiple times*/
+* {
+    -fx-dark-color:  #232323;
+    -fx-grey-color: #8a8a8a;
+    -fx-light-color: #dadada;
+    -fx-white-color: #fff;
+    -fx-blue-color: #0469B1;
+}
+
+/* GRID PANE */
+.root {
+    -fx-pref-height: 350;
+    -fx-pref-width: 450;
+    -fx-background-color: -fx-dark-color;
+}
+
+.title-label {
+    -fx-background-color: -fx-dark-color;
+    -fx-text-fill: -fx-light-color;
+    -fx-font-size: 20px;
+    -fx-font-weight: normal;
+}
+
+.progress-label {
+    -fx-background-color: -fx-dark-color;
+    -fx-text-fill: -fx-blue-color;
+    -fx-font-size: 15px;
+    -fx-font-weight: normal;
+}
+
+.progress-bar {
+    -fx-accent: -fx-blue-color;
+}

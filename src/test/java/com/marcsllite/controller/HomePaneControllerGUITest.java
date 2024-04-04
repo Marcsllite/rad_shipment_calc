@@ -19,6 +19,9 @@ import org.testfx.matcher.base.WindowMatchers;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
+
 class HomePaneControllerGUITest extends GUITest {
     @Spy
     HomePaneController controller;
@@ -57,40 +60,26 @@ class HomePaneControllerGUITest extends GUITest {
 
     @Test
     void testHideShow() {
-        interact(() -> {
-            controller.hide();
+        interact(() ->controller.hide());
 
-            FxAssert.verifyThat(gridPaneHome, NodeMatchers.isInvisible());
+        FxAssert.verifyThat(gridPaneHome, NodeMatchers.isInvisible());
 
-            controller.show();
+        interact(() ->controller.show());
 
-            FxAssert.verifyThat(gridPaneHome, NodeMatchers.isVisible());
-        });
+        FxAssert.verifyThat(gridPaneHome, NodeMatchers.isVisible());
     }
 
     @Test
     void testHomePaneHandler_btnAdd() {
-        interact(() -> clickOn(btnAdd));
+        clickOn(btnAdd);
         stackPaneModify = getNode(FXIds.STACKPANE_MODIFY);
         FxAssert.verifyThat(window(stackPaneModify), WindowMatchers.isShowing());
+        assertTrue(getController() instanceof ModifyController);
+        ModifyController c = (ModifyController) getController();
+        assertEquals(BaseController.Page.ADD, c.getPage());
 
         interact(() -> window(stackPaneModify).hide());
         FxAssert.verifyThat(window(gridPaneHome), WindowMatchers.isShowing());
         FxAssert.verifyThat(window(stackPaneModify), WindowMatchers.isNotShowing());
-    }
-
-    @Test
-    void testHomePaneHandler_btnEdit() {
-        clickOn(btnEdit);
-    }
-
-    @Test
-    void testHomePaneHandler_btnRemove() {
-        clickOn(btnRemove);
-    }
-
-    @Test
-    void testHomePaneHandler_btnCalculate() {
-        clickOn(btnCalculate);
     }
 }

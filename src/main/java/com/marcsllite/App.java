@@ -28,15 +28,16 @@ public class App extends Application {
     private DBService dbService;
     private PropHandler propHandler;
     private ControllerFactory controllerFactory;
-    private FXMLView view;
-    private boolean isModal = false;
-    private BaseController.Page page = BaseController.Page.NONE;
+    private static FXMLView view;
+    private boolean showSplash;
+    private static BaseController.Page page = BaseController.Page.NONE;
 
     public App() {
-        this(true);
+        this(true, true);
     }
 
-    protected App(boolean doInit) {
+    protected App(boolean doInit, boolean showSplash) {
+        setShowSplash(showSplash);
         if(doInit) {
             try {
                 init(null, null, null, null, null);
@@ -47,7 +48,7 @@ public class App extends Application {
                 // Do not call Platform.exit when testing because other tests that
                 // require the FX Thread will fail or be ignored
                 if(System.getProperty("keepPlatformOpen") == null) {
-                    getStageHandler().close();
+                    getStageHandler().closePrimary();
                 }
             }
         }
@@ -80,10 +81,18 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         setStageHandler(new StageHandler(stage, getPropHandler(), getControllerFactory()));
-        if(getPage() == null || BaseController.Page.NONE.equals(getPage())) {
-            getStageHandler().show(getView());
+        if(isShowSplash()) {
+            App.getStageHandler().showSplashScreen();
         } else {
-            getStageHandler().showModal(getView(), getPage());
+            App.loadPrimaryStage();
+        }
+    }
+
+    public static void loadPrimaryStage() {
+        if(App.getPage() == null || BaseController.Page.NONE.equals(App.getPage())) {
+            App.getStageHandler().show(getView());
+        } else {
+            App.getStageHandler().showModal(getView(), App.getPage());
         }
     }
 
@@ -147,27 +156,27 @@ public class App extends Application {
         this.controllerFactory = controllerFactory;
     }
 
-    public FXMLView getView() {
+    public static FXMLView getView() {
         return view;
     }
 
-    public void setView(FXMLView view) {
-        this.view = view;
+    public static void setView(FXMLView view) {
+        App.view = view;
     }
 
-    public boolean isModal() {
-        return isModal;
+    public boolean isShowSplash() {
+        return showSplash;
     }
 
-    public void setModal(boolean modal) {
-        isModal = modal;
+    public void setShowSplash(boolean showSplash) {
+        this.showSplash = showSplash;
     }
 
-    public BaseController.Page getPage() {
-        return page;
+    public static BaseController.Page getPage() {
+        return App.page;
     }
 
-    public void setPage(BaseController.Page page) {
-        this.page = page;
+    public static void setPage(BaseController.Page page) {
+        App.page = page;
     }
 }

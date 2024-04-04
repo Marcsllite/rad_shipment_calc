@@ -1,6 +1,5 @@
 package com.marcsllite;
 
-import com.marcsllite.controller.BaseController;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.FXMLView;
@@ -45,46 +44,19 @@ public abstract class GUITest extends FxRobot {
     private FolderHandler folderHandler;
     private DBService dbService;
     private App app;
-    private boolean isModal = false;
-    private BaseController.Page modType = null;
 
     public GUITest(FXMLView view) {
-        this(view, null);
-    }
-
-    public GUITest(FXMLView view, BaseController.Page modType) {
         this.view = view;
-        if(modType != null) {
-            setModal(true);
-            setPage(modType);
-        }
-    }
-
-    public boolean isModal() {
-        return isModal;
-    }
-
-    public void setModal(boolean modal) {
-        isModal = modal;
-    }
-
-    public BaseController.Page getPage() {
-        return modType;
-    }
-
-    public void setPage(BaseController.Page modType) {
-        this.modType = modType;
     }
 
     @BeforeAll
     public void beforeAll() {
-        app = new App(false);
+        app = new App(false, false);
 
         PropHandlerTestObj testPropHandler = new PropHandlerTestObj();
         folderHandler = mock(FolderHandler.class);
         folderHandler.setPropHandler(testPropHandler);
         dbService = spy(new DBServiceImpl(testPropHandler));
-        assertEquals(1, dbService.validateDb());
     }
 
     @Start
@@ -93,23 +65,19 @@ public abstract class GUITest extends FxRobot {
         when(folderHandler.getDataFolderPath()).thenReturn(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
 
         app.init(view, new PropHandlerTestObj(), folderHandler, dbService, new ControllerFactoryTestObj());
-        app.setModal(isModal());
-        app.setPage(getPage());
 
         app.start(stage);
-        stageHandler = App.getStageHandler();
+        setStageHandler(App.getStageHandler());
     }
 
     @BeforeEach
     public void beforeEach() {
         Assumptions.assumeTrue(FxToolkit.isFXApplicationThreadRunning());
-        baseStageAssertions();
+        baseStageAssertions(getStageHandler().getPrimaryStage());
     }
 
-    protected void baseStageAssertions() {
-        Stage stage = stageHandler.getPrimaryStage();
-
-        assertEquals(view, stageHandler.getCurrentView());
+    protected void baseStageAssertions(Stage stage) {
+        assertEquals(view, getStageHandler().getCurrentView());
         assertEquals(view.getTitle(), stage.getTitle());
         assertEquals(view.getWidth(), stage.getMinWidth(), 0.0D);
         assertEquals(view.getHeight(), stage.getMinHeight(), 0.0D);
@@ -120,8 +88,16 @@ public abstract class GUITest extends FxRobot {
         assertFalse(stage.getIcons().isEmpty());
     }
 
+    public DBService getDbService() {
+        return dbService;
+    }
+
     protected StageHandler getStageHandler() {
         return stageHandler;
+    }
+
+    public void setStageHandler(StageHandler stageHandler) {
+        this.stageHandler = stageHandler;
     }
 
     /**
@@ -130,18 +106,18 @@ public abstract class GUITest extends FxRobot {
      * @return  The controller class of the FXMLView or null if not found
      */
     protected Object getController(){
-        return stageHandler.getController();
+        return getStageHandler().getController();
     }
 
     /**
-     * org.testfx.api.FxAssert#toNode(String) function to lookup the JavaFX node
+     * org.testfx.api.FxAssert#toNode(String) function to look up the JavaFX node
      * from the gui using the node's id. Original function is private
      * @param nodeId the id of the fxml node
      * @return the first node found with the given id
      * @param <T> javafx.scene.Node object
      * @throws EmptyNodeQueryException if no node is found
      */
-    protected <T extends Node> T getNode(String nodeId) throws EmptyNodeQueryException {
+    public static <T extends Node> T getNode(String nodeId) throws EmptyNodeQueryException {
         NodeFinder nodeFinder = assertContext().getNodeFinder();
 
         return nodeFinder.lookup(nodeId).query();

@@ -128,60 +128,54 @@ class ModifyControllerGUITest extends GUITest {
     }
 
     private void goToPage(int pageNum) {
-        vBoxFirstPage.setVisible(pageNum == 1);
-        vBoxSecondPage.setVisible(pageNum == 2);
+        interact(() ->{
+            vBoxFirstPage.setVisible(pageNum == 1);
+            vBoxSecondPage.setVisible(pageNum == 2);
+        });
     }
     @Test
     void testHideShow() {
-        interact(() -> {
-            controller.hide();
+        interact(() ->controller.hide());
 
-            FxAssert.verifyThat(stackPaneModify, NodeMatchers.isInvisible());
+        FxAssert.verifyThat(stackPaneModify, NodeMatchers.isInvisible());
 
-            controller.show();
+        interact(() ->controller.show());
 
-            FxAssert.verifyThat(stackPaneModify, NodeMatchers.isVisible());
-        });
+        FxAssert.verifyThat(stackPaneModify, NodeMatchers.isVisible());
     }
 
     @Test
     void testModifyHandler_btnNext() {
-        interact(()-> {
-            goToPage(1);
+        goToPage(1);
 
-            clickOn(btnNext);
-        });
+        clickOn(btnNext);
     }
 
     @Test
     void testModifyHandler_chckBoxSameMass() {
-        interact(()-> {
-            goToPage(2);
+        goToPage(2);
 
-            clickOn(chckBoxSameMass);});
+        clickOn(chckBoxSameMass);
     }
 
     @Test
     void testModifyHandler_chckBoxSameNSF() {
-        interact(()-> {
-            goToPage(2);
+        goToPage(2);
 
-            clickOn(chckBoxSameNSF);});
+        clickOn(chckBoxSameNSF);
     }
 
     @Test
     void testModifyHandler_btnBack() {
-        interact(()-> {
-            goToPage(2);
+        goToPage(2);
 
-            clickOn(btnBack);});
+        clickOn(btnBack);
     }
 
     @Test
     void testModifyHandler_btnFinish() {
-        interact(()-> {
-            goToPage(2);
+        goToPage(2);
 
-            clickOn(btnFinish);});
+        clickOn(btnFinish);
     }
 }
