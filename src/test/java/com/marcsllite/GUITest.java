@@ -57,6 +57,7 @@ public abstract class GUITest extends FxRobot {
         folderHandler = mock(FolderHandler.class);
         folderHandler.setPropHandler(testPropHandler);
         dbService = spy(new DBServiceImpl(testPropHandler));
+        assertEquals(1, dbService.validateDb());
     }
 
     @Start

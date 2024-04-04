@@ -73,38 +73,38 @@ class ModifyControllerGUITest extends GUITest {
     public void start(Stage stage) throws IOException, TimeoutException {
         super.start(stage);
         controller = (ModifyController) getController();
-        stackPaneModify = getNode(FXIds.STACKPANE_MODIFY);
+        stackPaneModify = GUITest.getNode(FXIds.STACKPANE_MODIFY);
         // First Page
-        vBoxFirstPage = getNode(FXIds.VBOX_FIRST_PAGE);
-        txtFieldIsoName = getNode(FXIds.TXTFIELD_ISO_NAME);
-        txtFieldA0 = getNode(FXIds.TXTFIELD_A0);
-        comboBoxA0Prefix = getNode(FXIds.COMBOBOX_A0_PREFIX);
-        choiceBoxA0Name = getNode(FXIds.CHOICEBOX_AO_NAME);
-        vBoxMoreInfo = getNode(FXIds.VBOX_MORE_INFO);
-        hBoxAddInfoTop = getNode(FXIds.HBOX_ADD_INFO_TOP);
-        vBoxShortLong = getNode(FXIds.VBOX_SHORT_LONG);
-        radioBtnShortLived = getNode(FXIds.RADIO_SHORT_LIVED);
-        radioBtnLongLived = getNode(FXIds.RADIO_LONG_LIVED);
-        vBoxLungAbs = getNode(FXIds.VBOX_LUNG_ABS);
-        radioBtnSlowLungAbs = getNode(FXIds.RADIO_SLOW_LUNG);
-        radioBtnMediumLungAbs = getNode(FXIds.RADIO_MEDIUM_LUNG);
-        radioBtnFastLungAbs = getNode(FXIds.RADIO_FAST_LUNG);
-        txtFirstPageStatus = getNode(FXIds.TXT_FIRST_PAGE_STATUS);
-        btnNext = getNode(FXIds.BTN_NEXT);
+        vBoxFirstPage = GUITest.getNode(FXIds.VBOX_FIRST_PAGE);
+        txtFieldIsoName = GUITest.getNode(FXIds.TXTFIELD_ISO_NAME);
+        txtFieldA0 = GUITest.getNode(FXIds.TXTFIELD_A0);
+        comboBoxA0Prefix = GUITest.getNode(FXIds.COMBOBOX_A0_PREFIX);
+        choiceBoxA0Name = GUITest.getNode(FXIds.CHOICEBOX_AO_NAME);
+        vBoxMoreInfo = GUITest.getNode(FXIds.VBOX_MORE_INFO);
+        hBoxAddInfoTop = GUITest.getNode(FXIds.HBOX_ADD_INFO_TOP);
+        vBoxShortLong = GUITest.getNode(FXIds.VBOX_SHORT_LONG);
+        radioBtnShortLived = GUITest.getNode(FXIds.RADIO_SHORT_LIVED);
+        radioBtnLongLived = GUITest.getNode(FXIds.RADIO_LONG_LIVED);
+        vBoxLungAbs = GUITest.getNode(FXIds.VBOX_LUNG_ABS);
+        radioBtnSlowLungAbs = GUITest.getNode(FXIds.RADIO_SLOW_LUNG);
+        radioBtnMediumLungAbs = GUITest.getNode(FXIds.RADIO_MEDIUM_LUNG);
+        radioBtnFastLungAbs = GUITest.getNode(FXIds.RADIO_FAST_LUNG);
+        txtFirstPageStatus = GUITest.getNode(FXIds.TXT_FIRST_PAGE_STATUS);
+        btnNext = GUITest.getNode(FXIds.BTN_NEXT);
         // Second Page
-        vBoxSecondPage = getNode(FXIds.VBOX_SECOND_PAGE);
-        datePicker = getNode(FXIds.DATE_PICKER);
-        txtFieldMass = getNode(FXIds.TXTFIELD_MASS);
-        comboBoxMassPrefix = getNode(FXIds.COMBOBOX_MASS_PREFIX);
-        choiceBoxMassName = getNode(FXIds.CHOICEBOX_MASS_NAME);
-        choiceBoxNature = getNode(FXIds.CHOICEBOX_NATURE);
-        choiceBoxState = getNode(FXIds.CHOICEBOX_STATE);
-        choiceBoxForm = getNode(FXIds.CHOICEBOX_FORM);
-        chckBoxSameMass = getNode(FXIds.CHCKBOX_SAME_MASS);
-        chckBoxSameNSF = getNode(FXIds.CHCKBOX_SAME_NSF);
-        btnBack = getNode(FXIds.BTN_BACK);
-        btnFinish = getNode(FXIds.BTN_FINISH);
-        txtSecondPageStatus = getNode(FXIds.TXT_SECOND_PAGE_STATUS);
+        vBoxSecondPage = GUITest.getNode(FXIds.VBOX_SECOND_PAGE);
+        datePicker = GUITest.getNode(FXIds.DATE_PICKER);
+        txtFieldMass = GUITest.getNode(FXIds.TXTFIELD_MASS);
+        comboBoxMassPrefix = GUITest.getNode(FXIds.COMBOBOX_MASS_PREFIX);
+        choiceBoxMassName = GUITest.getNode(FXIds.CHOICEBOX_MASS_NAME);
+        choiceBoxNature = GUITest.getNode(FXIds.CHOICEBOX_NATURE);
+        choiceBoxState = GUITest.getNode(FXIds.CHOICEBOX_STATE);
+        choiceBoxForm = GUITest.getNode(FXIds.CHOICEBOX_FORM);
+        chckBoxSameMass = GUITest.getNode(FXIds.CHCKBOX_SAME_MASS);
+        chckBoxSameNSF = GUITest.getNode(FXIds.CHCKBOX_SAME_NSF);
+        btnBack = GUITest.getNode(FXIds.BTN_BACK);
+        btnFinish = GUITest.getNode(FXIds.BTN_FINISH);
+        txtSecondPageStatus = GUITest.getNode(FXIds.TXT_SECOND_PAGE_STATUS);
     }
 
     @Test

@@ -21,7 +21,6 @@ public class SplashScreenController {
     private PropHandler propHandler;
     private DBService dbService;
     SplashScreenTask splashScreenTask = null;
-    Thread thread = null;
 
     public SplashScreenController() throws IOException {
         this(null);
@@ -34,17 +33,25 @@ public class SplashScreenController {
 
     @FXML
     public void initialize() {
+        show();
         startTask(new SplashScreenTask());
+    }
+
+    public void show() {
+        gridPaneSplash.setVisible(true);
+    }
+
+    public void hide() {
+        gridPaneSplash.setVisible(false);
     }
 
     protected void startTask(SplashScreenTask target){
         if(splashScreenTask != null && splashScreenTask.isRunning()) {
             splashScreenTask.cancel();
-            thread.interrupt();
         }
 
         splashScreenTask = target;
-        thread = new Thread(splashScreenTask);
+        Thread thread = new Thread(splashScreenTask);
         bindSplashScreenTask(splashScreenTask);
         thread.setDaemon(true);
         thread.start();
@@ -80,25 +87,21 @@ public class SplashScreenController {
     protected class SplashScreenTask extends Task<Void> {
         @Override
         protected Void call() {
-            try {
-                updateMessage("Initializing and validating database...");
-                updateProgress(0, 2);
-                getDbService().validateDb();
+            updateMessage("Initializing and validating database...");
+            updateProgress(0, 2);
+            getDbService().validateDb();
 
-                updateMessage("Initializing Reference Page Table...");
-                updateProgress(1, 2);
-                getDbService().getAllIsotopes();
+            updateMessage("Initializing Isotopes for Reference Page Table...");
+            updateProgress(1, 2);
+            getDbService().getAllIsotopes();
 
-                updateProgress(2, 2);
-                Thread.sleep(50);
+            updateProgress(2, 2);
 
-                Platform.runLater(() -> {
-                    App.loadPrimaryStage();
-                    gridPaneSplash.getScene().getWindow().hide();
-                });
-            } catch (InterruptedException ie) {
-                Thread.currentThread().interrupt();
-            }
+            Platform.runLater(() -> {
+                App.loadPrimaryStage();
+                hide();
+            });
+
             return null;
         }
     }

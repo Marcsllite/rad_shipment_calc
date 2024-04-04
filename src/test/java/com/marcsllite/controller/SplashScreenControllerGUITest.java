@@ -25,7 +25,6 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
 import java.io.IOException;
-import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
@@ -51,8 +50,8 @@ class SplashScreenControllerGUITest extends FxRobot {
     }
 
     @Start
-    public void start(Stage stage) throws IOException, TimeoutException {
-        stageHandler = new StageHandler(stage, new PropHandlerTestObj(), new ControllerFactoryTestObj());
+    public void start(Stage stage) throws IOException {
+        stageHandler = new StageHandler(stage, testPropHandler, new ControllerFactoryTestObj());
 
         stageHandler.showSplashScreen();
         controller = spy((SplashScreenController) stageHandler.getController());
