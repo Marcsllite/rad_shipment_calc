@@ -150,7 +150,7 @@ public class ModifyController extends BaseController {
         comboBoxA0Prefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
         choiceBoxA0Name.getSelectionModel().select(Isotope.RadUnit.CURIE.getVal());
         comboBoxMassPrefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
-        choiceBoxMassName.getSelectionModel().select(Isotope.Mass.GRAMS.getVal());
+        choiceBoxMassName.getSelectionModel().select(Isotope.MassUnit.GRAMS.getVal());
 
         setupNameListener();
 
@@ -167,7 +167,7 @@ public class ModifyController extends BaseController {
         comboBoxA0Prefix.setItems(Conversions.SIPrefix.getFxValues());
         choiceBoxA0Name.setItems(Isotope.RadUnit.getFxValues());
         comboBoxMassPrefix.setItems(Conversions.SIPrefix.getFxValues());
-        choiceBoxMassName.setItems(Isotope.Mass.getFxValues());
+        choiceBoxMassName.setItems(Isotope.MassUnit.getFxValues());
         choiceBoxNature.setItems(Isotope.Nature.getFxValues());
         choiceBoxState.setItems(LimitsModelId.State.getFxValues());
         choiceBoxForm.setItems(LimitsModelId.Form.getFxValues());

@@ -49,10 +49,7 @@ public class IsotopeModelId implements Serializable {
             return false;
         }
         IsotopeModelId temp = (IsotopeModelId) obj;
-        if(!Objects.equals(this.name, temp.name)) {
-            return false;
-        }
-        return Objects.equals(this.abbr, temp.abbr);
+        return Objects.equals(this.name, temp.name) && Objects.equals(this.abbr, temp.abbr);
     }
 
     @Override

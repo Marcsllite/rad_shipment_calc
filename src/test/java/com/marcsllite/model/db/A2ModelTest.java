@@ -30,4 +30,11 @@ class A2ModelTest {
         model.setValue(val);
         assertEquals(val, model.getValue(), 0.0f);
     }
+
+    @Test
+    void testSetVersion() {
+        long version = -1L;
+        model.setVersion(version);
+        assertEquals(version, model.getVersion());
+    }
 }

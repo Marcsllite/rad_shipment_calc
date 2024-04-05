@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetSystemProperty;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.when;
 
 class IsotopeConstantsTest extends DBTest {
@@ -17,19 +18,8 @@ class IsotopeConstantsTest extends DBTest {
     IsotopeConstants constants;
     private final String DEFAULT_NAME = "Abbreviation";
     private final String DEFAULT_ABBR = "Abbr";
-    private final float DEFAULT_A1 = 1.0f;
-    private final float DEFAULT_A2 = 1.0f;
-    private final float DEFAULT_DECAY_CONST = 1.0f;
-    private final float DEFAULT_EXEMPT_CON = 1.0f;
-    private final float DEFAULT_EXEMPT_LIM = 1.0f;
-    private final float DEFAULT_HALF_LIFE = 1.0f;
     private final LimitsModelId.State DEFAULT_STATE = LimitsModelId.State.SOLID;
     private final LimitsModelId.Form DEFAULT_FORM = LimitsModelId.Form.NORMAL;
-    private final float DEFAULT_IA_LIMITED_LIM = 1.5f;
-    private final float DEFAULT_IA_PACKAGE_LIM = 2.0f;
-    private final float DEFAULT_LIMITED_LIM = 3.5f;
-    private final float DEFAULT_CI_REPORT_QUAN = 1.0f;
-    private final float DEFAULT_TBQ_REPORT_QUAN = 0.037f;
 
     @BeforeEach
     public void setUp() {
@@ -92,5 +82,59 @@ class IsotopeConstantsTest extends DBTest {
         assertEquals(expected, constants.getLimitedLimit(), 0.0f);
         assertEquals(expected, constants.getCurieReportQuan(), 0.0f);
         assertEquals(expected, constants.getTeraBqReportQuan(), 0.0f);
+    }
+
+    @Test
+    void testEquals() {
+        float val = -512F;
+        IsotopeConstants constants1 = new IsotopeConstants(DEFAULT_NUM);
+        IsotopeConstants constants2 = new IsotopeConstants(DEFAULT_NUM);
+        String str = "";
+
+        assertNotEquals(null, constants1);
+        assertNotEquals(constants1, str);
+
+        assertEquals(constants1, constants2);
+        assertEquals(constants1.hashCode(), constants2.hashCode());
+
+        constants1.setTeraBqReportQuan(val);
+        assertNotEquals(constants1, constants2);
+        assertNotEquals(constants1.hashCode(), constants2.hashCode());
+
+        constants1.setLimitedLimit(val);
+        assertNotEquals(constants1, constants2);
+        assertNotEquals(constants1.hashCode(), constants2.hashCode());
+
+        constants1.setIaPackageLimit(val);
+        assertNotEquals(constants1, constants2);
+        assertNotEquals(constants1.hashCode(), constants2.hashCode());
+
+        constants1.setIaLimitedLimit(val);
+        assertNotEquals(constants1, constants2);
+        assertNotEquals(constants1.hashCode(), constants2.hashCode());
+
+        constants1.setHalfLife(val);
+        assertNotEquals(constants1, constants2);
+        assertNotEquals(constants1.hashCode(), constants2.hashCode());
+
+        constants1.setExemptLimit(val);
+        assertNotEquals(constants1, constants2);
+        assertNotEquals(constants1.hashCode(), constants2.hashCode());
+
+        constants1.setExemptConcentration(val);
+        assertNotEquals(constants1, constants2);
+        assertNotEquals(constants1.hashCode(), constants2.hashCode());
+
+        constants1.setDecayConstant(val);
+        assertNotEquals(constants1, constants2);
+        assertNotEquals(constants1.hashCode(), constants2.hashCode());
+
+        constants1.setA2(val);
+        assertNotEquals(constants1, constants2);
+        assertNotEquals(constants1.hashCode(), constants2.hashCode());
+
+        constants1.setA1(val);
+        assertNotEquals(constants1, constants2);
+        assertNotEquals(constants1.hashCode(), constants2.hashCode());
     }
 }

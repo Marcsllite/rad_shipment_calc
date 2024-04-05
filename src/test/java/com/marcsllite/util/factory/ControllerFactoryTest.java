@@ -6,9 +6,12 @@ import com.marcsllite.controller.MenuPaneController;
 import com.marcsllite.controller.ModifyController;
 import com.marcsllite.controller.ReferencePaneController;
 import com.marcsllite.controller.ShipmentDetailsController;
+import com.marcsllite.controller.SplashScreenController;
 import com.marcsllite.controller.SummaryPaneController;
+import com.marcsllite.util.Conversions;
 import org.junit.jupiter.api.Test;
 
+import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 
 class ControllerFactoryTest {
@@ -17,9 +20,14 @@ class ControllerFactoryTest {
     @Test
     void testCall() {
         // Create new Controller
-        Class clazz = MainController.class;
+        Class clazz = SplashScreenController.class;
         Object ret = factory.call(clazz);
         
+        assertTrue(ret instanceof SplashScreenController);
+
+        clazz = MainController.class;
+        ret = factory.call(clazz);
+
         assertTrue(ret instanceof MainController);
 
         clazz = MenuPaneController.class;
@@ -51,5 +59,8 @@ class ControllerFactoryTest {
         ret = factory.call(clazz);
 
         assertTrue(ret instanceof SummaryPaneController);
+
+        clazz = Conversions.class;
+        assertNull(factory.call(clazz));
     }
 }

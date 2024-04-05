@@ -11,14 +11,17 @@ import com.marcsllite.dao.HalfLifeDaoImpl;
 import com.marcsllite.dao.IsotopeDaoImpl;
 import com.marcsllite.dao.LimitsDaoImpl;
 import com.marcsllite.dao.ReportableQuantityDaoImpl;
+import com.marcsllite.dao.ShipmentDaoImpl;
 import com.marcsllite.model.Isotope;
 import com.marcsllite.model.Limits;
 import com.marcsllite.model.ReportableQuantity;
+import com.marcsllite.model.Shipment;
 import com.marcsllite.model.db.IsotopeModel;
 import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModel;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.model.db.ReportableQuantityModel;
+import com.marcsllite.model.db.ShipmentModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.spy;
@@ -57,6 +61,8 @@ class DBServiceImplTest extends DBTest {
     private LimitsDaoImpl limitsDao;
     @Mock
     private ReportableQuantityDaoImpl reportableQuanDao;
+    @Mock
+    private ShipmentDaoImpl shipmentDao;
     @InjectMocks
     private DBServiceImpl service;
 
@@ -367,5 +373,20 @@ class DBServiceImplTest extends DBTest {
 
         assertEquals(exp, service.getTBqReportQuan(abbr));
         verify(reportableQuanDao).getTBq(abbr);
+    }
+
+    @Test
+    void testGetShipment() {
+        long id = -1L;
+        ShipmentModel model = new ShipmentModel();
+        Shipment exp = new Shipment(model);
+
+        when(service.getShipmentDao()).thenReturn(shipmentDao);
+        when(shipmentDao.getShipment(id)).thenReturn(model);
+
+        Shipment actual = service.getShipment(id);
+
+        assertNotNull(actual);
+        assertEquals(exp, actual);
     }
 }

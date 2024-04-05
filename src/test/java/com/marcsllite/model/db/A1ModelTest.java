@@ -18,16 +18,23 @@ class A1ModelTest {
     }
 
     @Test
-    void setAbbr() {
+    void testSetAbbr() {
         String abbr = "newAbbr";
         model.setAbbr(abbr);
         assertEquals(abbr, model.getAbbr());
     }
 
     @Test
-    void setValue() {
+    void testSetValue() {
         float val = 45.2f;
         model.setValue(val);
         assertEquals(val, model.getValue(), 0.0f);
+    }
+
+    @Test
+    void testSetVersion() {
+        long version = -1L;
+        model.setVersion(version);
+        assertEquals(version, model.getVersion());
     }
 }

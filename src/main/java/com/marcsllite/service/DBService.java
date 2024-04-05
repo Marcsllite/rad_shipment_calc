@@ -3,6 +3,7 @@ package com.marcsllite.service;
 import com.marcsllite.model.Isotope;
 import com.marcsllite.model.Limits;
 import com.marcsllite.model.ReportableQuantity;
+import com.marcsllite.model.Shipment;
 import com.marcsllite.model.db.IsotopeModel;
 import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
@@ -48,4 +49,6 @@ public interface DBService {
     float getCiReportQuan(String abbr);
 
     float getTBqReportQuan(String abbr);
+
+    Shipment getShipment(Long id);
 }

@@ -284,16 +284,16 @@ class ReferencePaneControllerGUITest extends GUITest {
         interact(() -> txtFieldSearch.setText("A"));
         assertEquals(2, tableViewSearch.getItems().size());
 
-        interact(() -> txtFieldSearch.setText("Ab"));
-        assertEquals(1, tableViewSearch.getItems().size());
+        interact(() -> txtFieldSearch.setText("An"));
+        assertEquals(2, tableViewSearch.getItems().size());
 
-        interact(() -> txtFieldSearch.setText("Abb"));
-        assertEquals(1, tableViewSearch.getItems().size());
+        interact(() -> txtFieldSearch.setText("Ann"));
+        assertEquals(2, tableViewSearch.getItems().size());
 
-        interact(() -> txtFieldSearch.setText("Abbz"));
+        interact(() -> txtFieldSearch.setText("Annz"));
         assertTrue(tableViewSearch.getItems().isEmpty());
 
-        interact(() -> txtFieldSearch.setText("Abbr"));
-        assertEquals(1, tableViewSearch.getItems().size());
+        interact(() -> txtFieldSearch.setText("Anny"));
+        assertEquals(2, tableViewSearch.getItems().size());
     }
 }

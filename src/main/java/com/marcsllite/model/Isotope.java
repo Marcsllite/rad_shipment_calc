@@ -1,5 +1,6 @@
 package com.marcsllite.model;
 
+import com.marcsllite.model.db.IsotopeModel;
 import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.factory.PropHandlerFactory;
@@ -13,30 +14,31 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Isotope {
     private static final Logger logr = LogManager.getLogger();
     protected PropHandler propHandler;
     protected IsotopeConstants constants;
-    private final SimpleStringProperty name = new SimpleStringProperty();
-    private final SimpleStringProperty abbr = new SimpleStringProperty();
+    private static final SimpleStringProperty name = new SimpleStringProperty();
+    private static final SimpleStringProperty abbr = new SimpleStringProperty();
     private Nature nature;
     private LimitsModelId.State state;
     private LimitsModelId.Form form;
-    private final SimpleFloatProperty mass = new SimpleFloatProperty();
-    private Mass massUnit;
-    private final SimpleFloatProperty initActivty = new SimpleFloatProperty();
+    private static final SimpleFloatProperty mass = new SimpleFloatProperty();
+    private MassUnit massUnit;
+    private static final SimpleFloatProperty initActivty = new SimpleFloatProperty();
     private RadUnit initActivityUnit;
     private IsoClass isoClass;
 
-    public enum Mass {
+    public enum MassUnit {
         GRAMS("grams"),
         LITERS("liters");
 
         private final String val;
 
-        Mass(String val) {
+        MassUnit(String val) {
             this.val = val;
         }
 
@@ -44,8 +46,8 @@ public class Isotope {
             return val;
         }
 
-        public static Mass toMass(String value) {
-            for (Mass enumValue : values()) {
+        public static MassUnit toMass(String value) {
+            for (MassUnit enumValue : values()) {
                 if (enumValue.getVal().equalsIgnoreCase(value)) {
                     return enumValue;
                 }
@@ -54,8 +56,8 @@ public class Isotope {
         }
 
         public static ObservableList<String> getFxValues() {
-            return Arrays.stream(Mass.values())
-                .map(Mass::getVal)
+            return Arrays.stream(MassUnit.values())
+                .map(MassUnit::getVal)
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
         }
 
@@ -175,55 +177,33 @@ public class Isotope {
         }
     }
 
+    public Isotope(IsotopeModel model) {
+        this(model.getIsotopeId());
+    }
+
     public Isotope(IsotopeModelId isoId) {
         this(isoId,
-            Mass.GRAMS);
+            null,
+            null,
+            null,
+            null);
     }
 
-    public Isotope(IsotopeModelId isoId, Mass massUnit) {
-        this(isoId,
-            massUnit,
-            RadUnit.CURIE);
-    }
-
-    public Isotope(IsotopeModelId isoId, Mass massUnit, RadUnit initActivityUnit) {
-        this(isoId,
-            massUnit,
-            initActivityUnit,
-            Nature.REGULAR);
-    }
-
-    public Isotope(IsotopeModelId isoId, Mass massUnit, RadUnit initActivityUnit, Nature nature) {
-        this(isoId,
-            massUnit,
-            initActivityUnit,
-            nature,
-            LimitsModelId.State.SOLID);
-    }
-
-    public Isotope(IsotopeModelId isoId, Mass massUnit, RadUnit initActivityUnit, Nature nature, LimitsModelId.State state) {
-        this(isoId,
-            massUnit,
-            initActivityUnit,
-            nature,
-            new LimitsModelId(state, LimitsModelId.Form.NORMAL));
-    }
-
-    public Isotope(IsotopeModelId isoId, Mass massUnit, RadUnit initActivityUnit, Nature nature, LimitsModelId limitsId) {
-        try {
-            setPropHandler(new PropHandlerFactory().getPropHandler(null));
-            setConstants(new IsotopeConstants((float) getPropHandler().getDouble("defaultNum")));
-            getConstants().dbInit(isoId, limitsId);
-        } catch (IOException e) {
-            logr.catching(e);
-            logr.error("Failed to setup Isotope {}'s constants.", isoId.getName());
-        }
+    public Isotope(IsotopeModelId isoId, MassUnit massUnit, RadUnit initActivityUnit, Nature nature, LimitsModelId limitsId) {
         setIsoId(isoId);
         setMassUnit(massUnit);
         setInitActivityUnit(initActivityUnit);
         setNature(nature);
         setLimitsId(limitsId);
         setIsoClass(IsoClass.TBD);
+        try {
+            setPropHandler(new PropHandlerFactory().getPropHandler(null));
+            setConstants(new IsotopeConstants((float) getPropHandler().getDouble("defaultNum")));
+            getConstants().dbInit(getIsoId(), getLimitsId());
+        } catch (IOException e) {
+            logr.catching(e);
+            logr.error("Failed to setup Isotope {}'s constants.", isoId.getName());
+        }
         logr.trace("Created new Isotope {}", this::toString);
     }
 
@@ -243,7 +223,7 @@ public class Isotope {
         this.constants = constants;
     }
 
-    public Mass getMassUnit() {
+    public MassUnit getMassUnit() {
         return massUnit;
     }
 
@@ -259,8 +239,8 @@ public class Isotope {
         massProperty().set(mass);
     }
 
-    public void setMassUnit(Mass massUnit) {
-        this.massUnit = massUnit;
+    public void setMassUnit(MassUnit massUnit) {
+        this.massUnit = massUnit == null? Isotope.MassUnit.GRAMS : massUnit;
     }
 
     public float getInitActivty() {
@@ -280,7 +260,7 @@ public class Isotope {
     }
 
     public void setInitActivityUnit(RadUnit initActivityUnit) {
-        this.initActivityUnit = initActivityUnit;
+        this.initActivityUnit = initActivityUnit == null? RadUnit.CURIE : initActivityUnit;
     }
 
     public void setIsoId(IsotopeModelId isoId) {
@@ -301,7 +281,7 @@ public class Isotope {
     }
 
     public void setName(String name) {
-        nameProperty().set(name);
+        nameProperty().set(name == null? "" : name);
     }
 
     public String getAbbr() {
@@ -313,7 +293,7 @@ public class Isotope {
     }
 
     public void setAbbr(String abbr) {
-        abbrProperty().set(abbr);
+        abbrProperty().set(abbr == null? "" : abbr);
     }
 
     public Nature getNature() {
@@ -321,7 +301,7 @@ public class Isotope {
     }
 
     public void setNature(Nature nature) {
-        this.nature = nature;
+        this.nature = nature == null? Isotope.Nature.REGULAR: nature;
     }
 
     public LimitsModelId getLimitsId() {
@@ -329,6 +309,9 @@ public class Isotope {
     }
 
     public void setLimitsId(LimitsModelId limitsId) {
+        if(limitsId == null) {
+            limitsId = new LimitsModelId();
+        }
         setState(limitsId.getState());
         setForm(limitsId.getForm());
     }
@@ -338,7 +321,7 @@ public class Isotope {
     }
 
     public void setState(LimitsModelId.State state) {
-        this.state = state;
+        this.state = state == null? LimitsModelId.State.SOLID : state;
     }
 
     public LimitsModelId.Form getForm() {
@@ -346,7 +329,7 @@ public class Isotope {
     }
 
     public void setForm(LimitsModelId.Form form) {
-        this.form = form;
+        this.form = form == null? LimitsModelId.Form.NORMAL : form;
     }
 
     public IsoClass getIsoClass() {
@@ -354,7 +337,41 @@ public class Isotope {
     }
 
     public void setIsoClass(IsoClass isoClass) {
-        this.isoClass = isoClass;
+        this.isoClass = isoClass == null? IsoClass.TBD : isoClass;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null) {
+            return false;
+        }
+        if(getClass() != obj.getClass()) {
+            return false;
+        }
+        Isotope temp = (Isotope) obj;
+        return Objects.equals(this.getIsoId(), temp.getIsoId()) &&
+            Objects.equals(this.getIsoClass(), temp.getIsoClass()) &&
+            Objects.equals(this.getMass(), temp.getMass()) &&
+            Objects.equals(this.getMassUnit(), temp.getMassUnit()) &&
+            Objects.equals(this.getInitActivty(), temp.getInitActivty()) &&
+            Objects.equals(this.getInitActivityUnit(), temp.getInitActivityUnit()) &&
+            Objects.equals(this.getNature(), temp.getNature()) &&
+            Objects.equals(this.getLimitsId(), temp.getLimitsId()) &&
+            Objects.equals(this.constants, temp.constants);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 43;
+        hash = 2 * hash + (this.getIsoId() != null ? this.getIsoId().hashCode() : 0);
+        hash = 2 * hash + (this.getIsoClass() != null ? this.getIsoClass().hashCode() : 0);
+        hash = 2 * hash + (int) this.getMass();
+        hash = 2 * hash + (this.getMassUnit() != null ? this.getMassUnit().hashCode() : 0);
+        hash = 2 * hash + (int) this.getInitActivty();
+        hash = 2 * hash + (this.getInitActivityUnit() != null? this.getInitActivityUnit().hashCode() : 0);
+        hash = 2 * hash + (this.getNature() != null ? this.getNature().hashCode() : 0);
+        hash = 2 * hash + (this.getLimitsId() != null ? this.getLimitsId().hashCode() : 0);
+        return hash;
     }
 
     @Override

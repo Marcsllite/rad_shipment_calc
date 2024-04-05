@@ -13,6 +13,9 @@ import org.mockito.InjectMocks;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -21,7 +24,7 @@ class IsotopeTest extends DBTest {
     private static final String DEFAULT_NAME = "Abbreviation";
     private static final String DEFAULT_ABBR = "Abbr";
     private static final IsotopeModelId isoId = new IsotopeModelId(DEFAULT_NAME, DEFAULT_ABBR);
-    private final Isotope.Mass DEFAULT_MASS = Isotope.Mass.GRAMS;
+    private final Isotope.MassUnit DEFAULT_MASS = Isotope.MassUnit.GRAMS;
     private final Isotope.RadUnit DEFAULT_RAD_UNIT = Isotope.RadUnit.CURIE;
     private final Isotope.Nature DEFAULT_NATURE = Isotope.Nature.REGULAR;
     private final LimitsModelId limitsId = new LimitsModelId();
@@ -55,19 +58,19 @@ class IsotopeTest extends DBTest {
     @Test
     void testToMass() {
         String str = "";
-        Isotope.Mass actual = Isotope.Mass.toMass(str);
+        Isotope.MassUnit actual = Isotope.MassUnit.toMass(str);
         assertNull(actual);
         
         str = "grams";
-        actual = Isotope.Mass.toMass(str);
-        assertEquals(Isotope.Mass.GRAMS, actual);
+        actual = Isotope.MassUnit.toMass(str);
+        assertEquals(Isotope.MassUnit.GRAMS, actual);
 
         str = "GRAMS";
-        actual = Isotope.Mass.toMass(str);
-        assertEquals(Isotope.Mass.GRAMS, actual);
+        actual = Isotope.MassUnit.toMass(str);
+        assertEquals(Isotope.MassUnit.GRAMS, actual);
         
         str = "fake";
-        actual = Isotope.Mass.toMass(str);
+        actual = Isotope.MassUnit.toMass(str);
         assertNull(actual);
     }
 
@@ -126,5 +129,56 @@ class IsotopeTest extends DBTest {
         str = "fake";
         actual = Isotope.Nature.toNature(str);
         assertNull(actual);
+    }
+
+    @Test
+    void testEquals() {
+        IsotopeModelId isoId = new IsotopeModelId();
+        Isotope isotope1 = mock(Isotope.class, CALLS_REAL_METHODS);
+        isotope1.setIsoId(isoId);
+        Isotope isotope2 = mock(Isotope.class, CALLS_REAL_METHODS);
+        isotope2.setIsoId(isoId);
+
+        String str = "";
+
+        assertNotEquals(null, isotope1);
+        assertNotEquals(isotope1, str);
+
+        assertEquals(isotope1.hashCode(), isotope1.hashCode());
+        assertEquals(isotope1, isotope1);
+
+        LimitsModelId limitsId = new LimitsModelId();
+        isotope1.setLimitsId(limitsId);
+        assertNotEquals(isotope1, isotope2);
+        assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
+
+        isotope1.setNature(Isotope.Nature.INSTRUMENT);
+        assertNotEquals(isotope1, isotope2);
+        assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
+
+        isotope1.setInitActivityUnit(Isotope.RadUnit.BECQUEREL);
+        assertNotEquals(isotope1, isotope2);
+        assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
+
+        isotope1.setInitActivty(-2F);
+        assertNotEquals(isotope1, isotope2);
+        assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
+
+        isotope1.setMassUnit(Isotope.MassUnit.LITERS);
+        assertNotEquals(isotope1, isotope2);
+        assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
+
+        isotope1.setMass(-2F);
+        assertNotEquals(isotope1, isotope2);
+        assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
+
+        isotope1.setIsoClass(Isotope.IsoClass.TYPE_B_HIGHWAY);
+        assertNotEquals(isotope1, isotope2);
+        assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
+
+        isoId = new IsotopeModelId("fake", "fke");
+        isotope1.setIsoId(isoId);
+        assertNotEquals(isotope1, isotope2);
+        assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
     }
 }

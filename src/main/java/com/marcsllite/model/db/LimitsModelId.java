@@ -128,10 +128,7 @@ public class LimitsModelId implements Serializable {
             return false;
         }
         LimitsModelId temp = (LimitsModelId) obj;
-        if(!Objects.equals(this.state, temp.state)) {
-            return false;
-        }
-        return Objects.equals(this.form, temp.form);
+        return Objects.equals(this.state, temp.state) && Objects.equals(this.form, temp.form);
     }
 
     @Override

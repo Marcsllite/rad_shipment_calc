@@ -1,10 +1,17 @@
 package com.marcsllite.model.db;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
+import static org.mockito.Mockito.mock;
 
+@ExtendWith(MockitoExtension.class)
 class IsotopeModelTest {
     private final String DEFAULT_NAME = "Name";
     private final String DEFAULT_ABBR = "Abbr";
@@ -22,5 +29,21 @@ class IsotopeModelTest {
         IsotopeModelId isoId = new IsotopeModelId("Testing", "123");
         model.setIsotopeId(isoId);
         assertEquals(isoId, model.getIsotopeId());
+    }
+
+    @Test
+    void testSetShipments() {
+        ShipmentModel shipmentModel = mock(ShipmentModel.class);
+        List<ShipmentModel> exp = new ArrayList<>();
+        exp.add(shipmentModel);
+        model.setShipments(exp);
+        assertEquals(exp, model.getShipments());
+    }
+
+    @Test
+    void testSetVersion() {
+        long version = -1L;
+        model.setVersion(version);
+        assertEquals(version, model.getVersion());
     }
 }

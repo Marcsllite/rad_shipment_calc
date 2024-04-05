@@ -9,9 +9,11 @@ import com.marcsllite.dao.HalfLifeDaoImpl;
 import com.marcsllite.dao.IsotopeDaoImpl;
 import com.marcsllite.dao.LimitsDaoImpl;
 import com.marcsllite.dao.ReportableQuantityDaoImpl;
+import com.marcsllite.dao.ShipmentDaoImpl;
 import com.marcsllite.model.Isotope;
 import com.marcsllite.model.Limits;
 import com.marcsllite.model.ReportableQuantity;
+import com.marcsllite.model.Shipment;
 import com.marcsllite.model.db.IsotopeModel;
 import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModel;
@@ -40,6 +42,7 @@ public class DBServiceImpl implements DBService {
     private final IsotopeDaoImpl isotopeDao;
     private final LimitsDaoImpl limitsDao;
     private final ReportableQuantityDaoImpl reportableQuanDao;
+    private final ShipmentDaoImpl shipmentDao;
 
     public DBServiceImpl() {
         this(null);
@@ -61,6 +64,7 @@ public class DBServiceImpl implements DBService {
         isotopeDao = new IsotopeDaoImpl();
         limitsDao = new LimitsDaoImpl();
         reportableQuanDao = new ReportableQuantityDaoImpl();
+        shipmentDao = new ShipmentDaoImpl();
     }
 
     public int validateDb() {
@@ -111,6 +115,10 @@ public class DBServiceImpl implements DBService {
         return reportableQuanDao;
     }
 
+    public ShipmentDaoImpl getShipmentDao() {
+        return shipmentDao;
+    }
+
     @Override
     public float getA1(String abbr) {
         return getA1Dao().getA1(abbr);
@@ -157,7 +165,7 @@ public class DBServiceImpl implements DBService {
     public ObservableList<Isotope> getAllIsotopes() {
         return getIsotopeDao().getAllIsotopes()
             .stream()
-            .map(model -> new Isotope(model.getIsotopeId()) {
+            .map(model -> new Isotope(model) {
                 @Override
                 public PropHandler getPropHandler() {
                     return DBServiceImpl.this.getPropHandler();
@@ -240,5 +248,10 @@ public class DBServiceImpl implements DBService {
     @Override
     public float getTBqReportQuan(String abbr) {
         return getReportableQuanDao().getTBq(abbr);
+    }
+
+    @Override
+    public Shipment getShipment(Long id) {
+        return new Shipment(getShipmentDao().getShipment(id));
     }
 }

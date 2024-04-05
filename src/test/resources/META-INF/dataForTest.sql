@@ -17,6 +17,25 @@ create table if not exists LIMITS (State char(6) not null, Form char(7) not null
 
 create table if not exists REPORTABLE_QUANTITY (Abbr char(15) not null, Ci real, TBq real, version bigint default 0, primary key (Abbr));
 
+create table if not exists SHIPMENT (
+Id bigint auto_increment,
+Reference_Date date not null,
+Mass real,
+Mass_Unit char(6) not null,
+Nature char(10) not null,
+State char(6) not null,
+Form char(7) not null,
+version bigint default 0,
+primary key (Id));
+
+create table if not exists SHIPMENT_ISOTOPES (
+Shipment_Id bigint not null,
+Isotope_Name varchar(255) not null,
+Isotope_Abbr char(15) not null,
+version bigint default 0,
+constraint SHIPMENT_FK foreign key Shipment_Id references Shipment(Id),
+constraint ISOTOPE_FK foreign key (Isotope_Name, Isotope_Abbr) references Isotopes(Name, Abbr));
+
 -- Adding Data
 merge into LIMITS(State, Form, IA_Limited, IA_Package, Limited, version) values('solid', 'normal', 1.5, 2.0, 3.5, -1);
 

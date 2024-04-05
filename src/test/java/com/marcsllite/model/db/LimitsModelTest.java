@@ -48,4 +48,11 @@ class LimitsModelTest {
         model.setLimited(val);
         assertEquals(val, model.getLimited(), 0.0f);
     }
+
+    @Test
+    void testSetVersion() {
+        long version = -1L;
+        model.setVersion(version);
+        assertEquals(version, model.getVersion());
+    }
 }

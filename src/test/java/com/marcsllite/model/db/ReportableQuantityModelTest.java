@@ -38,4 +38,11 @@ class ReportableQuantityModelTest {
         model.setTeraBq(val);
         assertEquals(val, model.getTeraBq(), 0.0f);
     }
+
+    @Test
+    void testSetVersion() {
+        long version = -1L;
+        model.setVersion(version);
+        assertEquals(version, model.getVersion());
+    }
 }

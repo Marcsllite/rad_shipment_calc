@@ -6,6 +6,8 @@ import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import javafx.beans.property.SimpleFloatProperty;
 
+import java.util.Objects;
+
 public class IsotopeConstants {
     private DBService dbService;
     private final float defaultVal;
@@ -195,6 +197,44 @@ public class IsotopeConstants {
     public void setTeraBqReportQuan(float teraBqReportQuan) {
         teraBqReportQuanProperty().set(teraBqReportQuan);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null) {
+            return false;
+        }
+        if(getClass() != obj.getClass()) {
+            return false;
+        }
+        IsotopeConstants temp = (IsotopeConstants) obj;
+        return Objects.equals(this.getA1(), temp.getA1()) &&
+            Objects.equals(this.getA2(), temp.getA2()) &&
+            Objects.equals(this.getDecayConstant(), temp.getDecayConstant()) &&
+            Objects.equals(this.getExemptConcentration(), temp.getExemptConcentration()) &&
+            Objects.equals(this.getExemptLimit(), temp.getExemptLimit()) &&
+            Objects.equals(this.getHalfLife(), temp.getHalfLife()) &&
+            Objects.equals(this.getIaLimitedLimit(), temp.getIaLimitedLimit()) &&
+            Objects.equals(this.getIaPackageLimit(), temp.getIaPackageLimit()) &&
+            Objects.equals(this.getLimitedLimit(), temp.getLimitedLimit()) &&
+            Objects.equals(this.getTeraBqReportQuan(), temp.getTeraBqReportQuan());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 79;
+        hash = 37 * hash + (int) this.getA1();
+        hash = 37 * hash + (int) this.getA2();
+        hash = 37 * hash + (int) this.getDecayConstant();
+        hash = 37 * hash + (int) this.getExemptConcentration();
+        hash = 37 * hash + (int) this.getExemptLimit();
+        hash = 37 * hash + (int) this.getHalfLife();
+        hash = 37 * hash + (int) this.getIaLimitedLimit();
+        hash = 37 * hash + (int) this.getIaPackageLimit();
+        hash = 37 * hash + (int) this.getLimitedLimit();
+        hash = 37 * hash + (int) this.getTeraBqReportQuan();
+        return hash;
+    }
+
 
     @Override
     public String toString() {

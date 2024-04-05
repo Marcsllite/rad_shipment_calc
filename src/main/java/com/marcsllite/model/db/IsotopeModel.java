@@ -2,8 +2,12 @@ package com.marcsllite.model.db;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.NamedNativeQuery;
 import jakarta.persistence.Table;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "ISOTOPES")
@@ -15,6 +19,9 @@ public class IsotopeModel extends BaseModel {
 
     @EmbeddedId
     private IsotopeModelId isotopeId;
+
+    @ManyToMany(mappedBy = "isotopes")
+    private List<ShipmentModel> shipments;
 
     public IsotopeModel() {
         this(new IsotopeModelId("Abbreviation", "Abbr"));
@@ -30,5 +37,13 @@ public class IsotopeModel extends BaseModel {
 
     public void setIsotopeId(IsotopeModelId isotopeId) {
         this.isotopeId = isotopeId;
+    }
+
+    public List<ShipmentModel> getShipments() {
+        return shipments;
+    }
+
+    public void setShipments(List<ShipmentModel> shipments) {
+        this.shipments = shipments == null? new ArrayList<>() : shipments;
     }
 }

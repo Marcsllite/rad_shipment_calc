@@ -14,7 +14,7 @@ public abstract class BaseModel implements Serializable {
 
     @Version
     @ColumnDefault("0")
-    private Long version;
+    private long version;
     @Transient
     private Conversions.SIPrefix basePrefix;
 
@@ -26,11 +26,11 @@ public abstract class BaseModel implements Serializable {
         this.basePrefix = basePrefix;
     }
 
-    public Long getVersion() {
+    public long getVersion() {
         return version;
     }
 
-    public void setVersion(Long version) {
+    public void setVersion(long version) {
         this.version = version;
     }
 }
