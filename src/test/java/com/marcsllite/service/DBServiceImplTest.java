@@ -21,7 +21,7 @@ import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModel;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.model.db.ReportableQuantityModel;
-import com.marcsllite.model.db.ShipmentModel;
+import com.marcsllite.model.db.ShipmentsModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -186,6 +186,7 @@ class DBServiceImplTest extends DBTest {
         exp.add(model);
 
         when(emHandler.getEntityManager()).thenReturn(em);
+        when(em.isOpen()).thenReturn(true);
         when(service.getIsotopeDao()).thenReturn(isotopeDao);
         when(isotopeDao.getAllIsotopes()).thenReturn(exp);
 
@@ -217,6 +218,7 @@ class DBServiceImplTest extends DBTest {
         IsotopeModel model = new IsotopeModel(isoId);
 
         when(emHandler.getEntityManager()).thenReturn(em);
+        when(em.isOpen()).thenReturn(true);
         when(service.getIsotopeDao()).thenReturn(isotopeDao);
         when(isotopeDao.getIsotope(isoId)).thenReturn(model);
 
@@ -378,7 +380,7 @@ class DBServiceImplTest extends DBTest {
     @Test
     void testGetShipment() {
         long id = -1L;
-        ShipmentModel model = new ShipmentModel();
+        ShipmentsModel model = new ShipmentsModel();
         Shipment exp = new Shipment(model);
 
         when(service.getShipmentDao()).thenReturn(shipmentDao);

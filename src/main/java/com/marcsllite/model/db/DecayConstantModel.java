@@ -4,7 +4,7 @@ import com.marcsllite.util.Conversions;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-@Entity
+@Entity(name = "Decay Constant")
 @Table(name = "DECAY_CONSTANT")
 public class DecayConstantModel extends BaseDataModel {
     private static final long serialVersionUID = 5704920375115196514L;

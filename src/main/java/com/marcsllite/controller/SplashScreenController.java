@@ -41,10 +41,6 @@ public class SplashScreenController {
         gridPaneSplash.setVisible(true);
     }
 
-    public void hide() {
-        gridPaneSplash.setVisible(false);
-    }
-
     protected void startTask(SplashScreenTask target){
         if(splashScreenTask != null && splashScreenTask.isRunning()) {
             splashScreenTask.cancel();
@@ -99,7 +95,7 @@ public class SplashScreenController {
 
             Platform.runLater(() -> {
                 App.loadPrimaryStage();
-                hide();
+                App.getStageHandler().closeSecondary();
             });
 
             return null;

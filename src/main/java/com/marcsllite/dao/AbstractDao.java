@@ -104,11 +104,18 @@ public abstract class AbstractDao<E extends Serializable, I> implements Dao<E, I
     }
 
     public EntityManager getEntityManager() throws IllegalStateException {
+        IllegalStateException ise = null;
         if(EntityManagerHandler.getInstance() == null) {
-            IllegalStateException ise = new IllegalStateException("Entity Manager Handler cannot be null.");
+            ise = new IllegalStateException("Entity Manager Handler cannot be null.");
+        } else if(!EntityManagerHandler.getInstance().getEntityManager().isOpen()) {
+            ise = new IllegalStateException("Entity Manager is closed.");
+        }
+
+        if(ise != null) {
             logr.throwing(Level.FATAL, ise);
             throw ise;
         }
+
         return EntityManagerHandler.getInstance().getEntityManager();
     }
 }

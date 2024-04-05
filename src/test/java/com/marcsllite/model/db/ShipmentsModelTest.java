@@ -16,12 +16,12 @@ import static junit.framework.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
-class ShipmentModelTest {
-    ShipmentModel model;
+class ShipmentsModelTest {
+    ShipmentsModel model;
 
     @BeforeEach
     public void setUp() {
-        model = new ShipmentModel();
+        model = new ShipmentsModel();
     }
 
     @Test

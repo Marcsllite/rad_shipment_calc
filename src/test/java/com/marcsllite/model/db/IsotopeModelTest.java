@@ -33,9 +33,9 @@ class IsotopeModelTest {
 
     @Test
     void testSetShipments() {
-        ShipmentModel shipmentModel = mock(ShipmentModel.class);
-        List<ShipmentModel> exp = new ArrayList<>();
-        exp.add(shipmentModel);
+        ShipmentsModel shipmentsModel = mock(ShipmentsModel.class);
+        List<ShipmentsModel> exp = new ArrayList<>();
+        exp.add(shipmentsModel);
         model.setShipments(exp);
         assertEquals(exp, model.getShipments());
     }

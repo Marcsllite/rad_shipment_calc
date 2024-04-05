@@ -16,12 +16,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "SHIPMENT")
-public class ShipmentModel extends BaseModel {
+@Entity(name = "Shipments")
+@Table(name = "SHIPMENTS")
+public class ShipmentsModel extends BaseModel {
     private static final long serialVersionUID = 1895641912158690468L;
 
-    public ShipmentModel() {
+    public ShipmentsModel() {
         super();
         setBasePrefix(Conversions.SIPrefix.BASE);
     }

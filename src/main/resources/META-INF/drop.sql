@@ -1,1 +1,1 @@
-DROP SCHEMA marcsllite;
+DROP SCHEMA IF EXISTS marcsllite CASCADE;

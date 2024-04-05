@@ -1,7 +1,7 @@
 package com.marcsllite.model;
 
 import com.marcsllite.model.db.LimitsModelId;
-import com.marcsllite.model.db.ShipmentModel;
+import com.marcsllite.model.db.ShipmentsModel;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class Shipment {
             null);
     }
 
-    public Shipment(ShipmentModel model) {
+    public Shipment(ShipmentsModel model) {
         this(model.getId(),
             model.getRefDate(),
             model.getMass(),

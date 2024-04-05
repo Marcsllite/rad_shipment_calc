@@ -18,7 +18,7 @@
         <class>com.marcsllite.model.db.IsotopeModel</class>
         <class>com.marcsllite.model.db.LimitsModel</class>
         <class>com.marcsllite.model.db.ReportableQuantityModel</class>
-        <class>com.marcsllite.model.db.ShipmentModel</class>
+        <class>com.marcsllite.model.db.ShipmentsModel</class>
 
         <properties>
             <!-- Database connection settings -->
@@ -28,17 +28,15 @@
             <property name="jakarta.persistence.jdbc.password" value="root" />
 
             <!-- Database initialization settings -->
-            <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+            <property name="hibernate.check_nullability" value="true"/>
             <property name="jakarta.persistence.schema-generation.create-source" value="script"/>
             <property name="jakarta.persistence.schema-generation.create-script-source" value="META-INF/createForTest.sql"/>
-
+            
+            <property name="jakarta.persistence.sql-load-script-source" value="META-INF/dataForTest.sql"/>
+    
             <property name="jakarta.persistence.schema-generation.drop-source" value="script"/>
             <property name="jakarta.persistence.schema-generation.drop-script-source" value="META-INF/dropForTest.sql"/>
-
-            <property name="jakarta.persistence.sql-load-script-source" value="META-INF/dataForTest.sql"/>
-
-            <property name="hibernate.check_nullability" value="true"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
 
             <!-- Echo all executed SQL to console -->
             <property name="hibernate.show_sql" value="true" />

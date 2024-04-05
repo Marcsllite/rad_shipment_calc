@@ -1,7 +1,7 @@
 package com.marcsllite.dao;
 
 import com.marcsllite.DBTest;
-import com.marcsllite.model.db.ShipmentModel;
+import com.marcsllite.model.db.ShipmentsModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,12 +16,13 @@ class ShipmentDaoImplTest extends DBTest {
     @InjectMocks
     ShipmentDaoImpl dao;
     @Mock
-    ShipmentModel model;
+    ShipmentsModel model;
 
     @BeforeEach
     public void setUp() {
         super.setUp();
         when(emHandler.getEntityManager()).thenReturn(em);
+        when(em.isOpen()).thenReturn(true);
     }
 
     @Test

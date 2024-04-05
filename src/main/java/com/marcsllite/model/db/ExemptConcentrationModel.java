@@ -4,7 +4,7 @@ import com.marcsllite.util.Conversions;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-@Entity
+@Entity(name = "Exempt Concentration")
 @Table(name = "EXEMPT_CONCENTRATION")
 public class ExemptConcentrationModel extends BaseDataModel {
     private static final long serialVersionUID = 5186004813264658890L;

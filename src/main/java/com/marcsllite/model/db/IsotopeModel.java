@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity(name = "Isotopes")
 @Table(name = "ISOTOPES")
 @NamedNativeQuery(name = IsotopeModel.GET_MATCHING_ISOTOPES,
     query = "select i from ISOTOPES where Abbr like :str or Name like :str")
@@ -21,7 +21,7 @@ public class IsotopeModel extends BaseModel {
     private IsotopeModelId isotopeId;
 
     @ManyToMany(mappedBy = "isotopes")
-    private List<ShipmentModel> shipments;
+    private List<ShipmentsModel> shipments;
 
     public IsotopeModel() {
         this(new IsotopeModelId("Abbreviation", "Abbr"));
@@ -39,11 +39,11 @@ public class IsotopeModel extends BaseModel {
         this.isotopeId = isotopeId;
     }
 
-    public List<ShipmentModel> getShipments() {
+    public List<ShipmentsModel> getShipments() {
         return shipments;
     }
 
-    public void setShipments(List<ShipmentModel> shipments) {
+    public void setShipments(List<ShipmentsModel> shipments) {
         this.shipments = shipments == null? new ArrayList<>() : shipments;
     }
 }

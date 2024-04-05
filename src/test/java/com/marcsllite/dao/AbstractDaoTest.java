@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.Id;
 import jakarta.persistence.OptimisticLockException;
-import jakarta.persistence.Table;
 import org.hibernate.StaleStateException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,12 +27,16 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class AbstractDaoTest extends DBTest {
-    @Entity
-    @Table(name = "Name")
+    @Entity(name = "Name")
     static class ConcreteModel implements Serializable {
         private static final long serialVersionUID = -574402544990187774L;
-        @Id
-        String id;
+        @Id String id;
+    }
+
+    @Entity
+    static class ConcreteModelNoName implements Serializable {
+        private static final long serialVersionUID = -5769071373571756264L;
+        @Id String id;
     }
 
     AbstractDao<ConcreteModel, String> dao;
@@ -57,6 +60,7 @@ class AbstractDaoTest extends DBTest {
     @Test
     void testFindById_NoResult() {
         when(emHandler.getEntityManager()).thenReturn(em);
+        when(em.isOpen()).thenReturn(true);
         when(em.find(any(), any())).thenReturn(null);
         when(dao.getEntityClass()).thenReturn(ConcreteModel.class);
 
@@ -72,6 +76,7 @@ class AbstractDaoTest extends DBTest {
         ConcreteModel exp = new ConcreteModel();
 
         when(emHandler.getEntityManager()).thenReturn(em);
+        when(em.isOpen()).thenReturn(true);
         when(em.find(any(), any())).thenReturn(exp);
 
         try {
@@ -89,6 +94,7 @@ class AbstractDaoTest extends DBTest {
         List<ConcreteModel> exp = Collections.singletonList(obj);
 
         when(emHandler.getEntityManager()).thenReturn(em);
+        when(em.isOpen()).thenReturn(true);
         when(em.createQuery(queryStr)).thenReturn(query);
         when(query.getResultList()).thenReturn(exp);
 
@@ -110,6 +116,7 @@ class AbstractDaoTest extends DBTest {
         ConcreteModel exp = new ConcreteModel();
 
         when(emHandler.getEntityManager()).thenReturn(em);
+        when(em.isOpen()).thenReturn(true);
         when(em.createQuery(queryStr)).thenReturn(query);
         when(query.getSingleResult()).thenReturn(exp);
 
@@ -130,6 +137,7 @@ class AbstractDaoTest extends DBTest {
         long exp = 1L;
 
         when(emHandler.getEntityManager()).thenReturn(em);
+        when(em.isOpen()).thenReturn(true);
         when(em.createQuery(queryStr)).thenReturn(query);
         when(query.getSingleResult()).thenReturn(exp);
 
@@ -152,6 +160,7 @@ class AbstractDaoTest extends DBTest {
         String exp = String.format("Attempted to attach a stale %s entity", dao.getEntityName());
 
         when(emHandler.getEntityManager()).thenReturn(em);
+        when(em.isOpen()).thenReturn(true);
         when(em.merge(model)).thenThrow(new OptimisticLockException());
 
         StaleStateException sse = assertThrows(
@@ -163,6 +172,7 @@ class AbstractDaoTest extends DBTest {
     @Test
     void testAttach() {
         when(emHandler.getEntityManager()).thenReturn(em);
+        when(em.isOpen()).thenReturn(true);
         when(em.merge(model)).thenReturn(model);
 
         assertEquals(model, dao.attach(model));
@@ -183,6 +193,7 @@ class AbstractDaoTest extends DBTest {
 
         when(dao.getEntityClass()).thenReturn(ConcreteModel.class);
         when(emHandler.getEntityManager()).thenReturn(em);
+        when(em.isOpen()).thenReturn(true);
         when(em.getReference(dao.getEntityClass(), id)).thenThrow(new EntityNotFoundException());
 
         try {
@@ -197,6 +208,7 @@ class AbstractDaoTest extends DBTest {
         String id = "id";
 
         when(emHandler.getEntityManager()).thenReturn(em);
+        when(em.isOpen()).thenReturn(true);
         when(em.getReference(dao.getEntityClass(), id)).thenReturn(model);
         doNothing().when(em).remove(model);
 
@@ -210,6 +222,7 @@ class AbstractDaoTest extends DBTest {
     @Test
     void testFlush() {
         when(emHandler.getEntityManager()).thenReturn(em);
+        when(em.isOpen()).thenReturn(true);
         doNothing().when(em).flush();
 
         dao.flush();
@@ -228,6 +241,7 @@ class AbstractDaoTest extends DBTest {
     @Test
     void testPersist() {
         when(emHandler.getEntityManager()).thenReturn(em);
+        when(em.isOpen()).thenReturn(true);
         doNothing().when(em).persist(model);
 
         dao.persist(model);
@@ -236,9 +250,16 @@ class AbstractDaoTest extends DBTest {
     }
 
     @Test
+    void testGetEntityName_NoName() {
+        AbstractDao<ConcreteModelNoName, String> dao2 = (AbstractDao<ConcreteModelNoName, String>) mock(AbstractDao.class, Mockito.CALLS_REAL_METHODS);
+        when(dao2.getEntityClass()).thenReturn(ConcreteModelNoName.class);
+        assertEquals(ConcreteModelNoName.class.getSimpleName(), dao2.getEntityName());
+    }
+
+    @Test
     void testGetEntityName() {
         when(dao.getEntityClass()).thenReturn(ConcreteModel.class);
-        assertEquals(ConcreteModel.class.getSimpleName(), dao.getEntityName());
+        assertEquals(ConcreteModel.class.getAnnotation(Entity.class).name(), dao.getEntityName());
     }
 
     @Test
@@ -254,8 +275,23 @@ class AbstractDaoTest extends DBTest {
     }
 
     @Test
+    void testGetEntityManager_Closed() {
+        super.tearDown();
+        staticEmHandler = mockStatic(EntityManagerHandler.class);
+        staticEmHandler.when(EntityManagerHandler::getInstance).thenReturn(emHandler);
+        when(emHandler.getEntityManager()).thenReturn(em);
+        when(em.isOpen()).thenReturn(false);
+
+        IllegalStateException ise = assertThrows(
+            IllegalStateException.class, () -> dao.getEntityManager()
+        );
+        assertEquals("Entity Manager is closed.", ise.getMessage());
+    }
+
+    @Test
     void testGetEntityManager() {
         when(emHandler.getEntityManager()).thenReturn(em);
+        when(em.isOpen()).thenReturn(true);
         assertEquals(em, dao.getEntityManager());
     }
 }

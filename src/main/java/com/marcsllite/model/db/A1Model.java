@@ -4,7 +4,7 @@ import com.marcsllite.util.Conversions;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-@Entity
+@Entity(name = "A1")
 @Table(name = "A_ONE")
 public class A1Model extends BaseDataModel {
     private static final long serialVersionUID = 1600283366978070629L;

@@ -36,7 +36,6 @@ import static org.mockito.Mockito.spy;
 class SplashScreenControllerGUITest extends FxRobot {
     SplashScreenController controller;
     FXMLView view = FXMLView.SPLASH;
-
     StageHandler stageHandler;
     PropHandlerTestObj testPropHandler = new PropHandlerTestObj();
     DBService dbService;

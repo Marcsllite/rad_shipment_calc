@@ -21,6 +21,7 @@ class DecayConstantDaoImplTest extends DBTest {
     public void setUp() {
         super.setUp();
         when(emHandler.getEntityManager()).thenReturn(em);
+        when(em.isOpen()).thenReturn(true);
     }
 
     @Test

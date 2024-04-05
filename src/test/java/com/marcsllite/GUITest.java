@@ -18,6 +18,7 @@ import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
+import org.testfx.framework.junit5.Stop;
 import org.testfx.service.finder.NodeFinder;
 import org.testfx.service.query.EmptyNodeQueryException;
 
@@ -73,6 +74,11 @@ public abstract class GUITest extends FxRobot {
 
         app.start(stage);
         setStageHandler(App.getStageHandler());
+    }
+
+    @Stop
+    public void stop() {
+        app.stop();
     }
 
     @BeforeEach

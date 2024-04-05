@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Entity
+@Entity(name = "Reportable Quantity")
 @Table(name = "REPORTABLE_QUANTITY")
 public class ReportableQuantityModel extends BaseModel {
     private static final long serialVersionUID = 1479886818838786038L;

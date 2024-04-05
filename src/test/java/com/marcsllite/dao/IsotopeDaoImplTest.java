@@ -32,6 +32,7 @@ class IsotopeDaoImplTest extends DBTest {
         super.setUp();
         daoSpy = spy(dao);
         when(emHandler.getEntityManager()).thenReturn(em);
+        when(em.isOpen()).thenReturn(true);
     }
 
     @Test
