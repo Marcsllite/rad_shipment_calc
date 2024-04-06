@@ -3,12 +3,14 @@ package com.marcsllite.controller;
 import com.marcsllite.App;
 import com.marcsllite.model.Isotope;
 import com.marcsllite.model.PTableColumn;
+import com.marcsllite.model.Shipment;
 import com.marcsllite.util.FXMLView;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
@@ -17,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class HomePaneController extends BaseController {
     @FXML GridPane homePane;
@@ -28,9 +30,10 @@ public class HomePaneController extends BaseController {
     @FXML PTableColumn<Isotope, String> tableColIsotope;
     @FXML PTableColumn<Isotope, Float> tableColHalfLife;
     @FXML PTableColumn<Isotope, Float> tableColActivity;
-    @FXML PTableColumn<Isotope, Date> tableColRefDate;
+    @FXML PTableColumn<Isotope, LocalDate> tableColRefDate;
     @FXML PTableColumn<Isotope, Float> tableColMass;
     @FXML Button btnCalculate;
+    private Shipment shipment;
 
     private static final Logger logr = LogManager.getLogger();
 
@@ -48,8 +51,8 @@ public class HomePaneController extends BaseController {
         super.initialize();
         initTable();
 
-        btnEdit.disableProperty().bind(Bindings.notEqual(1, Bindings.size(tableViewHome.getItems())));
-        btnRemove.disableProperty().bind(Bindings.equal(0, Bindings.size(tableViewHome.getItems())));
+        btnEdit.disableProperty().bind(Bindings.notEqual(1, Bindings.size(tableViewHome.getSelectionModel().getSelectedItems())));
+        btnRemove.disableProperty().bind(Bindings.equal(0, Bindings.size(tableViewHome.getSelectionModel().getSelectedItems())));
         btnCalculate.disableProperty().bind(Bindings.isEmpty(tableViewHome.getItems()));
         setInit(true);
     }
@@ -64,6 +67,14 @@ public class HomePaneController extends BaseController {
     public void hide() {
         homePane.setVisible(false);
         homePane.toBack();
+    }
+
+    public Shipment getShipment() {
+        return shipment;
+    }
+
+    public void setShipment(Shipment shipment) {
+        this.shipment = shipment;
     }
 
     /*///////////////////////////////////////////// HOME PANE CONTROLLER /////////////////////////////////////////////*/
@@ -96,7 +107,11 @@ public class HomePaneController extends BaseController {
     protected void initTable() {
         tableColIsotope.setCellValueFactory(new PropertyValueFactory<>("abbr"));
         tableColHalfLife.setCellValueFactory(i -> i.getValue().getConstants().halfLifeProperty().asObject());
+        tableColActivity.setCellValueFactory(new PropertyValueFactory<>("initActivty"));
+        tableColRefDate.setCellValueFactory(new PropertyValueFactory<>("refDate"));
         tableColMass.setCellValueFactory(new PropertyValueFactory<>("mass"));
+
+        tableViewHome.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     /**
@@ -104,6 +119,7 @@ public class HomePaneController extends BaseController {
      */
     @FXML protected void addBtnHandler() {
         logr.debug("User clicked the Add button on the home pane");
+        tableViewHome.getSelectionModel().clearSelection();
         App.getStageHandler().showModal(FXMLView.MODIFY, Page.ADD);
     }
 
@@ -128,6 +144,6 @@ public class HomePaneController extends BaseController {
      */
     @FXML protected void calculateBtnHandler() {
         logr.debug("User clicked the Calculate button on the home pane");
-        // TODO: implement clicking on calculate button
+        tableViewHome.getSelectionModel().clearSelection();
     }
 }
