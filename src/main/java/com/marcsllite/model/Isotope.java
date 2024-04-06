@@ -6,6 +6,7 @@ import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -31,6 +33,7 @@ public class Isotope {
     private static final SimpleFloatProperty initActivty = new SimpleFloatProperty();
     private RadUnit initActivityUnit;
     private IsoClass isoClass;
+    private static final SimpleObjectProperty<LocalDate> refDate = new SimpleObjectProperty<>();
 
     public enum MassUnit {
         GRAMS("grams"),
@@ -186,10 +189,11 @@ public class Isotope {
             null,
             null,
             null,
-            null);
+            null,
+            LocalDate.now());
     }
 
-    public Isotope(IsotopeModelId isoId, MassUnit massUnit, RadUnit initActivityUnit, Nature nature, LimitsModelId limitsId) {
+    public Isotope(IsotopeModelId isoId, MassUnit massUnit, RadUnit initActivityUnit, Nature nature, LimitsModelId limitsId, LocalDate refDate) {
         setIsoId(isoId);
         setMassUnit(massUnit);
         setInitActivityUnit(initActivityUnit);
@@ -340,6 +344,18 @@ public class Isotope {
         this.isoClass = isoClass == null? IsoClass.TBD : isoClass;
     }
 
+    public LocalDate getRefDate() {
+        return refDateProperty().get();
+    }
+
+    public SimpleObjectProperty<LocalDate> refDateProperty() {
+        return refDate;
+    }
+
+    public void setRefDate(LocalDate refDate) {
+        refDateProperty().set(refDate);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(obj == null) {
@@ -378,6 +394,7 @@ public class Isotope {
     public String toString() {
         return "Isotope: { " + getIsoId() +
             "\nClass: " + getIsoClass() +
+            "\nClass: " + getRefDate() +
             "\nMass: " + getMass() + " " + getMassUnit() +
             "\nInitial Activity: " + getInitActivty() + " " + getInitActivityUnit() +
             "\nNature: " + getNature() +

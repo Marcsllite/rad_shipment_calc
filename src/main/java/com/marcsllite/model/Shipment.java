@@ -2,6 +2,8 @@ package com.marcsllite.model;
 
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.model.db.ShipmentsModel;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,8 +13,8 @@ import java.util.stream.Collectors;
 
 public class Shipment {
     private long id;
-    private LocalDate refDate;
-    private float mass;
+    private static final SimpleObjectProperty<LocalDate> refDate = new SimpleObjectProperty<>();
+    private static final SimpleFloatProperty mass = new SimpleFloatProperty(-1F);
     private Isotope.MassUnit massUnit;
     private Isotope.Nature nature;
     private LimitsModelId.State state;
@@ -63,19 +65,27 @@ public class Shipment {
     }
 
     public LocalDate getRefDate() {
+        return refDateProperty().get();
+    }
+
+    public SimpleObjectProperty<LocalDate> refDateProperty() {
         return refDate;
     }
 
     public void setRefDate(LocalDate refDate) {
-        this.refDate = refDate == null? LocalDate.now() : refDate;
+        refDateProperty().set(refDate);
     }
 
     public float getMass() {
-        return mass;
+        return massProperty().get();
     }
 
     public void setMass(float mass) {
-        this.mass = mass;
+        massProperty().set(mass);
+    }
+
+    public SimpleFloatProperty massProperty() {
+        return mass;
     }
 
     public Isotope.MassUnit getMassUnit() {
