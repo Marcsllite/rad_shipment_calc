@@ -6,9 +6,12 @@ import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.handler.PropHandler;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.InjectMocks;
+
+import java.time.LocalDate;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -17,10 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class IsotopeTest extends DBTest {
-    private final float DEFAULT_NUM = -2.0f;
+    private final float DEFAULT_NUM = -1f;
     private static final String DEFAULT_NAME = "Abbreviation";
     private static final String DEFAULT_ABBR = "Abbr";
     private static final IsotopeModelId isoId = new IsotopeModelId(DEFAULT_NAME, DEFAULT_ABBR);
@@ -35,6 +39,12 @@ class IsotopeTest extends DBTest {
     @BeforeAll
     public void beforeAll() {
         System.setProperty("keepPlatformOpen", "true");
+    }
+
+    @Override
+    @BeforeEach
+    public void setUp() {
+        super.setUp();
         iso = spy(new Isotope(isoId) {
             @Override
             public PropHandler getPropHandler() {
@@ -52,7 +62,7 @@ class IsotopeTest extends DBTest {
         assertEquals(DEFAULT_RAD_UNIT, iso.getInitActivityUnit());
         assertEquals(DEFAULT_CLASS, iso.getIsoClass());
         assertNotNull(iso.getConstants());
-        System.out.println(iso.getConstants().toString());
+        assertNotNull(iso.getRefDate());
     }
 
     @Test
@@ -132,6 +142,151 @@ class IsotopeTest extends DBTest {
     }
 
     @Test
+    void testSetPropHandler_Null() {
+        iso.setPropHandler(null);
+        assertNotNull(iso.getPropHandler());
+    }
+
+    @Test
+    void testSetPropHandler() {
+        PropHandler exp = new PropHandlerTestObj();
+        iso.setPropHandler(exp);
+        assertEquals(exp.keySet(), iso.getPropHandler().keySet());
+    }
+
+    @Test
+    void testSetConstants_Null() {
+        iso.setConstants(null);
+        assertNotNull(iso.getConstants());
+    }
+
+    @Test
+    void testSetConstants() {
+        IsotopeConstants exp = mock(IsotopeConstants.class);
+        iso.setConstants(exp);
+        assertEquals(exp, iso.getConstants());
+    }
+
+    @Test
+    void testGetName_NullProp() {
+        when(iso.nameProperty()).thenReturn(null);
+        assertEquals("", iso.getName());
+    }
+
+    @Test
+    void testSetName_Null() {
+        iso.setName(null);
+        assertEquals("", iso.getName());
+    }
+
+    @Test
+    void testSetName_NullProp() {
+        when(iso.nameProperty())
+            .thenReturn(null)
+            .thenCallRealMethod();
+        String exp = "Name";
+        iso.setName(exp);
+        assertEquals(exp, iso.getName());
+    }
+
+    @Test
+    void testSetName() {
+        String exp = "Name";
+        iso.setName(exp);
+        assertEquals(exp, iso.getName());
+    }
+
+    @Test
+    void testGetAbbr_NullProp() {
+        when(iso.abbrProperty()).thenReturn(null);
+        assertEquals("", iso.getAbbr());
+    }
+
+    @Test
+    void testSetAbbr_Null() {
+        iso.setAbbr(null);
+        assertEquals("", iso.getAbbr());
+    }
+
+    @Test
+    void testSetAbbr_NullProp() {
+        when(iso.abbrProperty())
+            .thenReturn(null)
+            .thenCallRealMethod();
+        String exp = "Abbr";
+        iso.setAbbr(exp);
+        assertEquals(exp, iso.getAbbr());
+    }
+
+    @Test
+    void testSetAbbr() {
+        String exp = "Abbr";
+        iso.setAbbr(exp);
+        assertEquals(exp, iso.getAbbr());
+    }
+
+    @Test
+    void testGetMass_NullProp() {
+        when(iso.massProperty()).thenReturn(null);
+        assertEquals(DEFAULT_NUM, iso.getMass());
+    }
+
+    @Test
+    void testSetMass_NullProp() {
+        float exp = 5F;
+        when(iso.massProperty())
+            .thenReturn(null)
+            .thenCallRealMethod();
+        iso.setMass(exp);
+        assertEquals(exp, iso.getMass());
+    }
+
+    @Test
+    void testSetMass() {
+        float exp = 5F;
+        iso.setMass(exp);
+        assertEquals(exp, iso.getMass());
+    }
+
+
+    @Test
+    void testGetInitActivity_NullProp() {
+        when(iso.initActivityProperty()).thenReturn(null);
+        assertEquals(DEFAULT_NUM, iso.getInitActivity());
+    }
+
+    @Test
+    void testSetInitActivity_NullProp() {
+        when(iso.initActivityProperty())
+            .thenReturn(null)
+            .thenCallRealMethod();
+        float exp = 94F;
+        iso.setInitActivity(exp);
+        assertEquals(exp, iso.getInitActivity());
+    }
+
+    @Test
+    void testSetInitActivity() {
+        float exp = 94F;
+        iso.setInitActivity(exp);
+        assertEquals(exp, iso.getInitActivity());
+    }
+    
+    @Test
+    void testSetRefDate_Null() {
+        iso.setRefDate(null);
+        LocalDate actual = iso.getRefDate();
+        assertNotNull(actual);
+    }
+
+    @Test
+    void testSetRefDate() {
+        LocalDate exp = LocalDate.now();
+        iso.setRefDate(exp);
+        assertEquals(exp, iso.getRefDate());
+    }
+    
+    @Test
     void testEquals() {
         IsotopeModelId isoId = new IsotopeModelId();
         Isotope isotope1 = mock(Isotope.class, CALLS_REAL_METHODS);
@@ -160,7 +315,7 @@ class IsotopeTest extends DBTest {
         assertNotEquals(isotope1, isotope2);
         assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
 
-        isotope1.setInitActivty(-2F);
+        isotope1.setInitActivity(-2F);
         assertNotEquals(isotope1, isotope2);
         assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
 

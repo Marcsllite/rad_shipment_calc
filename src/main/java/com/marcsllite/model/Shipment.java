@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 
 public class Shipment {
     private long id;
-    private static final SimpleObjectProperty<LocalDate> refDate = new SimpleObjectProperty<>();
-    private static final SimpleFloatProperty mass = new SimpleFloatProperty(-1F);
+    private SimpleObjectProperty<LocalDate> refDate;
+    private SimpleFloatProperty mass;
     private Isotope.MassUnit massUnit;
     private Isotope.Nature nature;
     private LimitsModelId.State state;
@@ -65,7 +65,7 @@ public class Shipment {
     }
 
     public LocalDate getRefDate() {
-        return refDateProperty().get();
+        return refDateProperty() == null? LocalDate.now() : refDateProperty().get();
     }
 
     public SimpleObjectProperty<LocalDate> refDateProperty() {
@@ -73,15 +73,25 @@ public class Shipment {
     }
 
     public void setRefDate(LocalDate refDate) {
-        refDateProperty().set(refDate);
+        LocalDate val = refDate == null? LocalDate.now() : refDate;
+
+        if(refDateProperty() == null) {
+            this.refDate = new SimpleObjectProperty<>(val);
+        } else {
+            refDateProperty().set(val);
+        }
     }
 
     public float getMass() {
-        return massProperty().get();
+        return massProperty() == null? -1F : massProperty().get();
     }
 
     public void setMass(float mass) {
-        massProperty().set(mass);
+        if(massProperty() == null) {
+            this.mass = new SimpleFloatProperty(mass);
+        } else {
+            massProperty().set(mass);
+        }
     }
 
     public SimpleFloatProperty massProperty() {

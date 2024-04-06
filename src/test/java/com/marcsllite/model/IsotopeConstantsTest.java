@@ -14,17 +14,17 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.when;
 
 class IsotopeConstantsTest extends DBTest {
-    private final float DEFAULT_NUM = -2.0f;
+    float DEFAULT_NUM = -2.0f;
     IsotopeConstants constants;
-    private final String DEFAULT_NAME = "Abbreviation";
-    private final String DEFAULT_ABBR = "Abbr";
-    private final LimitsModelId.State DEFAULT_STATE = LimitsModelId.State.SOLID;
-    private final LimitsModelId.Form DEFAULT_FORM = LimitsModelId.Form.NORMAL;
+    String DEFAULT_NAME = "Abbreviation";
+    String DEFAULT_ABBR = "Abbr";
+    LimitsModelId.State DEFAULT_STATE = LimitsModelId.State.SOLID;
+    LimitsModelId.Form DEFAULT_FORM = LimitsModelId.Form.NORMAL;
 
     @BeforeEach
     public void setUp() {
         super.setUp();
-        constants = new IsotopeConstants(DEFAULT_NUM) {
+        constants = new IsotopeConstants() {
             @Override
             public DBService getDbService() {
                 return dbService;
@@ -34,9 +34,9 @@ class IsotopeConstantsTest extends DBTest {
 
     @Test
     void testConstructor() {
-        constants = new IsotopeConstants(DEFAULT_NUM);
+        constants = new IsotopeConstants();
 
-        assertEquals(DEFAULT_NUM, constants.getDefaultVal(), 0.0f);
+        assertEquals(DEFAULT_NUM, IsotopeConstants.getDefaultVal(), 0.0f);
         assertEquals(DEFAULT_NUM, constants.getA1(), 0.0f);
         assertEquals(DEFAULT_NUM, constants.getA2(), 0.0f);
         assertEquals(DEFAULT_NUM, constants.getDecayConstant(), 0.0f);
@@ -87,8 +87,8 @@ class IsotopeConstantsTest extends DBTest {
     @Test
     void testEquals() {
         float val = -512F;
-        IsotopeConstants constants1 = new IsotopeConstants(DEFAULT_NUM);
-        IsotopeConstants constants2 = new IsotopeConstants(DEFAULT_NUM);
+        IsotopeConstants constants1 = new IsotopeConstants();
+        IsotopeConstants constants2 = new IsotopeConstants();
         String str = "";
 
         assertNotEquals(null, constants1);

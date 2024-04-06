@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class IsotopeConstants {
     private DBService dbService;
-    private final float defaultVal;
+    private static final float defaultVal = -2.0F;
     private final SimpleFloatProperty a1 = new SimpleFloatProperty();
     private final SimpleFloatProperty a2 = new SimpleFloatProperty();
     private final SimpleFloatProperty decayConstant = new SimpleFloatProperty();
@@ -23,21 +23,20 @@ public class IsotopeConstants {
     private final SimpleFloatProperty curieReportQuan = new SimpleFloatProperty();
     private final SimpleFloatProperty teraBqReportQuan = new SimpleFloatProperty();
 
-    public IsotopeConstants(float defaultVal) {
+    public IsotopeConstants() {
         setDbService(new DBServiceImpl());
-        this.defaultVal = defaultVal;
 
-        setA1(getDefaultVal());
-        setA2(getDefaultVal());
-        setDecayConstant(getDefaultVal());
-        setExemptConcentration(getDefaultVal());
-        setExemptLimit(getDefaultVal());
-        setHalfLife(getDefaultVal());
-        setIaLimitedLimit(getDefaultVal());
-        setIaPackageLimit(getDefaultVal());
-        setLimitedLimit(getDefaultVal());
-        setCurieReportQuan(getDefaultVal());
-        setTeraBqReportQuan(getDefaultVal());
+        setA1(IsotopeConstants.getDefaultVal());
+        setA2(IsotopeConstants.getDefaultVal());
+        setDecayConstant(IsotopeConstants.getDefaultVal());
+        setExemptConcentration(IsotopeConstants.getDefaultVal());
+        setExemptLimit(IsotopeConstants.getDefaultVal());
+        setHalfLife(IsotopeConstants.getDefaultVal());
+        setIaLimitedLimit(IsotopeConstants.getDefaultVal());
+        setIaPackageLimit(IsotopeConstants.getDefaultVal());
+        setLimitedLimit(IsotopeConstants.getDefaultVal());
+        setCurieReportQuan(IsotopeConstants.getDefaultVal());
+        setTeraBqReportQuan(IsotopeConstants.getDefaultVal());
     }
 
     public void dbInit(IsotopeModelId isoId, LimitsModelId limitsId) {
@@ -62,8 +61,8 @@ public class IsotopeConstants {
         this.dbService = dbService;
     }
 
-    public float getDefaultVal() {
-        return defaultVal;
+    public static float getDefaultVal() {
+        return IsotopeConstants.defaultVal;
     }
 
     public float getA1() {

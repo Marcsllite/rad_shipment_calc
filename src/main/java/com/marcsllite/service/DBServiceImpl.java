@@ -165,24 +165,37 @@ public class DBServiceImpl implements DBService {
     public ObservableList<Isotope> getAllIsotopes() {
         return getIsotopeDao().getAllIsotopes()
             .stream()
-            .map(model -> new Isotope(model) {
+            .map(model -> (new Isotope(model) {
                 @Override
                 public PropHandler getPropHandler() {
                     return DBServiceImpl.this.getPropHandler();
                 }
-            })
+
+                @Override
+                public DBService getDbService() {
+                    return DBServiceImpl.this;
+                }
+            }).initConstants())
             .collect(Collectors.toCollection(FXCollections::observableArrayList));
     }
 
     @Override
     public Isotope getIsotope(IsotopeModelId modelId) {
         IsotopeModel model = getIsotopeDao().getIsotope(modelId);
-        return model == null? null : new Isotope(model.getIsotopeId()) {
+        if(model == null) {
+            return null;
+        }
+        return new Isotope(model.getIsotopeId()) {
             @Override
             public PropHandler getPropHandler() {
                 return DBServiceImpl.this.getPropHandler();
             }
-        };
+
+            @Override
+            public DBService getDbService() {
+                return DBServiceImpl.this;
+            }
+        }.initConstants();
     }
 
     @Override

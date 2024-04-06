@@ -185,10 +185,9 @@ class DBServiceImplTest extends DBTest {
         List<IsotopeModel> exp = new ArrayList<>();
         exp.add(model);
 
-        when(emHandler.getEntityManager()).thenReturn(em);
-        when(em.isOpen()).thenReturn(true);
         when(service.getIsotopeDao()).thenReturn(isotopeDao);
         when(isotopeDao.getAllIsotopes()).thenReturn(exp);
+        isoConstantsDbInit(model.getIsotopeId().getAbbr());
 
         List<Isotope> actual = service.getAllIsotopes();
         assertEquals(model.getIsotopeId(), actual.get(0).getIsoId());
@@ -209,6 +208,31 @@ class DBServiceImplTest extends DBTest {
         verify(isotopeDao).getIsotope(isoId);
     }
 
+    protected void isoConstantsDbInit(String abbr) {
+        LimitsModelId limitsId = new LimitsModelId();
+        float exp = 1.0f;
+
+        when(service.getA1Dao()).thenReturn(a1Dao);
+        when(a1Dao.getA1(abbr)).thenReturn(exp);
+        when(service.getA2Dao()).thenReturn(a2Dao);
+        when(a2Dao.getA2(abbr)).thenReturn(exp);
+        when(service.getDecayConstantDao()).thenReturn(decayConstantDao);
+        when(decayConstantDao.getDecayConstant(abbr)).thenReturn(exp);
+        when(service.getExemptConDao()).thenReturn(exemptConDao);
+        when(exemptConDao.getExemptConcentration(abbr)).thenReturn(exp);
+        when(service.getExemptLimitDao()).thenReturn(exemptLimitDao);
+        when(exemptLimitDao.getExemptLimit(abbr)).thenReturn(exp);
+        when(service.getHalfLifeDao()).thenReturn(halfLifeDao);
+        when(halfLifeDao.getHalfLife(abbr)).thenReturn(exp);
+        when(service.getLimitsDao()).thenReturn(limitsDao);
+        when(limitsDao.getIALimited(limitsId)).thenReturn(exp);
+        when(limitsDao.getIAPackage(limitsId)).thenReturn(exp);
+        when(limitsDao.getLimited(limitsId)).thenReturn(exp);
+        when(service.getReportableQuanDao()).thenReturn(reportableQuanDao);
+        when(reportableQuanDao.getCi(abbr)).thenReturn(exp);
+        when(reportableQuanDao.getTBq(abbr)).thenReturn(exp);
+    }
+
     @Test
     @SetSystemProperty(key = "keepPlatformOpen",value = "true")
     void testGetIsotope() {
@@ -217,10 +241,9 @@ class DBServiceImplTest extends DBTest {
         IsotopeModelId isoId = new IsotopeModelId(name, abbr);
         IsotopeModel model = new IsotopeModel(isoId);
 
-        when(emHandler.getEntityManager()).thenReturn(em);
-        when(em.isOpen()).thenReturn(true);
         when(service.getIsotopeDao()).thenReturn(isotopeDao);
         when(isotopeDao.getIsotope(isoId)).thenReturn(model);
+        isoConstantsDbInit(abbr);
 
         assertEquals(model.getIsotopeId(), service.getIsotope(isoId).getIsoId());
         verify(isotopeDao).getIsotope(isoId);
