@@ -1,6 +1,8 @@
 package com.marcsllite.controller;
 
+import com.marcsllite.App;
 import com.marcsllite.model.Isotope;
+import com.marcsllite.model.Shipment;
 import com.marcsllite.model.db.IsotopeModel;
 import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
@@ -16,7 +18,9 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -27,6 +31,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -41,7 +46,7 @@ public class ModifyController extends BaseController {
     @FXML private TextField txtFieldIsoName;
     @FXML private TextField txtFieldA0;
     @FXML private ComboBox<String> comboBoxA0Prefix;
-    @FXML private ChoiceBox<String> choiceBoxA0Name;
+    @FXML private ChoiceBox<String> choiceBoxA0RadUnit;
     @FXML private VBox vBoxMoreInfo;
     @FXML private HBox hBoxAddInfoTop;
     @FXML private VBox vBoxShortLong;
@@ -53,6 +58,7 @@ public class ModifyController extends BaseController {
     @FXML private ToggleGroup toggleGrpLungAbs;
     @FXML private RadioButton radioBtnMediumLungAbs;
     @FXML private RadioButton radioBtnFastLungAbs;
+    @FXML private Separator separatorAddInfo;
     @FXML private Text txtFirstPageStatus;
     @FXML private Button btnNext;
 
@@ -95,20 +101,14 @@ public class ModifyController extends BaseController {
         super.initialize();
 
         setupDropDownItems();
+        setRadioBtnUserData();
 
-        txtFieldA0.textProperty().addListener((observable, oldV, newV) -> {
-            if(newV == null || newV.isBlank()) {
-                btnNext.setDisable(true);
-            } else {
-                // if user inputs any non-numerical characters, remove them
-                String newTxt = newV.replaceAll("\\D", "");
-                String name = txtFieldIsoName.getText();
-                btnNext.setDisable(name == null || name.isBlank() ||
-                        searchFilteredIsos.size() != 1 || newTxt.isBlank());
+        datePicker.setValue(LocalDate.now());
 
-                txtFieldA0.setText(newTxt);
-            }
-        });
+        txtFieldA0.textProperty().addListener((observable, oldV, newV) -> initialActivityListener(newV));
+        txtFieldMass.textProperty().addListener(((observable, oldV, newV) -> massListener(newV)));
+        toggleGrpShortLong.selectedToggleProperty().addListener((observable, oldV, newV) -> radioBtnListener(newV));
+        toggleGrpLungAbs.selectedToggleProperty().addListener((observable, oldV, newV) -> radioBtnListener(newV));
 
         bindMassInputDisabledProp();
         bindNSFInputDisableProp();
@@ -117,9 +117,9 @@ public class ModifyController extends BaseController {
         hBoxAddInfoTop.managedProperty().bind(hBoxAddInfoTop.visibleProperty());
         vBoxShortLong.managedProperty().bind(vBoxShortLong.visibleProperty());
         vBoxLungAbs.managedProperty().bind(vBoxLungAbs.visibleProperty());
+        separatorAddInfo.managedProperty().bind(separatorAddInfo.visibleProperty());
         txtFirstPageStatus.managedProperty().bind(txtFirstPageStatus.visibleProperty());
         txtSecondPageStatus.managedProperty().bind(txtSecondPageStatus.visibleProperty());
-        btnBack.managedProperty().bind(btnBack.visibleProperty());
 
         if(Page.ADD.equals(getPage())) {
             initAddPage();
@@ -129,6 +129,17 @@ public class ModifyController extends BaseController {
 
         showPage(1);
         setInit(true);
+    }
+
+    private void massListener(String str) {
+        if(str == null || str.isBlank()) {
+            btnFinish.setDisable(true);
+        } else {
+            // if user inputs any non-numerical characters, remove them
+            String newTxt = str.replaceAll("\\D", "");
+            btnFinish.setDisable(newTxt.isBlank());
+            txtFieldMass.setText(newTxt);
+        }
     }
 
     @Override
@@ -143,18 +154,30 @@ public class ModifyController extends BaseController {
         modifyPane.toBack();
     }
 
+    public void reset() {
+        txtFieldIsoName.setText(null);
+        txtFieldA0.setText(null);
+        selectDefaultDropDownValues();
+        toggleGrpShortLong.selectToggle(null);
+        toggleGrpLungAbs.selectToggle(null);
+        txtFirstPageStatus.setText(null);
+
+        datePicker.setValue(LocalDate.now());
+        txtFieldMass.setText(null);
+        chckBoxSameMass.setSelected(false);
+        chckBoxSameNSF.setSelected(false);
+    }
+
     protected void initAddPage() {
         btnNext.setDisable(true);
+        btnFinish.setDisable(true);
 
-        // Default value for choice boxes
-        comboBoxA0Prefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
-        choiceBoxA0Name.getSelectionModel().select(Isotope.RadUnit.CURIE.getVal());
-        comboBoxMassPrefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
-        choiceBoxMassName.getSelectionModel().select(Isotope.MassUnit.GRAMS.getVal());
+        selectDefaultDropDownValues();
 
         setupNameListener();
 
         txtFirstPageStatus.setVisible(false);
+        txtSecondPageStatus.setVisible(false);
         setShortLong(false);
         setLungAbs(false);
     }
@@ -163,14 +186,74 @@ public class ModifyController extends BaseController {
         initAddPage();
     }
 
+    protected boolean isAddInfoNotProvided() {
+        boolean isShortLong = vBoxShortLong.isVisible();
+        boolean isLungAbs = vBoxLungAbs.isVisible();
+        boolean ret = false;
+
+        if(isShortLong) {
+            ret = toggleGrpShortLong.getSelectedToggle() == null;
+        }
+
+        if(isLungAbs) {
+            ret = toggleGrpLungAbs.getSelectedToggle() == null;
+        }
+        return ret;
+    }
+
+    protected void setRadioBtnUserData() {
+        radioBtnSlowLungAbs.setUserData("s");
+        radioBtnMediumLungAbs.setUserData("m");
+        radioBtnFastLungAbs.setUserData("f");
+        radioBtnShortLived.setUserData("(short)");
+        radioBtnLongLived.setUserData("(long)");
+    }
+
+    protected void radioBtnListener(Toggle newV) {
+        if(newV != null) {
+            String name = txtFieldIsoName.getText();
+            String a0 = txtFieldA0.getText();
+            btnNext.setDisable(name == null || name.isBlank() ||
+                searchFilteredIsos.size() != 1 || a0 == null || a0.isBlank()
+            );
+        } else {
+            btnNext.setDisable(true);
+        }
+    }
+
+    protected void initialActivityListener(String str) {
+        if(str == null || str.isBlank()) {
+            btnNext.setDisable(true);
+        } else {
+            // if user inputs any non-numerical characters, remove them
+            String newTxt = str.replaceAll("\\D", "");
+            String name = txtFieldIsoName.getText();
+            btnNext.setDisable(name == null || name.isBlank() ||
+                searchFilteredIsos.size() != 1 || newTxt.isBlank() ||
+                isAddInfoNotProvided()
+            );
+            txtFieldA0.setText(newTxt);
+        }
+    }
+
     protected void setupDropDownItems() {
         comboBoxA0Prefix.setItems(Conversions.SIPrefix.getFxValues());
-        choiceBoxA0Name.setItems(Isotope.RadUnit.getFxValues());
+        choiceBoxA0RadUnit.setItems(Isotope.RadUnit.getFxValues());
         comboBoxMassPrefix.setItems(Conversions.SIPrefix.getFxValues());
         choiceBoxMassName.setItems(Isotope.MassUnit.getFxValues());
         choiceBoxNature.setItems(Isotope.Nature.getFxValues());
         choiceBoxState.setItems(LimitsModelId.State.getFxValues());
         choiceBoxForm.setItems(LimitsModelId.Form.getFxValues());
+    }
+
+    protected void selectDefaultDropDownValues() {
+        comboBoxA0Prefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
+        choiceBoxA0RadUnit.getSelectionModel().select(Isotope.RadUnit.CURIE.getVal());
+        comboBoxMassPrefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
+        choiceBoxMassName.getSelectionModel().select(Isotope.MassUnit.GRAMS.getVal());
+        choiceBoxNature.getSelectionModel().select(Isotope.Nature.REGULAR.getVal());
+        choiceBoxState.getSelectionModel().select(LimitsModelId.State.SOLID.getVal());
+        choiceBoxForm.getSelectionModel().select(LimitsModelId.Form.NORMAL.getVal());
     }
 
     protected void showPage(int pageNum) {
@@ -187,11 +270,19 @@ public class ModifyController extends BaseController {
     protected void setShortLong(boolean isShortLong) {
         hBoxAddInfoTop.setVisible(isShortLong || vBoxLungAbs.isVisible());
         vBoxShortLong.setVisible(isShortLong);
+        if(!isShortLong) {
+            toggleGrpShortLong.selectToggle(null);
+        }
+        separatorAddInfo.setVisible(isShortLong || vBoxLungAbs.isVisible());
     }
 
     protected void setLungAbs(boolean isLungAbs) {
         hBoxAddInfoTop.setVisible(isLungAbs || vBoxShortLong.isVisible());
         vBoxLungAbs.setVisible(isLungAbs);
+        if(!isLungAbs) {
+            toggleGrpLungAbs.selectToggle(null);
+        }
+        separatorAddInfo.setVisible(isLungAbs || vBoxShortLong.isVisible());
     }
 
     protected void setupNameListener() {
@@ -212,7 +303,7 @@ public class ModifyController extends BaseController {
                     setLungAbs(!isShortLongIso(newV) && !filteredLungAbsIsos.isEmpty());
                     String a0 = txtFieldA0.getText();
                     btnNext.setDisable(searchFilteredIsos.size() != 1 ||
-                        a0 == null || a0.isBlank());
+                        a0 == null || a0.isBlank() || isAddInfoNotProvided());
                 }
             }
         );
@@ -289,6 +380,58 @@ public class ModifyController extends BaseController {
                 modelId.getName().toLowerCase().contains(searchStr));
     }
 
+    protected Isotope buildIsoFromFirstPage() {
+        Isotope iso = null;
+        if(!btnNext.isDisabled()) {
+            iso = new Isotope(searchFilteredIsos.get(0));
+            iso.setInitActivity(Float.parseFloat(txtFieldA0.getText()));
+            iso.setInitActivityPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxA0Prefix.getValue()));
+            iso.setInitActivityUnit(Isotope.RadUnit.toRadUnit(choiceBoxA0RadUnit.getValue()));
+            if(toggleGrpLungAbs.getSelectedToggle() != null) {
+                iso.setAbbr(
+                   iso.getAbbr() +  toggleGrpLungAbs.getSelectedToggle().getUserData()
+                );
+            }
+
+            if(toggleGrpShortLong.getSelectedToggle() != null) {
+                iso.setAbbr(
+                    iso.getAbbr() +  toggleGrpShortLong.getSelectedToggle().getUserData()
+                );
+            }
+        }
+        return iso;
+    }
+
+    protected Isotope buildIso() {
+        Isotope iso = buildIsoFromFirstPage();
+        if(iso != null && !btnFinish.isDisabled()) {
+            iso.setRefDate(datePicker.getValue());
+            if(chckBoxSameMass.isDisabled()) {
+                Shipment shipment = getMain().getHomePaneController().getShipment();
+                iso.setMass(shipment.getMass());
+                iso.setMassPrefix(shipment.getMassPrefix());
+                iso.setMassUnit(shipment.getMassUnit());
+            } else {
+                iso.setMass(Float.parseFloat(txtFieldMass.getText()));
+                iso.setMassPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxMassPrefix.getValue()));
+                iso.setMassUnit(Isotope.MassUnit.toMass(choiceBoxMassName.getValue()));
+            }
+
+            if(chckBoxSameNSF.isDisabled()) {
+                Shipment shipment = getMain().getHomePaneController().getShipment();
+                iso.setNature(shipment.getNature());
+                iso.setState(shipment.getState());
+                iso.setForm(shipment.getForm());
+            } else {
+                iso.setNature(Isotope.Nature.toNature(choiceBoxNature.getValue()));
+                iso.setState(LimitsModelId.State.toState(choiceBoxState.getValue()));
+                iso.setForm(LimitsModelId.Form.toForm(choiceBoxForm.getValue()));
+            }
+            iso.getConstants().dbInit(iso.getIsoId(), iso.getLimitsId());
+        }
+        return iso;
+    }
+
     /*///////////////////////////////////////////// HOME PANE CONTROLLER /////////////////////////////////////////////*/
 
     /**
@@ -317,7 +460,7 @@ public class ModifyController extends BaseController {
     /**
      * Helper function to handle the next button being pressed
      */
-    @FXML protected void nextBtnHandler(){
+    @FXML protected void nextBtnHandler() {
         logr.debug("User clicked the Next button on the {} pane", getPage());
         showPage(2);
     }
@@ -325,7 +468,7 @@ public class ModifyController extends BaseController {
     /**
      * Helper function to handle the add button being pressed
      */
-    @FXML protected void backBtnHandler(){
+    @FXML protected void backBtnHandler() {
         logr.debug("User clicked the Back button on the {} pane", getPage());
         showPage(1);
     }
@@ -333,8 +476,12 @@ public class ModifyController extends BaseController {
     /**
      * Helper function to handle the finish button being pressed
      */
-    @FXML protected void finishBtnHandler(){
+    @FXML protected void finishBtnHandler() {
         logr.debug("User clicked the Finish button on the {} pane", getPage());
-        // TODO: implement clicking on finish button
+        if(Page.ADD.equals(getPage())) {
+            Shipment shipment = getMain().getHomePaneController().getShipment();
+            shipment.add(buildIso());
+        }
+        App.getStageHandler().closeSecondary();
     }
 }

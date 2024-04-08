@@ -45,6 +45,7 @@ public class ReferencePaneController extends BaseController {
     @FXML TextField txtFieldReportQuan;
     @FXML ComboBox<String> comboBoxRefReportQuanPrefix;
     @FXML ChoiceBox<String> choiceBoxRefReportQuanRadUnit;
+    ObservableList<Isotope> refIsotopes;
 
     public ReferencePaneController() throws IOException {
         this(null);
@@ -73,6 +74,14 @@ public class ReferencePaneController extends BaseController {
     public void hide() {
         referencePane.setVisible(false);
         referencePane.toBack();
+    }
+
+    public ObservableList<Isotope> getRefIsotopes() {
+        return refIsotopes;
+    }
+
+    public void setRefIsotopes(ObservableList<Isotope> refIsotopes) {
+        this.refIsotopes = refIsotopes;
     }
 
     protected void initTable() {

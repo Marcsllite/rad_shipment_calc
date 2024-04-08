@@ -54,6 +54,12 @@ public final class Conversions {
             return val;
         }
 
+        public String getAbbrVal() {
+            return val.equals("----")? "" :
+                val.replaceAll("^.*\\(", "")
+                .replaceAll("\\)$", "");
+        }
+
         public static SIPrefix toSIPrefix(String value) {
             for (SIPrefix enumValue : values()) {
                 if (enumValue.getVal().equalsIgnoreCase(value)) {

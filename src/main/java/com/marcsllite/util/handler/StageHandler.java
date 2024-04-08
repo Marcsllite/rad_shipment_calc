@@ -1,6 +1,7 @@
 package com.marcsllite.util.handler;
 
 import com.marcsllite.controller.BaseController;
+import com.marcsllite.controller.ModifyController;
 import com.marcsllite.util.FXMLView;
 import com.marcsllite.util.factory.ControllerFactory;
 import com.marcsllite.util.factory.PropHandlerFactory;
@@ -208,7 +209,10 @@ public class StageHandler {
             getSecondaryStage().setOnCloseRequest(e -> {
                 e.consume();
                 logr.debug("Closing the {}", view.getName());
-                getSecondaryStage().close();
+                if(controller instanceof ModifyController) {
+                    ((ModifyController) controller).reset();
+                }
+                closeSecondary();
             });
             
 

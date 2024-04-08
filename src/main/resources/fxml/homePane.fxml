@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.marcsllite.model.PTableColumn?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
-<GridPane fx:id="homePane" prefHeight="500.0" prefWidth="600.0" styleClass="root" stylesheets="@../css/homePane.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcsllite.controller.HomePaneController">
+<?import com.marcsllite.model.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<GridPane fx:id="homePane" prefHeight="500.0" prefWidth="600.0" styleClass="root" stylesheets="@../css/homePane.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcsllite.controller.HomePaneController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
@@ -46,11 +43,11 @@
       </font></Button>
     <TableView fx:id="tableViewHome" GridPane.columnSpan="2147483647" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.rowSpan="3" GridPane.vgrow="ALWAYS">
       <columns>
-          <PTableColumn fx:id="tableColIsotope" styleClass="tableColumn" editable="false" percentageWidth="0.2" text="Isotope" />
-          <PTableColumn fx:id="tableColHalfLife" styleClass="tableColumn" editable="false" percentageWidth="0.2" text="HalfLife" />
-          <PTableColumn fx:id="tableColActivity" styleClass="tableColumn" editable="false" percentageWidth="0.2" text="Activity" />
-          <PTableColumn fx:id="tableColRefDate" styleClass="tableColumn" editable="false" percentageWidth="0.2" text="Date" />
-          <PTableColumn fx:id="tableColMass" styleClass="tableColumn" percentageWidth="0.2" text="Mass (unit)" />
+          <PTableColumn fx:id="tableColIsotope" editable="false" percentageWidth="0.2" styleClass="tableColumn" text="Isotope" />
+          <PTableColumn fx:id="tableColHalfLife" editable="false" percentageWidth="0.2" styleClass="tableColumn" text="HalfLife" />
+          <PTableColumn fx:id="tableColActivity" editable="false" percentageWidth="0.2" styleClass="tableColumn" text="Activity" />
+          <PTableColumn fx:id="tableColRefDate" editable="false" percentageWidth="0.2" styleClass="tableColumn" text="Date" />
+          <PTableColumn fx:id="tableColMass" percentageWidth="0.2" styleClass="tableColumn" text="Mass unit" />
       </columns>
         <GridPane.margin>
           <Insets left="15.0" right="15.0" />

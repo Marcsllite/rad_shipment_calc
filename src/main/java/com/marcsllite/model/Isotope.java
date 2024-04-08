@@ -5,6 +5,7 @@ import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
+import com.marcsllite.util.Conversions;
 import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.beans.property.SimpleFloatProperty;
@@ -31,9 +32,13 @@ public class Isotope {
     private Nature nature;
     private LimitsModelId.State state;
     private LimitsModelId.Form form;
+    private SimpleStringProperty strMass;
     private SimpleFloatProperty mass;
+    private Conversions.SIPrefix massPrefix;
     private MassUnit massUnit;
+    private SimpleStringProperty strInitActivity;
     private SimpleFloatProperty initActivity;
+    private Conversions.SIPrefix initActivityPrefix;
     private RadUnit initActivityUnit;
     private IsoClass isoClass;
     private SimpleObjectProperty<LocalDate> refDate;
@@ -199,8 +204,12 @@ public class Isotope {
     public Isotope(IsotopeModelId isoId, MassUnit massUnit, RadUnit initActivityUnit, Nature nature, LimitsModelId limitsId, LocalDate refDate) {
         setDbService(new DBServiceImpl());
         setIsoId(isoId);
+        setMassPrefix(Conversions.SIPrefix.BASE);
         setMassUnit(massUnit);
+        setStrMass();
+        setInitActivityPrefix(Conversions.SIPrefix.BASE);
         setInitActivityUnit(initActivityUnit);
+        setStrInitActivity();
         setNature(nature);
         setLimitsId(limitsId);
         setIsoClass(IsoClass.TBD);
@@ -250,8 +259,22 @@ public class Isotope {
         this.constants = constants == null? new IsotopeConstants() : constants;
     }
 
-    public MassUnit getMassUnit() {
-        return massUnit;
+    public String getStrMass() {
+        return strMassProperty() == null ?
+            getMass() + " " + getMassPrefix().getAbbrVal() +  getMassUnit() : strMassProperty().get();
+    }
+
+    public SimpleStringProperty strMassProperty() {
+        return strMass;
+    }
+
+    public void setStrMass() {
+        String str = getMass() + " " + getMassPrefix().getAbbrVal() + getMassUnit();
+        if(strMassProperty() == null) {
+            this.strMass = new SimpleStringProperty(str);
+        } else {
+            this.strMass.set(str);
+        }
     }
 
     public float getMass() {
@@ -268,10 +291,42 @@ public class Isotope {
         } else {
             massProperty().set(mass);
         }
+        setStrMass();
+    }
+
+    public Conversions.SIPrefix getMassPrefix() {
+        return massPrefix;
+    }
+
+    public void setMassPrefix(Conversions.SIPrefix massPrefix) {
+        this.massPrefix = massPrefix;
+    }
+
+    public MassUnit getMassUnit() {
+        return massUnit;
     }
 
     public void setMassUnit(MassUnit massUnit) {
         this.massUnit = massUnit == null? Isotope.MassUnit.GRAMS : massUnit;
+        setStrMass();
+    }
+
+    public String getStrInitActivity() {
+        return strInitActivityProperty() == null?
+            getInitActivity() + " " + getInitActivityPrefix().getAbbrVal() + getInitActivityUnit() : strInitActivityProperty().get();
+    }
+
+    public SimpleStringProperty strInitActivityProperty() {
+        return strInitActivity;
+    }
+
+    public void setStrInitActivity() {
+        String str = getInitActivity() + " " + getInitActivityPrefix().getAbbrVal() + getInitActivityUnit();
+        if(strInitActivityProperty() == null) {
+            this.strInitActivity = new SimpleStringProperty(str);
+        } else {
+            this.strInitActivity.set(str);
+        }
     }
 
     public float getInitActivity() {
@@ -288,6 +343,14 @@ public class Isotope {
         } else {
             initActivityProperty().set(initActivity);
         }
+    }
+
+    public Conversions.SIPrefix getInitActivityPrefix() {
+        return initActivityPrefix;
+    }
+
+    public void setInitActivityPrefix(Conversions.SIPrefix initActivityPrefix) {
+        this.initActivityPrefix = initActivityPrefix;
     }
 
     public RadUnit getInitActivityUnit() {
@@ -447,8 +510,8 @@ public class Isotope {
         return "Isotope: { " + getIsoId() +
             "\nClass: " + getIsoClass() +
             "\nClass: " + getRefDate() +
-            "\nMass: " + getMass() + " " + getMassUnit() +
-            "\nInitial Activity: " + getInitActivity() + " " + getInitActivityUnit() +
+            "\nMass: " + getMass() + " " + getMassPrefix() + getMassUnit() +
+            "\nInitial Activity: " + getInitActivity() + " " + getInitActivityPrefix() + getInitActivityUnit() +
             "\nNature: " + getNature() +
             "\n" + getLimitsId() +
             "\n" + getConstants() + "\n}";

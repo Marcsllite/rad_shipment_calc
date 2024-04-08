@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 
 <StackPane fx:id="modifyPane" prefHeight="250.0" prefWidth="450.0" styleClass="root" stylesheets="@../css/modify.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcsllite.controller.ModifyController">
-   <VBox fx:id="vBoxFirstPage" alignment="CENTER" spacing="15.0" styleClass="vBoxFirstPage">
+   <VBox fx:id="vBoxFirstPage" alignment="CENTER" spacing="15.0" styleClass="vBoxFirstPage" visible="false">
       <StackPane.margin>
          <Insets />
       </StackPane.margin>
@@ -29,7 +29,7 @@
       </HBox>
       <HBox styleClass="hBoxAdd">
          <ComboBox fx:id="comboBoxA0Prefix" visibleRowCount="5" />
-         <ChoiceBox fx:id="choiceBoxA0Name" />
+         <ChoiceBox fx:id="choiceBoxA0RadUnit" />
       </HBox>
       <VBox fx:id="vBoxMoreInfo" spacing="5.0" styleClass="vBoxAdditionalInfo">
          <HBox fx:id="hBoxAddInfoTop" alignment="CENTER" spacing="5.0" styleClass="hBoxMoreInfoHeader">
@@ -55,9 +55,9 @@
                <RadioButton fx:id="radioBtnFastLungAbs" mnemonicParsing="false" styleClass="moreInfoRaadioBtns" text="Fast Lung Absorption" toggleGroup="$toggleGrpLungAbs" />
             </VBox>
          </StackPane>
-         <Separator styleClass="moreInfoBorder">
+         <Separator fx:id="separatorAddInfo" styleClass="moreInfoBorder">
             <VBox.margin>
-               <Insets left="25.0" right="25.0" />
+               <Insets left="15.0" right="15.0" />
             </VBox.margin>
          </Separator>
       </VBox>
@@ -70,7 +70,7 @@
          </VBox.margin>
       </Button>
    </VBox>
-   <VBox fx:id="vBoxSecondPage" styleClass="vBoxSecondPage" visible="false">
+   <VBox fx:id="vBoxSecondPage" styleClass="vBoxSecondPage">
       <HBox styleClass="hBoxAdd">
          <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="modifyTxt" text="Reference Date:" />
          <DatePicker fx:id="datePicker" />
@@ -102,7 +102,7 @@
          <Button fx:id="btnFinish" layoutX="185.0" layoutY="10.0" mnemonicParsing="false" onAction="#modifyHandler" prefWidth="100.0" styleClass="modifyBtn" text="Add" />
       </HBox>
       <StackPane>
-         <Text fx:id="txtSecondPageStatus" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="modifyTxt" text="Text" textAlignment="CENTER" wrappingWidth="300.0" />
+         <Text fx:id="txtSecondPageStatus" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="modifyTxt" text="Text" textAlignment="CENTER" visible="false" wrappingWidth="300.0" />
       </StackPane>
    </VBox>
 </StackPane>

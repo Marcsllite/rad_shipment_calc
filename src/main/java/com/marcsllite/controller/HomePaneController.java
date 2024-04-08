@@ -44,6 +44,7 @@ public class HomePaneController extends BaseController {
     public HomePaneController(PropHandler propHandler) throws IOException {
         super(propHandler);
         setPage(Page.HOME);
+        setShipment(new Shipment());
     }
 
     @Override
@@ -107,11 +108,12 @@ public class HomePaneController extends BaseController {
     protected void initTable() {
         tableColIsotope.setCellValueFactory(new PropertyValueFactory<>("abbr"));
         tableColHalfLife.setCellValueFactory(i -> i.getValue().getConstants().halfLifeProperty().asObject());
-        tableColActivity.setCellValueFactory(new PropertyValueFactory<>("initActivty"));
+        tableColActivity.setCellValueFactory(new PropertyValueFactory<>("strInitActivity"));
         tableColRefDate.setCellValueFactory(new PropertyValueFactory<>("refDate"));
-        tableColMass.setCellValueFactory(new PropertyValueFactory<>("mass"));
+        tableColMass.setCellValueFactory(new PropertyValueFactory<>("strMass"));
 
         tableViewHome.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        tableViewHome.itemsProperty().bind(getShipment().isotopesProperty());
     }
 
     /**

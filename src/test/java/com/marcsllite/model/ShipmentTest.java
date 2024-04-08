@@ -1,6 +1,8 @@
 package com.marcsllite.model;
 
 import com.marcsllite.model.db.LimitsModelId;
+import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.collections.ObservableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
@@ -127,7 +128,7 @@ class ShipmentTest {
     @Test
     void testSetIsotopesUnit() {
         Isotope isotope = mock(Isotope.class);
-        List<Isotope> exp = new ArrayList<>();
+        ObservableList<Isotope> exp = new ObservableListWrapper<>(new ArrayList<>());
         exp.add(isotope);
         shipment.setIsotopes(exp);
         assertEquals(exp, shipment.getIsotopes());
@@ -145,12 +146,12 @@ class ShipmentTest {
         assertEquals(shipmentA, shipmentB);
         assertEquals(shipmentA.hashCode(), shipmentB.hashCode());
 
-        shipmentA.setIsotopes(new ArrayList<>());
+        shipmentA.setIsotopes(new ObservableListWrapper<>(new ArrayList<>()));
         assertEquals(shipmentA, shipmentB);
         assertEquals(shipmentA.hashCode(), shipmentB.hashCode());
 
         Isotope isotope = mock(Isotope.class);
-        shipmentA.setIsotopes(Collections.singletonList(isotope));
+        shipmentA.setIsotopes(new ObservableListWrapper<>(List.of(isotope)));
         assertNotEquals(shipmentA, shipmentB);
         assertNotEquals(shipmentA.hashCode(), shipmentB.hashCode());
 

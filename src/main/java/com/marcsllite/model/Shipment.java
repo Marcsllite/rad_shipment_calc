@@ -2,11 +2,14 @@ package com.marcsllite.model;
 
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.model.db.ShipmentsModel;
+import com.marcsllite.util.Conversions;
 import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -15,11 +18,12 @@ public class Shipment {
     private long id;
     private SimpleObjectProperty<LocalDate> refDate;
     private SimpleFloatProperty mass;
+    private Conversions.SIPrefix massPrefix;
     private Isotope.MassUnit massUnit;
     private Isotope.Nature nature;
     private LimitsModelId.State state;
     private LimitsModelId.Form form;
-    private List<Isotope> isotopes;
+    private SimpleListProperty<Isotope> isotopes;
 
     public Shipment() {
         this(-1L,
@@ -42,18 +46,19 @@ public class Shipment {
         setIsotopes(model.getIsotopes()
                 .stream()
                 .map(Isotope::new)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toCollection(FXCollections::observableArrayList)));
     }
 
     public Shipment(long id, LocalDate refDate, float mass, Isotope.MassUnit massUnit, Isotope.Nature nature, LimitsModelId.State state, LimitsModelId.Form form) {
         setId(id);
         setRefDate(refDate);
         setMass(mass);
+        setMassPrefix(Conversions.SIPrefix.BASE);
         setMassUnit(massUnit);
         setNature(nature);
         setState(state);
         setForm(form);
-        setIsotopes(null);
+        setIsotopes(FXCollections.observableArrayList());
     }
 
     public long getId() {
@@ -98,6 +103,14 @@ public class Shipment {
         return mass;
     }
 
+    public Conversions.SIPrefix getMassPrefix() {
+        return massPrefix;
+    }
+
+    public void setMassPrefix(Conversions.SIPrefix massPrefix) {
+        this.massPrefix = massPrefix;
+    }
+
     public Isotope.MassUnit getMassUnit() {
         return massUnit;
     }
@@ -130,12 +143,32 @@ public class Shipment {
         this.form = form == null? LimitsModelId.Form.NORMAL : form;
     }
 
-    public List<Isotope> getIsotopes() {
+    public ObservableList<Isotope> getIsotopes() {
+        return isotopesProperty() == null? FXCollections.observableArrayList() : isotopesProperty().get();
+    }
+
+    public SimpleListProperty<Isotope> isotopesProperty() {
         return isotopes;
     }
 
-    public void setIsotopes(List<Isotope> isotopes) {
-        this.isotopes = isotopes == null? new ArrayList<>() : isotopes;
+    public void setIsotopes(ObservableList<Isotope> isotopes) {
+        if(isotopesProperty() == null) {
+            this.isotopes = new SimpleListProperty<>(isotopes);
+        } else {
+            isotopesProperty().addAll(isotopes);
+        }
+    }
+
+    public void addAll(List<Isotope> list) {
+        getIsotopes().addAll(list);
+    }
+
+    public void add(Isotope isotope) {
+        getIsotopes().add(isotope);
+    }
+
+    public void remove(List<Isotope> isotopes) {
+        getIsotopes().removeAll(isotopes);
     }
 
     @Override
@@ -175,7 +208,7 @@ public class Shipment {
     public String toString() {
         return "Shipment: { Id: " + getId() +
             "\nReference Date: " + getRefDate() +
-            "\nMass: " + getMass() + " " + getMassUnit() +
+            "\nMass: " + getMass() + " " + getMassPrefix() + getMassUnit() +
             "\nNature: " + getNature() +
             "\nState: " + getState() +
             "\nForm: " + getForm() +
