@@ -70,9 +70,9 @@ public class FXIds {
     public static final String CHOICEBOX_AO_NAME = "#choiceBoxA0Name";
     public static final String VBOX_MORE_INFO = "#vBoxMoreInfo";
     public static final String HBOX_ADD_INFO_TOP = "#hBoxAddInfoTop";
-    public static final String VBOX_SHORT_LONG = "#vBoxShortLong";
+    public static final String VBOX_LIFE_SPAN = "#vBoxLifeSpan";
     public static final String RADIO_SHORT_LIVED = "#radioBtnShortLived";
-    public static final String TOGGLE_SHORT_LONG = "#toggleGrpShortLong";
+    public static final String TOGGLE_LIFE_SPAN = "#toggleGrpLifeSpan";
     public static final String RADIO_LONG_LIVED = "#radioBtnLongLived";
     public static final String VBOX_LUNG_ABS = "#vBoxLungAbs";
     public static final String RADIO_SLOW_LUNG = "#radioBtnSlowLungAbs";

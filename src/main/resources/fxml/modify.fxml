@@ -37,13 +37,13 @@
             <Separator prefWidth="325.0" styleClass="moreInfoBorder" />
          </HBox>
          <StackPane>
-            <VBox fx:id="vBoxShortLong" alignment="CENTER_LEFT" spacing="5.0" styleClass="radioBtnsShortLong">
+            <VBox fx:id="vBoxLifeSpan" alignment="CENTER_LEFT" spacing="5.0" styleClass="radioBtnsLifeSpan">
                <RadioButton fx:id="radioBtnShortLived" mnemonicParsing="false" styleClass="moreInfoRaadioBtns" text="Short Lived">
                   <toggleGroup>
-                     <ToggleGroup fx:id="toggleGrpShortLong" />
+                     <ToggleGroup fx:id="toggleGrpLifeSpan" />
                   </toggleGroup>
                </RadioButton>
-               <RadioButton fx:id="radioBtnLongLived" mnemonicParsing="false" styleClass="moreInfoRaadioBtns" text="Long Lived" toggleGroup="$toggleGrpShortLong" />
+               <RadioButton fx:id="radioBtnLongLived" mnemonicParsing="false" styleClass="moreInfoRaadioBtns" text="Long Lived" toggleGroup="$toggleGrpLifeSpan" />
             </VBox>
             <VBox fx:id="vBoxLungAbs" alignment="CENTER_LEFT" spacing="5.0" styleClass="radioBtnsLungAbsorp">
                <RadioButton fx:id="radioBtnSlowLungAbs" mnemonicParsing="false" styleClass="moreInfoRaadioBtns" text="Slow Lung Absorption">
@@ -79,7 +79,7 @@
          <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="modifyTxt" text="Mass:" />
          <TextField fx:id="txtFieldMass" promptText="Mass" styleClass="validTxtField" />
          <ComboBox fx:id="comboBoxMassPrefix" visibleRowCount="5" />
-         <ChoiceBox fx:id="choiceBoxMassName" layoutX="350.0" layoutY="10.0" />
+         <ChoiceBox fx:id="choiceBoxMassUnit" layoutX="350.0" layoutY="10.0" />
       </HBox>
       <HBox alignment="CENTER" spacing="10.0" styleClass="hBoxAdd">
          <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="modifyTxt" text="Nature:" />

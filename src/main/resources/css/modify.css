@@ -82,7 +82,7 @@ HBox, VBox { -fx-alignment: CENTER; }
     -fx-spacing: 5;
 }
 
-.radioBtnsShortLong, .radioBtnsLungAbsorp {
+.radioBtnsLifeSpan, .radioBtnsLungAbsorp {
     -fx-alignment: CENTER;
     -fx-spacing: 5;
 }

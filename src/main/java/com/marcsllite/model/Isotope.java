@@ -42,6 +42,8 @@ public class Isotope {
     private RadUnit initActivityUnit;
     private IsoClass isoClass;
     private SimpleObjectProperty<LocalDate> refDate;
+    private LifeSpan lifeSpan;
+    private LungAbsorption lungAbsorption;
 
     public enum MassUnit {
         GRAMS("grams"),
@@ -57,9 +59,12 @@ public class Isotope {
             return val;
         }
 
+        public String getAbbrVal() { return getVal().substring(0,1).toLowerCase(); }
+
         public static MassUnit toMass(String value) {
             for (MassUnit enumValue : values()) {
-                if (enumValue.getVal().equalsIgnoreCase(value)) {
+                if (enumValue.getVal().equalsIgnoreCase(value) ||
+                    enumValue.getAbbrVal().equalsIgnoreCase(value)) {
                     return enumValue;
                 }
             }
@@ -188,6 +193,87 @@ public class Isotope {
         }
     }
 
+    public enum LifeSpan {
+        SHORT("Short"),
+        LONG("Long"),
+        REGULAR("");
+
+        private final String val;
+
+        LifeSpan(String val) {
+            this.val = val;
+        }
+
+        public String getVal() {
+            return Objects.equals(val, "") ? "" : val + " Lived";
+        }
+
+        public String getAbbrVal() { return val.equals("")? "" :
+            "(" + val.toLowerCase() + ")";}
+
+        public static LifeSpan toLifeSpan(String value) {
+            for (LifeSpan enumValue : values()) {
+                if (enumValue.getVal().equalsIgnoreCase(value) ||
+                enumValue.getAbbrVal().equalsIgnoreCase(value)) {
+                    return enumValue;
+                }
+            }
+            return null;
+        }
+
+        public static ObservableList<String> getFxValues() {
+            return Arrays.stream(LifeSpan.values())
+                .map(LifeSpan::getAbbrVal)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        @Override
+        public String toString() {
+            return getVal();
+        }
+    }
+
+    public enum LungAbsorption {
+        SLOW("Slow Lung Absorption"),
+        MEDIUM("Medium Lung Absorption"),
+        FAST("Fast Lung Absorption"),
+        NONE("");
+
+        private final String val;
+
+        LungAbsorption(String val) {
+            this.val = val;
+        }
+
+        public String getVal() {
+            return val;
+        }
+
+        public String getAbbrVal() { return val.equals("")? "" :
+            val.substring(0,1).toLowerCase();}
+
+        public static LungAbsorption toLungAbsorption(String value) {
+            for (LungAbsorption enumValue : values()) {
+                if (enumValue.getVal().equalsIgnoreCase(value) ||
+                    enumValue.getAbbrVal().equalsIgnoreCase(value)) {
+                    return enumValue;
+                }
+            }
+            return null;
+        }
+
+        public static ObservableList<String> getFxValues() {
+            return Arrays.stream(LungAbsorption.values())
+                .map(LungAbsorption::getAbbrVal)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        @Override
+        public String toString() {
+            return getVal();
+        }
+    }
+
     public Isotope(IsotopeModel model) {
         this(model.getIsotopeId());
     }
@@ -215,6 +301,8 @@ public class Isotope {
         setIsoClass(IsoClass.TBD);
         setPropHandler(null);
         setRefDate(refDate);
+        setLifeSpan(LifeSpan.REGULAR);
+        setLungAbsorption(LungAbsorption.NONE);
 
         logr.trace("Created new Isotope {}", this::toString);
     }
@@ -261,7 +349,7 @@ public class Isotope {
 
     public String getStrMass() {
         return strMassProperty() == null ?
-            getMass() + " " + getMassPrefix().getAbbrVal() +  getMassUnit() : strMassProperty().get();
+            getMass() + " " + getMassPrefix().getAbbrVal() + getMassUnit().getAbbrVal() : strMassProperty().get();
     }
 
     public SimpleStringProperty strMassProperty() {
@@ -269,11 +357,11 @@ public class Isotope {
     }
 
     public void setStrMass() {
-        String str = getMass() + " " + getMassPrefix().getAbbrVal() + getMassUnit();
+        String str = getMass() + " " + getMassPrefix().getAbbrVal() + getMassUnit().getAbbrVal();
         if(strMassProperty() == null) {
             this.strMass = new SimpleStringProperty(str);
         } else {
-            this.strMass.set(str);
+            strMassProperty().set(str);
         }
     }
 
@@ -291,11 +379,10 @@ public class Isotope {
         } else {
             massProperty().set(mass);
         }
-        setStrMass();
     }
 
     public Conversions.SIPrefix getMassPrefix() {
-        return massPrefix;
+        return massPrefix == null? Conversions.SIPrefix.BASE : massPrefix;
     }
 
     public void setMassPrefix(Conversions.SIPrefix massPrefix) {
@@ -308,12 +395,12 @@ public class Isotope {
 
     public void setMassUnit(MassUnit massUnit) {
         this.massUnit = massUnit == null? Isotope.MassUnit.GRAMS : massUnit;
-        setStrMass();
     }
 
     public String getStrInitActivity() {
         return strInitActivityProperty() == null?
-            getInitActivity() + " " + getInitActivityPrefix().getAbbrVal() + getInitActivityUnit() : strInitActivityProperty().get();
+            getInitActivity() + " " + getInitActivityPrefix().getAbbrVal() + getInitActivityUnit() :
+            strInitActivityProperty().get();
     }
 
     public SimpleStringProperty strInitActivityProperty() {
@@ -325,7 +412,7 @@ public class Isotope {
         if(strInitActivityProperty() == null) {
             this.strInitActivity = new SimpleStringProperty(str);
         } else {
-            this.strInitActivity.set(str);
+            strInitActivityProperty().set(str);
         }
     }
 
@@ -471,6 +558,22 @@ public class Isotope {
         }
     }
 
+    public LifeSpan getLifeSpan() {
+        return lifeSpan;
+    }
+
+    public void setLifeSpan(LifeSpan lifeSpan) {
+        this.lifeSpan = lifeSpan;
+    }
+
+    public LungAbsorption getLungAbsorption() {
+        return lungAbsorption;
+    }
+
+    public void setLungAbsorption(LungAbsorption lungAbsorption) {
+        this.lungAbsorption = lungAbsorption;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(obj == null) {
@@ -482,13 +585,10 @@ public class Isotope {
         Isotope temp = (Isotope) obj;
         return Objects.equals(this.getIsoId(), temp.getIsoId()) &&
             Objects.equals(this.getIsoClass(), temp.getIsoClass()) &&
-            Objects.equals(this.getMass(), temp.getMass()) &&
-            Objects.equals(this.getMassUnit(), temp.getMassUnit()) &&
-            Objects.equals(this.getInitActivity(), temp.getInitActivity()) &&
-            Objects.equals(this.getInitActivityUnit(), temp.getInitActivityUnit()) &&
+            Objects.equals(this.getStrMass(), temp.getStrMass()) &&
+            Objects.equals(this.getStrInitActivity(), temp.getStrInitActivity()) &&
             Objects.equals(this.getNature(), temp.getNature()) &&
-            Objects.equals(this.getLimitsId(), temp.getLimitsId()) &&
-            Objects.equals(this.getConstants(), temp.getConstants());
+            Objects.equals(this.getLimitsId(), temp.getLimitsId());
     }
 
     @Override
@@ -496,10 +596,9 @@ public class Isotope {
         int hash = 43;
         hash = 2 * hash + (this.getIsoId() != null ? this.getIsoId().hashCode() : 0);
         hash = 2 * hash + (this.getIsoClass() != null ? this.getIsoClass().hashCode() : 0);
-        hash = 2 * hash + (int) this.getMass();
-        hash = 2 * hash + (this.getMassUnit() != null ? this.getMassUnit().hashCode() : 0);
-        hash = 2 * hash + (int) this.getInitActivity();
-        hash = 2 * hash + (this.getInitActivityUnit() != null? this.getInitActivityUnit().hashCode() : 0);
+        hash = 2 * hash + (this.getRefDate() != null ? this.getRefDate().hashCode() : 0);
+        hash = 2 * hash + (this.getStrMass().hashCode());
+        hash = 2 * hash + (this.getStrInitActivity().hashCode());
         hash = 2 * hash + (this.getNature() != null ? this.getNature().hashCode() : 0);
         hash = 2 * hash + (this.getLimitsId() != null ? this.getLimitsId().hashCode() : 0);
         return hash;
@@ -509,9 +608,9 @@ public class Isotope {
     public String toString() {
         return "Isotope: { " + getIsoId() +
             "\nClass: " + getIsoClass() +
-            "\nClass: " + getRefDate() +
-            "\nMass: " + getMass() + " " + getMassPrefix() + getMassUnit() +
-            "\nInitial Activity: " + getInitActivity() + " " + getInitActivityPrefix() + getInitActivityUnit() +
+            "\nRef Date: " + getRefDate() +
+            "\nMass: " + getStrMass() +
+            "\nInitial Activity: " + getStrInitActivity() +
             "\nNature: " + getNature() +
             "\n" + getLimitsId() +
             "\n" + getConstants() + "\n}";

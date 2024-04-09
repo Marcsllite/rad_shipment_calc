@@ -44,7 +44,7 @@ class ModifyControllerAddGUITest extends GUITest {
     ChoiceBox<String> choiceBoxA0Name;
     VBox vBoxMoreInfo;
     HBox hBoxAddInfoTop;
-    VBox vBoxShortLong;
+    VBox vBoxLifeSpan;
     RadioButton radioBtnShortLived;
     RadioButton radioBtnLongLived;
     VBox vBoxLungAbs;
@@ -86,7 +86,7 @@ class ModifyControllerAddGUITest extends GUITest {
         choiceBoxA0Name = GUITest.getNode(FXIds.CHOICEBOX_AO_NAME);
         vBoxMoreInfo = GUITest.getNode(FXIds.VBOX_MORE_INFO);
         hBoxAddInfoTop = GUITest.getNode(FXIds.HBOX_ADD_INFO_TOP);
-        vBoxShortLong = GUITest.getNode(FXIds.VBOX_SHORT_LONG);
+        vBoxLifeSpan = GUITest.getNode(FXIds.VBOX_LIFE_SPAN);
         radioBtnShortLived = GUITest.getNode(FXIds.RADIO_SHORT_LIVED);
         radioBtnLongLived = GUITest.getNode(FXIds.RADIO_LONG_LIVED);
         vBoxLungAbs = GUITest.getNode(FXIds.VBOX_LUNG_ABS);

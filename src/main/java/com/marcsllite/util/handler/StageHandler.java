@@ -1,7 +1,6 @@
 package com.marcsllite.util.handler;
 
 import com.marcsllite.controller.BaseController;
-import com.marcsllite.controller.ModifyController;
 import com.marcsllite.util.FXMLView;
 import com.marcsllite.util.factory.ControllerFactory;
 import com.marcsllite.util.factory.PropHandlerFactory;
@@ -119,7 +118,7 @@ public class StageHandler {
     public void switchSceneModal(FXMLView view, BaseController.Page page) throws RuntimeException {
         if (view == null) {
             throw new InvalidParameterException(NULL_ERROR);
-        } else if(view.equals(getCurrentView())) {
+        } else if(view.equals(getCurrentView()) && !view.equals(FXMLView.MODIFY)) {
             return;
         }
 
@@ -209,9 +208,6 @@ public class StageHandler {
             getSecondaryStage().setOnCloseRequest(e -> {
                 e.consume();
                 logr.debug("Closing the {}", view.getName());
-                if(controller instanceof ModifyController) {
-                    ((ModifyController) controller).reset();
-                }
                 closeSecondary();
             });
             

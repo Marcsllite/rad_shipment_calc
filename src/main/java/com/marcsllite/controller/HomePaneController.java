@@ -7,6 +7,7 @@ import com.marcsllite.model.Shipment;
 import com.marcsllite.util.FXMLView;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleListProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.time.LocalDate;
+import java.util.List;
 
 public class HomePaneController extends BaseController {
     @FXML GridPane homePane;
@@ -29,11 +31,12 @@ public class HomePaneController extends BaseController {
     @FXML TableView<Isotope> tableViewHome;
     @FXML PTableColumn<Isotope, String> tableColIsotope;
     @FXML PTableColumn<Isotope, Float> tableColHalfLife;
-    @FXML PTableColumn<Isotope, Float> tableColActivity;
+    @FXML PTableColumn<Isotope, String> tableColActivity;
     @FXML PTableColumn<Isotope, LocalDate> tableColRefDate;
-    @FXML PTableColumn<Isotope, Float> tableColMass;
+    @FXML PTableColumn<Isotope, String> tableColMass;
     @FXML Button btnCalculate;
     private Shipment shipment;
+    SimpleListProperty<Isotope> selectedIsotopes = new SimpleListProperty<>();
 
     private static final Logger logr = LogManager.getLogger();
 
@@ -76,6 +79,26 @@ public class HomePaneController extends BaseController {
 
     public void setShipment(Shipment shipment) {
         this.shipment = shipment;
+    }
+
+    public boolean isIsoInTable(Isotope isotope) {
+        if(isotope == null || getSelectedIsotopes().isEmpty() ||
+            getSelectedIsotopes().get(0) == null) {
+            return false;
+        }
+        return getShipment().getIsotopes()
+            .stream()
+            .anyMatch(i -> i.getAbbr().equals(getSelectedIsotopes().get(0).getAbbr()));
+    }
+
+    public void updateIsotope(Isotope newV) {
+        getShipment().getIsotopes().set(
+            tableViewHome.getSelectionModel().getSelectedIndex(), newV
+        );
+    }
+
+    public List<Isotope> getSelectedIsotopes() {
+        return tableViewHome.getSelectionModel().getSelectedItems();
     }
 
     /*///////////////////////////////////////////// HOME PANE CONTROLLER /////////////////////////////////////////////*/
