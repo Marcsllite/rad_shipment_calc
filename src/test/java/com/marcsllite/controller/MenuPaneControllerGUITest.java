@@ -45,14 +45,14 @@ class MenuPaneControllerGUITest extends GUITest {
     public void start(Stage stage) throws IOException, TimeoutException {
         super.start(stage);
         controller = (MenuPaneController) getController();
-        gridPaneMenu = GUITest.getNode(FXIds.GRIDPANE_MENU);
-        stackPaneLogo = GUITest.getNode(FXIds.STACKPANE_LOGO);
-        imgViewColorLogo = GUITest.getNode(FXIds.IMGVIEW_COLOR_LOGO);
-        imgViewGreyLogo = GUITest.getNode(FXIds.IMGVIEW_GREY_LOGO);
+        gridPaneMenu = GUITest.getNode(FXIds.GRID_PANE_MENU);
+        stackPaneLogo = GUITest.getNode(FXIds.STACK_PANE_LOGO);
+        imgViewColorLogo = GUITest.getNode(FXIds.IMG_VIEW_COLOR_LOGO);
+        imgViewGreyLogo = GUITest.getNode(FXIds.IMG_VIEW_GREY_LOGO);
         btnShipment = GUITest.getNode(FXIds.BTN_SHIPMENT);
-        imgViewShipment = GUITest.getNode(FXIds.IMGVIEW_SHIPMENT);
+        imgViewShipment = GUITest.getNode(FXIds.IMG_VIEW_SHIPMENT);
         btnReference = GUITest.getNode(FXIds.BTN_REFERENCE);
-        imgViewReference = GUITest.getNode(FXIds.IMGVIEW_REFERENCE);
+        imgViewReference = GUITest.getNode(FXIds.IMG_VIEW_REFERENCE);
 
         mainController = spy(controller.getMain());
         controller.setMain(mainController);

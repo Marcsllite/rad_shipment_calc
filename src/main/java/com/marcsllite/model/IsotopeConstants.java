@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class IsotopeConstants {
     private DBService dbService;
-    private static final float defaultVal = -2.0F;
+    private static final float DEFAULT_VAL = -2.0F;
     private final SimpleFloatProperty a1 = new SimpleFloatProperty();
     private final SimpleFloatProperty a2 = new SimpleFloatProperty();
     private final SimpleFloatProperty decayConstant = new SimpleFloatProperty();
@@ -62,7 +62,7 @@ public class IsotopeConstants {
     }
 
     public static float getDefaultVal() {
-        return IsotopeConstants.defaultVal;
+        return IsotopeConstants.DEFAULT_VAL;
     }
 
     public float getA1() {

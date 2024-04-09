@@ -63,26 +63,26 @@ class ReferencePaneControllerGUITest extends GUITest {
     public void start(Stage stage) throws IOException, TimeoutException {
         super.start(stage);
         controller = (ReferencePaneController) getController();
-        gridPaneReference = GUITest.getNode(FXIds.GRIDPANE_REFERENCE);
-        txtFieldSearch = GUITest.getNode(FXIds.TXTFIELD_SEARCH);
-        tableViewSearch = GUITest.getNode(FXIds.TABLEVIEW_SEARCH);
-        txtFieldA1 = GUITest.getNode(FXIds.TXTFIELD_A1);
-        comboBoxRefA1Prefix = GUITest.getNode(FXIds.COMBOBOX_REF_A1_PREFIX);
-        choiceBoxRefA1RadUnit = GUITest.getNode(FXIds.CHOICEBOX_REF_A1_RAD_UNIT);
-        txtFieldA2 = GUITest.getNode(FXIds.TXTFIELD_A2);
-        comboBoxRefA2Prefix = GUITest.getNode(FXIds.COMBOBOX_REF_A2_PREFIX);
-        choiceBoxRefA2RadUnit = GUITest.getNode(FXIds.CHOICEBOX_REF_A2_RAD_UNIT);
-        txtFieldDecayConst = GUITest.getNode(FXIds.TXTFIELD_DECAY_CONSTANT);
-        txtFieldExemptCon = GUITest.getNode(FXIds.TXTFIELD_EXEMPT_CON);
-        comboBoxRefExemptConPrefix = GUITest.getNode(FXIds.COMBOBOX_REF_EXEMPT_CON_PREFIX);
-        choiceBoxRefExemptConRadUnit = GUITest.getNode(FXIds.CHOICEBOX_REF_EXEMPT_CON_RAD_UNIT);
-        txtFieldExemptLim = GUITest.getNode(FXIds.TXTFIELD_EXEMPT_LIMIT);
-        comboBoxRefExemptLimPrefix = GUITest.getNode(FXIds.COMBOBOX_REF_EXEMPT_LIM_PREFIX);
-        choiceBoxRefExemptLimRadUnit = GUITest.getNode(FXIds.CHOICEBOX_REF_EXEMPT_LIM_RAD_UNIT);
-        txtFieldHalfLife = GUITest.getNode(FXIds.TXTFIELD_HALF_LIFE);
-        txtFieldReportQuan = GUITest.getNode(FXIds.TXTFIELD_REPORTABLE_QUANTITY);
-        comboBoxRefReportQuanPrefix = GUITest.getNode(FXIds.COMBOBOX_REF_REPORT_QUAN_PREFIX);
-        choiceBoxRefReportQuanRadUnit = GUITest.getNode(FXIds.CHOICEBOX_REF_REPORT_QUAN_RAD_UNIT);
+        gridPaneReference = GUITest.getNode(FXIds.GRID_PANE_REFERENCE);
+        txtFieldSearch = GUITest.getNode(FXIds.TXT_FIELD_SEARCH);
+        tableViewSearch = GUITest.getNode(FXIds.TABLE_VIEW_SEARCH);
+        txtFieldA1 = GUITest.getNode(FXIds.TXT_FIELD_A1);
+        comboBoxRefA1Prefix = GUITest.getNode(FXIds.COMBO_BOX_REF_A1_PREFIX);
+        choiceBoxRefA1RadUnit = GUITest.getNode(FXIds.CHOICE_BOX_REF_A1_RAD_UNIT);
+        txtFieldA2 = GUITest.getNode(FXIds.TXT_FIELD_A2);
+        comboBoxRefA2Prefix = GUITest.getNode(FXIds.COMBO_BOX_REF_A2_PREFIX);
+        choiceBoxRefA2RadUnit = GUITest.getNode(FXIds.CHOICE_BOX_REF_A2_RAD_UNIT);
+        txtFieldDecayConst = GUITest.getNode(FXIds.TXT_FIELD_DECAY_CONSTANT);
+        txtFieldExemptCon = GUITest.getNode(FXIds.TXT_FIELD_EXEMPT_CON);
+        comboBoxRefExemptConPrefix = GUITest.getNode(FXIds.COMBO_BOX_REF_EXEMPT_CON_PREFIX);
+        choiceBoxRefExemptConRadUnit = GUITest.getNode(FXIds.CHOICE_BOX_REF_EXEMPT_CON_RAD_UNIT);
+        txtFieldExemptLim = GUITest.getNode(FXIds.TXT_FIELD_EXEMPT_LIMIT);
+        comboBoxRefExemptLimPrefix = GUITest.getNode(FXIds.COMBO_BOX_REF_EXEMPT_LIM_PREFIX);
+        choiceBoxRefExemptLimRadUnit = GUITest.getNode(FXIds.CHOICE_BOX_REF_EXEMPT_LIM_RAD_UNIT);
+        txtFieldHalfLife = GUITest.getNode(FXIds.TXT_FIELD_HALF_LIFE);
+        txtFieldReportQuan = GUITest.getNode(FXIds.TXT_FIELD_REPORTABLE_QUANTITY);
+        comboBoxRefReportQuanPrefix = GUITest.getNode(FXIds.COMBO_BOX_REF_REPORT_QUAN_PREFIX);
+        choiceBoxRefReportQuanRadUnit = GUITest.getNode(FXIds.CHOICE_BOX_REF_REPORT_QUAN_RAD_UNIT);
     }
 
     @Test

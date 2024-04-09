@@ -40,15 +40,15 @@ class ShipmentDetailsControllerGUITest extends GUITest {
     public void start(Stage stage) throws IOException, TimeoutException {
         super.start(stage);
         controller = (ShipmentDetailsController) getController();
-        stackPaneShipmentDetails = GUITest.getNode(FXIds.STACKPANE_SHIPMENT_DETAILS);
+        stackPaneShipmentDetails = GUITest.getNode(FXIds.STACK_PANE_SHIPMENT_DETAILS);
         vBoxShipDetails = GUITest.getNode(FXIds.VBOX_SHIP_DETAILS);
         datePickerShipDetails = GUITest.getNode(FXIds.DATE_PICKER_SHIP_DETAILS);
-        txtFieldMassShipDetails = GUITest.getNode(FXIds.TXTFIELD_MASS_SHIP_DETAILS);
-        comboBoxMassPrefixShipDetails = GUITest.getNode(FXIds.COMBOBOX_MASS_PREFIX_SHIP_DETAILS);
-        choiceBoxMassNameShipDetails = GUITest.getNode(FXIds.CHOICEBOX_MASS_NAME_SHIP_DETAILS);
-        choiceBoxNatureShipDetails = GUITest.getNode(FXIds.CHOICEBOX_NATURE_SHIP_DETAILS);
-        choiceBoxStateShipDetails = GUITest.getNode(FXIds.CHOICEBOX_STATE_SHIP_DETAILS);
-        choiceBoxFormShipDetails = GUITest.getNode(FXIds.CHOICEBOX_FORM_SHIP_DETAILS);
+        txtFieldMassShipDetails = GUITest.getNode(FXIds.TXT_FIELD_MASS_SHIP_DETAILS);
+        comboBoxMassPrefixShipDetails = GUITest.getNode(FXIds.COMBO_BOX_MASS_PREFIX_SHIP_DETAILS);
+        choiceBoxMassNameShipDetails = GUITest.getNode(FXIds.CHOICE_BOX_MASS_NAME_SHIP_DETAILS);
+        choiceBoxNatureShipDetails = GUITest.getNode(FXIds.CHOICE_BOX_NATURE_SHIP_DETAILS);
+        choiceBoxStateShipDetails = GUITest.getNode(FXIds.CHOICE_BOX_STATE_SHIP_DETAILS);
+        choiceBoxFormShipDetails = GUITest.getNode(FXIds.CHOICE_BOX_FORM_SHIP_DETAILS);
         btnSaveShipDetails = GUITest.getNode(FXIds.BTN_SAVE_SHIP_DETAILS);
     }
 

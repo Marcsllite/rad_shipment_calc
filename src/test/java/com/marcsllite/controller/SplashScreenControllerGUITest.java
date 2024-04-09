@@ -56,7 +56,7 @@ class SplashScreenControllerGUITest extends FxRobot {
         controller = spy((SplashScreenController) stageHandler.getController());
         controller.setDbService(dbService);
 
-        gridPaneSplash = GUITest.getNode(FXIds.GRIDPANE_SPLASH);
+        gridPaneSplash = GUITest.getNode(FXIds.GRID_PANE_SPLASH);
         labelSplash = GUITest.getNode(FXIds.LABEL_SPLASH);
         progressSplash = GUITest.getNode(FXIds.PROGRESS_SPLASH);
     }

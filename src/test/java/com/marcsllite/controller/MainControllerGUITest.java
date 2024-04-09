@@ -27,9 +27,9 @@ class MainControllerGUITest extends GUITest {
     public void start(Stage stage) throws IOException, TimeoutException {
         super.start(stage);
         controller = (MainController) getController();
-        gridPaneMenu = GUITest.getNode(FXIds.GRIDPANE_MENU);
-        gridPaneHome = GUITest.getNode(FXIds.GRIDPANE_HOME);
-        gridPaneRef = GUITest.getNode(FXIds.GRIDPANE_REFERENCE);
+        gridPaneMenu = GUITest.getNode(FXIds.GRID_PANE_MENU);
+        gridPaneHome = GUITest.getNode(FXIds.GRID_PANE_HOME);
+        gridPaneRef = GUITest.getNode(FXIds.GRID_PANE_REFERENCE);
     }
 
     @Test

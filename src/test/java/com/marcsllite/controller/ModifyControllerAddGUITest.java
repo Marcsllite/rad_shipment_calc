@@ -31,6 +31,9 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class ModifyControllerAddGUITest extends GUITest {
     ModifyController controller;
@@ -77,13 +80,15 @@ class ModifyControllerAddGUITest extends GUITest {
     public void start(Stage stage) throws IOException, TimeoutException {
         super.start(stage);
         controller = (ModifyController) getController();
-        stackPaneModify = GUITest.getNode(FXIds.STACKPANE_MODIFY);
+
+
+        stackPaneModify = GUITest.getNode(FXIds.STACK_PANE_MODIFY);
         // First Page
         vBoxFirstPage = GUITest.getNode(FXIds.VBOX_FIRST_PAGE);
-        txtFieldIsoName = GUITest.getNode(FXIds.TXTFIELD_ISO_NAME);
-        txtFieldA0 = GUITest.getNode(FXIds.TXTFIELD_A0);
-        comboBoxA0Prefix = GUITest.getNode(FXIds.COMBOBOX_A0_PREFIX);
-        choiceBoxA0Name = GUITest.getNode(FXIds.CHOICEBOX_AO_NAME);
+        txtFieldIsoName = GUITest.getNode(FXIds.TXT_FIELD_ISO_NAME);
+        txtFieldA0 = GUITest.getNode(FXIds.TXT_FIELD_A0);
+        comboBoxA0Prefix = GUITest.getNode(FXIds.COMBO_BOX_A0_PREFIX);
+        choiceBoxA0Name = GUITest.getNode(FXIds.CHOICE_BOX_AO_RAD_UNIT);
         vBoxMoreInfo = GUITest.getNode(FXIds.VBOX_MORE_INFO);
         hBoxAddInfoTop = GUITest.getNode(FXIds.HBOX_ADD_INFO_TOP);
         vBoxLifeSpan = GUITest.getNode(FXIds.VBOX_LIFE_SPAN);
@@ -98,14 +103,14 @@ class ModifyControllerAddGUITest extends GUITest {
         // Second Page
         vBoxSecondPage = GUITest.getNode(FXIds.VBOX_SECOND_PAGE);
         datePicker = GUITest.getNode(FXIds.DATE_PICKER);
-        txtFieldMass = GUITest.getNode(FXIds.TXTFIELD_MASS);
-        comboBoxMassPrefix = GUITest.getNode(FXIds.COMBOBOX_MASS_PREFIX);
-        choiceBoxMassName = GUITest.getNode(FXIds.CHOICEBOX_MASS_NAME);
-        choiceBoxNature = GUITest.getNode(FXIds.CHOICEBOX_NATURE);
-        choiceBoxState = GUITest.getNode(FXIds.CHOICEBOX_STATE);
-        choiceBoxForm = GUITest.getNode(FXIds.CHOICEBOX_FORM);
-        chckBoxSameMass = GUITest.getNode(FXIds.CHCKBOX_SAME_MASS);
-        chckBoxSameNSF = GUITest.getNode(FXIds.CHCKBOX_SAME_NSF);
+        txtFieldMass = GUITest.getNode(FXIds.TXT_FIELD_MASS);
+        comboBoxMassPrefix = GUITest.getNode(FXIds.COMBO_BOX_MASS_PREFIX);
+        choiceBoxMassName = GUITest.getNode(FXIds.CHOICE_BOX_MASS_UNIT);
+        choiceBoxNature = GUITest.getNode(FXIds.CHOICE_BOX_NATURE);
+        choiceBoxState = GUITest.getNode(FXIds.CHOICE_BOX_STATE);
+        choiceBoxForm = GUITest.getNode(FXIds.CHOICE_BOX_FORM);
+        chckBoxSameMass = GUITest.getNode(FXIds.CHCK_BOX_SAME_MASS);
+        chckBoxSameNSF = GUITest.getNode(FXIds.CHCK_BOX_SAME_NSF);
         btnBack = GUITest.getNode(FXIds.BTN_BACK);
         btnFinish = GUITest.getNode(FXIds.BTN_FINISH);
         txtSecondPageStatus = GUITest.getNode(FXIds.TXT_SECOND_PAGE_STATUS);
@@ -113,7 +118,7 @@ class ModifyControllerAddGUITest extends GUITest {
 
     @Test
     void testInit() {
-        FxAssert.verifyThat(FXIds.STACKPANE_MODIFY, NodeMatchers.isVisible());
+        FxAssert.verifyThat(FXIds.STACK_PANE_MODIFY, NodeMatchers.isVisible());
         Assertions.assertEquals(BaseController.Page.ADD, controller.getPage());
 
         assertEquals(Conversions.SIPrefix.getFxValues(), comboBoxA0Prefix.getItems());
@@ -149,6 +154,12 @@ class ModifyControllerAddGUITest extends GUITest {
 
     @Test
     void testModifyHandler_btnNext() {
+        MainController mainController = mock(MainController.class);
+        HomePaneController homePaneController = mock(HomePaneController.class);
+        controller.setMain(mainController);
+        when(mainController.getHomePaneController()).thenReturn(homePaneController);
+        when(homePaneController.isIsoInTable(any())).thenReturn(false);
+        
         goToPage(1);
         FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
 

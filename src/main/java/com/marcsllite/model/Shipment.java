@@ -153,9 +153,9 @@ public class Shipment {
 
     public void setIsotopes(ObservableList<Isotope> isotopes) {
         if(isotopesProperty() == null) {
-            this.isotopes = new SimpleListProperty<>(isotopes);
+            this.isotopes = new SimpleListProperty<>(isotopes == null? FXCollections.observableArrayList() : isotopes);
         } else {
-            isotopesProperty().addAll(isotopes);
+            isotopesProperty().addAll(isotopes == null? FXCollections.observableArrayList() : isotopes);
         }
     }
 

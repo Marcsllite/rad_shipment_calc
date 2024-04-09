@@ -41,11 +41,11 @@ class HomePaneControllerGUITest extends GUITest {
     public void start(Stage stage) throws IOException, TimeoutException {
         super.start(stage);
         controller = (HomePaneController) getController();
-        gridPaneHome = GUITest.getNode(FXIds.GRIDPANE_HOME);
+        gridPaneHome = GUITest.getNode(FXIds.GRID_PANE_HOME);
         btnAdd = GUITest.getNode(FXIds.BTN_ADD);
         btnEdit = GUITest.getNode(FXIds.BTN_EDIT);
         btnRemove = GUITest.getNode(FXIds.BTN_REMOVE);
-        tableViewHome = GUITest.getNode(FXIds.TABLEVIEW_HOME);
+        tableViewHome = GUITest.getNode(FXIds.TABLE_VIEW_HOME);
         btnCalculate = GUITest.getNode(FXIds.BTN_CALCULATE);
     }
 
@@ -72,7 +72,7 @@ class HomePaneControllerGUITest extends GUITest {
     @Test
     void testHomePaneHandler_btnAdd() {
         clickOn(btnAdd);
-        stackPaneModify = GUITest.getNode(FXIds.STACKPANE_MODIFY);
+        stackPaneModify = GUITest.getNode(FXIds.STACK_PANE_MODIFY);
         FxAssert.verifyThat(window(stackPaneModify), WindowMatchers.isShowing());
         assertTrue(getController() instanceof ModifyController);
         ModifyController c = (ModifyController) getController();

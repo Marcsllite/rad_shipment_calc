@@ -29,8 +29,8 @@ class SummaryPaneControllerGUITest extends GUITest {
     public void start(Stage stage) throws IOException, TimeoutException {
         super.start(stage);
         controller = (SummaryPaneController) getController();
-        anchorPaneSummary = GUITest.getNode(FXIds.ANCHORPANE_SUMMARY);
-        txtAreaSummary = GUITest.getNode(FXIds.TXTAREA_SUMMARY);
+        anchorPaneSummary = GUITest.getNode(FXIds.ANCHOR_PANE_SUMMARY);
+        txtAreaSummary = GUITest.getNode(FXIds.TXT_AREA_SUMMARY);
         btnSaveSummary = GUITest.getNode(FXIds.BTN_SAVE_SUMMARY);
     }
 
