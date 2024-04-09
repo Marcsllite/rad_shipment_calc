@@ -37,7 +37,7 @@ public class StageHandler {
     }
 
     public StageHandler(Stage stage, PropHandler propHandler, ControllerFactory factory) throws IOException {
-        primaryStage = stage;
+        primaryStage = stage == null? new Stage() : stage;
         getPrimaryStage().setOnCloseRequest(e -> Platform.exit());
         setPropHandler(propHandler == null? new PropHandlerFactory().getPropHandler(null) : propHandler);
         setFactory(factory == null? new ControllerFactory() : factory);
@@ -170,7 +170,7 @@ public class StageHandler {
             // Do not call Platform.exit when testing because other tests that
             // require the FX Thread will fail or be ignored
             if(System.getProperty(KEEP_PLATFORM_OPEN_PROPERTY) == null) {
-                closePrimary();
+                closeSecondary();
             }
         }
     }
@@ -230,13 +230,15 @@ public class StageHandler {
             // Do not call Platform.exit when testing because other tests that
             // require the FX Thread will fail or be ignored
             if(System.getProperty(KEEP_PLATFORM_OPEN_PROPERTY) == null) {
-                closePrimary();
+                closeSecondary();
             }
         }
     }
 
     public void closePrimary() {
-        getPrimaryStage().close();
+        if(getPrimaryStage() != null) {
+            getPrimaryStage().close();
+        }
     }
 
     public void closeSecondary() {
@@ -253,10 +255,10 @@ public class StageHandler {
         String errMsg = "Unable to load FXML view " + view.getFxmlName();
 
         if(getPropHandler().keySet().isEmpty()) {
-            logAndThrowException(errMsg.concat(": The resource bundle contains no values."), null);
+            throw logAndThrowException(errMsg.concat(": The resource bundle contains no values."), null);
         }
 
-        Parent rootNode = null;
+        Parent rootNode;
         setLoader(new FXMLLoader());
         getLoader().setLocation(getClass().getResource(view.getFxmlLoc()));
         getLoader().setControllerFactory(getFactory());
@@ -265,20 +267,25 @@ public class StageHandler {
             rootNode = getLoader().load();
             Objects.requireNonNull(rootNode, "A Root FXML node must not be null");
         } catch (Exception exception) {
-            logAndThrowException(errMsg, exception);
+            RuntimeException rte = logAndThrowException(errMsg, exception);
             // Can only initialize one FX Thread per JVM
             // Do not call Platform.exit when testing because other tests that
             // require the FX Thread will fail or be ignored
             if(System.getProperty(KEEP_PLATFORM_OPEN_PROPERTY) == null) {
-                closePrimary();
+                if(getSecondaryStage() != null) {
+                    closeSecondary();
+                } else {
+                    closePrimary();
+                }
             }
+            throw rte;
         }
         return rootNode;
     }
 
     @SuppressWarnings("java:S112")
     // ignored rule java:S112 as RuntimeException is used to match previous exception type
-    protected void logAndThrowException(String errorMsg, Exception exception) throws RuntimeException {
+    protected RuntimeException logAndThrowException(String errorMsg, Exception exception) throws RuntimeException {
         if (errorMsg == null || errorMsg.isBlank()) {
             errorMsg = StageHandler.DEFAULT_MSG;
         }
@@ -290,6 +297,6 @@ public class StageHandler {
         }
         var e = new RuntimeException(errorMsg);
         logr.throwing(Level.FATAL, e);
-        throw e;
+        return e;
     }
 }

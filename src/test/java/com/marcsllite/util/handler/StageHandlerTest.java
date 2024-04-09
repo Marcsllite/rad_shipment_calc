@@ -2,29 +2,39 @@ package com.marcsllite.util.handler;
 
 import com.marcsllite.ControllerFactoryTestObj;
 import com.marcsllite.PropHandlerTestObj;
+import com.marcsllite.controller.BaseController;
+import com.marcsllite.controller.HomePaneController;
 import com.marcsllite.util.FXMLView;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junitpioneer.jupiter.SetSystemProperty;
+import org.junitpioneer.jupiter.ClearSystemProperty;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.testfx.api.FxToolkit;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.Properties;
-import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -32,16 +42,31 @@ class StageHandlerTest {
     final static String propMsg = "This is a proper message";
     final static String defaultMessage = StageHandler.DEFAULT_MSG;
     private StageHandler stageHandler;
-    static Stage stage;
-    
-    @BeforeAll
-    public void beforeAll() throws TimeoutException {
-        stage = FxToolkit.registerPrimaryStage();
+    private Stage primaryStage;
+
+    @BeforeEach
+    public void setUp() {
         try {
-            stageHandler = spy(new StageHandler(stage, new PropHandlerTestObj(), new ControllerFactoryTestObj()));
+            primaryStage = mock(Stage.class);
+            stageHandler = spy(new StageHandler(primaryStage, new PropHandlerTestObj(), new ControllerFactoryTestObj()));
         } catch (IOException e) {
             fail("Failed to initialize test object");
         }
+    }
+
+    @Test
+    void testGetController_NullLoader() {
+        when(stageHandler.getLoader()).thenReturn(null);
+        assertNull(stageHandler.getController());
+    }
+
+    @Test
+    void testGetController() {
+        String str = "str";
+        FXMLLoader loader = mock(FXMLLoader.class);
+        when(stageHandler.getLoader()).thenReturn(loader);
+        when(loader.getController()).thenReturn(str);
+        assertEquals(str, stageHandler.getController());
     }
 
     @Test
@@ -61,6 +86,51 @@ class StageHandlerTest {
     }
 
     @Test
+    void testSwitchSceneModal_NotModifyCurrentView() {
+        FXMLView view = FXMLView.HOME;
+
+        Platform.runLater(
+            () ->  {
+                when(stageHandler.getCurrentView()).thenReturn(view);
+                stageHandler.switchSceneModal(view, BaseController.Page.NONE);
+                verify(stageHandler, times(0)).getFactory();
+                verify(stageHandler, times(0)).loadViewNodeHierarchy(view);
+                verify(stageHandler, times(0)).setSecondaryStage(any());
+            }
+        );
+    }
+
+    @Test
+    void testSwitchSceneModal_ModifyCurrentView() {
+        FXMLView view = FXMLView.MODIFY;
+        Stage stage = mock(Stage.class);
+
+        Platform.runLater(
+            () -> {
+                when(stageHandler.getCurrentView()).thenReturn(view);
+                when(stageHandler.loadViewNodeHierarchy(view)).thenReturn(null);
+                when(stageHandler.getSecondaryStage()).thenReturn(stage);
+
+                stageHandler.switchSceneModal(view, BaseController.Page.NONE);
+
+                verify(stage).initModality(Modality.APPLICATION_MODAL);
+                verify(stage).setScene(any());
+                verify(stage).setMinWidth(view.getWidth());
+                verify(stage).setMinHeight(view.getHeight());
+                verify(stage).setMaxWidth(view.getMaxWidth());
+                verify(stage).setMaxHeight(view.getMaxHeight());
+                verify(stage).setFullScreen(false);
+                verify(stage).setMaximized(false);
+                verify(stage).setResizable(false);
+                verify(stage).setTitle(view.getTitle());
+                verify(stage).getIcons();
+                verify(stage).centerOnScreen();
+                verify(stageHandler).loadViewNodeHierarchy(view);
+            }
+        );
+    }
+
+    @Test
     void testShow_NullView() {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> stageHandler.show(null, null)
@@ -77,14 +147,47 @@ class StageHandlerTest {
     }
   
     @Test
-    @SetSystemProperty(key = "keepPlatformOpen",value = "true")
+    @ClearSystemProperty(key = "keepPlatformOpen")
     void testShow_EmptyView() {
         FXMLView view = FXMLView.TEST;
+
+        doNothing().when(primaryStage).close();
+
+        stageHandler.show(view, null);
+        verify(stageHandler, times(2)).closePrimary();
+    }
+
+    @Test
+    @ClearSystemProperty(key = "keepPlatformOpen")
+    void testShowModal_EmptyView() {
+        FXMLView view = FXMLView.TEST;
+
+        when(stageHandler.getSecondaryStage()).thenReturn(primaryStage);
+        doNothing().when(primaryStage).close();
+
         try {
-            stageHandler.show(view, null);
+            stageHandler.showModal(view, null);
+            verify(stageHandler, times(2)).closeSecondary();
         } catch(Exception e) {
             fail("An exception should not have been thrown");
         }
+    }
+
+    @Test
+    @ClearSystemProperty(key = "keepPlatformOpen")
+    void testShowModal_NotInit() {
+        FXMLView view = FXMLView.HOME;
+        BaseController.Page page = BaseController.Page.NONE;
+        HomePaneController controller = mock(HomePaneController.class);
+
+        doNothing().when(stageHandler).switchSceneModal(view, page);
+        when(stageHandler.getController()).thenReturn(controller);
+        when(stageHandler.getSecondaryStage()).thenReturn(primaryStage);
+        doNothing().when(primaryStage).close();
+
+        stageHandler.showModal(view, page);
+
+        verify(stageHandler).closeSecondary();
     }
 
     @Test
@@ -98,7 +201,7 @@ class StageHandlerTest {
     @Test
     void testLoadViewNodeHierarchy_EmptyProperties() {
         try {
-            stageHandler = new StageHandler(stage);
+            stageHandler = new StageHandler(primaryStage);
         } catch (IOException e) {
             fail("Failed to initialize test object");
         }
@@ -113,8 +216,12 @@ class StageHandlerTest {
     }
 
     @Test
+    @ClearSystemProperty(key = "keepPlatformOpen")
     void testLoadViewNodeHierarchy_EmptyView() {
         FXMLView view = FXMLView.TEST;
+
+        when(stageHandler.getSecondaryStage()).thenReturn(null);
+        doNothing().when(primaryStage).close();
 
         RuntimeException exception = assertThrows(
             RuntimeException.class, () -> stageHandler.loadViewNodeHierarchy(view)
@@ -123,14 +230,45 @@ class StageHandlerTest {
         String expected2 = "The resource bundle contains no values.";
         assertTrue(exception.getMessage().contains(expected));
         assertFalse(exception.getMessage().contains(expected2));
+        verify(stageHandler).closePrimary();
     }
-  
+
+    @Test
+    @ClearSystemProperty(key = "keepPlatformOpen")
+    void testLoadViewNodeHierarchy_LoadExceptionPrimary() throws IOException {
+        FXMLView view = FXMLView.TEST;
+        FXMLLoader loader = mock(FXMLLoader.class);
+
+        when(stageHandler.getLoader()).thenReturn(loader);
+        when(loader.load()).thenReturn(null);
+        when(stageHandler.getSecondaryStage()).thenReturn(null);
+        doNothing().when(primaryStage).close();
+
+        assertThrows(RuntimeException.class, () -> stageHandler.loadViewNodeHierarchy(view));
+
+         verify(stageHandler).closePrimary();
+    }
+
+    @Test
+    @ClearSystemProperty(key = "keepPlatformOpen")
+    void testLoadViewNodeHierarchy_LoadExceptionSecondary() throws IOException {
+        FXMLView view = FXMLView.TEST;
+        FXMLLoader loader = mock(FXMLLoader.class);
+
+        when(stageHandler.getLoader()).thenReturn(loader);
+        when(loader.load()).thenReturn(null);
+        when(stageHandler.getSecondaryStage()).thenReturn(primaryStage);
+        doNothing().when(primaryStage).close();
+
+        assertThrows(RuntimeException.class, () -> stageHandler.loadViewNodeHierarchy(view));
+
+        verify(stageHandler).closeSecondary();
+    }
+
     @ParameterizedTest
     @MethodSource("logAndThrowException_data")
     void testLogAndThrowException(String errorMsg, Exception exception, String expectedMsg) {
-        RuntimeException except = assertThrows(
-            RuntimeException.class, () -> stageHandler.logAndThrowException(errorMsg, exception)
-        );
+        RuntimeException except = stageHandler.logAndThrowException(errorMsg, exception);
         assertEquals(expectedMsg, except.getMessage());
     }
   

@@ -3,23 +3,52 @@ package com.marcsllite.util.handler;
 import com.marcsllite.PropHandlerTestObj;
 import com.marcsllite.util.OS;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.spy;
 
+@ExtendWith(MockitoExtension.class)
 class PropHandlerTest {
-    PropHandler handler = new PropHandlerTestObj();
-  
+    PropHandler handler;
+
+    @BeforeEach
+    public void setUp() {
+        handler = spy(new PropHandlerTestObj());
+    }
+
+    @Test
+    void testSetProp_Exception() {
+        String str = "str";
+        InputStream stream = new ByteArrayInputStream(str.getBytes());
+        NullPointerException ioe = new NullPointerException();
+        doThrow(ioe).when(handler).setProp(any(Properties.class));
+
+        InvalidParameterException ipe = assertThrows(
+            InvalidParameterException.class, () -> handler.setProp(stream)
+        );
+
+        assertTrue(ipe.getMessage().contains("Failed to set properties from stream"));
+    }
+
     @Test
     void testGetOs_NullOS() {
         handler.setOs(null);

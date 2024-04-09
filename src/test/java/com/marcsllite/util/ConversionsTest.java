@@ -1,5 +1,6 @@
 package com.marcsllite.util;
 
+import junit.framework.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.security.InvalidParameterException;
 
+import static junit.framework.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -36,6 +38,33 @@ class ConversionsTest {
         mockedConversions.close();
     }
 
+    @Test
+    void testToSIPrefix() {
+        String str = "";
+        Conversions.SIPrefix actual = Conversions.SIPrefix.toSIPrefix(str);
+        Assert.assertEquals(Conversions.SIPrefix.BASE, actual);
+
+        str = "m";
+        actual = Conversions.SIPrefix.toSIPrefix(str);
+        Assert.assertEquals(Conversions.SIPrefix.MILLI, actual);
+
+        str = "M";
+        actual = Conversions.SIPrefix.toSIPrefix(str);
+        Assert.assertEquals(Conversions.SIPrefix.MEGA, actual);
+
+        str = "Mega (M)";
+        actual = Conversions.SIPrefix.toSIPrefix(str);
+        Assert.assertEquals(Conversions.SIPrefix.MEGA, actual);
+
+        str = "mEGA (M)";
+        actual = Conversions.SIPrefix.toSIPrefix(str);
+        Assert.assertEquals(Conversions.SIPrefix.MEGA, actual);
+
+        str = "fake";
+        actual = Conversions.SIPrefix.toSIPrefix(str);
+        assertNull(actual);
+    }
+    
     @ParameterizedTest(name = "Convert 7.5 {0} to base = {1}")
     @MethodSource("convertToBaseException_data")
     void testConvertToBaseException(BigDecimal value, Conversions.SIPrefix prefix, String message) {
@@ -136,11 +165,29 @@ class ConversionsTest {
     }
 
     @Test
+    void testBqToCi_Null() {
+        InvalidParameterException ipe = assertThrows(
+            InvalidParameterException.class, () -> Conversions.bqToCi(null)
+        );
+
+        assertEquals("Invalid Value", ipe.getMessage());
+    }
+
+    @Test
     void testBqToCi() {
         BigDecimal expected = BigDecimal.valueOf(2.7).multiply(BigDecimal.TEN.pow(-11, mc), mc);
         BigDecimal actual = Conversions.bqToCi(BigDecimal.ONE);
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void testCiToBq_Null() {
+        InvalidParameterException ipe = assertThrows(
+            InvalidParameterException.class, () -> Conversions.ciToBq(null)
+        );
+
+        assertEquals("Invalid Value", ipe.getMessage());
     }
 
     @Test
@@ -152,11 +199,29 @@ class ConversionsTest {
     }
 
     @Test
+    void testGyToRad_Null() {
+        InvalidParameterException ipe = assertThrows(
+            InvalidParameterException.class, () -> Conversions.gyToRad(null)
+        );
+
+        assertEquals("Invalid Value", ipe.getMessage());
+    }
+
+    @Test
     void testGyToRad() {
         BigDecimal expected = BigDecimal.TEN.pow(2, mc);
         BigDecimal actual = Conversions.gyToRad(BigDecimal.ONE);
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void testRadToGy_Null() {
+        InvalidParameterException ipe = assertThrows(
+            InvalidParameterException.class, () -> Conversions.radToGy(null)
+        );
+
+        assertEquals("Invalid Value", ipe.getMessage());
     }
 
     @Test
@@ -168,11 +233,29 @@ class ConversionsTest {
     }
 
     @Test
+    void testSvToRem_Null() {
+        InvalidParameterException ipe = assertThrows(
+            InvalidParameterException.class, () -> Conversions.svToRem(null)
+        );
+
+        assertEquals("Invalid Value", ipe.getMessage());
+    }
+
+    @Test
     void testSvToRem() {
         BigDecimal expected = BigDecimal.TEN.pow(2, mc);
         BigDecimal actual = Conversions.svToRem(BigDecimal.ONE);
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void testRemToSv_Null() {
+        InvalidParameterException ipe = assertThrows(
+            InvalidParameterException.class, () -> Conversions.remToSv(null)
+        );
+
+        assertEquals("Invalid Value", ipe.getMessage());
     }
 
     @Test
@@ -184,11 +267,29 @@ class ConversionsTest {
     }
 
     @Test
+    void testCkgToR_Null() {
+        InvalidParameterException ipe = assertThrows(
+            InvalidParameterException.class, () -> Conversions.ckgToR(null)
+        );
+
+        assertEquals("Invalid Value", ipe.getMessage());
+    }
+
+    @Test
     void testCkgToR() {
         BigDecimal expected = BigDecimal.valueOf(3.88).multiply(BigDecimal.TEN.pow(3, mc), mc);
         BigDecimal actual = Conversions.ckgToR(BigDecimal.ONE);
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void testRToCkg_Null() {
+        InvalidParameterException ipe = assertThrows(
+            InvalidParameterException.class, () -> Conversions.rToCkg(null)
+        );
+
+        assertEquals("Invalid Value", ipe.getMessage());
     }
 
     @Test
