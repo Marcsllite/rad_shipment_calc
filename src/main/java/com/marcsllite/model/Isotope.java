@@ -563,7 +563,7 @@ public class Isotope {
     }
 
     public void setLifeSpan(LifeSpan lifeSpan) {
-        this.lifeSpan = lifeSpan;
+        this.lifeSpan = lifeSpan == null? LifeSpan.REGULAR : lifeSpan;
     }
 
     public LungAbsorption getLungAbsorption() {
@@ -571,7 +571,7 @@ public class Isotope {
     }
 
     public void setLungAbsorption(LungAbsorption lungAbsorption) {
-        this.lungAbsorption = lungAbsorption;
+        this.lungAbsorption = lungAbsorption == null? LungAbsorption.NONE : lungAbsorption;
     }
 
     @Override

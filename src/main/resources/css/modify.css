@@ -41,6 +41,10 @@ HBox, VBox { -fx-alignment: CENTER; }
     -fx-border-width: 1;
 }
 
+.txtFirstPageStatus {
+    -fx-fill: red;
+}
+
 .hBoxAdd, .hBoxMoreInfoBody {
     -fx-spacing: 10;
 }

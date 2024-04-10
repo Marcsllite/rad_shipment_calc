@@ -82,13 +82,14 @@ public class HomePaneController extends BaseController {
     }
 
     public boolean isIsoInTable(Isotope isotope) {
-        if(isotope == null || getSelectedIsotopes().isEmpty() ||
-            getSelectedIsotopes().get(0) == null) {
+        if(isotope == null || getShipment().getIsotopes().isEmpty()) {
             return false;
         }
         return getShipment().getIsotopes()
             .stream()
-            .anyMatch(i -> i.getAbbr().equals(getSelectedIsotopes().get(0).getAbbr()));
+            .anyMatch(i -> i.getAbbr().equals(isotope.getAbbr()) &&
+                i.getLifeSpan().equals(isotope.getLifeSpan()) &&
+                i.getLungAbsorption().equals(isotope.getLungAbsorption()));
     }
 
     public void updateIsotope(Isotope newV) {
@@ -161,7 +162,7 @@ public class HomePaneController extends BaseController {
      */
     @FXML protected void removeBtnHandler() {
         logr.debug("User clicked the Remove button on the home pane");
-        // TODO: implement clicking on remove button
+        getShipment().remove(tableViewHome.getSelectionModel().getSelectedItems());
     }
 
     /**
