@@ -82,7 +82,11 @@ public class HomePaneController extends BaseController {
     }
 
     public boolean isIsoInTable(Isotope isotope) {
-        if(isotope == null || getShipment().getIsotopes().isEmpty()) {
+        if(isotope == null ||
+            getShipment() == null ||
+            getShipment()
+                .getIsotopes()
+                .isEmpty()) {
             return false;
         }
         return getShipment().getIsotopes()
@@ -93,9 +97,17 @@ public class HomePaneController extends BaseController {
     }
 
     public void updateIsotope(Isotope newV) {
-        getShipment().getIsotopes().set(
-            tableViewHome.getSelectionModel().getSelectedIndex(), newV
-        );
+        if(newV != null) {
+            try {
+                if(tableViewHome.getSelectionModel().getSelectedItems().size() == 1) {
+                    getShipment().getIsotopes().set(
+                        tableViewHome.getSelectionModel().getSelectedIndex(), newV
+                    );
+                }
+            } catch (Exception ignored) {
+                // exception is ignored
+            }
+        }
     }
 
     public List<Isotope> getSelectedIsotopes() {

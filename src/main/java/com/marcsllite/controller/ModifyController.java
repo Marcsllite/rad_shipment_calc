@@ -4,7 +4,6 @@ import com.marcsllite.App;
 import com.marcsllite.model.Isotope;
 import com.marcsllite.model.Shipment;
 import com.marcsllite.model.db.IsotopeModel;
-import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.Conversions;
 import com.marcsllite.util.handler.PropHandler;
@@ -32,8 +31,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -52,12 +49,12 @@ public class ModifyController extends BaseController {
     @FXML private VBox vBoxMoreInfo;
     @FXML private HBox hBoxAddInfoTop;
     @FXML private VBox vBoxLifeSpan;
-    @FXML private RadioButton radioBtnShortLived;
     @FXML private ToggleGroup toggleGrpLifeSpan;
+    @FXML private RadioButton radioBtnShortLived;
     @FXML private RadioButton radioBtnLongLived;
     @FXML private VBox vBoxLungAbs;
-    @FXML private RadioButton radioBtnSlowLungAbs;
     @FXML private ToggleGroup toggleGrpLungAbs;
+    @FXML private RadioButton radioBtnSlowLungAbs;
     @FXML private RadioButton radioBtnMediumLungAbs;
     @FXML private RadioButton radioBtnFastLungAbs;
     @FXML private Separator separatorAddInfo;
@@ -81,6 +78,7 @@ public class ModifyController extends BaseController {
     Isotope editingIso;
     ObservableList<IsotopeModel> isotopes = getDbService().getAllIsotopeModels();
     FilteredList<IsotopeModel> searchFilteredIsos =  new FilteredList<>(isotopes, null);
+    FilteredList<IsotopeModel> filteredLifeSpanIsos = new FilteredList<>(isotopes, null);
     FilteredList<IsotopeModel> filteredLungAbsIsos = new FilteredList<>(isotopes, null);
 
     public ModifyController(BaseController.Page page) throws IOException {
@@ -90,6 +88,14 @@ public class ModifyController extends BaseController {
     public ModifyController(BaseController.Page page, PropHandler propHandler) throws IOException {
         super(propHandler);
         setPage(page);
+    }
+
+    public FilteredList<IsotopeModel> getFilteredLifeSpanIsos() {
+        return filteredLifeSpanIsos;
+    }
+
+    public FilteredList<IsotopeModel> getFilteredLungAbsIsos() {
+        return filteredLungAbsIsos;
     }
 
     public FilteredList<IsotopeModel> getSearchFilteredIsos() {
@@ -419,6 +425,7 @@ public class ModifyController extends BaseController {
     protected void nameListener(String newV) {
         if (newV == null || newV.isBlank()) {
             searchFilteredIsos.setPredicate(isotope -> false);
+            filteredLifeSpanIsos.setPredicate(isotope -> false);
             filteredLungAbsIsos.setPredicate(isotope -> false);
             setLifeSpanVisible(false);
             setLungAbsVisible(false);
@@ -426,10 +433,11 @@ public class ModifyController extends BaseController {
             setDuplicateIso(false);
         } else {
             searchFilteredIsos.setPredicate(validIsoFilteringPredicate(newV));
+            filteredLifeSpanIsos.setPredicate(lifeSpanFilteringPredicate(newV));
             filteredLungAbsIsos.setPredicate(lungAbsFilteringPredicate(newV));
             Isotope iso = buildEditedIso();
-            setLifeSpanVisible(isLifeSpanIso(newV));
-            setLungAbsVisible(!isLifeSpanIso(newV) && !filteredLungAbsIsos.isEmpty());
+            setLifeSpanVisible(!filteredLifeSpanIsos.isEmpty());
+            setLungAbsVisible(!vBoxLifeSpan.isVisible() && !filteredLungAbsIsos.isEmpty());
             String a0 = txtFieldA0.getText();
             btnNext.setDisable(iso == null ||
                 a0 == null || a0.isBlank() || isAddInfoNotProvided() || isIsoInTable(iso));
@@ -486,6 +494,13 @@ public class ModifyController extends BaseController {
         return isotope -> isValidIso(isotope, str);
     }
 
+    protected Predicate<IsotopeModel> lifeSpanFilteringPredicate(String str) {
+        if (str == null || str.isBlank()) {
+            return null;
+        }
+        return isotope -> isLifeSpanIso(isotope, str);
+    }
+
     protected Predicate<IsotopeModel> lungAbsFilteringPredicate(String str) {
         if (str == null || str.isBlank()) {
             return null;
@@ -497,7 +512,6 @@ public class ModifyController extends BaseController {
         if(isotope == null || str == null || str.isBlank()) {
             return false;
         }
-
 
         String abbr = isotope.getIsotopeId().getAbbr();
         String name = isotope.getIsotopeId().getName();
@@ -520,20 +534,19 @@ public class ModifyController extends BaseController {
         return (name.contains(searchStr) || abbr.contains(searchStr)) && matchAbbr.find();
     }
 
-    protected boolean isLifeSpanIso(String str) {
-        List<IsotopeModelId> lifeSpanIsoModels = new ArrayList<>(2);
-        lifeSpanIsoModels.add(new IsotopeModelId("Europium-150","Eu-150"));
-        lifeSpanIsoModels.add(new IsotopeModelId("Neptunium-236", "Np-236"));
-
+    protected boolean isLifeSpanIso(IsotopeModel isotope, String str) {
         if (str == null || str.isBlank()) {
             return false;
         }
 
         String searchStr = str.toLowerCase();
 
-        return lifeSpanIsoModels.stream().anyMatch(modelId ->
-            modelId.getAbbr().toLowerCase().contains(searchStr) ||
-                modelId.getName().toLowerCase().contains(searchStr));
+        String abbr = isotope.getIsotopeId().getAbbr().toLowerCase();
+        String name = isotope.getIsotopeId().getName().toLowerCase();
+        Pattern pattern = Pattern.compile("\\)$");
+        Matcher matchAbbr = pattern.matcher(abbr);
+
+        return (name.contains(searchStr) || abbr.contains(searchStr)) && matchAbbr.find();
     }
 
     protected Isotope buildIsoFromFirstPage() {

@@ -612,6 +612,8 @@ public class Isotope {
             "\nMass: " + getStrMass() +
             "\nInitial Activity: " + getStrInitActivity() +
             "\nNature: " + getNature() +
+            "\nLifeSpan: " + getLifeSpan() +
+            "\nLung Absorption: " + getLungAbsorption() +
             "\n" + getLimitsId() +
             "\n" + getConstants() + "\n}";
     }

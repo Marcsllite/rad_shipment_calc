@@ -14,6 +14,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.api.FxAssert;
 import org.testfx.framework.junit5.Start;
@@ -30,7 +31,6 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
 
 class ReferencePaneControllerGUITest extends GUITest {
     ReferencePaneController controller;
@@ -83,6 +83,11 @@ class ReferencePaneControllerGUITest extends GUITest {
         txtFieldReportQuan = GUITest.getNode(FXIds.TXT_FIELD_REPORTABLE_QUANTITY);
         comboBoxRefReportQuanPrefix = GUITest.getNode(FXIds.COMBO_BOX_REF_REPORT_QUAN_PREFIX);
         choiceBoxRefReportQuanRadUnit = GUITest.getNode(FXIds.CHOICE_BOX_REF_REPORT_QUAN_RAD_UNIT);
+    }
+
+    @BeforeEach
+    public void setUp() {
+        clearSelection(tableViewSearch);
     }
 
     @Test
@@ -151,17 +156,22 @@ class ReferencePaneControllerGUITest extends GUITest {
         validateRefTextFields(txtFieldReportQuan, "Reportable Quantity");
 
         ObservableList<Isotope> tableItems = tableViewSearch.getItems();
-        assertEquals(2, tableItems.size());
+        assertEquals(4, tableItems.size());
 
-        selectRow(0);
-        validateSelectedRow(0);
+        selectRow(tableViewSearch, 0);
+        validateRefDataForSelectedRow(0);
 
-        selectRow(1);
-        validateSelectedRow(1);
-        clearSelection();
+        selectRow(tableViewSearch, 1);
+        validateRefDataForSelectedRow(1);
+
+        selectRow(tableViewSearch, 2);
+        validateRefDataForSelectedRow(2);
+
+        selectRow(tableViewSearch, 3);
+        validateRefDataForSelectedRow(3);
     }
 
-    protected void validateSelectedRow(int index) {
+    protected void validateRefDataForSelectedRow(int index) {
         IsotopeConstants isoConstants = tableViewSearch.getItems().get(index).getConstants();
 
         assertEquals(String.valueOf(isoConstants.getA1()), txtFieldA1.getText());
@@ -181,7 +191,7 @@ class ReferencePaneControllerGUITest extends GUITest {
 
     @Test
     void testRadUnitListener() {
-        selectRow(0);
+        selectRow(tableViewSearch, 0);
 
         IsotopeConstants isoConstants = tableViewSearch.getItems().get(0).getConstants();
 
@@ -190,7 +200,7 @@ class ReferencePaneControllerGUITest extends GUITest {
         verifyRadUnitConversions(choiceBoxRefExemptConRadUnit, txtFieldExemptCon, isoConstants.getExemptConcentration());
         verifyRadUnitConversions(choiceBoxRefExemptLimRadUnit, txtFieldExemptLim, isoConstants.getExemptLimit());
         verifyRadUnitConversions(choiceBoxRefReportQuanRadUnit, txtFieldReportQuan, isoConstants.getTeraBqReportQuan());
-        interact(this::clearSelection);
+        interact(() -> clearSelection(tableViewSearch));
     }
 
     protected void verifyRadUnitConversions(ChoiceBox<String> choiceBox, TextField field, float original) {
@@ -208,7 +218,7 @@ class ReferencePaneControllerGUITest extends GUITest {
 
     @Test
     void testPrefixListener() {
-        selectRow(0);
+        selectRow(tableViewSearch, 0);
 
         IsotopeConstants isoConstants = tableViewSearch.getItems().get(0).getConstants();
 
@@ -217,8 +227,6 @@ class ReferencePaneControllerGUITest extends GUITest {
         verifyPrefixConversions(comboBoxRefExemptConPrefix, txtFieldExemptCon, Conversions.SIPrefix.BASE, isoConstants.getExemptConcentration());
         verifyPrefixConversions(comboBoxRefExemptLimPrefix, txtFieldExemptLim, Conversions.SIPrefix.BASE, isoConstants.getExemptLimit());
         verifyPrefixConversions(comboBoxRefReportQuanPrefix, txtFieldReportQuan, Conversions.SIPrefix.TERA, isoConstants.getTeraBqReportQuan());
-
-        clearSelection();
     }
 
     protected void verifyPrefixConversions(ComboBox<String> comboBox, TextField field, Conversions.SIPrefix start, float original) {
@@ -241,7 +249,7 @@ class ReferencePaneControllerGUITest extends GUITest {
 
     @Test
     void testUnselectRowOnSearch() {
-        selectRow(0);
+        selectRow(tableViewSearch, 0);
 
         interact(() ->txtFieldSearch.setText(null));
         assertNotNull(tableViewSearch.getSelectionModel().getSelectedItem());
@@ -259,27 +267,13 @@ class ReferencePaneControllerGUITest extends GUITest {
         assertNull(tableViewSearch.getSelectionModel().getSelectedItem());
     }
 
-    protected void selectRow(int index) {
-        if(tableViewSearch.getItems().isEmpty()) {
-            fail("Table has no items to select from");
-        }
-
-        interact(() ->tableViewSearch.getSelectionModel().select(index));
-        assertNotNull(tableViewSearch.getSelectionModel().getSelectedItem());
-    }
-
-    protected void clearSelection() {
-        interact(() -> tableViewSearch.getSelectionModel().clearSelection());
-        assertNull(tableViewSearch.getSelectionModel().getSelectedItem());
-    }
-
     @Test
     void testSearchFiltering() {
         interact(() -> txtFieldSearch.setText(null));
-        assertEquals(2, tableViewSearch.getItems().size());
+        assertEquals(4, tableViewSearch.getItems().size());
 
         interact(() -> txtFieldSearch.setText(""));
-        assertEquals(2, tableViewSearch.getItems().size());
+        assertEquals(4, tableViewSearch.getItems().size());
 
         interact(() -> txtFieldSearch.setText("A"));
         assertEquals(2, tableViewSearch.getItems().size());

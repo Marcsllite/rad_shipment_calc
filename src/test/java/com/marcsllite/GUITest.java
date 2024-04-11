@@ -1,6 +1,7 @@
 package com.marcsllite;
 
 import com.marcsllite.controller.BaseController;
+import com.marcsllite.model.Isotope;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.FXMLView;
@@ -8,6 +9,7 @@ import com.marcsllite.util.handler.FolderHandler;
 import com.marcsllite.util.handler.StageHandler;
 import javafx.application.Platform;
 import javafx.scene.Node;
+import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
@@ -28,6 +30,9 @@ import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -126,6 +131,20 @@ public abstract class GUITest extends FxRobot {
      */
     protected Object getController(){
         return getStageHandler().getController();
+    }
+
+    protected void selectRow(TableView<Isotope> table, int index) {
+        if(table.getItems().isEmpty()) {
+            fail("Table has no items to select from");
+        }
+
+        interact(() ->table.getSelectionModel().select(index));
+        assertNotNull(table.getSelectionModel().getSelectedItem());
+    }
+
+    protected void clearSelection(TableView<Isotope> table) {
+        interact(() -> table.getSelectionModel().clearSelection());
+        assertNull(table.getSelectionModel().getSelectedItem());
     }
 
     /**

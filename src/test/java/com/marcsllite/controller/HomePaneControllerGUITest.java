@@ -3,12 +3,16 @@ package com.marcsllite.controller;
 import com.marcsllite.FXIds;
 import com.marcsllite.GUITest;
 import com.marcsllite.model.Isotope;
+import com.marcsllite.model.Shipment;
+import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.util.FXMLView;
+import javafx.collections.FXCollections;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
 import org.testfx.api.FxAssert;
@@ -20,6 +24,8 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 
 class HomePaneControllerGUITest extends GUITest {
@@ -32,6 +38,7 @@ class HomePaneControllerGUITest extends GUITest {
     TableView<Isotope> tableViewHome;
     Button btnCalculate;
     StackPane stackPaneModify;
+    Shipment shipment;
 
     public HomePaneControllerGUITest() {
         super(FXMLView.HOME, BaseController.Page.HOME);
@@ -41,12 +48,19 @@ class HomePaneControllerGUITest extends GUITest {
     public void start(Stage stage) throws IOException, TimeoutException {
         super.start(stage);
         controller = (HomePaneController) getController();
+        shipment = controller.getShipment();
         gridPaneHome = GUITest.getNode(FXIds.GRID_PANE_HOME);
         btnAdd = GUITest.getNode(FXIds.BTN_ADD);
         btnEdit = GUITest.getNode(FXIds.BTN_EDIT);
         btnRemove = GUITest.getNode(FXIds.BTN_REMOVE);
         tableViewHome = GUITest.getNode(FXIds.TABLE_VIEW_HOME);
         btnCalculate = GUITest.getNode(FXIds.BTN_CALCULATE);
+    }
+
+    @BeforeEach
+    public void setUp() {
+        clearSelection(tableViewHome);
+        shipment.setIsotopes(null);
     }
 
     @Test
@@ -56,6 +70,7 @@ class HomePaneControllerGUITest extends GUITest {
         FxAssert.verifyThat(btnEdit, NodeMatchers.isDisabled());
         FxAssert.verifyThat(btnRemove, NodeMatchers.isDisabled());
         FxAssert.verifyThat(btnCalculate, NodeMatchers.isDisabled());
+        assertTrue(tableViewHome.getItems().isEmpty());
     }
 
     @Test
@@ -70,7 +85,9 @@ class HomePaneControllerGUITest extends GUITest {
     }
 
     @Test
-    void testHomePaneHandler_btnAdd() {
+    void testAddBtnHandler_ShowHide() {
+        assertFalse(btnAdd.isDisabled());
+
         clickOn(btnAdd);
         stackPaneModify = GUITest.getNode(FXIds.STACK_PANE_MODIFY);
         FxAssert.verifyThat(window(stackPaneModify), WindowMatchers.isShowing());
@@ -81,5 +98,57 @@ class HomePaneControllerGUITest extends GUITest {
         interact(() -> window(stackPaneModify).hide());
         FxAssert.verifyThat(window(gridPaneHome), WindowMatchers.isShowing());
         FxAssert.verifyThat(window(stackPaneModify), WindowMatchers.isNotShowing());
+    }
+
+    @Test
+    void testEditBtnHandler_ShowHide() {
+        assertTrue(btnEdit.isDisabled());
+
+        addIsoToTable();
+        selectRow(tableViewHome, 0);
+        assertFalse(btnEdit.isDisabled());
+
+        clickOn(btnEdit);
+        stackPaneModify = GUITest.getNode(FXIds.STACK_PANE_MODIFY);
+        FxAssert.verifyThat(window(stackPaneModify), WindowMatchers.isShowing());
+        assertTrue(getController() instanceof ModifyController);
+        ModifyController c = (ModifyController) getController();
+        assertEquals(BaseController.Page.EDIT, c.getPage());
+
+        interact(() -> window(stackPaneModify).hide());
+        FxAssert.verifyThat(window(gridPaneHome), WindowMatchers.isShowing());
+        FxAssert.verifyThat(window(stackPaneModify), WindowMatchers.isNotShowing());
+    }
+
+    protected void addIsoToTable() {
+        Isotope iso = new Isotope(new IsotopeModelId());
+        shipment.setIsotopes(FXCollections.observableArrayList(iso));
+        assertFalse(shipment.getIsotopes().isEmpty());
+        assertEquals(shipment.getIsotopes().get(0), tableViewHome.getItems().get(0));
+    }
+
+    @Test
+    void testRemoveBtnHandler() {
+        assertTrue(btnRemove.isDisabled());
+
+        addIsoToTable();
+        selectRow(tableViewHome, 0);
+        assertFalse(btnRemove.isDisabled());
+
+        clickOn(btnRemove);
+        assertTrue(tableViewHome.getItems().isEmpty());
+    }
+
+    @Test
+    void testCalculateBtnHandler() {
+        assertTrue(btnCalculate.isDisabled());
+
+        addIsoToTable();
+        assertFalse(btnCalculate.isDisabled());
+        selectRow(tableViewHome, 0);
+
+        clickOn(btnCalculate);
+
+        assertNull(tableViewHome.getSelectionModel().getSelectedItem());
     }
 }
