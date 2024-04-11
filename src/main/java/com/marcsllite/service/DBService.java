@@ -7,7 +7,11 @@ import com.marcsllite.model.Shipment;
 import com.marcsllite.model.db.IsotopeModel;
 import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
+import com.marcsllite.model.db.ValidNuclideModelId;
+import com.marcsllite.model.db.ValidNuclideModel;
 import javafx.collections.ObservableList;
+
+import java.util.List;
 
 public interface DBService {
     int validateDb();
@@ -35,6 +39,14 @@ public interface DBService {
     String getIsotopeName(IsotopeModelId modelId);
 
     String getIsotopeAbbr(IsotopeModelId modelId);
+
+    List<ValidNuclideModel> getAllValidIsotopes();
+
+    ValidNuclideModel getValidIsotope(ValidNuclideModelId isoId);
+
+    String getValidIsotopeNameNotation(ValidNuclideModelId isoId);
+
+    String getValidIsotopeAbbrNotation(ValidNuclideModelId isoId);
 
     Limits getLimits(LimitsModelId modelId);
 

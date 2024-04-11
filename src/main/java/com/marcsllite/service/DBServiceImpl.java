@@ -10,6 +10,7 @@ import com.marcsllite.dao.IsotopeDaoImpl;
 import com.marcsllite.dao.LimitsDaoImpl;
 import com.marcsllite.dao.ReportableQuantityDaoImpl;
 import com.marcsllite.dao.ShipmentDaoImpl;
+import com.marcsllite.dao.ValidNuclideDaoImpl;
 import com.marcsllite.model.Isotope;
 import com.marcsllite.model.Limits;
 import com.marcsllite.model.ReportableQuantity;
@@ -19,6 +20,8 @@ import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModel;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.model.db.ReportableQuantityModel;
+import com.marcsllite.model.db.ValidNuclideModelId;
+import com.marcsllite.model.db.ValidNuclideModel;
 import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.collections.FXCollections;
@@ -27,6 +30,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class DBServiceImpl implements DBService {
@@ -43,6 +47,7 @@ public class DBServiceImpl implements DBService {
     private final LimitsDaoImpl limitsDao;
     private final ReportableQuantityDaoImpl reportableQuanDao;
     private final ShipmentDaoImpl shipmentDao;
+    private final ValidNuclideDaoImpl validIsotopeDao;
 
     public DBServiceImpl() {
         this(null);
@@ -65,6 +70,7 @@ public class DBServiceImpl implements DBService {
         limitsDao = new LimitsDaoImpl();
         reportableQuanDao = new ReportableQuantityDaoImpl();
         shipmentDao = new ShipmentDaoImpl();
+        validIsotopeDao = new ValidNuclideDaoImpl();
     }
 
     public int validateDb() {
@@ -117,6 +123,10 @@ public class DBServiceImpl implements DBService {
 
     public ShipmentDaoImpl getShipmentDao() {
         return shipmentDao;
+    }
+
+    public ValidNuclideDaoImpl getValidIsotopeDao() {
+        return validIsotopeDao;
     }
 
     @Override
@@ -206,6 +216,26 @@ public class DBServiceImpl implements DBService {
     @Override
     public String getIsotopeAbbr(IsotopeModelId modelId) {
         return getIsotopeDao().getIsotopeAbbr(modelId);
+    }
+
+    @Override
+    public List<ValidNuclideModel> getAllValidIsotopes() {
+        return getValidIsotopeDao().getAllValidIsotopes();
+    }
+
+    @Override
+    public ValidNuclideModel getValidIsotope(ValidNuclideModelId isoId) {
+        return getValidIsotopeDao().getValidIsotope(isoId);
+    }
+
+    @Override
+    public String getValidIsotopeNameNotation(ValidNuclideModelId isoId) {
+        return getValidIsotopeDao().getValidIsotopeNameNotation(isoId);
+    }
+
+    @Override
+    public String getValidIsotopeAbbrNotation(ValidNuclideModelId isoId) {
+        return getValidIsotopeDao().getValidIsotopeAbbrNotation(isoId);
     }
 
     @Override

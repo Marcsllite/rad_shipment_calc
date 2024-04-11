@@ -12,6 +12,8 @@ create table if not exists HALF_LIFE (Abbr char(15) not null, Val real, version 
 
 create table if not exists ISOTOPES (Name varchar(255) not null, Abbr char(15) not null, version bigint default 0, primary key (Name, Abbr)) as select * from csvread('classpath:csv/ValidIsotopes.csv');
 
+create table if not exists VALID_NUCLIDE (Name varchar(255) not null, Symbol char(2) not null, Mass_Number char(15) not null, version bigint default 0, primary key (Symbol, Mass_Number)) as select * from csvread('classpath:csv/AllValidIsotopes.csv');
+
 create table if not exists LIMITS (State char(6) not null, Form char(7) not null, IA_Limited real, IA_Package real, Limited real, version bigint default 0, primary key (State, Form)) as select * from csvread('classpath:csv/Limits.csv');
 
 create table if not exists REPORTABLE_QUANTITY (Abbr char(15) not null, Ci real, TBq real, version bigint default 0, primary key (Abbr)) as select * from csvread('classpath:csv/Reportable_Quantities.csv');

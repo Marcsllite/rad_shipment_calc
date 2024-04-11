@@ -20,6 +20,7 @@
         <class>com.marcsllite.model.db.LimitsModel</class>
         <class>com.marcsllite.model.db.ReportableQuantityModel</class>
         <class>com.marcsllite.model.db.ShipmentsModel</class>
+        <class>com.marcsllite.model.db.ValidNuclideModel</class>
 
         <properties>
             <!-- Database connection settings -->

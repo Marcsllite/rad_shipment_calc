@@ -13,6 +13,8 @@ create table if not exists HALF_LIFE (Abbr char(15) not null, Val real, version 
 
 create table if not exists ISOTOPES (Name varchar(255) not null, Abbr char(15) not null, version bigint default 0, primary key (Name, Abbr));
 
+create table if not exists VALID_NUCLIDE (Name varchar(255) not null, Symbol char(2) not null, Mass_Number char(15) not null, version bigint default 0, primary key (Symbol, Mass_Number)) as select * from csvread('classpath:csv/AllValidIsotopes.csv');
+
 create table if not exists LIMITS (State char(6) not null, Form char(7) not null, IA_Limited real, IA_Package real, Limited real, version bigint default 0, primary key (State, Form));
 
 create table if not exists REPORTABLE_QUANTITY (Abbr char(15) not null, Ci real, TBq real, version bigint default 0, primary key (Abbr));
@@ -41,3 +43,21 @@ insert into EXEMPT_CONCENTRATION(Abbr, Val, version) values('Anny', 2.0, -1);
 insert into EXEMPT_LIMIT(Abbr, Val, version) values('Anny', 2.0, -1);
 insert into HALF_LIFE(Abbr, Val, version) values('Anny', 2.0, -1);
 insert into REPORTABLE_QUANTITY(Abbr, Ci, TBq, version) values('Anny', 2, 0.074, -1);
+
+insert into ISOTOPES(Name, Abbr, version) values('Bofuri', 'Bfi(short)', -1);
+insert into A_ONE(Abbr, Val, version) values('Bfi(short)', 3.0, -1);
+insert into A_TWO(Abbr, Val, version) values('Bfi(short)', 3.0, -1);
+insert into DECAY_CONSTANT(Abbr, Val, version) values('Bfi(short)', 3.0, -1);
+insert into EXEMPT_CONCENTRATION(Abbr, Val, version) values('Bfi(short)', 3.0, -1);
+insert into EXEMPT_LIMIT(Abbr, Val, version) values('Bfi(short)', 3.0, -1);
+insert into HALF_LIFE(Abbr, Val, version) values('Bfi(short)', 3.0, -1);
+insert into REPORTABLE_QUANTITY(Abbr, Ci, TBq, version) values('Bfi(short)', 3, 0.074, -1);
+
+insert into ISOTOPES(Name, Abbr, version) values('Best', 'Bstf', -1);
+insert into A_ONE(Abbr, Val, version) values('Bstf', 4.0, -1);
+insert into A_TWO(Abbr, Val, version) values('Bstf', 4.0, -1);
+insert into DECAY_CONSTANT(Abbr, Val, version) values('Bstf', 4.0, -1);
+insert into EXEMPT_CONCENTRATION(Abbr, Val, version) values('Bstf', 4.0, -1);
+insert into EXEMPT_LIMIT(Abbr, Val, version) values('Bstf', 4.0, -1);
+insert into HALF_LIFE(Abbr, Val, version) values('Bstf', 4.0, -1);
+insert into REPORTABLE_QUANTITY(Abbr, Ci, TBq, version) values('Bstf', 4, 0.074, -1);
