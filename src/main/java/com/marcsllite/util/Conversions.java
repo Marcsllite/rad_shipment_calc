@@ -10,74 +10,6 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public final class Conversions {
-    /* source: REMM(Radiation Emergency Medical Management)
-     * https://www.remm.nlm.gov/radmeasurement.htm
-     * #################|           SI Units            |      Common Units     |
-     * Radioactive      |   becquerel           (Bq)    |   curie       (Ci)    |
-     * Absorbed Dose    |   gray                (Gy)    |   rad                 |
-     * Dose Equivalent  |   sievert             (Sv)    |   rem                 |
-     * Exposure         |   coulomb/kilogram    (C/kg)  |   roentgen    (R)     |
-     * ##########################################################################
-     *
-     * NOTE: Accuracy is set by context
-     */
-    public enum SIPrefix {
-        YOTTA("Yotta (Y)"),
-        ZETTA("Zetta (Z)"),
-        EXA("Exa (E)"),
-        PETA("Peta (P)"),
-        TERA("Tera (T)"),
-        GIGA("Giga (G)"),
-        MEGA("Mega (M)"),
-        KILO("Kilo (k)"),
-        HECTO("Hecto (h)"),
-        DEKA("Deka (da)"),
-        BASE("----"),
-        DECI("Deci (d)"),
-        CENTI("Centi (c)"),
-        MILLI("Milli (m)"),
-        MICRO("Micro (\u00B5)"),
-        NANO("Nano (n)"),
-        PICO("Pico (p)"),
-        FEMTO("Femto (f)"),
-        ATTO("Atto (a)"),
-        ZEPTO("Zepto (z)"),
-        YOCTO("Yocto (y)");
-
-        private final String val;
-
-        SIPrefix(String val) {
-            this.val = val;
-        }
-
-        public String getVal() {
-            return val;
-        }
-
-        public String getAbbrVal() {
-            return val.equals("----")? "" :
-                val.replaceAll("^.*\\(", "")
-                .replaceAll("\\)$", "");
-        }
-
-        public static SIPrefix toSIPrefix(String value) {
-            for (SIPrefix enumValue : values()) {
-                if (enumValue.getVal().equalsIgnoreCase(value) ||
-                    enumValue.getAbbrVal().equals(value)) {
-                    return enumValue;
-                }
-            }
-            return null;
-        }
-        
-        public static ObservableList<String> getFxValues() {
-            return Arrays.stream(SIPrefix.values())
-                .map(SIPrefix::getVal)
-                .collect(Collectors.toCollection(FXCollections::observableArrayList));
-        }
-    }
-    
-    // Declaring variables
     public static final MathContext context = new MathContext(2);
     private static final BigDecimal YOTTA = BigDecimal.TEN.pow(24, context);   // Y
     private static final BigDecimal ZETTA = BigDecimal.TEN.pow(21, context);   // Z
@@ -266,5 +198,246 @@ public final class Conversions {
     public static BigDecimal rToCkg(BigDecimal r) throws InvalidParameterException {
         if(r == null) throw new InvalidParameterException(INVALID_VALUE);
         return r.multiply(BigDecimal.valueOf(2.58d).multiply(BigDecimal.TEN.pow(-4, context), context), context);
+    }
+
+    public enum MassUnit {
+        GRAMS("grams (g)"),
+        LITERS("liters (l)");
+
+        private final String val;
+
+        MassUnit(String val) {
+            this.val = val;
+        }
+
+        public String getVal() {
+            return val;
+        }
+
+        public String getAbbrVal() {
+            return val.replaceAll("^.*\\(", "")
+                    .replaceAll("\\)$", "");
+        }
+
+        public static MassUnit toMass(String value) {
+            for (MassUnit enumValue : values()) {
+                if (enumValue.getVal().equalsIgnoreCase(value) ||
+                    enumValue.getAbbrVal().equalsIgnoreCase(value)) {
+                    return enumValue;
+                }
+            }
+            return null;
+        }
+
+        public static ObservableList<String> getFxValues() {
+            return Arrays.stream(MassUnit.values())
+                .map(MassUnit::getVal)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        @Override
+        public String toString() {
+            return getVal();
+        }
+    }
+
+    /* REMM(Radiation Emergency Medical Management)
+     * source: https://www.remm.hhs.gov/radmeasurement.htm
+     * #################|           SI Units            |             Common Units            |
+     * Absorbed Dose    |   gray                (Gy)    |   radiation absorbed dose     (rad) |
+     * Dose Equivalent  |   sievert             (Sv)    |   roentgen equivalent, man    (rem) |
+     */
+    public enum DoseUnit {
+        GRAY("gray (gy)"),
+        RAD("sievert (Sv)"),
+        SIEVERT("radiation absorbed dose (rad)"),
+        REM("roentgen equivalent, man (rem)");
+
+        private final String val;
+
+        DoseUnit(String val) {
+            this.val = val;
+        }
+
+        public String getVal() {
+            return val;
+        }
+
+        public String getAbbrVal() {
+            return val.replaceAll("^.*\\(", "")
+                    .replaceAll("\\)$", "");
+        }
+
+        public static DoseUnit toDoseUnit(String value) {
+            for (DoseUnit enumValue : values()) {
+                if (enumValue.getVal().equalsIgnoreCase(value) ||
+                    enumValue.getAbbrVal().equals(value)) {
+                    return enumValue;
+                }
+            }
+            return null;
+        }
+
+        public static ObservableList<String> getFxValues() {
+            return Arrays.stream(DoseUnit.values())
+                .map(DoseUnit::getVal)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        @Override
+        public String toString() {
+            return getVal();
+        }
+    }
+
+    /*
+     * REMM(Radiation Emergency Medical Management)
+     * source: https://www.remm.hhs.gov/radmeasurement.htm
+     * #########|           SI Unit            |      Common Unit     |
+     * Exposure |   coulomb/kilogram    (C/kg) |   roentgen      (R)  |
+     */
+    public enum ExposureUnit {
+        COULOMB_KILOGRAM("coulomb/kilogram (C/kg)"),
+        ROENTGEN("roentgen (R)");
+
+        private final String val;
+
+        ExposureUnit(String val) {
+            this.val = val;
+        }
+
+        public String getVal() {
+            return val;
+        }
+
+        public String getAbbrVal() {
+            return val.replaceAll("^.*\\(", "")
+                .replaceAll("\\)$", "");
+        }
+
+        public static ExposureUnit toExposureUnit(String value) {
+            for (ExposureUnit enumValue : values()) {
+                if (enumValue.getVal().equalsIgnoreCase(value) ||
+                    enumValue.getAbbrVal().equals(value)) {
+                    return enumValue;
+                }
+            }
+            return null;
+        }
+
+        public static ObservableList<String> getFxValues() {
+            return Arrays.stream(DoseUnit.values())
+                .map(DoseUnit::getVal)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        @Override
+        public String toString() {
+            return getVal();
+        }
+    }
+
+    /*
+     * REMM(Radiation Emergency Medical Management)
+     * source: https://remm.hhs.gov/radmeasurement.htm
+     * ############|           SI Unit          |    Common Unit     |
+     * Radioactive |   becquerel           (Bq) |   curie       (Ci) |
+     */
+    public enum RadUnit {
+        BECQUEREL("Becquerel (Bq)"),
+        CURIE("Curie (Ci)");
+
+        private final String val;
+
+        RadUnit(String val) {
+            this.val = val;
+        }
+
+        public String getVal() {
+            return val;
+        }
+
+        public String getAbbrVal() {
+            return val.equals("----")? "" :
+                val.replaceAll("^.*\\(", "")
+                    .replaceAll("\\)$", "");
+        }
+
+        public static RadUnit toRadUnit(String value) {
+            for (RadUnit enumValue : values()) {
+                if (enumValue.getVal().equalsIgnoreCase(value) ||
+                    enumValue.getAbbrVal().equals(value)) {
+                    return enumValue;
+                }
+            }
+            return null;
+        }
+
+        public static ObservableList<String> getFxValues() {
+            return Arrays.stream(RadUnit.values())
+                .map(RadUnit::getVal)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        @Override
+        public String toString() {
+            return getVal();
+        }
+    }
+
+    public enum SIPrefix {
+        YOTTA("Yotta (Y)"),
+        ZETTA("Zetta (Z)"),
+        EXA("Exa (E)"),
+        PETA("Peta (P)"),
+        TERA("Tera (T)"),
+        GIGA("Giga (G)"),
+        MEGA("Mega (M)"),
+        KILO("Kilo (k)"),
+        HECTO("Hecto (h)"),
+        DEKA("Deka (da)"),
+        BASE("----"),
+        DECI("Deci (d)"),
+        CENTI("Centi (c)"),
+        MILLI("Milli (m)"),
+        MICRO("Micro (\u00B5)"),
+        NANO("Nano (n)"),
+        PICO("Pico (p)"),
+        FEMTO("Femto (f)"),
+        ATTO("Atto (a)"),
+        ZEPTO("Zepto (z)"),
+        YOCTO("Yocto (y)");
+
+        private final String val;
+
+        SIPrefix(String val) {
+            this.val = val;
+        }
+
+        public String getVal() {
+            return val;
+        }
+
+        public String getAbbrVal() {
+            return val.equals("----")? "" :
+                val.replaceAll("^.*\\(", "")
+                    .replaceAll("\\)$", "");
+        }
+
+        public static SIPrefix toSIPrefix(String value) {
+            for (SIPrefix enumValue : values()) {
+                if (enumValue.getVal().equalsIgnoreCase(value) ||
+                    enumValue.getAbbrVal().equals(value)) {
+                    return enumValue;
+                }
+            }
+            return null;
+        }
+
+        public static ObservableList<String> getFxValues() {
+            return Arrays.stream(SIPrefix.values())
+                .map(SIPrefix::getVal)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
     }
 }

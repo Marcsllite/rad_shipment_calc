@@ -1,6 +1,7 @@
 package com.marcsllite.model;
 
 import com.marcsllite.model.db.LimitsModelId;
+import com.marcsllite.util.Conversions;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.collections.ObservableList;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +33,7 @@ class ShipmentTest {
         assertEquals(-1L, shipment.getId());
         assertNotNull(shipment.getRefDate());
         assertEquals(-1F, shipment.getMass());
-        assertEquals(Isotope.MassUnit.GRAMS, shipment.getMassUnit());
+        assertEquals(Conversions.MassUnit.GRAMS, shipment.getMassUnit());
         assertEquals(Isotope.Nature.REGULAR, shipment.getNature());
         assertEquals(LimitsModelId.State.SOLID, shipment.getState());
         assertEquals(LimitsModelId.Form.NORMAL, shipment.getForm());
@@ -70,12 +71,12 @@ class ShipmentTest {
     @Test
     void testSetMassUnit_Null() {
         shipment.setMassUnit(null);
-        assertEquals(Isotope.MassUnit.GRAMS, shipment.getMassUnit());
+        assertEquals(Conversions.MassUnit.GRAMS, shipment.getMassUnit());
     }
 
     @Test
     void testSetMassUnit() {
-        Isotope.MassUnit exp = Isotope.MassUnit.LITERS;
+        Conversions.MassUnit exp = Conversions.MassUnit.LITERS;
         shipment.setMassUnit(exp);
         assertEquals(exp, shipment.getMassUnit());
     }
@@ -167,7 +168,7 @@ class ShipmentTest {
         assertNotEquals(shipmentA, shipmentB);
         assertNotEquals(shipmentA.hashCode(), shipmentB.hashCode());
 
-        shipmentA.setMassUnit(Isotope.MassUnit.LITERS);
+        shipmentA.setMassUnit(Conversions.MassUnit.LITERS);
         assertNotEquals(shipmentA, shipmentB);
         assertNotEquals(shipmentA.hashCode(), shipmentB.hashCode());
 

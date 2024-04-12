@@ -38,7 +38,7 @@ public class ShipmentsModel extends BaseModel {
 
     @Column(name = "Mass_Unit", nullable = false)
     @Convert(converter = MassUnitAttrConverter.class)
-    private Isotope.MassUnit massUnit;
+    private Conversions.MassUnit massUnit;
 
     @Column(name = "Nature", nullable = false)
     @Convert(converter = NatureAttrConverter.class)
@@ -87,12 +87,12 @@ public class ShipmentsModel extends BaseModel {
         this.mass = mass;
     }
 
-    public Isotope.MassUnit getMassUnit() {
+    public Conversions.MassUnit getMassUnit() {
         return massUnit;
     }
 
-    public void setMassUnit(Isotope.MassUnit massUnit) {
-        this.massUnit = massUnit == null? Isotope.MassUnit.GRAMS : massUnit;
+    public void setMassUnit(Conversions.MassUnit massUnit) {
+        this.massUnit = massUnit == null? Conversions.MassUnit.GRAMS : massUnit;
     }
 
     public Isotope.Nature getNature() {

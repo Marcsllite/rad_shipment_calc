@@ -1,13 +1,13 @@
 package com.marcsllite.model.db;
 
-import com.marcsllite.model.Isotope;
+import com.marcsllite.util.Conversions;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 @Converter
-public class MassUnitAttrConverter implements AttributeConverter<Isotope.MassUnit, String> {
+public class MassUnitAttrConverter implements AttributeConverter<Conversions.MassUnit, String> {
     @Override
-    public String convertToDatabaseColumn(Isotope.MassUnit massUnit) {
+    public String convertToDatabaseColumn(Conversions.MassUnit massUnit) {
         if(massUnit == null) {
             return null;
         }
@@ -15,10 +15,10 @@ public class MassUnitAttrConverter implements AttributeConverter<Isotope.MassUni
     }
 
     @Override
-    public Isotope.MassUnit convertToEntityAttribute(String str) {
+    public Conversions.MassUnit convertToEntityAttribute(String str) {
         if(str == null) {
             return null;
         }
-        return Isotope.MassUnit.toMass(str);
+        return Conversions.MassUnit.toMass(str);
     }
 }

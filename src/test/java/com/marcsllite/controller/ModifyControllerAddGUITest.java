@@ -133,17 +133,17 @@ class ModifyControllerAddGUITest extends GUITest {
         Assertions.assertEquals(BaseController.Page.ADD, controller.getPage());
 
         assertEquals(Conversions.SIPrefix.getFxValues(), comboBoxA0Prefix.getItems());
-        assertEquals(Isotope.RadUnit.getFxValues(), choiceBoxA0Name.getItems());
+        assertEquals(Conversions.RadUnit.getFxValues(), choiceBoxA0Name.getItems());
         assertEquals(Conversions.SIPrefix.getFxValues(), comboBoxMassPrefix.getItems());
-        assertEquals(Isotope.MassUnit.getFxValues(), choiceBoxMassName.getItems());
+        assertEquals(Conversions.MassUnit.getFxValues(), choiceBoxMassName.getItems());
         assertEquals(Isotope.Nature.getFxValues(), choiceBoxNature.getItems());
         assertEquals(LimitsModelId.State.getFxValues(), choiceBoxState.getItems());
         assertEquals(LimitsModelId.Form.getFxValues(), choiceBoxForm.getItems());
 
         assertEquals(Conversions.SIPrefix.BASE.getVal(), comboBoxA0Prefix.getSelectionModel().getSelectedItem());
-        assertEquals(Isotope.RadUnit.CURIE.getVal(), choiceBoxA0Name.getSelectionModel().getSelectedItem());
+        assertEquals(Conversions.RadUnit.CURIE.getVal(), choiceBoxA0Name.getSelectionModel().getSelectedItem());
         assertEquals(Conversions.SIPrefix.BASE.getVal(), comboBoxMassPrefix.getSelectionModel().getSelectedItem());
-        assertEquals(Isotope.MassUnit.GRAMS.getVal(), choiceBoxMassName.getSelectionModel().getSelectedItem());
+        assertEquals(Conversions.MassUnit.GRAMS.getVal(), choiceBoxMassName.getSelectionModel().getSelectedItem());
     }
 
     private void goToPage(int pageNum) {

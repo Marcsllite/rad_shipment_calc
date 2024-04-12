@@ -1,6 +1,6 @@
 package com.marcsllite.model.db;
 
-import com.marcsllite.model.Isotope;
+import com.marcsllite.util.Conversions;
 import org.junit.jupiter.api.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -16,7 +16,7 @@ class MassUnitAttrConverterTest {
 
     @Test
     void testConvertToDatabaseColumn() {
-        Isotope.MassUnit form = Isotope.MassUnit.GRAMS;
+        Conversions.MassUnit form = Conversions.MassUnit.GRAMS;
         String expected = form.getVal().toLowerCase();
         assertEquals(expected, converter.convertToDatabaseColumn(form));
     }
@@ -28,7 +28,7 @@ class MassUnitAttrConverterTest {
 
     @Test
     void testConvertToEntityAttribute() {
-        Isotope.MassUnit expected = Isotope.MassUnit.GRAMS;
+        Conversions.MassUnit expected = Conversions.MassUnit.GRAMS;
         String str = expected.getVal();
         assertEquals(expected, converter.convertToEntityAttribute(str));
     }

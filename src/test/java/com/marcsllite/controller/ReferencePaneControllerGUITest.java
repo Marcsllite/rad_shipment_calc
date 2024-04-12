@@ -100,30 +100,30 @@ class ReferencePaneControllerGUITest extends GUITest {
 
     protected void verifySetupDropDownItems() {
         assertEquals(Conversions.SIPrefix.getFxValues(), comboBoxRefA1Prefix.getItems());
-        assertEquals(Isotope.RadUnit.getFxValues(), choiceBoxRefA1RadUnit.getItems());
+        assertEquals(Conversions.RadUnit.getFxValues(), choiceBoxRefA1RadUnit.getItems());
         assertEquals(Conversions.SIPrefix.getFxValues(), comboBoxRefA2Prefix.getItems());
-        assertEquals(Isotope.RadUnit.getFxValues(), choiceBoxRefA2RadUnit.getItems());
+        assertEquals(Conversions.RadUnit.getFxValues(), choiceBoxRefA2RadUnit.getItems());
         assertEquals(Conversions.SIPrefix.getFxValues(), comboBoxRefExemptConPrefix.getItems());
-        assertEquals(Isotope.RadUnit.getFxValues(), choiceBoxRefExemptConRadUnit.getItems());
+        assertEquals(Conversions.RadUnit.getFxValues(), choiceBoxRefExemptConRadUnit.getItems());
         assertEquals(Conversions.SIPrefix.getFxValues(), comboBoxRefExemptLimPrefix.getItems());
-        assertEquals(Isotope.RadUnit.getFxValues(), choiceBoxRefExemptLimRadUnit.getItems());
+        assertEquals(Conversions.RadUnit.getFxValues(), choiceBoxRefExemptLimRadUnit.getItems());
         assertEquals(Conversions.SIPrefix.getFxValues(), comboBoxRefReportQuanPrefix.getItems());
-        assertEquals(Isotope.RadUnit.getFxValues(), choiceBoxRefReportQuanRadUnit.getItems());
+        assertEquals(Conversions.RadUnit.getFxValues(), choiceBoxRefReportQuanRadUnit.getItems());
 
         verifySelectBaseDropDownItems();
     }
 
     protected void verifySelectBaseDropDownItems() {
         assertEquals(Conversions.SIPrefix.TERA.getVal(), comboBoxRefA1Prefix.getSelectionModel().getSelectedItem());
-        assertEquals(Isotope.RadUnit.BECQUEREL.getVal(), choiceBoxRefA1RadUnit.getSelectionModel().getSelectedItem());
+        assertEquals(Conversions.RadUnit.BECQUEREL.getVal(), choiceBoxRefA1RadUnit.getSelectionModel().getSelectedItem());
         assertEquals(Conversions.SIPrefix.TERA.getVal(), comboBoxRefA2Prefix.getSelectionModel().getSelectedItem());
-        assertEquals(Isotope.RadUnit.BECQUEREL.getVal(), choiceBoxRefA2RadUnit.getSelectionModel().getSelectedItem());
+        assertEquals(Conversions.RadUnit.BECQUEREL.getVal(), choiceBoxRefA2RadUnit.getSelectionModel().getSelectedItem());
         assertEquals(Conversions.SIPrefix.BASE.getVal(), comboBoxRefExemptConPrefix.getSelectionModel().getSelectedItem());
-        assertEquals(Isotope.RadUnit.BECQUEREL.getVal(), choiceBoxRefExemptConRadUnit.getSelectionModel().getSelectedItem());
+        assertEquals(Conversions.RadUnit.BECQUEREL.getVal(), choiceBoxRefExemptConRadUnit.getSelectionModel().getSelectedItem());
         assertEquals(Conversions.SIPrefix.BASE.getVal(), comboBoxRefExemptLimPrefix.getSelectionModel().getSelectedItem());
-        assertEquals(Isotope.RadUnit.BECQUEREL.getVal(), choiceBoxRefExemptLimRadUnit.getSelectionModel().getSelectedItem());
+        assertEquals(Conversions.RadUnit.BECQUEREL.getVal(), choiceBoxRefExemptLimRadUnit.getSelectionModel().getSelectedItem());
         assertEquals(Conversions.SIPrefix.TERA.getVal(), comboBoxRefReportQuanPrefix.getSelectionModel().getSelectedItem());
-        assertEquals(Isotope.RadUnit.BECQUEREL.getVal(), choiceBoxRefReportQuanRadUnit.getSelectionModel().getSelectedItem());
+        assertEquals(Conversions.RadUnit.BECQUEREL.getVal(), choiceBoxRefReportQuanRadUnit.getSelectionModel().getSelectedItem());
     }
 
     protected void verifyInitTable() {
@@ -207,11 +207,11 @@ class ReferencePaneControllerGUITest extends GUITest {
         String exp = String.valueOf(original);
         assertEquals(exp, field.getText());
 
-        interact(() -> choiceBox.getSelectionModel().select(Isotope.RadUnit.CURIE.getVal()));
+        interact(() -> choiceBox.getSelectionModel().select(Conversions.RadUnit.CURIE.getVal()));
         exp = Conversions.bqToCi(BigDecimal.valueOf(original)).toString();
         assertEquals(exp, field.getText());
 
-        interact(() -> choiceBox.getSelectionModel().select(Isotope.RadUnit.BECQUEREL.getVal()));
+        interact(() -> choiceBox.getSelectionModel().select(Conversions.RadUnit.BECQUEREL.getVal()));
         exp = String.valueOf(original);
         assertEquals(exp, field.getText());
     }

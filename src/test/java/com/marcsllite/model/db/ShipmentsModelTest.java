@@ -60,12 +60,12 @@ class ShipmentsModelTest {
     @Test
     void testSetMassUnit_Null() {
         model.setMassUnit(null);
-        assertEquals(Isotope.MassUnit.GRAMS, model.getMassUnit());
+        assertEquals(Conversions.MassUnit.GRAMS, model.getMassUnit());
     }
 
     @Test
     void testSetMassUnit() {
-        Isotope.MassUnit exp = Isotope.MassUnit.LITERS;
+        Conversions.MassUnit exp = Conversions.MassUnit.LITERS;
         model.setMassUnit(exp);
         assertEquals(exp, model.getMassUnit());
     }

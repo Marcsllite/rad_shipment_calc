@@ -52,8 +52,9 @@ public class LimitsModelId implements Serializable {
     }
 
     public enum Form {
-        NORMAL("Normal"),
-        SPECIAL("Special");
+        // source: https://remm.hhs.gov/NRC_for-educators_11.pdf
+        NORMAL("Normal"), // A1
+        SPECIAL("Special");  // A2
 
         private final String val;
 

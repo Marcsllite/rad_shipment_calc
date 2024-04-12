@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -19,7 +20,7 @@ public class Shipment {
     private SimpleObjectProperty<LocalDate> refDate;
     private SimpleFloatProperty mass;
     private Conversions.SIPrefix massPrefix;
-    private Isotope.MassUnit massUnit;
+    private Conversions.MassUnit massUnit;
     private Isotope.Nature nature;
     private LimitsModelId.State state;
     private LimitsModelId.Form form;
@@ -49,7 +50,7 @@ public class Shipment {
                 .collect(Collectors.toCollection(FXCollections::observableArrayList)));
     }
 
-    public Shipment(long id, LocalDate refDate, float mass, Isotope.MassUnit massUnit, Isotope.Nature nature, LimitsModelId.State state, LimitsModelId.Form form) {
+    public Shipment(long id, LocalDate refDate, float mass, Conversions.MassUnit massUnit, Isotope.Nature nature, LimitsModelId.State state, LimitsModelId.Form form) {
         setId(id);
         setRefDate(refDate);
         setMass(mass);
@@ -111,12 +112,12 @@ public class Shipment {
         this.massPrefix = massPrefix;
     }
 
-    public Isotope.MassUnit getMassUnit() {
+    public Conversions.MassUnit getMassUnit() {
         return massUnit;
     }
 
-    public void setMassUnit(Isotope.MassUnit massUnit) {
-        this.massUnit = massUnit == null? Isotope.MassUnit.GRAMS : massUnit;
+    public void setMassUnit(Conversions.MassUnit massUnit) {
+        this.massUnit = massUnit == null? Conversions.MassUnit.GRAMS : massUnit;
     }
 
     public Isotope.Nature getNature() {
@@ -213,5 +214,49 @@ public class Shipment {
             "\nState: " + getState() +
             "\nForm: " + getForm() +
             "\nIsotopes: " + getIsotopes() + "\n}";
+    }
+
+    public enum Label {
+        // Source: https://remm.hhs.gov/NRC_for-educators_11.pdf
+        WHITE_1("White 1",
+            "Surface: Does not exceed 0.5 millirem/hour, TI: N/A"),
+        YELLOW_1("Yellow 1",
+            "Surface: Does not exceed 50 millirems/hour, TI: Does not exceed 1 millirem/hour"),
+        YELLOW_2("Yellow 2",
+            "Surface: Exceeds 50 millirems/hour, TI: Exceeds 1 millirem/hour");
+
+        private final String val;
+        private final String info;
+
+        Label(String val, String info) {
+            this.val = val;
+            this.info = info;
+        }
+
+        public String getVal() {
+            return val;
+        }
+
+        public String getInfo() { return info; }
+
+        public static Shipment.Label toIsoClass(String value) {
+            for (Shipment.Label enumValue : values()) {
+                if (enumValue.getVal().equalsIgnoreCase(value)) {
+                    return enumValue;
+                }
+            }
+            return null;
+        }
+
+        public static ObservableList<String> getFxValues() {
+            return Arrays.stream(Shipment.Label.values())
+                .map(Shipment.Label::getVal)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+
+        @Override
+        public String toString() {
+            return getVal();
+        }
     }
 }

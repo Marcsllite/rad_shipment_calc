@@ -4,6 +4,7 @@ import com.marcsllite.DBTest;
 import com.marcsllite.PropHandlerTestObj;
 import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
+import com.marcsllite.util.Conversions;
 import com.marcsllite.util.handler.PropHandler;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,8 +29,8 @@ class IsotopeTest extends DBTest {
     private static final String DEFAULT_NAME = "Abbreviation";
     private static final String DEFAULT_ABBR = "Abbr";
     private static final IsotopeModelId isoId = new IsotopeModelId(DEFAULT_NAME, DEFAULT_ABBR);
-    private final Isotope.MassUnit DEFAULT_MASS = Isotope.MassUnit.GRAMS;
-    private final Isotope.RadUnit DEFAULT_RAD_UNIT = Isotope.RadUnit.CURIE;
+    private final Conversions.MassUnit DEFAULT_MASS = Conversions.MassUnit.GRAMS;
+    private final Conversions.RadUnit DEFAULT_RAD_UNIT = Conversions.RadUnit.CURIE;
     private final Isotope.Nature DEFAULT_NATURE = Isotope.Nature.REGULAR;
     private final LimitsModelId limitsId = new LimitsModelId();
     private final Isotope.IsoClass DEFAULT_CLASS = Isotope.IsoClass.TBD;
@@ -68,38 +69,38 @@ class IsotopeTest extends DBTest {
     @Test
     void testToMass() {
         String str = "";
-        Isotope.MassUnit actual = Isotope.MassUnit.toMass(str);
+        Conversions.MassUnit actual = Conversions.MassUnit.toMass(str);
         assertNull(actual);
         
         str = "grams";
-        actual = Isotope.MassUnit.toMass(str);
-        assertEquals(Isotope.MassUnit.GRAMS, actual);
+        actual = Conversions.MassUnit.toMass(str);
+        assertEquals(Conversions.MassUnit.GRAMS, actual);
 
         str = "GRAMS";
-        actual = Isotope.MassUnit.toMass(str);
-        assertEquals(Isotope.MassUnit.GRAMS, actual);
+        actual = Conversions.MassUnit.toMass(str);
+        assertEquals(Conversions.MassUnit.GRAMS, actual);
         
         str = "fake";
-        actual = Isotope.MassUnit.toMass(str);
+        actual = Conversions.MassUnit.toMass(str);
         assertNull(actual);
     }
 
     @Test
     void testToRadUnit() {
         String str = "";
-        Isotope.RadUnit actual = Isotope.RadUnit.toRadUnit(str);
+        Conversions.RadUnit actual = Conversions.RadUnit.toRadUnit(str);
         assertNull(actual);
 
         str = "ci";
-        actual = Isotope.RadUnit.toRadUnit(str);
-        assertEquals(Isotope.RadUnit.CURIE, actual);
+        actual = Conversions.RadUnit.toRadUnit(str);
+        assertEquals(Conversions.RadUnit.CURIE, actual);
 
         str = "CI";
-        actual = Isotope.RadUnit.toRadUnit(str);
-        assertEquals(Isotope.RadUnit.CURIE, actual);
+        actual = Conversions.RadUnit.toRadUnit(str);
+        assertEquals(Conversions.RadUnit.CURIE, actual);
 
         str = "fake";
-        actual = Isotope.RadUnit.toRadUnit(str);
+        actual = Conversions.RadUnit.toRadUnit(str);
         assertNull(actual);
     }
 
@@ -311,7 +312,7 @@ class IsotopeTest extends DBTest {
         assertNotEquals(isotope1, isotope2);
         assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
 
-        isotope1.setInitActivityUnit(Isotope.RadUnit.BECQUEREL);
+        isotope1.setInitActivityUnit(Conversions.RadUnit.BECQUEREL);
         assertNotEquals(isotope1, isotope2);
         assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
 
@@ -319,7 +320,7 @@ class IsotopeTest extends DBTest {
         assertNotEquals(isotope1, isotope2);
         assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
 
-        isotope1.setMassUnit(Isotope.MassUnit.LITERS);
+        isotope1.setMassUnit(Conversions.MassUnit.LITERS);
         assertNotEquals(isotope1, isotope2);
         assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
 

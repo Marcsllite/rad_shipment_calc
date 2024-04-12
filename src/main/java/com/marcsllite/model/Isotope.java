@@ -35,106 +35,48 @@ public class Isotope {
     private SimpleStringProperty strMass;
     private SimpleFloatProperty mass;
     private Conversions.SIPrefix massPrefix;
-    private MassUnit massUnit;
+    private Conversions.MassUnit massUnit;
     private SimpleStringProperty strInitActivity;
     private SimpleFloatProperty initActivity;
     private Conversions.SIPrefix initActivityPrefix;
-    private RadUnit initActivityUnit;
+    private Conversions.RadUnit initActivityUnit;
     private IsoClass isoClass;
     private SimpleObjectProperty<LocalDate> refDate;
     private LifeSpan lifeSpan;
     private LungAbsorption lungAbsorption;
 
-    public enum MassUnit {
-        GRAMS("grams"),
-        LITERS("liters");
-
-        private final String val;
-
-        MassUnit(String val) {
-            this.val = val;
-        }
-
-        public String getVal() {
-            return val;
-        }
-
-        public String getAbbrVal() { return getVal().substring(0,1).toLowerCase(); }
-
-        public static MassUnit toMass(String value) {
-            for (MassUnit enumValue : values()) {
-                if (enumValue.getVal().equalsIgnoreCase(value) ||
-                    enumValue.getAbbrVal().equalsIgnoreCase(value)) {
-                    return enumValue;
-                }
-            }
-            return null;
-        }
-
-        public static ObservableList<String> getFxValues() {
-            return Arrays.stream(MassUnit.values())
-                .map(MassUnit::getVal)
-                .collect(Collectors.toCollection(FXCollections::observableArrayList));
-        }
-
-        @Override
-        public String toString() {
-            return getVal();
-        }
-    }
-
-    public enum RadUnit {
-        BECQUEREL("Bq"),
-        CURIE("Ci");
-
-        private final String val;
-
-        RadUnit(String val) {
-            this.val = val;
-        }
-
-        public String getVal() {
-            return val;
-        }
-
-        public static RadUnit toRadUnit(String value) {
-            for (RadUnit enumValue : values()) {
-                if (enumValue.getVal().equalsIgnoreCase(value)) {
-                    return enumValue;
-                }
-            }
-            return null;
-        }
-        
-        public static ObservableList<String> getFxValues() {
-            return Arrays.stream(RadUnit.values())
-                .map(RadUnit::getVal)
-                .collect(Collectors.toCollection(FXCollections::observableArrayList));
-        }
-
-        @Override
-        public String toString() {
-            return getVal();
-        }
-    }
 
     public enum IsoClass {
-        EXEMPT("Exempt"),
-        EXCEPTED("Excepted"),
-        TYPE_A("Type A"),
-        TYPE_B("Type B"),
-        TYPE_B_HIGHWAY("Type B: Highway Route Control"),
-        TBD("To Be Determined");
+        // Source: https://remm.hhs.gov/NRC_for-educators_11.pdf
+        TBD("To Be Determined", ""),
+        EXEMPT("Non-Radioactive",
+            "The amount of material is less than 0.002 \u00B5curies per gram."),
+        EXCEPTED("Limited Quantity",
+            "The amount is greater than 0.002 \u00B5curies per gram but does not exceed\n" +
+                "one thousandth of the A1 or A2 value (depending on the form)."),
+        TYPE_A("Type A Quantity",
+            "The amount is less than or equal to the A1 or A2 value (depending on the\n" +
+                "form) but greater than one thousandth of the value."),
+        TYPE_B("Type B Quantity",
+            "The amount is greater than the A1 or A2 value (depending on the form) but\n" +
+                "less than or equal to 3000 times these values"),
+        TYPE_B_HIGHWAY("Type B: Highway Route Controlled Quantity",
+            "The amount is greater than 3000 times the A1 or A2 value (depending on\n" +
+                "the form) but less than 27,000 curies.");
 
         private final String val;
+        private final String info;
 
-        IsoClass(String val) {
+        IsoClass(String val, String info) {
             this.val = val;
+            this.info = info;
         }
 
         public String getVal() {
             return val;
         }
+
+        public String getInfo() { return info; }
 
         public static IsoClass toIsoClass(String value) {
             for (IsoClass enumValue : values()) {
@@ -287,7 +229,7 @@ public class Isotope {
             LocalDate.now());
     }
 
-    public Isotope(IsotopeModelId isoId, MassUnit massUnit, RadUnit initActivityUnit, Nature nature, LimitsModelId limitsId, LocalDate refDate) {
+    public Isotope(IsotopeModelId isoId, Conversions.MassUnit massUnit, Conversions.RadUnit initActivityUnit, Nature nature, LimitsModelId limitsId, LocalDate refDate) {
         setDbService(new DBServiceImpl());
         setIsoId(isoId);
         setMassPrefix(Conversions.SIPrefix.BASE);
@@ -389,12 +331,12 @@ public class Isotope {
         this.massPrefix = massPrefix;
     }
 
-    public MassUnit getMassUnit() {
+    public Conversions.MassUnit getMassUnit() {
         return massUnit;
     }
 
-    public void setMassUnit(MassUnit massUnit) {
-        this.massUnit = massUnit == null? Isotope.MassUnit.GRAMS : massUnit;
+    public void setMassUnit(Conversions.MassUnit massUnit) {
+        this.massUnit = massUnit == null? Conversions.MassUnit.GRAMS : massUnit;
     }
 
     public String getStrInitActivity() {
@@ -440,12 +382,12 @@ public class Isotope {
         this.initActivityPrefix = initActivityPrefix;
     }
 
-    public RadUnit getInitActivityUnit() {
+    public Conversions.RadUnit getInitActivityUnit() {
         return initActivityUnit;
     }
 
-    public void setInitActivityUnit(RadUnit initActivityUnit) {
-        this.initActivityUnit = initActivityUnit == null? RadUnit.CURIE : initActivityUnit;
+    public void setInitActivityUnit(Conversions.RadUnit initActivityUnit) {
+        this.initActivityUnit = initActivityUnit == null? Conversions.RadUnit.CURIE : initActivityUnit;
     }
 
     public void setIsoId(IsotopeModelId isoId) {

@@ -96,15 +96,15 @@ public class ReferencePaneController extends BaseController {
 
     protected void setupDropDownItems() {
         comboBoxRefA1Prefix.setItems(Conversions.SIPrefix.getFxValues());
-        choiceBoxRefA1RadUnit.setItems(Isotope.RadUnit.getFxValues());
+        choiceBoxRefA1RadUnit.setItems(Conversions.RadUnit.getFxValues());
         comboBoxRefA2Prefix.setItems(Conversions.SIPrefix.getFxValues());
-        choiceBoxRefA2RadUnit.setItems(Isotope.RadUnit.getFxValues());
+        choiceBoxRefA2RadUnit.setItems(Conversions.RadUnit.getFxValues());
         comboBoxRefExemptConPrefix.setItems(Conversions.SIPrefix.getFxValues());
-        choiceBoxRefExemptConRadUnit.setItems(Isotope.RadUnit.getFxValues());
+        choiceBoxRefExemptConRadUnit.setItems(Conversions.RadUnit.getFxValues());
         comboBoxRefExemptLimPrefix.setItems(Conversions.SIPrefix.getFxValues());
-        choiceBoxRefExemptLimRadUnit.setItems(Isotope.RadUnit.getFxValues());
+        choiceBoxRefExemptLimRadUnit.setItems(Conversions.RadUnit.getFxValues());
         comboBoxRefReportQuanPrefix.setItems(Conversions.SIPrefix.getFxValues());
-        choiceBoxRefReportQuanRadUnit.setItems(Isotope.RadUnit.getFxValues());
+        choiceBoxRefReportQuanRadUnit.setItems(Conversions.RadUnit.getFxValues());
 
         selectBaseDropDownItems();
 
@@ -142,15 +142,15 @@ public class ReferencePaneController extends BaseController {
 
     protected void selectBaseDropDownItems() {
         selectDropDownItem(comboBoxRefA1Prefix, Conversions.SIPrefix.TERA.getVal());
-        selectDropDownItem(choiceBoxRefA1RadUnit, Isotope.RadUnit.BECQUEREL.getVal());
+        selectDropDownItem(choiceBoxRefA1RadUnit, Conversions.RadUnit.BECQUEREL.getVal());
         selectDropDownItem(comboBoxRefA2Prefix, Conversions.SIPrefix.TERA.getVal());
-        selectDropDownItem(choiceBoxRefA2RadUnit, Isotope.RadUnit.BECQUEREL.getVal());
+        selectDropDownItem(choiceBoxRefA2RadUnit, Conversions.RadUnit.BECQUEREL.getVal());
         selectDropDownItem(comboBoxRefExemptConPrefix, Conversions.SIPrefix.BASE.getVal());
-        selectDropDownItem(choiceBoxRefExemptConRadUnit, Isotope.RadUnit.BECQUEREL.getVal());
+        selectDropDownItem(choiceBoxRefExemptConRadUnit, Conversions.RadUnit.BECQUEREL.getVal());
         selectDropDownItem(comboBoxRefExemptLimPrefix, Conversions.SIPrefix.BASE.getVal());
-        selectDropDownItem(choiceBoxRefExemptLimRadUnit, Isotope.RadUnit.BECQUEREL.getVal());
+        selectDropDownItem(choiceBoxRefExemptLimRadUnit, Conversions.RadUnit.BECQUEREL.getVal());
         selectDropDownItem(comboBoxRefReportQuanPrefix, Conversions.SIPrefix.TERA.getVal());
-        selectDropDownItem(choiceBoxRefReportQuanRadUnit, Isotope.RadUnit.BECQUEREL.getVal());
+        selectDropDownItem(choiceBoxRefReportQuanRadUnit, Conversions.RadUnit.BECQUEREL.getVal());
     }
 
     protected void selectDropDownItem(Control list, String selection) {
@@ -167,11 +167,11 @@ public class ReferencePaneController extends BaseController {
             BigDecimal prev = new BigDecimal(field.getText());
             unbindControl(field);
 
-            if(Isotope.RadUnit.CURIE.getVal().equals(oldV) &&
-                Isotope.RadUnit.BECQUEREL.getVal().equals(newV)) {
+            if(Conversions.RadUnit.CURIE.getVal().equals(oldV) &&
+                Conversions.RadUnit.BECQUEREL.getVal().equals(newV)) {
                 field.setText(Conversions.ciToBq(prev).toString());
-            } else if(Isotope.RadUnit.BECQUEREL.getVal().equals(oldV) &&
-                Isotope.RadUnit.CURIE.getVal().equals(newV)) {
+            } else if(Conversions.RadUnit.BECQUEREL.getVal().equals(oldV) &&
+                Conversions.RadUnit.CURIE.getVal().equals(newV)) {
                 field.setText(Conversions.bqToCi(prev).toString());
             }
         } catch (NumberFormatException ignored) {

@@ -367,9 +367,9 @@ public class ModifyController extends BaseController {
 
     protected void setupDropDownItems() {
         comboBoxA0Prefix.setItems(Conversions.SIPrefix.getFxValues());
-        choiceBoxA0RadUnit.setItems(Isotope.RadUnit.getFxValues());
+        choiceBoxA0RadUnit.setItems(Conversions.RadUnit.getFxValues());
         comboBoxMassPrefix.setItems(Conversions.SIPrefix.getFxValues());
-        choiceBoxMassUnit.setItems(Isotope.MassUnit.getFxValues());
+        choiceBoxMassUnit.setItems(Conversions.MassUnit.getFxValues());
         choiceBoxNature.setItems(Isotope.Nature.getFxValues());
         choiceBoxState.setItems(LimitsModelId.State.getFxValues());
         choiceBoxForm.setItems(LimitsModelId.Form.getFxValues());
@@ -382,7 +382,7 @@ public class ModifyController extends BaseController {
 
     private void selectDefaultSecondPageDropDownValues() {
         comboBoxMassPrefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
-        choiceBoxMassUnit.getSelectionModel().select(Isotope.MassUnit.GRAMS.getVal());
+        choiceBoxMassUnit.getSelectionModel().select(Conversions.MassUnit.GRAMS.getVal());
         choiceBoxNature.getSelectionModel().select(Isotope.Nature.REGULAR.getVal());
         choiceBoxState.getSelectionModel().select(LimitsModelId.State.SOLID.getVal());
         choiceBoxForm.getSelectionModel().select(LimitsModelId.Form.NORMAL.getVal());
@@ -390,7 +390,7 @@ public class ModifyController extends BaseController {
 
     private void selectDefaultFirstPageDropDownValues() {
         comboBoxA0Prefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
-        choiceBoxA0RadUnit.getSelectionModel().select(Isotope.RadUnit.CURIE.getVal());
+        choiceBoxA0RadUnit.getSelectionModel().select(Conversions.RadUnit.CURIE.getVal());
     }
 
     protected void showPage(int pageNum) {
@@ -555,7 +555,7 @@ public class ModifyController extends BaseController {
             iso = new Isotope(searchFilteredIsos.get(0));
             iso.setInitActivity(Float.parseFloat(txtFieldA0.getText()));
             iso.setInitActivityPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxA0Prefix.getValue()));
-            iso.setInitActivityUnit(Isotope.RadUnit.toRadUnit(choiceBoxA0RadUnit.getValue()));
+            iso.setInitActivityUnit(Conversions.RadUnit.toRadUnit(choiceBoxA0RadUnit.getValue()));
             iso.setStrInitActivity();
             iso.setLungAbsorption(Isotope.LungAbsorption.NONE);
             iso.setLifeSpan(Isotope.LifeSpan.REGULAR);
@@ -608,7 +608,7 @@ public class ModifyController extends BaseController {
             } else {
                 iso.setMass(Float.parseFloat(txtFieldMass.getText()));
                 iso.setMassPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxMassPrefix.getValue()));
-                iso.setMassUnit(Isotope.MassUnit.toMass(choiceBoxMassUnit.getValue()));
+                iso.setMassUnit(Conversions.MassUnit.toMass(choiceBoxMassUnit.getValue()));
             }
             iso.setStrMass();
 
