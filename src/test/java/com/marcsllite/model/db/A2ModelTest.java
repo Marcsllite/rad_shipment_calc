@@ -1,34 +1,37 @@
 package com.marcsllite.model.db;
 
 import com.marcsllite.util.Conversions;
+import com.marcsllite.util.RadBigDecimal;
 import org.junit.jupiter.api.Test;
 
 import static junit.framework.Assert.assertEquals;
 
 class A2ModelTest {
-    private final String DEFAULT_ABBR = "Abbr";
-    private final float DEFAULT_VAL = 1.0f;
-    A2Model model = new A2Model(DEFAULT_ABBR, DEFAULT_VAL);
+    private final String DEFAULT_SYMBOL = "Sy";
+    private final String DEFAULT_MASS_NUMBER = "1";
+    private final NuclideModelId DEFAULT_ID = new NuclideModelId(DEFAULT_SYMBOL, DEFAULT_MASS_NUMBER);
+    private final RadBigDecimal DEFAULT_VAL = RadBigDecimal.valueOf(1.0f);
+    A2Model model = new A2Model(DEFAULT_ID, DEFAULT_VAL);
 
     @Test
     void testConstructor() {
-        assertEquals(DEFAULT_ABBR, model.getAbbr());
-        assertEquals(DEFAULT_VAL, model.getValue(), 0.0f);
+        assertEquals(DEFAULT_ID, model.getNuclideId());
+        assertEquals(DEFAULT_VAL, model.getValue());
         assertEquals(Conversions.SIPrefix.TERA, model.getBasePrefix());
     }
 
     @Test
-    void setAbbr() {
-        String abbr = "newAbbr";
-        model.setAbbr(abbr);
-        assertEquals(abbr, model.getAbbr());
+    void setNuclideId() {
+        NuclideModelId id = new NuclideModelId("test", "mn");
+        model.setNuclideId(id);
+        assertEquals(id, model.getNuclideId());
     }
 
     @Test
     void setValue() {
-        float val = 45.2f;
+        RadBigDecimal val = RadBigDecimal.valueOf(45.2f);
         model.setValue(val);
-        assertEquals(val, model.getValue(), 0.0f);
+        assertEquals(val, model.getValue());
     }
 
     @Test

@@ -1,19 +1,21 @@
 package com.marcsllite.dao;
 
+import com.marcsllite.model.db.NuclideModelId;
 import com.marcsllite.model.db.ReportableQuantityModel;
+import com.marcsllite.util.RadBigDecimal;
 
-public class ReportableQuantityDaoImpl extends AbstractDao<ReportableQuantityModel, String> {
-    public ReportableQuantityModel getReportQuan(String abbr) {
-        return findById(abbr);
+public class ReportableQuantityDaoImpl extends AbstractDao<ReportableQuantityModel, NuclideModelId> {
+    public ReportableQuantityModel getReportQuan(NuclideModelId nuclideId) {
+        return findById(nuclideId);
     }
 
-    public float getCi(String abbr) {
-        ReportableQuantityModel model = getReportQuan(abbr);
-        return model == null? -123456789.0f : model.getCurie();
+    public RadBigDecimal getCi(NuclideModelId nuclideId) {
+        ReportableQuantityModel model = getReportQuan(nuclideId);
+        return model == null? RadBigDecimal.NEG_INFINITY_OBJ : model.getCurie();
     }
 
-    public float getTBq(String abbr) {
-        ReportableQuantityModel model = getReportQuan(abbr);
-        return model == null? -123456789.0f : model.getTeraBq();
+    public RadBigDecimal getTBq(NuclideModelId nuclideId) {
+        ReportableQuantityModel model = getReportQuan(nuclideId);
+        return model == null? RadBigDecimal.NEG_INFINITY_OBJ : model.getTeraBq();
     }
 }

@@ -1,41 +1,54 @@
 package com.marcsllite.model.db;
 
+import com.marcsllite.util.RadBigDecimal;
 import jakarta.persistence.Column;
-import jakarta.persistence.Id;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Transient;
 
 @MappedSuperclass
 public abstract class BaseDataModel extends BaseModel {
     private static final long serialVersionUID = 6194462219788554210L;
 
-    @Id
-    @Column(name = "Abbr", length = 15, nullable = false)
-    private String abbr;
+    @EmbeddedId
+    private NuclideModelId nuclideId;
     @Column(name = "Val")
-    private float value;
+    private String decFloatStr;
+    @Transient
+    private RadBigDecimal value;
 
     BaseDataModel() {
-        this("Abbr", -2.0f);
+        this(new NuclideModelId("XX", "1"),
+            RadBigDecimal.NEG_INFINITY_OBJ.toString());
     }
 
-    BaseDataModel(String abbr, float value) {
-        setAbbr(abbr);
-        setValue(value);
+    BaseDataModel(NuclideModelId nuclideId, String decFloatStr) {
+        setNuclideId(nuclideId);
+        setDecFloatStr(decFloatStr);
+    }
+    public NuclideModelId getNuclideId() {
+        return nuclideId;
     }
 
-    public float getValue() {
+    public void setNuclideId(NuclideModelId nuclideId) {
+        this.nuclideId = nuclideId;
+    }
+
+    public RadBigDecimal getValue() {
         return value;
     }
 
-    public void setValue(float value) {
+    public void setValue(RadBigDecimal value) {
         this.value = value;
+        this.decFloatStr = value.toString();
     }
 
-    public String getAbbr() {
-        return abbr;
+    public String getDecFloatStr() {
+        return decFloatStr;
     }
 
-    public void setAbbr(String abbr) {
-        this.abbr = abbr;
+    public void setDecFloatStr(String decFloatStr) {
+        this.decFloatStr = decFloatStr;
+        this.value = new RadBigDecimal(decFloatStr);
     }
 }

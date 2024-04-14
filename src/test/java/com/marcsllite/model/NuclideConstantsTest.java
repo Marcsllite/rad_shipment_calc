@@ -2,9 +2,10 @@ package com.marcsllite.model;
 
 
 import com.marcsllite.DBTest;
-import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
+import com.marcsllite.model.db.NuclideModelId;
 import com.marcsllite.service.DBService;
+import com.marcsllite.util.RadBigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetSystemProperty;
@@ -13,18 +14,19 @@ import static junit.framework.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.when;
 
-class IsotopeConstantsTest extends DBTest {
-    float DEFAULT_NUM = -2.0f;
-    IsotopeConstants constants;
-    String DEFAULT_NAME = "Abbreviation";
-    String DEFAULT_ABBR = "Abbr";
+class NuclideConstantsTest extends DBTest {
+    RadBigDecimal DEFAULT_NUM = RadBigDecimal.NEG_INFINITY_OBJ;
+    NuclideConstants constants;
+    private final String DEFAULT_SYMBOL = "Sy";
+    private final String DEFAULT_MASS_NUMBER = "1";
+    private final NuclideModelId DEFAULT_ID = new NuclideModelId(DEFAULT_SYMBOL, DEFAULT_MASS_NUMBER);
     LimitsModelId.State DEFAULT_STATE = LimitsModelId.State.SOLID;
     LimitsModelId.Form DEFAULT_FORM = LimitsModelId.Form.NORMAL;
 
     @BeforeEach
     public void setUp() {
         super.setUp();
-        constants = new IsotopeConstants() {
+        constants = new NuclideConstants() {
             @Override
             public DBService getDbService() {
                 return dbService;
@@ -34,61 +36,61 @@ class IsotopeConstantsTest extends DBTest {
 
     @Test
     void testConstructor() {
-        constants = new IsotopeConstants();
+        constants = new NuclideConstants();
 
-        assertEquals(DEFAULT_NUM, IsotopeConstants.getDefaultVal(), 0.0f);
-        assertEquals(DEFAULT_NUM, constants.getA1(), 0.0f);
-        assertEquals(DEFAULT_NUM, constants.getA2(), 0.0f);
-        assertEquals(DEFAULT_NUM, constants.getDecayConstant(), 0.0f);
-        assertEquals(DEFAULT_NUM, constants.getExemptConcentration(), 0.0f);
-        assertEquals(DEFAULT_NUM, constants.getExemptLimit(), 0.0f);
-        assertEquals(DEFAULT_NUM, constants.getHalfLife(), 0.0f);
-        assertEquals(DEFAULT_NUM, constants.getIaLimitedLimit(), 0.0f);
-        assertEquals(DEFAULT_NUM, constants.getIaPackageLimit(), 0.0f);
-        assertEquals(DEFAULT_NUM, constants.getLimitedLimit(), 0.0f);
-        assertEquals(DEFAULT_NUM, constants.getCurieReportQuan(), 0.0f);
-        assertEquals(DEFAULT_NUM, constants.getTeraBqReportQuan(), 0.0f);
+        assertEquals(DEFAULT_NUM, NuclideConstants.getDefaultVal());
+        assertEquals(DEFAULT_NUM, constants.getA1());
+        assertEquals(DEFAULT_NUM, constants.getA2());
+        assertEquals(DEFAULT_NUM, constants.getDecayConstant());
+        assertEquals(DEFAULT_NUM, constants.getExemptConcentration());
+        assertEquals(DEFAULT_NUM, constants.getExemptLimit());
+        assertEquals(DEFAULT_NUM, constants.getHalfLife());
+        assertEquals(DEFAULT_NUM, constants.getIaLimitedLimit());
+        assertEquals(DEFAULT_NUM, constants.getIaPackageLimit());
+        assertEquals(DEFAULT_NUM, constants.getLimitedLimit());
+        assertEquals(DEFAULT_NUM, constants.getCurieReportQuan());
+        assertEquals(DEFAULT_NUM, constants.getTeraBqReportQuan());
     }
 
     @Test
     @SetSystemProperty(key = "keepPlatformOpen",value = "true")
     void testDbInit() {
-        IsotopeModelId isoId = new IsotopeModelId(DEFAULT_NAME, DEFAULT_ABBR);
+        NuclideModelId nuclideId = new NuclideModelId(DEFAULT_SYMBOL, DEFAULT_MASS_NUMBER);
         LimitsModelId limitsId = new LimitsModelId(DEFAULT_STATE, DEFAULT_FORM);
-        float expected = 3.14159f;
+        RadBigDecimal expected = RadBigDecimal.valueOf(3.14159f);
         
-        when(dbService.getA1(isoId.getAbbr())).thenReturn(expected);
-        when(dbService.getA2(isoId.getAbbr())).thenReturn(expected);
-        when(dbService.getDecayConstant(isoId.getAbbr())).thenReturn(expected);
-        when(dbService.getExemptConcentration(isoId.getAbbr())).thenReturn(expected);
-        when(dbService.getExemptLimit(isoId.getAbbr())).thenReturn(expected);
-        when(dbService.getHalfLife(isoId.getAbbr())).thenReturn(expected);
+        when(dbService.getA1(nuclideId)).thenReturn(expected);
+        when(dbService.getA2(nuclideId)).thenReturn(expected);
+        when(dbService.getDecayConstant(nuclideId)).thenReturn(expected);
+        when(dbService.getExemptConcentration(nuclideId)).thenReturn(expected);
+        when(dbService.getExemptLimit(nuclideId)).thenReturn(expected);
+        when(dbService.getHalfLife(nuclideId)).thenReturn(expected);
         when(dbService.getIALimited(limitsId)).thenReturn(expected);
         when(dbService.getIAPackage(limitsId)).thenReturn(expected);
         when(dbService.getLimited(limitsId)).thenReturn(expected);
-        when(dbService.getCiReportQuan(isoId.getAbbr())).thenReturn(expected);
-        when(dbService.getTBqReportQuan(isoId.getAbbr())).thenReturn(expected);
+        when(dbService.getCiReportQuan(nuclideId)).thenReturn(expected);
+        when(dbService.getTBqReportQuan(nuclideId)).thenReturn(expected);
 
-        constants.dbInit(isoId, limitsId);
+        constants.dbInit(nuclideId, limitsId);
 
-        assertEquals(expected, constants.getA1(), 0.0f);
-        assertEquals(expected, constants.getA2(), 0.0f);
-        assertEquals(expected, constants.getDecayConstant(), 0.0f);
-        assertEquals(expected, constants.getExemptConcentration(), 0.0f);
-        assertEquals(expected, constants.getExemptLimit(), 0.0f);
-        assertEquals(expected, constants.getHalfLife(), 0.0f);
-        assertEquals(expected, constants.getIaLimitedLimit(), 0.0f);
-        assertEquals(expected, constants.getIaPackageLimit(), 0.0f);
-        assertEquals(expected, constants.getLimitedLimit(), 0.0f);
-        assertEquals(expected, constants.getCurieReportQuan(), 0.0f);
-        assertEquals(expected, constants.getTeraBqReportQuan(), 0.0f);
+        assertEquals(expected, constants.getA1());
+        assertEquals(expected, constants.getA2());
+        assertEquals(expected, constants.getDecayConstant());
+        assertEquals(expected, constants.getExemptConcentration());
+        assertEquals(expected, constants.getExemptLimit());
+        assertEquals(expected, constants.getHalfLife());
+        assertEquals(expected, constants.getIaLimitedLimit());
+        assertEquals(expected, constants.getIaPackageLimit());
+        assertEquals(expected, constants.getLimitedLimit());
+        assertEquals(expected, constants.getCurieReportQuan());
+        assertEquals(expected, constants.getTeraBqReportQuan());
     }
 
     @Test
     void testEquals() {
-        float val = -512F;
-        IsotopeConstants constants1 = new IsotopeConstants();
-        IsotopeConstants constants2 = new IsotopeConstants();
+        RadBigDecimal val = RadBigDecimal.valueOf(-512F);
+        NuclideConstants constants1 = new NuclideConstants();
+        NuclideConstants constants2 = new NuclideConstants();
         String str = "";
 
         assertNotEquals(null, constants1);

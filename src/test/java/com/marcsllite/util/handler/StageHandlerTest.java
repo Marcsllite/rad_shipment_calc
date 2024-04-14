@@ -4,6 +4,8 @@ import com.marcsllite.ControllerFactoryTestObj;
 import com.marcsllite.PropHandlerTestObj;
 import com.marcsllite.controller.BaseController;
 import com.marcsllite.controller.HomePaneController;
+import com.marcsllite.service.DBService;
+import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.FXMLView;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -48,7 +50,8 @@ class StageHandlerTest {
     public void setUp() {
         try {
             primaryStage = mock(Stage.class);
-            stageHandler = spy(new StageHandler(primaryStage, new PropHandlerTestObj(), new ControllerFactoryTestObj()));
+            DBService dbService = mock(DBServiceImpl.class);
+            stageHandler = spy(new StageHandler(primaryStage, new PropHandlerTestObj(), new ControllerFactoryTestObj(dbService)));
         } catch (IOException e) {
             fail("Failed to initialize test object");
         }

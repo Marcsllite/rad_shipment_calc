@@ -1,6 +1,7 @@
 package com.marcsllite.model.db;
 
 import com.marcsllite.util.Conversions;
+import com.marcsllite.util.RadBigDecimal;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
@@ -13,8 +14,8 @@ public class ExemptConcentrationModel extends BaseDataModel {
         super();
     }
 
-    public ExemptConcentrationModel(String abbr, float value) {
-        super(abbr, value);
+    public ExemptConcentrationModel(NuclideModelId nuclideId, RadBigDecimal value) {
+        super(nuclideId, value.toString());
         setBasePrefix(Conversions.SIPrefix.BASE);
     }
 }

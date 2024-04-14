@@ -1,9 +1,9 @@
 package com.marcsllite.controller;
 
 import com.marcsllite.PropHandlerTestObj;
-import com.marcsllite.model.Isotope;
+import com.marcsllite.model.Nuclide;
 import com.marcsllite.model.Shipment;
-import com.marcsllite.model.db.IsotopeModelId;
+import com.marcsllite.model.db.NuclideModelId;
 import javafx.collections.FXCollections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,48 +42,49 @@ class HomePaneControllerTest {
     }
 
     @Test
-    void testIsIsoInTable_NullIsotope() {
-        assertFalse(controller.isIsoInTable(null));
+    void testIsIsoInTable_NullNuclide() {
+        assertFalse(controller.isNuclideInTable(null));
     }
 
     @Test
     void testIsIsoInTable_NullShipment() {
         controller.setShipment(null);
-        assertFalse(controller.isIsoInTable(new Isotope(new IsotopeModelId())));
+        assertFalse(controller.isNuclideInTable(new Nuclide("", new NuclideModelId())));
     }
 
     @Test
     void testIsIsoInTable_EmptyTable() {
         Shipment shipment = spy(Shipment.class);
-        shipment.setIsotopes(FXCollections.observableArrayList());
+        shipment.setNuclides(FXCollections.observableArrayList());
         controller.setShipment(shipment);
 
-        assertFalse(controller.isIsoInTable(new Isotope(new IsotopeModelId())));
+        assertFalse(controller.isNuclideInTable(new Nuclide("", new NuclideModelId())));
     }
 
     @Test
     void testIsIsoInTable() {
         Shipment shipment = spy(Shipment.class);
-        Isotope iso = new Isotope(new IsotopeModelId());
-        shipment.setIsotopes(FXCollections.observableArrayList(iso));
+        Nuclide nuclide = new Nuclide("", new NuclideModelId());
+        shipment.setNuclides(FXCollections.observableArrayList(nuclide));
         controller.setShipment(shipment);
 
-        Isotope iso2 = new Isotope(new IsotopeModelId());
-        assertTrue(controller.isIsoInTable(iso2));
+        Nuclide nuclide2 = new Nuclide("", new NuclideModelId());
+        assertTrue(controller.isNuclideInTable(nuclide2));
 
-        iso2.setLungAbsorption(Isotope.LungAbsorption.FAST);
-        assertFalse(controller.isIsoInTable(iso2));
+        nuclide2.setLungAbsorption(Nuclide.LungAbsorption.FAST);
+        assertFalse(controller.isNuclideInTable(nuclide2));
 
-        iso2.setLifeSpan(Isotope.LifeSpan.LONG);
-        assertFalse(controller.isIsoInTable(iso2));
+        nuclide2.setLifeSpan(Nuclide.LifeSpan.LONG);
+        assertFalse(controller.isNuclideInTable(nuclide2));
 
-        iso2.setAbbr("differentAbbr");
-        assertFalse(controller.isIsoInTable(iso2));
+        NuclideModelId nuclideId = new NuclideModelId("test", "s");
+        nuclide2.setNuclideId(nuclideId);
+        assertFalse(controller.isNuclideInTable(nuclide2));
     }
 
     @Test
-    void testUpdateIsotope_NullIsotope() {
-        controller.updateIsotope(null);
+    void testUpdateNuclide_NullNuclide() {
+        controller.updateNuclide(null);
 
         verify(controller, times(0)).getShipment();
     }

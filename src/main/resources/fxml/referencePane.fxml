@@ -20,8 +20,8 @@
   </HBox>
     <TableView fx:id="tableViewSearch" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
       <columns>
-        <PTableColumn fx:id="tableColRefAbbr" editable="false" percentageWidth="0.5" styleClass="tableColumn" text="Abbreviation" />
-        <PTableColumn fx:id="tableColRefName" editable="false" percentageWidth="0.5" styleClass="tableColumn" text="Full Name" />
+        <PTableColumn fx:id="tableColRefFullName" editable="false" percentageWidth="0.5" styleClass="tableColumn" text="Name (Symbol)" />
+        <PTableColumn fx:id="tableColRefMassNumber" editable="false" percentageWidth="0.5" styleClass="tableColumn" text="Mass Number" />
       </columns>
       <GridPane.margin>
         <Insets left="15.0" right="15.0" />

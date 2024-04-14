@@ -1,7 +1,8 @@
 package com.marcsllite.model.db;
 
-import com.marcsllite.model.Isotope;
+import com.marcsllite.model.Nuclide;
 import com.marcsllite.util.Conversions;
+import com.marcsllite.util.RadBigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,12 +17,12 @@ import static junit.framework.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
-class ShipmentsModelTest {
-    ShipmentsModel model;
+class ShipmentModelTest {
+    ShipmentModel model;
 
     @BeforeEach
     public void setUp() {
-        model = new ShipmentsModel();
+        model = new ShipmentModel();
     }
 
     @Test
@@ -52,7 +53,7 @@ class ShipmentsModelTest {
 
     @Test
     void testSetMass() {
-        float exp = -1F;
+        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
         model.setMass(exp);
         assertEquals(exp, model.getMass());
     }
@@ -73,12 +74,12 @@ class ShipmentsModelTest {
     @Test
     void testSetNatureUnit_Null() {
         model.setNature(null);
-        assertEquals(Isotope.Nature.REGULAR, model.getNature());
+        assertEquals(Nuclide.Nature.REGULAR, model.getNature());
     }
 
     @Test
     void testSetNatureUnit() {
-        Isotope.Nature exp = Isotope.Nature.ARTICLE;
+        Nuclide.Nature exp = Nuclide.Nature.ARTICLE;
         model.setNature(exp);
         assertEquals(exp, model.getNature());
     }
@@ -110,18 +111,18 @@ class ShipmentsModelTest {
     }
 
     @Test
-    void testSetIsotopesUnit_Null() {
-        model.setIsotopes(null);
-        assertNotNull(model.getIsotopes());
+    void testSetNuclidesUnit_Null() {
+        model.setNuclides(null);
+        assertNotNull(model.getNuclides());
     }
 
     @Test
-    void testSetIsotopesUnit() {
-        IsotopeModel isotope = mock(IsotopeModel.class);
-        List<IsotopeModel> exp = new ArrayList<>();
+    void testSetNuclidesUnit() {
+        NuclideModel isotope = mock(NuclideModel.class);
+        List<NuclideModel> exp = new ArrayList<>();
         exp.add(isotope);
-        model.setIsotopes(exp);
-        assertEquals(exp, model.getIsotopes());
+        model.setNuclides(exp);
+        assertEquals(exp, model.getNuclides());
     }
 
     @Test

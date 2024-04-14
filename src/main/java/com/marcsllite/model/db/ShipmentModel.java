@@ -1,7 +1,8 @@
 package com.marcsllite.model.db;
 
-import com.marcsllite.model.Isotope;
+import com.marcsllite.model.Nuclide;
 import com.marcsllite.util.Conversions;
+import com.marcsllite.util.RadBigDecimal;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -16,12 +17,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "Shipments")
-@Table(name = "SHIPMENTS")
-public class ShipmentsModel extends BaseModel {
+@Entity(name = "Shipment")
+@Table(name = "SHIPMENT")
+public class ShipmentModel extends BaseModel {
     private static final long serialVersionUID = 1895641912158690468L;
 
-    public ShipmentsModel() {
+    public ShipmentModel() {
         super();
         setBasePrefix(Conversions.SIPrefix.BASE);
     }
@@ -34,7 +35,7 @@ public class ShipmentsModel extends BaseModel {
     private LocalDate refDate;
 
     @Column(name = "MassUnit")
-    private float mass;
+    private RadBigDecimal mass;
 
     @Column(name = "Mass_Unit", nullable = false)
     @Convert(converter = MassUnitAttrConverter.class)
@@ -42,7 +43,7 @@ public class ShipmentsModel extends BaseModel {
 
     @Column(name = "Nature", nullable = false)
     @Convert(converter = NatureAttrConverter.class)
-    private Isotope.Nature nature;
+    private Nuclide.Nature nature;
 
     @Column(name = "State", nullable = false)
     @Convert(converter = StateAttrConverter.class)
@@ -54,14 +55,14 @@ public class ShipmentsModel extends BaseModel {
     
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
-        name = "SHIPMENT_ISOTOPES",
+        name = "SHIPMENT_NUCLIDE",
         joinColumns = {@JoinColumn(name = "Shipment_Id")},
         inverseJoinColumns = {
-            @JoinColumn(name = "Isotope_Name", referencedColumnName = "name"),
-            @JoinColumn(name = "Isotope_Abbr", referencedColumnName = "abbr")
+            @JoinColumn(name = "Nuclide_Symbol", referencedColumnName = "Symbol"),
+            @JoinColumn(name = "Mass_Number", referencedColumnName = "Mass_Number")
         }
     )
-    private List<IsotopeModel> isotopes = new ArrayList<>();
+    private List<NuclideModel> nuclides = new ArrayList<>();
 
     public long getId() {
         return id;
@@ -79,11 +80,11 @@ public class ShipmentsModel extends BaseModel {
         this.refDate = refDate == null? LocalDate.now() : refDate;
     }
 
-    public float getMass() {
+    public RadBigDecimal getMass() {
         return mass;
     }
 
-    public void setMass(float mass) {
+    public void setMass(RadBigDecimal mass) {
         this.mass = mass;
     }
 
@@ -95,12 +96,12 @@ public class ShipmentsModel extends BaseModel {
         this.massUnit = massUnit == null? Conversions.MassUnit.GRAMS : massUnit;
     }
 
-    public Isotope.Nature getNature() {
+    public Nuclide.Nature getNature() {
         return nature;
     }
 
-    public void setNature(Isotope.Nature nature) {
-        this.nature = nature == null? Isotope.Nature.REGULAR: nature;
+    public void setNature(Nuclide.Nature nature) {
+        this.nature = nature == null? Nuclide.Nature.REGULAR: nature;
     }
 
     public LimitsModelId.State getState() {
@@ -119,11 +120,11 @@ public class ShipmentsModel extends BaseModel {
         this.form = form == null? LimitsModelId.Form.NORMAL : form;
     }
 
-    public List<IsotopeModel> getIsotopes() {
-        return isotopes;
+    public List<NuclideModel> getNuclides() {
+        return nuclides;
     }
 
-    public void setIsotopes(List<IsotopeModel> isotopes) {
-        this.isotopes = isotopes == null? new ArrayList<>() : isotopes;
+    public void setNuclides(List<NuclideModel> nuclides) {
+        this.nuclides = nuclides == null? new ArrayList<>() : nuclides;
     }
 }

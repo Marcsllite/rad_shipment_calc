@@ -1,42 +1,45 @@
 package com.marcsllite.model.db;
 
+import com.marcsllite.util.RadBigDecimal;
 import org.junit.jupiter.api.Test;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
 class ReportableQuantityModelTest {
-    private final String DEFAULT_ABBR = "Abbr";
-    private final float DEFAULT_VAL = 1.0f;
-    ReportableQuantityModel model = new ReportableQuantityModel(DEFAULT_ABBR, DEFAULT_VAL, DEFAULT_VAL);
+    private final String DEFAULT_SYMBOL = "Sy";
+    private final String DEFAULT_MASS_NUMBER = "1";
+    private final NuclideModelId DEFAULT_ID = new NuclideModelId(DEFAULT_SYMBOL, DEFAULT_MASS_NUMBER);
+    private final RadBigDecimal DEFAULT_VAL = RadBigDecimal.valueOf(1.0f);
+    ReportableQuantityModel model = new ReportableQuantityModel(DEFAULT_ID, DEFAULT_VAL.toString(), DEFAULT_VAL.toString());
 
     @Test
     void testConstructor() {
-        assertEquals(DEFAULT_ABBR, model.getAbbr());
-        assertEquals(DEFAULT_VAL, model.getCurie(), 0.0f);
-        assertEquals(DEFAULT_VAL, model.getTeraBq(), 0.0f);
+        assertEquals(DEFAULT_ID, model.getNuclideId());
+        assertEquals(DEFAULT_VAL, model.getCurie());
+        assertEquals(DEFAULT_VAL, model.getTeraBq());
         assertNull(model.getBasePrefix());
     }
 
     @Test
-    void setAbbr() {
-        String abbr = "newAbbr";
-        model.setAbbr(abbr);
-        assertEquals(abbr, model.getAbbr());
+    void testSetNuclideId() {
+        NuclideModelId id = new NuclideModelId("test", "mn");
+        model.setNuclideId(id);
+        assertEquals(id, model.getNuclideId());
     }
 
     @Test
     void setCurie() {
-        float val = 45.2f;
+        RadBigDecimal val = RadBigDecimal.valueOf(45.2f);
         model.setCurie(val);
-        assertEquals(val, model.getCurie(), 0.0f);
+        assertEquals(val, model.getCurie());
     }
 
     @Test
     void setTeraBq() {
-        float val = 45.2f;
+        RadBigDecimal val = RadBigDecimal.valueOf(45.2f);
         model.setTeraBq(val);
-        assertEquals(val, model.getTeraBq(), 0.0f);
+        assertEquals(val, model.getTeraBq());
     }
 
     @Test

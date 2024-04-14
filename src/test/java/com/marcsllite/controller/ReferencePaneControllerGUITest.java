@@ -2,10 +2,11 @@ package com.marcsllite.controller;
 
 import com.marcsllite.FXIds;
 import com.marcsllite.GUITest;
-import com.marcsllite.model.Isotope;
-import com.marcsllite.model.IsotopeConstants;
+import com.marcsllite.model.Nuclide;
+import com.marcsllite.model.NuclideConstants;
 import com.marcsllite.util.Conversions;
 import com.marcsllite.util.FXMLView;
+import com.marcsllite.util.RadBigDecimal;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
@@ -21,7 +22,6 @@ import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.base.NodeMatchers;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.TimeoutException;
@@ -36,7 +36,7 @@ class ReferencePaneControllerGUITest extends GUITest {
     ReferencePaneController controller;
     GridPane gridPaneReference;
     TextField txtFieldSearch;
-    TableView<Isotope> tableViewSearch;
+    TableView<Nuclide> tableViewSearch;
     TextField txtFieldA1;
     ComboBox<String> comboBoxRefA1Prefix;
     ChoiceBox<String> choiceBoxRefA1RadUnit;
@@ -155,7 +155,7 @@ class ReferencePaneControllerGUITest extends GUITest {
         validateRefTextFields(txtFieldHalfLife, "Half Life");
         validateRefTextFields(txtFieldReportQuan, "Reportable Quantity");
 
-        ObservableList<Isotope> tableItems = tableViewSearch.getItems();
+        ObservableList<Nuclide> tableItems = tableViewSearch.getItems();
         assertEquals(4, tableItems.size());
 
         selectRow(tableViewSearch, 0);
@@ -172,7 +172,7 @@ class ReferencePaneControllerGUITest extends GUITest {
     }
 
     protected void validateRefDataForSelectedRow(int index) {
-        IsotopeConstants isoConstants = tableViewSearch.getItems().get(index).getConstants();
+        NuclideConstants isoConstants = tableViewSearch.getItems().get(index).getConstants();
 
         assertEquals(String.valueOf(isoConstants.getA1()), txtFieldA1.getText());
         assertEquals(String.valueOf(isoConstants.getA2()), txtFieldA2.getText());
@@ -193,7 +193,7 @@ class ReferencePaneControllerGUITest extends GUITest {
     void testRadUnitListener() {
         selectRow(tableViewSearch, 0);
 
-        IsotopeConstants isoConstants = tableViewSearch.getItems().get(0).getConstants();
+        NuclideConstants isoConstants = tableViewSearch.getItems().get(0).getConstants();
 
         verifyRadUnitConversions(choiceBoxRefA1RadUnit, txtFieldA1, isoConstants.getA1());
         verifyRadUnitConversions(choiceBoxRefA2RadUnit, txtFieldA2, isoConstants.getA2());
@@ -203,12 +203,12 @@ class ReferencePaneControllerGUITest extends GUITest {
         interact(() -> clearSelection(tableViewSearch));
     }
 
-    protected void verifyRadUnitConversions(ChoiceBox<String> choiceBox, TextField field, float original) {
+    protected void verifyRadUnitConversions(ChoiceBox<String> choiceBox, TextField field, RadBigDecimal original) {
         String exp = String.valueOf(original);
         assertEquals(exp, field.getText());
 
         interact(() -> choiceBox.getSelectionModel().select(Conversions.RadUnit.CURIE.getVal()));
-        exp = Conversions.bqToCi(BigDecimal.valueOf(original)).toString();
+        exp = Conversions.bqToCi(original).toString();
         assertEquals(exp, field.getText());
 
         interact(() -> choiceBox.getSelectionModel().select(Conversions.RadUnit.BECQUEREL.getVal()));
@@ -220,7 +220,7 @@ class ReferencePaneControllerGUITest extends GUITest {
     void testPrefixListener() {
         selectRow(tableViewSearch, 0);
 
-        IsotopeConstants isoConstants = tableViewSearch.getItems().get(0).getConstants();
+        NuclideConstants isoConstants = tableViewSearch.getItems().get(0).getConstants();
 
         verifyPrefixConversions(comboBoxRefA1Prefix, txtFieldA1, Conversions.SIPrefix.TERA, isoConstants.getA1());
         verifyPrefixConversions(comboBoxRefA2Prefix, txtFieldA2, Conversions.SIPrefix.TERA, isoConstants.getA2());
@@ -229,7 +229,7 @@ class ReferencePaneControllerGUITest extends GUITest {
         verifyPrefixConversions(comboBoxRefReportQuanPrefix, txtFieldReportQuan, Conversions.SIPrefix.TERA, isoConstants.getTeraBqReportQuan());
     }
 
-    protected void verifyPrefixConversions(ComboBox<String> comboBox, TextField field, Conversions.SIPrefix start, float original) {
+    protected void verifyPrefixConversions(ComboBox<String> comboBox, TextField field, Conversions.SIPrefix start, RadBigDecimal original) {
         String exp = String.valueOf(original);
         assertEquals(exp, field.getText());
 
@@ -237,7 +237,7 @@ class ReferencePaneControllerGUITest extends GUITest {
         assertTrue(end.isPresent());
 
         interact(() ->comboBox.getSelectionModel().select(end.get().getVal()));
-        exp = Conversions.convertToPrefix(BigDecimal.valueOf(original),
+        exp = Conversions.convertToPrefix(original,
                 start,
                 end.get()).toString();
         assertEquals(exp, field.getText());
@@ -276,18 +276,18 @@ class ReferencePaneControllerGUITest extends GUITest {
         assertEquals(4, tableViewSearch.getItems().size());
 
         interact(() -> txtFieldSearch.setText("A"));
-        assertEquals(2, tableViewSearch.getItems().size());
+        assertEquals(3, tableViewSearch.getItems().size());
 
         interact(() -> txtFieldSearch.setText("An"));
         assertEquals(1, tableViewSearch.getItems().size());
 
-        interact(() -> txtFieldSearch.setText("Ann"));
+        interact(() -> txtFieldSearch.setText("An-"));
         assertEquals(1, tableViewSearch.getItems().size());
 
-        interact(() -> txtFieldSearch.setText("Annz"));
+        interact(() -> txtFieldSearch.setText("An-z"));
         assertTrue(tableViewSearch.getItems().isEmpty());
 
-        interact(() -> txtFieldSearch.setText("Anny"));
+        interact(() -> txtFieldSearch.setText("An-1"));
         assertEquals(1, tableViewSearch.getItems().size());
     }
 }

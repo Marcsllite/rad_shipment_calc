@@ -31,7 +31,7 @@ public class FXIds {
     public static final String BTN_EDIT = "#btnEdit";
     public static final String BTN_REMOVE = "#btnRemove";
     public static final String TABLE_VIEW_HOME = "#tableViewHome";
-    public static final String TABLE_COL_ISOTOPES = "#tableColIsotope";
+    public static final String TABLE_COL_NUCLIDES = "#tableColNuclides";
     public static final String TABLE_COL_HALF_LIFE = "#tableColHalfLife";
     public static final String TABLE_COL_ACTIVITY = "#tableColActivity";
     public static final String TABLE_COL_REF_DATE = "#tableColRefDate";
@@ -64,7 +64,7 @@ public class FXIds {
     // Modify
     public static final String STACK_PANE_MODIFY = "#modifyPane";
     public static final String VBOX_FIRST_PAGE = "#vBoxFirstPage";
-    public static final String TXT_FIELD_ISO_NAME = "#txtFieldIsoName";
+    public static final String TXT_FIELD_ISO_NAME = "#txtFieldNuclideName";
     public static final String TXT_FIELD_A0 = "#txtFieldA0";
     public static final String COMBO_BOX_A0_PREFIX = "#comboBoxA0Prefix";
     public static final String CHOICE_BOX_AO_RAD_UNIT = "#choiceBoxA0RadUnit";

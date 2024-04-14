@@ -6,51 +6,51 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-class IsotopeModelIdTest {
+class NuclideModelIdTest {
     @Test
     void testGetters_ValueTrimmed() {
         String exp = "expected";
         String value = "  " + exp + "   ";
 
-        IsotopeModelId isoId = new IsotopeModelId(value, value);
-        assertEquals(exp, isoId.getName());
-        assertEquals(exp, isoId.getAbbr());
+        NuclideModelId isoId = new NuclideModelId(value, value);
+        assertEquals(exp, isoId.getSymbol());
+        assertEquals(exp, isoId.getMassNumber());
     }
 
     @Test
     void testEquals_NullObj() {
-        IsotopeModelId isoId = new IsotopeModelId("", "");
+        NuclideModelId isoId = new NuclideModelId("", "");
         assertNotEquals(null, isoId);
     }
 
     @Test
     void testEquals_WrongClass() {
-        IsotopeModelId isoId = new IsotopeModelId("", "");
+        NuclideModelId isoId = new NuclideModelId("", "");
         assertNotEquals(isoId, new Object());
     }
 
     @Test
-    void testEquals_DiffName() {
-        IsotopeModelId isoId = new IsotopeModelId("", "");
-        IsotopeModelId isoId2 = new IsotopeModelId("Name", "");
+    void testEquals_DiffSymbol() {
+        NuclideModelId isoId = new NuclideModelId("", "");
+        NuclideModelId isoId2 = new NuclideModelId("Sy", "");
         assertNotEquals(isoId, isoId2);
         assertNotSame(isoId.hashCode(), isoId2.hashCode());
     }
 
     @Test
-    void testEquals_DiffAbbr() {
-        IsotopeModelId isoId = new IsotopeModelId("", "");
-        IsotopeModelId isoId2 = new IsotopeModelId("", "Abbr");
+    void testEquals_DiffMassNumber() {
+        NuclideModelId isoId = new NuclideModelId("", "");
+        NuclideModelId isoId2 = new NuclideModelId("", "MassNumber");
         assertNotEquals(isoId, isoId2);
         assertNotSame(isoId.hashCode(), isoId2.hashCode());
     }
 
     @Test
     void testEquals() {
-        String name = "Name";
-        String abbr = "Abbr";
-        IsotopeModelId isoId = new IsotopeModelId(name, abbr);
-        IsotopeModelId isoId2 = new IsotopeModelId(name, abbr);
+        String symbol = "Sy";
+        String massNumber = "MassNumber";
+        NuclideModelId isoId = new NuclideModelId(symbol, massNumber);
+        NuclideModelId isoId2 = new NuclideModelId(symbol, massNumber);
         assertEquals(isoId, isoId2);
         assertEquals(isoId.hashCode(), isoId2.hashCode());
     }

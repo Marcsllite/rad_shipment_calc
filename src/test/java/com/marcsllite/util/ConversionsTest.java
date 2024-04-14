@@ -12,7 +12,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.security.InvalidParameterException;
 
 import static junit.framework.Assert.assertNull;
@@ -24,8 +23,7 @@ import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class ConversionsTest {
-    final static BigDecimal toBeConverted = BigDecimal.valueOf(7.5d);
-    final static MathContext mc = Conversions.context;
+    final static RadBigDecimal toBeConverted = RadBigDecimal.valueOf(7.5d);
     MockedStatic<Conversions> mockedConversions;
 
     @BeforeEach
@@ -37,37 +35,10 @@ class ConversionsTest {
     public void tearDown() {
         mockedConversions.close();
     }
-
-    @Test
-    void testToSIPrefix() {
-        String str = "";
-        Conversions.SIPrefix actual = Conversions.SIPrefix.toSIPrefix(str);
-        Assert.assertEquals(Conversions.SIPrefix.BASE, actual);
-
-        str = "m";
-        actual = Conversions.SIPrefix.toSIPrefix(str);
-        Assert.assertEquals(Conversions.SIPrefix.MILLI, actual);
-
-        str = "M";
-        actual = Conversions.SIPrefix.toSIPrefix(str);
-        Assert.assertEquals(Conversions.SIPrefix.MEGA, actual);
-
-        str = "Mega (M)";
-        actual = Conversions.SIPrefix.toSIPrefix(str);
-        Assert.assertEquals(Conversions.SIPrefix.MEGA, actual);
-
-        str = "mEGA (M)";
-        actual = Conversions.SIPrefix.toSIPrefix(str);
-        Assert.assertEquals(Conversions.SIPrefix.MEGA, actual);
-
-        str = "fake";
-        actual = Conversions.SIPrefix.toSIPrefix(str);
-        assertNull(actual);
-    }
     
     @ParameterizedTest(name = "Convert 7.5 {0} to base = {1}")
     @MethodSource("convertToBaseException_data")
-    void testConvertToBaseException(BigDecimal value, Conversions.SIPrefix prefix, String message) {
+    void testConvertToBaseException(RadBigDecimal value, Conversions.SIPrefix prefix, String message) {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> Conversions.convertToBase(value, prefix)
         );
@@ -83,39 +54,39 @@ class ConversionsTest {
     
     @ParameterizedTest(name = "Convert {0} {1} to base = {3}")
     @MethodSource("convertToBase_data")
-    void testConvertToBase(BigDecimal value, Conversions.SIPrefix prefix, BigDecimal expected) {
+    void testConvertToBase(RadBigDecimal value, Conversions.SIPrefix prefix, RadBigDecimal expected) {
         assertEquals(expected, Conversions.convertToBase(value, prefix));
     }
 
     private static Object[] convertToBase_data() {
         return new Object[] {
-            new Object[] {toBeConverted, Conversions.SIPrefix.YOTTA, toBeConverted.multiply(BigDecimal.TEN.pow(24, mc), mc)},
-            new Object[] {toBeConverted, Conversions.SIPrefix.ZETTA, toBeConverted.multiply(BigDecimal.TEN.pow(21, mc), mc)},
-            new Object[] {toBeConverted, Conversions.SIPrefix.EXA, toBeConverted.multiply(BigDecimal.TEN.pow(18, mc), mc)},
-            new Object[] {toBeConverted, Conversions.SIPrefix.PETA, toBeConverted.multiply(BigDecimal.TEN.pow(15), mc)},
-            new Object[] {toBeConverted, Conversions.SIPrefix.TERA, toBeConverted.multiply(BigDecimal.TEN.pow(12), mc)},
-            new Object[] {toBeConverted, Conversions.SIPrefix.GIGA, toBeConverted.multiply(BigDecimal.TEN.pow(9), mc)},
-            new Object[] {toBeConverted, Conversions.SIPrefix.MEGA, toBeConverted.multiply(BigDecimal.TEN.pow(6), mc)},
-            new Object[] {toBeConverted, Conversions.SIPrefix.KILO, toBeConverted.multiply(BigDecimal.TEN.pow(3), mc)},
-            new Object[] {toBeConverted, Conversions.SIPrefix.HECTO, toBeConverted.multiply(BigDecimal.TEN.pow(2), mc)},
-            new Object[] {toBeConverted, Conversions.SIPrefix.DEKA, toBeConverted.multiply(BigDecimal.TEN.pow(1), mc)},
+            new Object[] {toBeConverted, Conversions.SIPrefix.YOTTA, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(24))},
+            new Object[] {toBeConverted, Conversions.SIPrefix.ZETTA, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(21))},
+            new Object[] {toBeConverted, Conversions.SIPrefix.EXA, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(18))},
+            new Object[] {toBeConverted, Conversions.SIPrefix.PETA, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(15))},
+            new Object[] {toBeConverted, Conversions.SIPrefix.TERA, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(12))},
+            new Object[] {toBeConverted, Conversions.SIPrefix.GIGA, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(9))},
+            new Object[] {toBeConverted, Conversions.SIPrefix.MEGA, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(6))},
+            new Object[] {toBeConverted, Conversions.SIPrefix.KILO, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(3))},
+            new Object[] {toBeConverted, Conversions.SIPrefix.HECTO, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(2))},
+            new Object[] {toBeConverted, Conversions.SIPrefix.DEKA, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(1))},
             new Object[] {toBeConverted, Conversions.SIPrefix.BASE, toBeConverted},
-            new Object[] {toBeConverted, Conversions.SIPrefix.DECI, toBeConverted.multiply(BigDecimal.TEN.pow(-1, mc), mc)},
-            new Object[] {toBeConverted, Conversions.SIPrefix.CENTI, toBeConverted.multiply(BigDecimal.TEN.pow(-2, mc), mc)},
-            new Object[] {toBeConverted, Conversions.SIPrefix.MILLI, toBeConverted.multiply(BigDecimal.TEN.pow(-3, mc), mc)},
-            new Object[] {toBeConverted, Conversions.SIPrefix.MICRO, toBeConverted.multiply(BigDecimal.TEN.pow(-6, mc), mc)},
-            new Object[] {toBeConverted, Conversions.SIPrefix.NANO, toBeConverted.multiply(BigDecimal.TEN.pow(-9, mc), mc)},
-            new Object[] {toBeConverted, Conversions.SIPrefix.PICO, toBeConverted.multiply(BigDecimal.TEN.pow(-12, mc), mc)},
-            new Object[] {toBeConverted, Conversions.SIPrefix.FEMTO, toBeConverted.multiply(BigDecimal.TEN.pow(-15, mc), mc)},
-            new Object[] {toBeConverted, Conversions.SIPrefix.ATTO, toBeConverted.multiply(BigDecimal.TEN.pow(-18, mc), mc)},
-            new Object[] {toBeConverted, Conversions.SIPrefix.ZEPTO, toBeConverted.multiply(BigDecimal.TEN.pow(-21, mc), mc)},
-            new Object[] {toBeConverted, Conversions.SIPrefix.YOCTO, toBeConverted.multiply(BigDecimal.TEN.pow(-24, mc), mc)}
+            new Object[] {toBeConverted, Conversions.SIPrefix.DECI, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(-1))},
+            new Object[] {toBeConverted, Conversions.SIPrefix.CENTI, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(-2))},
+            new Object[] {toBeConverted, Conversions.SIPrefix.MILLI, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(-3))},
+            new Object[] {toBeConverted, Conversions.SIPrefix.MICRO, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(-6))},
+            new Object[] {toBeConverted, Conversions.SIPrefix.NANO, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(-9))},
+            new Object[] {toBeConverted, Conversions.SIPrefix.PICO, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(-12))},
+            new Object[] {toBeConverted, Conversions.SIPrefix.FEMTO, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(-15))},
+            new Object[] {toBeConverted, Conversions.SIPrefix.ATTO, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(-18))},
+            new Object[] {toBeConverted, Conversions.SIPrefix.ZEPTO, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(-21))},
+            new Object[] {toBeConverted, Conversions.SIPrefix.YOCTO, toBeConverted.multiply(new RadBigDecimal(BigDecimal.TEN).pow(-24))}
         };
     }
 
     @ParameterizedTest(name = "Convert 7.5 {0} to base = {1}")
     @MethodSource("convertToPrefixException_data")
-    void testConvertToPrefixException(BigDecimal value, Conversions.SIPrefix start, Conversions.SIPrefix end, String message) {
+    void testConvertToPrefixException(RadBigDecimal value, Conversions.SIPrefix start, Conversions.SIPrefix end, String message) {
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> Conversions.convertToPrefix(value, start, end)
         );
@@ -133,7 +104,7 @@ class ConversionsTest {
 
     @ParameterizedTest(name = "Convert {0} {1} to base = {3}")
     @MethodSource("convertToPrefix_data")
-    void testConvertToPrefix(BigDecimal value, Conversions.SIPrefix start, Conversions.SIPrefix end, BigDecimal expected) {
+    void testConvertToPrefix(RadBigDecimal value, Conversions.SIPrefix start, Conversions.SIPrefix end, RadBigDecimal expected) {
         assertEquals(expected, Conversions.convertToPrefix(value, start, end));
         mockedConversions.verify(() -> Conversions.convertToBase(value, start));
     }
@@ -175,8 +146,8 @@ class ConversionsTest {
 
     @Test
     void testBqToCi() {
-        BigDecimal expected = BigDecimal.valueOf(2.7).multiply(BigDecimal.TEN.pow(-11, mc), mc);
-        BigDecimal actual = Conversions.bqToCi(BigDecimal.ONE);
+        RadBigDecimal expected = RadBigDecimal.valueOf(2.7).multiply(new RadBigDecimal(BigDecimal.TEN).pow(-11));
+        RadBigDecimal actual = Conversions.bqToCi(new RadBigDecimal(BigDecimal.ONE));
 
         assertEquals(expected, actual);
     }
@@ -192,8 +163,8 @@ class ConversionsTest {
 
     @Test
     void testCiToBq() {
-        BigDecimal expected = BigDecimal.valueOf(3.7).multiply(BigDecimal.TEN.pow(10, mc), mc);
-        BigDecimal actual = Conversions.ciToBq(BigDecimal.ONE);
+        RadBigDecimal expected = RadBigDecimal.valueOf(3.7).multiply(new RadBigDecimal(BigDecimal.TEN).pow(10));
+        RadBigDecimal actual = Conversions.ciToBq(new RadBigDecimal(BigDecimal.ONE));
 
         assertEquals(expected, actual);
     }
@@ -209,8 +180,8 @@ class ConversionsTest {
 
     @Test
     void testGyToRad() {
-        BigDecimal expected = BigDecimal.TEN.pow(2, mc);
-        BigDecimal actual = Conversions.gyToRad(BigDecimal.ONE);
+        RadBigDecimal expected = new RadBigDecimal(BigDecimal.TEN).pow(2);
+        BigDecimal actual = Conversions.gyToRad(new RadBigDecimal(BigDecimal.ONE));
 
         assertEquals(expected, actual);
     }
@@ -226,8 +197,8 @@ class ConversionsTest {
 
     @Test
     void testRadToGy() {
-        BigDecimal expected = BigDecimal.TEN.pow(-2, mc);
-        BigDecimal actual = Conversions.radToGy(BigDecimal.ONE);
+        BigDecimal expected = new RadBigDecimal(BigDecimal.TEN).pow(-2);
+        BigDecimal actual = Conversions.radToGy(new RadBigDecimal(BigDecimal.ONE));
 
         assertEquals(expected, actual);
     }
@@ -243,8 +214,8 @@ class ConversionsTest {
 
     @Test
     void testSvToRem() {
-        BigDecimal expected = BigDecimal.TEN.pow(2, mc);
-        BigDecimal actual = Conversions.svToRem(BigDecimal.ONE);
+        BigDecimal expected = new RadBigDecimal(BigDecimal.TEN).pow(2);
+        BigDecimal actual = Conversions.svToRem(new RadBigDecimal(BigDecimal.ONE));
 
         assertEquals(expected, actual);
     }
@@ -260,8 +231,8 @@ class ConversionsTest {
 
     @Test
     void testRemToSv() {
-        BigDecimal expected = BigDecimal.TEN.pow(-2, mc);
-        BigDecimal actual = Conversions.remToSv(BigDecimal.ONE);
+        BigDecimal expected = new RadBigDecimal(BigDecimal.TEN).pow(-2);
+        BigDecimal actual = Conversions.remToSv(new RadBigDecimal(BigDecimal.ONE));
 
         assertEquals(expected, actual);
     }
@@ -277,8 +248,8 @@ class ConversionsTest {
 
     @Test
     void testCkgToR() {
-        BigDecimal expected = BigDecimal.valueOf(3.88).multiply(BigDecimal.TEN.pow(3, mc), mc);
-        BigDecimal actual = Conversions.ckgToR(BigDecimal.ONE);
+        RadBigDecimal expected = RadBigDecimal.valueOf(3.88).multiply(new RadBigDecimal(BigDecimal.TEN).pow(3));
+        RadBigDecimal actual = Conversions.ckgToR(new RadBigDecimal(BigDecimal.ONE));
 
         assertEquals(expected, actual);
     }
@@ -294,9 +265,128 @@ class ConversionsTest {
 
     @Test
     void testRToCkg() {
-        BigDecimal expected = BigDecimal.valueOf(2.58).multiply(BigDecimal.TEN.pow(-4, mc), mc);
-        BigDecimal actual = Conversions.rToCkg(BigDecimal.ONE);
+        RadBigDecimal expected = RadBigDecimal.valueOf(2.58).multiply(new RadBigDecimal(BigDecimal.TEN).pow(-4));
+        RadBigDecimal actual = Conversions.rToCkg(new RadBigDecimal(BigDecimal.ONE));
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void testToMassUnit() {
+        String str = "";
+        Conversions.MassUnit actual = Conversions.MassUnit.toMass(str);
+        assertNull(actual);
+
+        str = "g";
+        actual = Conversions.MassUnit.toMass(str);
+        Assert.assertEquals(Conversions.MassUnit.GRAMS, actual);
+
+        str = "GRAMS (g)";
+        actual = Conversions.MassUnit.toMass(str);
+        Assert.assertEquals(Conversions.MassUnit.GRAMS, actual);
+
+        str = "fake";
+        actual = Conversions.MassUnit.toMass(str);
+        assertNull(actual);
+    }
+
+    @Test
+    void testToDoseUnit() {
+        String str = "";
+        Conversions.DoseUnit actual = Conversions.DoseUnit.toDoseUnit(str);
+        Assert.assertNull(actual);
+
+        str = "g";
+        actual = Conversions.DoseUnit.toDoseUnit(str);
+        Assert.assertNull(actual);
+
+        str = "gy";
+        actual = Conversions.DoseUnit.toDoseUnit(str);
+        Assert.assertEquals(Conversions.DoseUnit.GRAY, actual);
+
+        str = "roentgen equivalent, man (rem)";
+        actual = Conversions.DoseUnit.toDoseUnit(str);
+        Assert.assertEquals(Conversions.DoseUnit.REM, actual);
+
+        str = "roentgen Equivalent, MaN (rem)";
+        actual = Conversions.DoseUnit.toDoseUnit(str);
+        Assert.assertEquals(Conversions.DoseUnit.REM, actual);
+
+        str = "fake";
+        actual = Conversions.DoseUnit.toDoseUnit(str);
+        assertNull(actual);
+    }
+
+    @Test
+    void testToExposureUnit() {
+        String str = "";
+        Conversions.ExposureUnit actual = Conversions.ExposureUnit.toExposureUnit(str);
+        Assert.assertNull(actual);
+
+        str = "r";
+        actual = Conversions.ExposureUnit.toExposureUnit(str);
+        Assert.assertEquals(Conversions.ExposureUnit.ROENTGEN, actual);
+
+        str = "C/kg";
+        actual = Conversions.ExposureUnit.toExposureUnit(str);
+        Assert.assertEquals(Conversions.ExposureUnit.COULOMB_KILOGRAM, actual);
+
+        str = "roentgen (R)";
+        actual = Conversions.ExposureUnit.toExposureUnit(str);
+        Assert.assertEquals(Conversions.ExposureUnit.ROENTGEN, actual);
+
+        str = "coulomb/kilogram (C/kg)";
+        actual = Conversions.ExposureUnit.toExposureUnit(str);
+        Assert.assertEquals(Conversions.ExposureUnit.COULOMB_KILOGRAM, actual);
+
+        str = "fake";
+        actual = Conversions.ExposureUnit.toExposureUnit(str);
+        assertNull(actual);
+    }
+
+    @Test
+    void testToRadUnit() {
+        String str = "";
+        Conversions.RadUnit actual = Conversions.RadUnit.toRadUnit(str);
+        assertNull(actual);
+
+        str = "Curie (Ci)";
+        actual = Conversions.RadUnit.toRadUnit(str);
+        Assert.assertEquals(Conversions.RadUnit.CURIE, actual);
+
+        str = "CI";
+        actual = Conversions.RadUnit.toRadUnit(str);
+        Assert.assertEquals(Conversions.RadUnit.CURIE, actual);
+
+        str = "fake";
+        actual = Conversions.RadUnit.toRadUnit(str);
+        assertNull(actual);
+    }
+
+    @Test
+    void testToSIPrefix() {
+        String str = "";
+        Conversions.SIPrefix actual = Conversions.SIPrefix.toSIPrefix(str);
+        Assert.assertEquals(Conversions.SIPrefix.BASE, actual);
+    
+        str = "m";
+        actual = Conversions.SIPrefix.toSIPrefix(str);
+        Assert.assertEquals(Conversions.SIPrefix.MILLI, actual);
+    
+        str = "M";
+        actual = Conversions.SIPrefix.toSIPrefix(str);
+        Assert.assertEquals(Conversions.SIPrefix.MEGA, actual);
+    
+        str = "Mega (M)";
+        actual = Conversions.SIPrefix.toSIPrefix(str);
+        Assert.assertEquals(Conversions.SIPrefix.MEGA, actual);
+    
+        str = "mEGA (M)";
+        actual = Conversions.SIPrefix.toSIPrefix(str);
+        Assert.assertEquals(Conversions.SIPrefix.MEGA, actual);
+    
+        str = "fake";
+        actual = Conversions.SIPrefix.toSIPrefix(str);
+        assertNull(actual);
     }
 }

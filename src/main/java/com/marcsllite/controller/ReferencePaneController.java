@@ -1,8 +1,9 @@
 package com.marcsllite.controller;
 
-import com.marcsllite.model.Isotope;
+import com.marcsllite.model.Nuclide;
 import com.marcsllite.model.PTableColumn;
 import com.marcsllite.util.Conversions;
+import com.marcsllite.util.RadBigDecimal;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -19,15 +20,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.function.Predicate;
 
 public class ReferencePaneController extends BaseController {
     @FXML GridPane referencePane;
     @FXML TextField txtFieldSearch;
-    @FXML TableView<Isotope> tableViewSearch;
-    @FXML PTableColumn<Isotope, String> tableColRefAbbr;
-    @FXML PTableColumn<Isotope, String> tableColRefName;
+    @FXML TableView<Nuclide> tableViewSearch;
+    @FXML PTableColumn<Nuclide, String> tableColRefFullName;
+    @FXML PTableColumn<Nuclide, String> tableColRefMassNumber;
     @FXML TextField txtFieldA1;
     @FXML ComboBox<String> comboBoxRefA1Prefix;
     @FXML ChoiceBox<String> choiceBoxRefA1RadUnit;
@@ -45,7 +44,7 @@ public class ReferencePaneController extends BaseController {
     @FXML TextField txtFieldReportQuan;
     @FXML ComboBox<String> comboBoxRefReportQuanPrefix;
     @FXML ChoiceBox<String> choiceBoxRefReportQuanRadUnit;
-    ObservableList<Isotope> refIsotopes;
+    ObservableList<Nuclide> refNuclides;
 
     public ReferencePaneController() throws IOException {
         this(null);
@@ -76,22 +75,22 @@ public class ReferencePaneController extends BaseController {
         referencePane.toBack();
     }
 
-    public ObservableList<Isotope> getRefIsotopes() {
-        return refIsotopes;
+    public ObservableList<Nuclide> getRefNuclides() {
+        return refNuclides;
     }
 
-    public void setRefIsotopes(ObservableList<Isotope> refIsotopes) {
-        this.refIsotopes = refIsotopes;
+    public void setRefNuclides(ObservableList<Nuclide> refNuclides) {
+        this.refNuclides = refNuclides;
     }
 
     protected void initTable() {
-        tableColRefAbbr.setCellValueFactory(new PropertyValueFactory<>("abbr"));
-        tableColRefName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tableColRefFullName.setCellValueFactory(new PropertyValueFactory<>("fullName"));
+        tableColRefMassNumber.setCellValueFactory(new PropertyValueFactory<>("massNumber"));
 
         tableViewSearch.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         tableViewSearch.getSelectionModel().clearSelection();
 
-        setupSearchFiltering(getDbService().getAllIsotopes());
+        setupSearchFiltering(getDbService().getAllNuclides());
     }
 
     protected void setupDropDownItems() {
@@ -164,7 +163,7 @@ public class ReferencePaneController extends BaseController {
 
     protected void radUnitListener(TextField field, String oldV, String newV) {
         try {
-            BigDecimal prev = new BigDecimal(field.getText());
+            RadBigDecimal prev = new RadBigDecimal(field.getText());
             unbindControl(field);
 
             if(Conversions.RadUnit.CURIE.getVal().equals(oldV) &&
@@ -181,8 +180,8 @@ public class ReferencePaneController extends BaseController {
 
     protected void prefixListener(TextField field, String oldV, String newV) {
         try {
-            BigDecimal converted = Conversions.convertToPrefix(
-                new BigDecimal(field.getText()),
+            RadBigDecimal converted = Conversions.convertToPrefix(
+                new RadBigDecimal(field.getText()),
                 Conversions.SIPrefix.toSIPrefix(oldV),
                 Conversions.SIPrefix.toSIPrefix(newV));
 
@@ -193,33 +192,31 @@ public class ReferencePaneController extends BaseController {
         }
     }
 
-    protected void setupSearchFiltering(ObservableList<Isotope> list) {
-        FilteredList<Isotope> filteredData =  new FilteredList<>(list, null);
+    protected void setupSearchFiltering(ObservableList<Nuclide> list) {
+        FilteredList<Nuclide> filteredData =  new FilteredList<>(list, null);
 
         txtFieldSearch.textProperty().addListener(
-            (observable, oldV, newV) -> {
-                if (newV != null && !newV.isBlank()) {
-                    tableViewSearch.getSelectionModel().clearSelection();
-                }
-
-                filteredData.setPredicate(searchFilteringPredicate(newV));
-            }
+            (observable, oldV, newV) -> searchFilteringListener(filteredData, newV)
         );
 
-        SortedList<Isotope> sortedData = new SortedList<>(filteredData);
+        SortedList<Nuclide> sortedData = new SortedList<>(filteredData);
         sortedData.comparatorProperty().bind(tableViewSearch.comparatorProperty());
         tableViewSearch.setItems(sortedData);
-        tableViewSearch.getSelectionModel().selectedItemProperty().addListener(((observable, oldV, newV) ->
-            setupTableDataLinking(newV)
-        ));
+        tableViewSearch.getSelectionModel().selectedItemProperty().addListener(
+            (observable, oldV, newV) -> setupTableDataLinking(newV)
+        );
     }
 
-    protected Predicate<Isotope> searchFilteringPredicate(String str) {
-        return isotope -> doesIsotopeNameMatch(isotope, str);
+    protected void searchFilteringListener(FilteredList<Nuclide> filteredData, String newV) {
+        if (newV != null && !newV.isBlank()) {
+            tableViewSearch.getSelectionModel().clearSelection();
+        }
+
+        filteredData.setPredicate(nuclide -> doesNuclideNameMatch(nuclide, newV));
     }
 
-    protected boolean doesIsotopeNameMatch(Isotope isotope, String str) {
-        if(isotope == null) {
+    protected boolean doesNuclideNameMatch(Nuclide nuclide, String str) {
+        if(nuclide == null) {
             return false;
         }
         if (str == null || str.isBlank()) {
@@ -227,30 +224,30 @@ public class ReferencePaneController extends BaseController {
         }
         String searchStr = str.toLowerCase();
 
-        return isotope.getIsoId().getAbbr().toLowerCase().contains(searchStr) ||
-            isotope.getIsoId().getName().toLowerCase().contains(searchStr);
+        return nuclide.getNameNotation().toLowerCase().contains(searchStr) ||
+            nuclide.getAbbrNotation().toLowerCase().contains(searchStr);
     }
 
-    protected void setupTableDataLinking(Isotope isotope) {
-        unbindIsotopeConstants();
-        if(isotope != null) {
-            bindIsotopeConstants(isotope);
+    protected void setupTableDataLinking(Nuclide nuclide) {
+        unbindNuclideConstants();
+        if(nuclide != null) {
+            bindNuclideConstants(nuclide);
             selectBaseDropDownItems();
         }
     }
 
-    protected void bindIsotopeConstants(Isotope isotope) {
-        if(isotope != null) {
-            txtFieldA1.textProperty().bind(isotope.getConstants().a1Property().asString());
-            txtFieldA2.textProperty().bind(isotope.getConstants().a2Property().asString());
-            txtFieldDecayConst.textProperty().bind(isotope.getConstants().decayConstantProperty().asString());
-            txtFieldExemptCon.textProperty().bind(isotope.getConstants().exemptConcentrationProperty().asString());
-            txtFieldExemptLim.textProperty().bind(isotope.getConstants().exemptLimitProperty().asString());
-            txtFieldHalfLife.textProperty().bind(isotope.getConstants().halfLifeProperty().asString());
-            txtFieldReportQuan.textProperty().bind(isotope.getConstants().teraBqReportQuanProperty().asString());
+    protected void bindNuclideConstants(Nuclide nuclide) {
+        if(nuclide != null) {
+            txtFieldA1.textProperty().bind(nuclide.getConstants().a1Property().asString());
+            txtFieldA2.textProperty().bind(nuclide.getConstants().a2Property().asString());
+            txtFieldDecayConst.textProperty().bind(nuclide.getConstants().decayConstantProperty().asString());
+            txtFieldExemptCon.textProperty().bind(nuclide.getConstants().exemptConcentrationProperty().asString());
+            txtFieldExemptLim.textProperty().bind(nuclide.getConstants().exemptLimitProperty().asString());
+            txtFieldHalfLife.textProperty().bind(nuclide.getConstants().halfLifeProperty().asString());
+            txtFieldReportQuan.textProperty().bind(nuclide.getConstants().teraBqReportQuanProperty().asString());
         }
     }
-    protected void unbindIsotopeConstants() {
+    protected void unbindNuclideConstants() {
         unbindControl(txtFieldA1);
         unbindControl(txtFieldA2);
         unbindControl(txtFieldDecayConst);

@@ -1,10 +1,12 @@
 package com.marcsllite.dao;
 
 import com.marcsllite.model.db.ExemptLimitModel;
+import com.marcsllite.model.db.NuclideModelId;
+import com.marcsllite.util.RadBigDecimal;
 
-public class ExemptLimitDaoImpl extends AbstractDao<ExemptLimitModel, String> {
-    public float getExemptLimit(String abbr) {
-        ExemptLimitModel model = findById(abbr);
-        return model == null? -123456789.0f: model.getValue();
+public class ExemptLimitDaoImpl extends AbstractDao<ExemptLimitModel, NuclideModelId> {
+    public RadBigDecimal getExemptLimit(NuclideModelId nuclideId) {
+        ExemptLimitModel model = findById(nuclideId);
+        return model == null? RadBigDecimal.NEG_INFINITY_OBJ : model.getValue();
     }
 }
