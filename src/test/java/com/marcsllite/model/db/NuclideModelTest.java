@@ -8,24 +8,24 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
 @ExtendWith(MockitoExtension.class)
-class ValidNuclideModelTest {
+class NuclideModelTest {
     private final String DEFAULT_SYMBOL = "XX";
     private final String DEFAULT_MASS_NUMBER = "1";
-    private final ValidNuclideModelId DEFAULT_ISO_ID = new ValidNuclideModelId(DEFAULT_SYMBOL, DEFAULT_MASS_NUMBER);
-    ValidNuclideModel model = new ValidNuclideModel(DEFAULT_ISO_ID);
+    private final NuclideModelId DEFAULT_ISO_ID = new NuclideModelId(DEFAULT_SYMBOL, DEFAULT_MASS_NUMBER);
+    NuclideModel model = new NuclideModel(DEFAULT_ISO_ID);
 
     @Test
     void testConstructor() {
-        assertEquals(DEFAULT_ISO_ID, model.getIsotopeId());
+        assertEquals(DEFAULT_ISO_ID, model.getNuclideId());
         assertEquals(DEFAULT_SYMBOL, model.getName());
         assertNull(model.getBasePrefix());
     }
 
     @Test
     void testSetIsoId() {
-        ValidNuclideModelId isoId = new ValidNuclideModelId("ZZ", "123");
-        model.setIsotopeId(isoId);
-        assertEquals(isoId, model.getIsotopeId());
+        NuclideModelId isoId = new NuclideModelId("ZZ", "123");
+        model.setNuclideId(isoId);
+        assertEquals(isoId, model.getNuclideId());
     }
 
     @Test

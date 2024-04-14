@@ -1,12 +1,14 @@
 package com.marcsllite.controller;
 
 import com.marcsllite.App;
-import com.marcsllite.model.Isotope;
+import com.marcsllite.model.Nuclide;
 import com.marcsllite.model.Shipment;
-import com.marcsllite.model.db.IsotopeModel;
 import com.marcsllite.model.db.LimitsModelId;
+import com.marcsllite.model.db.NuclideModel;
 import com.marcsllite.util.Conversions;
+import com.marcsllite.util.RadBigDecimal;
 import com.marcsllite.util.handler.PropHandler;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
@@ -42,7 +44,7 @@ public class ModifyController extends BaseController {
     @FXML private StackPane modifyPane;
     // First Page
     @FXML private VBox vBoxFirstPage;
-    @FXML private TextField txtFieldIsoName;
+    @FXML private TextField txtFieldNuclideName;
     @FXML private TextField txtFieldA0;
     @FXML private ComboBox<String> comboBoxA0Prefix;
     @FXML private ChoiceBox<String> choiceBoxA0RadUnit;
@@ -75,11 +77,11 @@ public class ModifyController extends BaseController {
     @FXML private Button btnBack;
     @FXML private Button btnFinish;
     @FXML private Text txtSecondPageStatus;
-    Isotope editingIso;
-    ObservableList<IsotopeModel> isotopes = getDbService().getAllIsotopeModels();
-    FilteredList<IsotopeModel> searchFilteredIsos =  new FilteredList<>(isotopes, null);
-    FilteredList<IsotopeModel> filteredLifeSpanIsos = new FilteredList<>(isotopes, null);
-    FilteredList<IsotopeModel> filteredLungAbsIsos = new FilteredList<>(isotopes, null);
+    Nuclide editingNuclide;
+    ObservableList<NuclideModel> nuclides;
+    FilteredList<NuclideModel> searchFilteredNuclides;
+    FilteredList<NuclideModel> filteredLifeSpanNuclides;
+    FilteredList<NuclideModel> filteredLungAbsNuclides;
 
     public ModifyController(BaseController.Page page) throws IOException {
         this(page, null);
@@ -88,18 +90,48 @@ public class ModifyController extends BaseController {
     public ModifyController(BaseController.Page page, PropHandler propHandler) throws IOException {
         super(propHandler);
         setPage(page);
+        setNuclides(getDbService().getAllNuclideModels());
     }
 
-    public FilteredList<IsotopeModel> getFilteredLifeSpanIsos() {
-        return filteredLifeSpanIsos;
+    public ObservableList<NuclideModel> getNuclides() {
+        return nuclides;
     }
 
-    public FilteredList<IsotopeModel> getFilteredLungAbsIsos() {
-        return filteredLungAbsIsos;
+    public void setNuclides(ObservableList<NuclideModel> nuclides) {
+        this.nuclides = nuclides == null? FXCollections.observableArrayList() : nuclides;
+        setSearchFilteredNuclides(new FilteredList<>(getNuclides(), null));
+        setFilteredLifeSpanNuclides(new FilteredList<>(getNuclides(), null));
+        setFilteredLungAbsNuclides(new FilteredList<>(getNuclides(), null));
     }
 
-    public FilteredList<IsotopeModel> getSearchFilteredIsos() {
-        return searchFilteredIsos;
+    public FilteredList<NuclideModel> getFilteredLifeSpanNuclides() {
+        return filteredLifeSpanNuclides;
+    }
+
+    public void setFilteredLifeSpanNuclides(FilteredList<NuclideModel> filteredLifeSpanNuclides) {
+        this.filteredLifeSpanNuclides = filteredLifeSpanNuclides == null?
+            new FilteredList<>(FXCollections.observableArrayList(), null) :
+            filteredLifeSpanNuclides;
+    }
+
+    public FilteredList<NuclideModel> getFilteredLungAbsNuclides() {
+        return filteredLungAbsNuclides;
+    }
+
+    public void setFilteredLungAbsNuclides(FilteredList<NuclideModel> filteredLungAbsNuclides) {
+        this.filteredLungAbsNuclides = filteredLungAbsNuclides == null?
+            new FilteredList<>(FXCollections.observableArrayList(), null) :
+            filteredLungAbsNuclides;
+    }
+
+    public FilteredList<NuclideModel> getSearchFilteredNuclides() {
+        return searchFilteredNuclides;
+    }
+
+    public void setSearchFilteredNuclides(FilteredList<NuclideModel> searchFilteredNuclides) {
+        this.searchFilteredNuclides = searchFilteredNuclides == null?
+            new FilteredList<>(FXCollections.observableArrayList(), null) :
+            searchFilteredNuclides;
     }
 
     @Override
@@ -156,12 +188,12 @@ public class ModifyController extends BaseController {
         }
     }
 
-    public Isotope getEditingIso() {
-        return editingIso;
+    public Nuclide getEditingNuclide() {
+        return editingNuclide;
     }
 
-    public void setEditingIso(Isotope editingIso) {
-        this.editingIso = editingIso;
+    public void setEditingNuclide(Nuclide editingNuclide) {
+        this.editingNuclide = editingNuclide;
     }
 
     @Override
@@ -182,7 +214,7 @@ public class ModifyController extends BaseController {
     }
     
     protected void resetFirstPage() {
-        txtFieldIsoName.setText(null);
+        txtFieldNuclideName.setText(null);
         txtFieldA0.setText(null);
         setLungAbsVisible(false);
         setLifeSpanVisible(false);
@@ -204,23 +236,21 @@ public class ModifyController extends BaseController {
     }
 
     protected void setupListeners() {
-        txtFieldIsoName.textProperty().removeListener((observable, oldV, newV) -> nameListener(newV));
+        txtFieldNuclideName.textProperty().removeListener((observable, oldV, newV) -> nameListener(newV));
         txtFieldA0.textProperty().removeListener((observable, oldV, newV) -> initialActivityListener(newV));
         txtFieldMass.textProperty().removeListener(((observable, oldV, newV) -> massListener(newV)));
         toggleGrpLifeSpan.selectedToggleProperty().removeListener((observable, oldV, newV) -> radioBtnListener(newV));
         toggleGrpLungAbs.selectedToggleProperty().removeListener((observable, oldV, newV) -> radioBtnListener(newV));
 
-        txtFieldIsoName.textProperty().addListener((observable, oldV, newV) -> nameListener(newV));
+        txtFieldNuclideName.textProperty().addListener((observable, oldV, newV) -> nameListener(newV));
         txtFieldA0.textProperty().addListener((observable, oldV, newV) -> initialActivityListener(newV));
         txtFieldMass.textProperty().addListener(((observable, oldV, newV) -> massListener(newV)));
         toggleGrpLifeSpan.selectedToggleProperty().addListener((observable, oldV, newV) -> radioBtnListener(newV));
         toggleGrpLungAbs.selectedToggleProperty().addListener((observable, oldV, newV) -> radioBtnListener(newV));
     }
-
-
     
     protected void initAddPage() {
-        setEditingIso(null);
+        setEditingNuclide(null);
         btnNext.setDisable(true);
         btnFinish.setDisable(true);
 
@@ -235,7 +265,7 @@ public class ModifyController extends BaseController {
     }
 
     protected void initEditPage() {
-        setEditingIso(getMain().getHomePaneController().getSelectedIsotopes().get(0));
+        setEditingNuclide(getMain().getHomePaneController().getSelectedNuclides().get(0));
         btnNext.setDisable(false);
         btnFinish.setDisable(false);
         
@@ -244,17 +274,17 @@ public class ModifyController extends BaseController {
     }
 
     private void setFirstPageValues() {
-        if(getEditingIso() != null) {
-            txtFieldIsoName.setText(getEditingIso().getName());
-            txtFieldA0.setText(String.valueOf(getEditingIso().getInitActivity()));
-            comboBoxA0Prefix.getSelectionModel().select(getEditingIso().getInitActivityPrefix().getVal());
-            choiceBoxA0RadUnit.getSelectionModel().select(getEditingIso().getMassUnit().getVal());
+        if(getEditingNuclide() != null) {
+            txtFieldNuclideName.setText(getEditingNuclide().getName());
+            txtFieldA0.setText(String.valueOf(getEditingNuclide().getInitActivity()));
+            comboBoxA0Prefix.getSelectionModel().select(getEditingNuclide().getInitActivityPrefix().getVal());
+            choiceBoxA0RadUnit.getSelectionModel().select(getEditingNuclide().getMassUnit().getVal());
     
             txtFirstPageStatus.setVisible(false);
             txtFirstPageStatus.setText(null);
     
-            String abbr = getEditingIso().getAbbr().toLowerCase();
-            Pattern lungAbsPattern = Pattern.compile("[sfm]$");
+            String abbr = getEditingNuclide().getAbbrNotation().toLowerCase();
+            Pattern lungAbsPattern = Pattern.compile("(slow|medium|fast)$");
             Matcher lungAbsMatch = lungAbsPattern.matcher(abbr);
             Pattern shortLongPattern = Pattern.compile("\\)$");
             Matcher shortLongMatch = shortLongPattern.matcher(abbr);
@@ -265,8 +295,8 @@ public class ModifyController extends BaseController {
                     .stream()
                     .filter(t ->
                         Objects.equals(
-                            Isotope.LifeSpan.toLifeSpan((String) t.getUserData()),
-                            getEditingIso().getLifeSpan())
+                            Nuclide.LifeSpan.toLifeSpan((String) t.getUserData()),
+                            getEditingNuclide().getLifeSpan())
                     ).findFirst();
     
                 toggle.ifPresent(value -> toggleGrpLifeSpan.selectToggle(value));
@@ -278,8 +308,8 @@ public class ModifyController extends BaseController {
                     .stream()
                     .filter(t ->
                         Objects.equals(
-                            Isotope.LungAbsorption.toLungAbsorption((String) t.getUserData()),
-                            getEditingIso().getLungAbsorption())
+                            Nuclide.LungAbsorption.toLungAbsorption((String) t.getUserData()),
+                            getEditingNuclide().getLungAbsorption())
                     ).findFirst();
     
                 toggle.ifPresent(value -> toggleGrpLungAbs.selectToggle(value));
@@ -290,14 +320,14 @@ public class ModifyController extends BaseController {
     }
 
     private void setSecondPageValues() {
-        if(getEditingIso() != null) {
-            datePicker.setValue(getEditingIso().getRefDate());
-            txtFieldMass.setText(String.valueOf(getEditingIso().getMass()));
-            comboBoxMassPrefix.getSelectionModel().select(getEditingIso().getMassPrefix().getVal());
-            choiceBoxMassUnit.getSelectionModel().select(getEditingIso().getMassUnit().getVal());
-            choiceBoxNature.getSelectionModel().select(getEditingIso().getNature().getVal());
-            choiceBoxState.getSelectionModel().select(getEditingIso().getState().getVal());
-            choiceBoxForm.getSelectionModel().select(getEditingIso().getForm().getVal());
+        if(getEditingNuclide() != null) {
+            datePicker.setValue(getEditingNuclide().getRefDate());
+            txtFieldMass.setText(String.valueOf(getEditingNuclide().getMass()));
+            comboBoxMassPrefix.getSelectionModel().select(getEditingNuclide().getMassPrefix().getVal());
+            choiceBoxMassUnit.getSelectionModel().select(getEditingNuclide().getMassUnit().getVal());
+            choiceBoxNature.getSelectionModel().select(getEditingNuclide().getNature().getVal());
+            choiceBoxState.getSelectionModel().select(getEditingNuclide().getState().getVal());
+            choiceBoxForm.getSelectionModel().select(getEditingNuclide().getForm().getVal());
             chckBoxSameMass.setSelected(false);
             chckBoxSameNSF.setSelected(false);
 
@@ -325,27 +355,27 @@ public class ModifyController extends BaseController {
     }
 
     protected void setRadioBtnTxt() {
-        radioBtnSlowLungAbs.setText(Isotope.LungAbsorption.SLOW.getVal());
-        radioBtnMediumLungAbs.setText(Isotope.LungAbsorption.MEDIUM.getVal());
-        radioBtnFastLungAbs.setText(Isotope.LungAbsorption.FAST.getVal());
-        radioBtnShortLived.setText(Isotope.LifeSpan.SHORT.getVal());
-        radioBtnLongLived.setText(Isotope.LifeSpan.LONG.getVal());
+        radioBtnSlowLungAbs.setText(Nuclide.LungAbsorption.SLOW.getVal());
+        radioBtnMediumLungAbs.setText(Nuclide.LungAbsorption.MEDIUM.getVal());
+        radioBtnFastLungAbs.setText(Nuclide.LungAbsorption.FAST.getVal());
+        radioBtnShortLived.setText(Nuclide.LifeSpan.SHORT.getVal());
+        radioBtnLongLived.setText(Nuclide.LifeSpan.LONG.getVal());
     }
     
     protected void setRadioBtnUserData() {
-        radioBtnSlowLungAbs.setUserData(Isotope.LungAbsorption.SLOW.getAbbrVal());
-        radioBtnMediumLungAbs.setUserData(Isotope.LungAbsorption.MEDIUM.getAbbrVal());
-        radioBtnFastLungAbs.setUserData(Isotope.LungAbsorption.FAST.getAbbrVal());
-        radioBtnShortLived.setUserData(Isotope.LifeSpan.SHORT.getAbbrVal());
-        radioBtnLongLived.setUserData(Isotope.LifeSpan.LONG.getAbbrVal());
+        radioBtnSlowLungAbs.setUserData(Nuclide.LungAbsorption.SLOW.getAbbrVal());
+        radioBtnMediumLungAbs.setUserData(Nuclide.LungAbsorption.MEDIUM.getAbbrVal());
+        radioBtnFastLungAbs.setUserData(Nuclide.LungAbsorption.FAST.getAbbrVal());
+        radioBtnShortLived.setUserData(Nuclide.LifeSpan.SHORT.getAbbrVal());
+        radioBtnLongLived.setUserData(Nuclide.LifeSpan.LONG.getAbbrVal());
     }
 
     protected void radioBtnListener(Toggle newV) {
         if(newV != null) {
-            Isotope iso = buildEditedIso();
-            boolean isInTable = isIsoInTable(iso);
+            Nuclide nuclide = buildEditedNuclide();
+            boolean isInTable = isNuclideInTable(nuclide);
             String a0 = txtFieldA0.getText();
-            btnNext.setDisable(iso == null || a0 == null ||
+            btnNext.setDisable(nuclide == null || a0 == null ||
                 a0.isBlank() || isInTable);
         } else {
             btnNext.setDisable(true);
@@ -358,9 +388,9 @@ public class ModifyController extends BaseController {
         } else {
             // if user inputs any non-numerical characters, remove them
             String newTxt = str.replaceAll("\\D", "");
-            Isotope iso = buildEditedIso();
-            btnNext.setDisable(iso == null || newTxt.isBlank() ||
-                isAddInfoNotProvided() || isIsoInTable(iso));
+            Nuclide nuclide = buildEditedNuclide();
+            btnNext.setDisable(nuclide == null || newTxt.isBlank() ||
+                isAddInfoNotProvided() || isNuclideInTable(nuclide));
             txtFieldA0.setText(newTxt);
         }
     }
@@ -370,7 +400,7 @@ public class ModifyController extends BaseController {
         choiceBoxA0RadUnit.setItems(Conversions.RadUnit.getFxValues());
         comboBoxMassPrefix.setItems(Conversions.SIPrefix.getFxValues());
         choiceBoxMassUnit.setItems(Conversions.MassUnit.getFxValues());
-        choiceBoxNature.setItems(Isotope.Nature.getFxValues());
+        choiceBoxNature.setItems(Nuclide.Nature.getFxValues());
         choiceBoxState.setItems(LimitsModelId.State.getFxValues());
         choiceBoxForm.setItems(LimitsModelId.Form.getFxValues());
     }
@@ -383,7 +413,7 @@ public class ModifyController extends BaseController {
     private void selectDefaultSecondPageDropDownValues() {
         comboBoxMassPrefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
         choiceBoxMassUnit.getSelectionModel().select(Conversions.MassUnit.GRAMS.getVal());
-        choiceBoxNature.getSelectionModel().select(Isotope.Nature.REGULAR.getVal());
+        choiceBoxNature.getSelectionModel().select(Nuclide.Nature.REGULAR.getVal());
         choiceBoxState.getSelectionModel().select(LimitsModelId.State.SOLID.getVal());
         choiceBoxForm.getSelectionModel().select(LimitsModelId.Form.NORMAL.getVal());
     }
@@ -424,47 +454,47 @@ public class ModifyController extends BaseController {
 
     protected void nameListener(String newV) {
         if (newV == null || newV.isBlank()) {
-            searchFilteredIsos.setPredicate(isotope -> false);
-            filteredLifeSpanIsos.setPredicate(isotope -> false);
-            filteredLungAbsIsos.setPredicate(isotope -> false);
+            getSearchFilteredNuclides().setPredicate(nuclide -> false);
+            getFilteredLifeSpanNuclides().setPredicate(nuclide -> false);
+            getFilteredLungAbsNuclides().setPredicate(nuclide -> false);
             setLifeSpanVisible(false);
             setLungAbsVisible(false);
             btnNext.setDisable(true);
-            setDuplicateIso(false);
+            setDuplicateNuclide(false);
         } else {
-            searchFilteredIsos.setPredicate(validIsoFilteringPredicate(newV));
-            filteredLifeSpanIsos.setPredicate(lifeSpanFilteringPredicate(newV));
-            filteredLungAbsIsos.setPredicate(lungAbsFilteringPredicate(newV));
-            Isotope iso = buildEditedIso();
-            setLifeSpanVisible(!filteredLifeSpanIsos.isEmpty());
-            setLungAbsVisible(!vBoxLifeSpan.isVisible() && !filteredLungAbsIsos.isEmpty());
+            getSearchFilteredNuclides().setPredicate(validNuclideFilteringPredicate(newV));
+            getFilteredLifeSpanNuclides().setPredicate(lifeSpanFilteringPredicate(newV));
+            getFilteredLungAbsNuclides().setPredicate(lungAbsFilteringPredicate(newV));
+            Nuclide nuclide = buildEditedNuclide();
+            setLifeSpanVisible(!getFilteredLifeSpanNuclides().isEmpty());
+            setLungAbsVisible(!vBoxLifeSpan.isVisible() && !getFilteredLungAbsNuclides().isEmpty());
             String a0 = txtFieldA0.getText();
-            btnNext.setDisable(iso == null ||
-                a0 == null || a0.isBlank() || isAddInfoNotProvided() || isIsoInTable(iso));
+            btnNext.setDisable(nuclide == null ||
+                a0 == null || a0.isBlank() || isAddInfoNotProvided() || isNuclideInTable(nuclide));
         }
     }
 
-    private boolean isEditingIso(Isotope isotope) {
-        if(getEditingIso() == null || isotope == null) {
+    private boolean isEditingNuclide(Nuclide nuclide) {
+        if(getEditingNuclide() == null || nuclide == null) {
             return false;
         }
-        return getEditingIso().getAbbr().equals(isotope.getAbbr()) &&
-            getEditingIso().getLifeSpan().equals(isotope.getLifeSpan()) &&
-            getEditingIso().getLungAbsorption().equals(isotope.getLungAbsorption());
+        return getEditingNuclide().getNuclideId().equals(nuclide.getNuclideId()) &&
+            getEditingNuclide().getLifeSpan().equals(nuclide.getLifeSpan()) &&
+            getEditingNuclide().getLungAbsorption().equals(nuclide.getLungAbsorption());
     }
 
-    private boolean isIsoInTable(Isotope isotope) throws InvalidParameterException {
-        boolean ret = !isEditingIso(isotope) &&
-            getMain().getHomePaneController().isIsoInTable(isotope);
-        setDuplicateIso(ret);
+    private boolean isNuclideInTable(Nuclide nuclide) throws InvalidParameterException {
+        boolean ret = !isEditingNuclide(nuclide) &&
+            getMain().getHomePaneController().isNuclideInTable(nuclide);
+        setDuplicateNuclide(ret);
         return ret;
     }
 
-    protected void setDuplicateIso(boolean isInvalid) {
-        txtFieldIsoName.getStyleClass().removeAll("validRegion", "invalidRegion");
-        txtFieldIsoName.getStyleClass().add(isInvalid ? "invalidRegion" : "validRegion");
+    protected void setDuplicateNuclide(boolean isInvalid) {
+        txtFieldNuclideName.getStyleClass().removeAll("validRegion", "invalidRegion");
+        txtFieldNuclideName.getStyleClass().add(isInvalid ? "invalidRegion" : "validRegion");
         txtFirstPageStatus.setVisible(isInvalid);
-        txtFirstPageStatus.setText("Isotope already in the table.");
+        txtFirstPageStatus.setText("Nuclide already in the table.");
     }
 
     protected void bindMassInputDisabledProp() {
@@ -487,144 +517,144 @@ public class ModifyController extends BaseController {
         choiceBoxForm.disableProperty().bind(chckBoxSameNSF.selectedProperty());
     }
 
-    protected Predicate<IsotopeModel> validIsoFilteringPredicate(String str) {
+    protected Predicate<NuclideModel> validNuclideFilteringPredicate(String str) {
         if (str == null || str.isBlank()) {
             return null;
         }
-        return isotope -> isValidIso(isotope, str);
+        return nuclide -> isValidNuclide(nuclide, str);
     }
 
-    protected Predicate<IsotopeModel> lifeSpanFilteringPredicate(String str) {
+    protected Predicate<NuclideModel> lifeSpanFilteringPredicate(String str) {
         if (str == null || str.isBlank()) {
             return null;
         }
-        return isotope -> isLifeSpanIso(isotope, str);
+        return nuclide -> isLifeSpanNuclide(nuclide, str);
     }
 
-    protected Predicate<IsotopeModel> lungAbsFilteringPredicate(String str) {
+    protected Predicate<NuclideModel> lungAbsFilteringPredicate(String str) {
         if (str == null || str.isBlank()) {
             return null;
         }
-        return isotope -> isLungAbsIso(isotope, str);
+        return nuclide -> isLungAbsNuclide(nuclide, str);
     }
 
-    protected boolean isValidIso(IsotopeModel isotope, String str) {
-        if(isotope == null || str == null || str.isBlank()) {
+    protected boolean isValidNuclide(NuclideModel nuclide, String str) {
+        if(nuclide == null || str == null || str.isBlank()) {
             return false;
         }
 
-        String abbr = isotope.getIsotopeId().getAbbr();
-        String name = isotope.getIsotopeId().getName();
+        String abbr = nuclide.getAbbrNotation();
+        String name = nuclide.getNameNotation();
 
         return abbr.equalsIgnoreCase(str) || name.equalsIgnoreCase(str);
     }
 
-    protected boolean isLungAbsIso(IsotopeModel isotope, String str) {
-        if(isotope == null || str == null || str.isBlank()) {
+    protected boolean isLungAbsNuclide(NuclideModel nuclide, String str) {
+        if(nuclide == null || str == null || str.isBlank()) {
             return false;
         }
 
         String searchStr = str.toLowerCase();
 
-        String abbr = isotope.getIsotopeId().getAbbr().toLowerCase();
-        String name = isotope.getIsotopeId().getName().toLowerCase();
-        Pattern pattern = Pattern.compile("[sfm]$");
+        String abbr = nuclide.getAbbrNotation().toLowerCase();
+        String name = nuclide.getNameNotation().toLowerCase();
+        Pattern pattern = Pattern.compile("(slow|medium|fast)$");
         Matcher matchAbbr = pattern.matcher(abbr);
 
         return (name.contains(searchStr) || abbr.contains(searchStr)) && matchAbbr.find();
     }
 
-    protected boolean isLifeSpanIso(IsotopeModel isotope, String str) {
+    protected boolean isLifeSpanNuclide(NuclideModel nuclide, String str) {
         if (str == null || str.isBlank()) {
             return false;
         }
 
         String searchStr = str.toLowerCase();
 
-        String abbr = isotope.getIsotopeId().getAbbr().toLowerCase();
-        String name = isotope.getIsotopeId().getName().toLowerCase();
+        String abbr = nuclide.getAbbrNotation().toLowerCase();
+        String name = nuclide.getNameNotation().toLowerCase();
         Pattern pattern = Pattern.compile("\\)$");
         Matcher matchAbbr = pattern.matcher(abbr);
 
         return (name.contains(searchStr) || abbr.contains(searchStr)) && matchAbbr.find();
     }
 
-    protected Isotope buildIsoFromFirstPage() {
-        Isotope iso = null;
+    protected Nuclide buildNuclideFromFirstPage() {
+        Nuclide nuclide = null;
         if(!btnNext.isDisabled()) {
-            iso = new Isotope(searchFilteredIsos.get(0));
-            iso.setInitActivity(Float.parseFloat(txtFieldA0.getText()));
-            iso.setInitActivityPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxA0Prefix.getValue()));
-            iso.setInitActivityUnit(Conversions.RadUnit.toRadUnit(choiceBoxA0RadUnit.getValue()));
-            iso.setStrInitActivity();
-            iso.setLungAbsorption(Isotope.LungAbsorption.NONE);
-            iso.setLifeSpan(Isotope.LifeSpan.REGULAR);
+            nuclide = new Nuclide(getSearchFilteredNuclides().get(0));
+            nuclide.setInitActivity(new RadBigDecimal(txtFieldA0.getText()));
+            nuclide.setInitActivityPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxA0Prefix.getValue()));
+            nuclide.setInitActivityUnit(Conversions.RadUnit.toRadUnit(choiceBoxA0RadUnit.getValue()));
+            nuclide.setStrInitActivity();
+            nuclide.setLungAbsorption(Nuclide.LungAbsorption.NONE);
+            nuclide.setLifeSpan(Nuclide.LifeSpan.REGULAR);
 
-            setIsoLungAbs(iso);
-            setIsoLifeSpan(iso);
+            setNuclideLungAbs(nuclide);
+            setNuclideLifeSpan(nuclide);
         }
-        return iso;
+        return nuclide;
     }
 
-    protected Isotope buildEditedIso() {
-        Isotope iso = null;
-        if(searchFilteredIsos.size() == 1 && searchFilteredIsos.get(0) != null) {
-            iso = new Isotope(searchFilteredIsos.get(0));
-            setIsoLifeSpan(iso);
-            setIsoLungAbs(iso);
+    protected Nuclide buildEditedNuclide() {
+        Nuclide nuclide = null;
+        if(getSearchFilteredNuclides().size() == 1 && getSearchFilteredNuclides().get(0) != null) {
+            nuclide = new Nuclide(getSearchFilteredNuclides().get(0));
+            setNuclideLifeSpan(nuclide);
+            setNuclideLungAbs(nuclide);
         }
-        return iso;
+        return nuclide;
     }
 
-    private void setIsoLifeSpan(Isotope iso) {
+    private void setNuclideLifeSpan(Nuclide nuclide) {
         if(toggleGrpLifeSpan.getSelectedToggle() != null) {
             RadioButton radioBtn = (RadioButton) toggleGrpLifeSpan.getSelectedToggle();
-            iso.setAbbr(iso.getAbbr() + radioBtn.getUserData());
-            iso.setLifeSpan(Isotope.LifeSpan.toLifeSpan((String) radioBtn.getUserData()));
+            nuclide.getNuclideId().setMassNumber(nuclide.getMassNumber() + radioBtn.getUserData());
+            nuclide.setLifeSpan(Nuclide.LifeSpan.toLifeSpan((String) radioBtn.getUserData()));
         } else {
-            iso.setLifeSpan(null);
+            nuclide.setLifeSpan(null);
         }
     }
 
-    protected void setIsoLungAbs(Isotope iso) {
+    protected void setNuclideLungAbs(Nuclide nuclide) {
         if(toggleGrpLungAbs.getSelectedToggle() != null) {
             RadioButton radioBtn = (RadioButton) toggleGrpLungAbs.getSelectedToggle();
-            iso.setAbbr(iso.getAbbr() + radioBtn.getUserData());
-            iso.setLungAbsorption(Isotope.LungAbsorption.toLungAbsorption((String) radioBtn.getUserData()));
+            nuclide.getNuclideId().setMassNumber(nuclide.getMassNumber() + radioBtn.getUserData());
+            nuclide.setLungAbsorption(Nuclide.LungAbsorption.toLungAbsorption((String) radioBtn.getUserData()));
         } else {
-            iso.setLungAbsorption(null);
+            nuclide.setLungAbsorption(null);
         }
     }
 
-    protected Isotope buildIso() {
-        Isotope iso = buildIsoFromFirstPage();
-        if(iso != null && !btnFinish.isDisabled()) {
-            iso.setRefDate(datePicker.getValue());
+    protected Nuclide buildNuclide() {
+        Nuclide nuclide = buildNuclideFromFirstPage();
+        if(nuclide != null && !btnFinish.isDisabled()) {
+            nuclide.setRefDate(datePicker.getValue());
             if(chckBoxSameMass.isDisabled()) {
                 Shipment shipment = getMain().getHomePaneController().getShipment();
-                iso.setMass(shipment.getMass());
-                iso.setMassPrefix(shipment.getMassPrefix());
-                iso.setMassUnit(shipment.getMassUnit());
+                nuclide.setMass(shipment.getMass());
+                nuclide.setMassPrefix(shipment.getMassPrefix());
+                nuclide.setMassUnit(shipment.getMassUnit());
             } else {
-                iso.setMass(Float.parseFloat(txtFieldMass.getText()));
-                iso.setMassPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxMassPrefix.getValue()));
-                iso.setMassUnit(Conversions.MassUnit.toMass(choiceBoxMassUnit.getValue()));
+                nuclide.setMass(new RadBigDecimal(txtFieldMass.getText()));
+                nuclide.setMassPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxMassPrefix.getValue()));
+                nuclide.setMassUnit(Conversions.MassUnit.toMass(choiceBoxMassUnit.getValue()));
             }
-            iso.setStrMass();
+            nuclide.setStrMass();
 
             if(chckBoxSameNSF.isDisabled()) {
                 Shipment shipment = getMain().getHomePaneController().getShipment();
-                iso.setNature(shipment.getNature());
-                iso.setState(shipment.getState());
-                iso.setForm(shipment.getForm());
+                nuclide.setNature(shipment.getNature());
+                nuclide.setState(shipment.getState());
+                nuclide.setForm(shipment.getForm());
             } else {
-                iso.setNature(Isotope.Nature.toNature(choiceBoxNature.getValue()));
-                iso.setState(LimitsModelId.State.toState(choiceBoxState.getValue()));
-                iso.setForm(LimitsModelId.Form.toForm(choiceBoxForm.getValue()));
+                nuclide.setNature(Nuclide.Nature.toNature(choiceBoxNature.getValue()));
+                nuclide.setState(LimitsModelId.State.toState(choiceBoxState.getValue()));
+                nuclide.setForm(LimitsModelId.Form.toForm(choiceBoxForm.getValue()));
             }
-            iso.getConstants().dbInit(iso.getIsoId(), iso.getLimitsId());
+            nuclide.getConstants().dbInit(nuclide.getNuclideId(), nuclide.getLimitsId());
         }
-        return iso;
+        return nuclide;
     }
 
     /*///////////////////////////////////////////// HOME PANE CONTROLLER /////////////////////////////////////////////*/
@@ -675,10 +705,10 @@ public class ModifyController extends BaseController {
         logr.debug("User clicked the Finish button on the {} pane", getPage());
         if(Page.ADD.equals(getPage())) {
             Shipment shipment = getMain().getHomePaneController().getShipment();
-            shipment.add(buildIso());
+            shipment.add(buildNuclide());
         }
         if(Page.EDIT.equals(getPage())) {
-            getMain().getHomePaneController().updateIsotope(buildIso());
+            getMain().getHomePaneController().updateNuclide(buildNuclide());
         }
         App.getStageHandler().closeSecondary();
     }

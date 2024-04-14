@@ -1,7 +1,7 @@
 package com.marcsllite;
 
 import com.marcsllite.controller.BaseController;
-import com.marcsllite.model.Isotope;
+import com.marcsllite.model.Nuclide;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.FXMLView;
@@ -66,7 +66,7 @@ public abstract class GUITest extends FxRobot {
         folderHandler = mock(FolderHandler.class);
         folderHandler.setPropHandler(testPropHandler);
         dbService = spy(new DBServiceImpl(testPropHandler));
-        assertEquals(1, dbService.validateDb());
+        assertEquals(1, getDbService().validateDb());
     }
 
     @Start
@@ -74,7 +74,7 @@ public abstract class GUITest extends FxRobot {
         Platform.setImplicitExit(false);
         when(folderHandler.getDataFolderPath()).thenReturn(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
 
-        app.init(view, new PropHandlerTestObj(), folderHandler, dbService, new ControllerFactoryTestObj());
+        app.init(view, new PropHandlerTestObj(), folderHandler, getDbService(), new ControllerFactoryTestObj(getDbService()));
         App.setPage(getPage());
 
         app.start(stage);
@@ -133,7 +133,7 @@ public abstract class GUITest extends FxRobot {
         return getStageHandler().getController();
     }
 
-    protected void selectRow(TableView<Isotope> table, int index) {
+    protected void selectRow(TableView<Nuclide> table, int index) {
         if(table.getItems().isEmpty()) {
             fail("Table has no items to select from");
         }
@@ -142,7 +142,7 @@ public abstract class GUITest extends FxRobot {
         assertNotNull(table.getSelectionModel().getSelectedItem());
     }
 
-    protected void clearSelection(TableView<Isotope> table) {
+    protected void clearSelection(TableView<Nuclide> table) {
         interact(() -> table.getSelectionModel().clearSelection());
         assertNull(table.getSelectionModel().getSelectedItem());
     }

@@ -1,6 +1,6 @@
 package com.marcsllite.model.db;
 
-import com.marcsllite.model.Isotope;
+import com.marcsllite.model.Nuclide;
 import org.junit.jupiter.api.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -16,7 +16,7 @@ class NatureAttrConverterTest {
 
     @Test
     void testConvertToDatabaseColumn() {
-        Isotope.Nature form = Isotope.Nature.REGULAR;
+        Nuclide.Nature form = Nuclide.Nature.REGULAR;
         String expected = form.getVal().toLowerCase();
         assertEquals(expected, converter.convertToDatabaseColumn(form));
     }
@@ -28,7 +28,7 @@ class NatureAttrConverterTest {
 
     @Test
     void testConvertToEntityAttribute() {
-        Isotope.Nature expected = Isotope.Nature.REGULAR;
+        Nuclide.Nature expected = Nuclide.Nature.REGULAR;
         String str = expected.getVal();
         assertEquals(expected, converter.convertToEntityAttribute(str));
     }

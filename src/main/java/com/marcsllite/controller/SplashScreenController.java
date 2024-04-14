@@ -89,7 +89,7 @@ public class SplashScreenController {
 
             updateMessage("Initializing Isotopes for Reference Page Table...");
             updateProgress(1, 2);
-            getDbService().getAllIsotopes();
+            getDbService().getAllNuclides();
 
             updateProgress(2, 2);
 

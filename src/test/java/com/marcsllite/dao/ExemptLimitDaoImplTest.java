@@ -2,6 +2,8 @@ package com.marcsllite.dao;
 
 import com.marcsllite.DBTest;
 import com.marcsllite.model.db.ExemptLimitModel;
+import com.marcsllite.model.db.NuclideModelId;
+import com.marcsllite.util.RadBigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,6 +18,9 @@ class ExemptLimitDaoImplTest extends DBTest {
     ExemptLimitDaoImpl dao;
     @Mock
     ExemptLimitModel model;
+    private final String DEFAULT_SYMBOL = "Sy";
+    private final String DEFAULT_MASS_NUMBER = "1";
+    private final NuclideModelId DEFAULT_ID = new NuclideModelId(DEFAULT_SYMBOL, DEFAULT_MASS_NUMBER);
 
     @BeforeEach
     public void setUp() {
@@ -26,21 +31,18 @@ class ExemptLimitDaoImplTest extends DBTest {
 
     @Test
     void testGetA2_NoResult() {
-        String abbr = "abbr";
-
         when(em.find(any(), any())).thenReturn(null);
 
-        assertEquals(-123456789.0f, dao.getExemptLimit(abbr));
+        assertEquals(RadBigDecimal.NEG_INFINITY_OBJ, dao.getExemptLimit(DEFAULT_ID));
     }
 
     @Test
     void testGetExemptLimit() {
-        String abbr = "abbr";
-        float exp = 1f;
+        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
 
         when(em.find(any(), any())).thenReturn(model);
         when(model.getValue()).thenReturn(exp);
 
-        assertEquals(exp, dao.getExemptLimit(abbr));
+        assertEquals(exp, dao.getExemptLimit(DEFAULT_ID));
     }
 }

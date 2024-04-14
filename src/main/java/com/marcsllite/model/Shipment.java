@@ -1,9 +1,9 @@
 package com.marcsllite.model;
 
 import com.marcsllite.model.db.LimitsModelId;
-import com.marcsllite.model.db.ShipmentsModel;
+import com.marcsllite.model.db.ShipmentModel;
 import com.marcsllite.util.Conversions;
-import javafx.beans.property.SimpleFloatProperty;
+import com.marcsllite.util.RadBigDecimal;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -18,25 +18,25 @@ import java.util.stream.Collectors;
 public class Shipment {
     private long id;
     private SimpleObjectProperty<LocalDate> refDate;
-    private SimpleFloatProperty mass;
+    private SimpleObjectProperty<RadBigDecimal> mass;
     private Conversions.SIPrefix massPrefix;
     private Conversions.MassUnit massUnit;
-    private Isotope.Nature nature;
+    private Nuclide.Nature nature;
     private LimitsModelId.State state;
     private LimitsModelId.Form form;
-    private SimpleListProperty<Isotope> isotopes;
+    private SimpleListProperty<Nuclide> nuclides;
 
     public Shipment() {
         this(-1L,
             null,
-            -1F,
+            RadBigDecimal.NEG_INFINITY_OBJ,
             null,
             null,
             null,
             null);
     }
 
-    public Shipment(ShipmentsModel model) {
+    public Shipment(ShipmentModel model) {
         this(model.getId(),
             model.getRefDate(),
             model.getMass(),
@@ -44,13 +44,13 @@ public class Shipment {
             model.getNature(),
             model.getState(),
             model.getForm());
-        setIsotopes(model.getIsotopes()
+        setNuclides(model.getNuclides()
                 .stream()
-                .map(Isotope::new)
+                .map(Nuclide::new)
                 .collect(Collectors.toCollection(FXCollections::observableArrayList)));
     }
 
-    public Shipment(long id, LocalDate refDate, float mass, Conversions.MassUnit massUnit, Isotope.Nature nature, LimitsModelId.State state, LimitsModelId.Form form) {
+    public Shipment(long id, LocalDate refDate, RadBigDecimal mass, Conversions.MassUnit massUnit, Nuclide.Nature nature, LimitsModelId.State state, LimitsModelId.Form form) {
         setId(id);
         setRefDate(refDate);
         setMass(mass);
@@ -59,7 +59,7 @@ public class Shipment {
         setNature(nature);
         setState(state);
         setForm(form);
-        setIsotopes(FXCollections.observableArrayList());
+        setNuclides(FXCollections.observableArrayList());
     }
 
     public long getId() {
@@ -88,19 +88,19 @@ public class Shipment {
         }
     }
 
-    public float getMass() {
-        return massProperty() == null? -1F : massProperty().get();
+    public RadBigDecimal getMass() {
+        return massProperty() == null? RadBigDecimal.NEG_INFINITY_OBJ : massProperty().get();
     }
 
-    public void setMass(float mass) {
+    public void setMass(RadBigDecimal mass) {
         if(massProperty() == null) {
-            this.mass = new SimpleFloatProperty(mass);
+            this.mass = new SimpleObjectProperty<>(mass);
         } else {
             massProperty().set(mass);
         }
     }
 
-    public SimpleFloatProperty massProperty() {
+    public SimpleObjectProperty<RadBigDecimal> massProperty() {
         return mass;
     }
 
@@ -120,12 +120,12 @@ public class Shipment {
         this.massUnit = massUnit == null? Conversions.MassUnit.GRAMS : massUnit;
     }
 
-    public Isotope.Nature getNature() {
+    public Nuclide.Nature getNature() {
         return nature;
     }
 
-    public void setNature(Isotope.Nature nature) {
-        this.nature = nature == null? Isotope.Nature.REGULAR: nature;
+    public void setNature(Nuclide.Nature nature) {
+        this.nature = nature == null? Nuclide.Nature.REGULAR: nature;
     }
 
     public LimitsModelId.State getState() {
@@ -144,32 +144,32 @@ public class Shipment {
         this.form = form == null? LimitsModelId.Form.NORMAL : form;
     }
 
-    public ObservableList<Isotope> getIsotopes() {
-        return isotopesProperty() == null? FXCollections.observableArrayList() : isotopesProperty().get();
+    public ObservableList<Nuclide> getNuclides() {
+        return nuclidesProperty() == null? FXCollections.observableArrayList() : nuclidesProperty().get();
     }
 
-    public SimpleListProperty<Isotope> isotopesProperty() {
-        return isotopes;
+    public SimpleListProperty<Nuclide> nuclidesProperty() {
+        return nuclides;
     }
 
-    public void setIsotopes(ObservableList<Isotope> isotopes) {
-        if(isotopesProperty() == null) {
-            this.isotopes = new SimpleListProperty<>(isotopes == null? FXCollections.observableArrayList() : isotopes);
+    public void setNuclides(ObservableList<Nuclide> nuclides) {
+        if(nuclidesProperty() == null) {
+            this.nuclides = new SimpleListProperty<>(nuclides == null? FXCollections.observableArrayList() : nuclides);
         } else {
-            isotopesProperty().addAll(isotopes == null? FXCollections.observableArrayList() : isotopes);
+            nuclidesProperty().addAll(nuclides == null? FXCollections.observableArrayList() : nuclides);
         }
     }
 
-    public void addAll(List<Isotope> list) {
-        getIsotopes().addAll(list);
+    public void addAll(List<Nuclide> list) {
+        getNuclides().addAll(list);
     }
 
-    public void add(Isotope isotope) {
-        getIsotopes().add(isotope);
+    public void add(Nuclide isotope) {
+        getNuclides().add(isotope);
     }
 
-    public void remove(List<Isotope> isotopes) {
-        getIsotopes().removeAll(isotopes);
+    public void remove(List<Nuclide> isotopes) {
+        getNuclides().removeAll(isotopes);
     }
 
     @Override
@@ -188,7 +188,7 @@ public class Shipment {
             Objects.equals(this.getNature(), temp.getNature()) &&
             Objects.equals(this.getState(), temp.getState()) &&
             Objects.equals(this.getForm(), temp.getForm()) &&
-            Objects.equals(this.getIsotopes(), temp.getIsotopes());
+            Objects.equals(this.getNuclides(), temp.getNuclides());
     }
 
     @Override
@@ -196,12 +196,12 @@ public class Shipment {
         int hash = 57;
         hash = 7 * hash + (int) this.getId();
         hash = 7 * hash + (this.getRefDate() != null ? this.getRefDate().hashCode() : 0);
-        hash = 7 * hash + (int) this.getMass();
+        hash = 7 * hash + this.getMass().intValue();
         hash = 7 * hash + (this.getMassUnit() != null ? this.getMassUnit().hashCode() : 0);
         hash = 7 * hash + (this.getNature() != null ? this.getNature().hashCode() : 0);
         hash = 7 * hash + (this.getState() != null ? this.getState().hashCode() : 0);
         hash = 7 * hash + (this.getForm() != null ? this.getForm().hashCode() : 0);
-        hash = 7 * hash + (this.getIsotopes() != null? this.getIsotopes().hashCode() : 0);
+        hash = 7 * hash + (this.getNuclides() != null? this.getNuclides().hashCode() : 0);
         return hash;
     }
 
@@ -213,7 +213,7 @@ public class Shipment {
             "\nNature: " + getNature() +
             "\nState: " + getState() +
             "\nForm: " + getForm() +
-            "\nIsotopes: " + getIsotopes() + "\n}";
+            "\nNuclides: " + getNuclides() + "\n}";
     }
 
     public enum Label {

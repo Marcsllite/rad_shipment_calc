@@ -50,7 +50,7 @@ class SplashScreenControllerGUITest extends FxRobot {
 
     @Start
     public void start(Stage stage) throws IOException {
-        stageHandler = new StageHandler(stage, testPropHandler, new ControllerFactoryTestObj());
+        stageHandler = new StageHandler(stage, testPropHandler, new ControllerFactoryTestObj(dbService));
 
         stageHandler.showSplashScreen();
         controller = spy((SplashScreenController) stageHandler.getController());

@@ -2,9 +2,9 @@ package com.marcsllite.controller;
 
 import com.marcsllite.FXIds;
 import com.marcsllite.GUITest;
-import com.marcsllite.model.Isotope;
+import com.marcsllite.model.Nuclide;
 import com.marcsllite.model.Shipment;
-import com.marcsllite.model.db.IsotopeModelId;
+import com.marcsllite.model.db.NuclideModelId;
 import com.marcsllite.util.FXMLView;
 import javafx.collections.FXCollections;
 import javafx.scene.control.Button;
@@ -35,7 +35,7 @@ class HomePaneControllerGUITest extends GUITest {
     Button btnAdd;
     Button btnEdit;
     Button btnRemove;
-    TableView<Isotope> tableViewHome;
+    TableView<Nuclide> tableViewHome;
     Button btnCalculate;
     StackPane stackPaneModify;
     Shipment shipment;
@@ -60,7 +60,7 @@ class HomePaneControllerGUITest extends GUITest {
     @BeforeEach
     public void setUp() {
         clearSelection(tableViewHome);
-        shipment.setIsotopes(null);
+        shipment.setNuclides(null);
     }
 
     @Test
@@ -121,10 +121,10 @@ class HomePaneControllerGUITest extends GUITest {
     }
 
     protected void addIsoToTable() {
-        Isotope iso = new Isotope(new IsotopeModelId());
-        shipment.setIsotopes(FXCollections.observableArrayList(iso));
-        assertFalse(shipment.getIsotopes().isEmpty());
-        assertEquals(shipment.getIsotopes().get(0), tableViewHome.getItems().get(0));
+        Nuclide nuclide = new Nuclide("Name", new NuclideModelId());
+        shipment.setNuclides(FXCollections.observableArrayList(nuclide));
+        assertFalse(shipment.getNuclides().isEmpty());
+        assertEquals(shipment.getNuclides().get(0), tableViewHome.getItems().get(0));
     }
 
     @Test

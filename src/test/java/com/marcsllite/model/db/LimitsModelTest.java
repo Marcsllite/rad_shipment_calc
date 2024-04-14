@@ -1,5 +1,6 @@
 package com.marcsllite.model.db;
 
+import com.marcsllite.util.RadBigDecimal;
 import org.junit.jupiter.api.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -9,8 +10,8 @@ class LimitsModelTest {
     private final LimitsModelId.State DEFAULT_STATE = LimitsModelId.State.SOLID;
     private final LimitsModelId.Form DEFAULT_FORM = LimitsModelId.Form.NORMAL;
     private final LimitsModelId DEFAULT_LIMITS_ID = new LimitsModelId(DEFAULT_STATE, DEFAULT_FORM);
-    private final float DEFAULT_VAL = 1.0f;
-    LimitsModel model = new LimitsModel(DEFAULT_LIMITS_ID, DEFAULT_VAL, DEFAULT_VAL, DEFAULT_VAL);
+    private final RadBigDecimal DEFAULT_VAL = RadBigDecimal.valueOf(1.0f);
+    LimitsModel model = new LimitsModel(DEFAULT_LIMITS_ID, DEFAULT_VAL.toString(), DEFAULT_VAL.toString(), DEFAULT_VAL.toString());
 
     @Test
     void testConstructor() {
@@ -30,23 +31,23 @@ class LimitsModelTest {
 
     @Test
     void testSetIa_limited() {
-        float val = 4.5f;
+        RadBigDecimal val = RadBigDecimal.valueOf(4.5f);
         model.setIaLimited(val);
-        assertEquals(val, model.getIaLimited(), 0.0f);
+        assertEquals(val, model.getIaLimited());
     }
 
     @Test
     void testSetIa_package() {
-        float val = 4.5f;
+        RadBigDecimal val = RadBigDecimal.valueOf(4.5f);
         model.setIaPackage(val);
-        assertEquals(val, model.getIaPackage(), 0.0f);
+        assertEquals(val, model.getIaPackage());
     }
 
     @Test
     void testSetLimited() {
-        float val = 4.5f;
+        RadBigDecimal val = RadBigDecimal.valueOf(4.5f);
         model.setLimited(val);
-        assertEquals(val, model.getLimited(), 0.0f);
+        assertEquals(val, model.getLimited());
     }
 
     @Test

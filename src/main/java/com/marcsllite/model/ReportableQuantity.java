@@ -1,8 +1,10 @@
 package com.marcsllite.model;
 
+import com.marcsllite.model.db.NuclideModelId;
+import com.marcsllite.util.RadBigDecimal;
 import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
-import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,27 +13,27 @@ import java.io.IOException;
 public class ReportableQuantity {
     private static final Logger logr = LogManager.getLogger();
     private PropHandler propHandler;
-    private float defaultVal;
-    private String abbr;
-    private final SimpleFloatProperty curie = new SimpleFloatProperty();
-    private final SimpleFloatProperty teraBq = new SimpleFloatProperty();
+    private RadBigDecimal defaultVal;
+    private NuclideModelId nuclideId;
+    private final SimpleObjectProperty<RadBigDecimal> curie = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<RadBigDecimal> teraBq = new SimpleObjectProperty<>();
 
-    public ReportableQuantity(String abbr) {
-        this(abbr,
+    public ReportableQuantity(NuclideModelId nuclideId) {
+        this(nuclideId,
             null,
             null);
     }
 
-    public ReportableQuantity(String abbr, Float curie, Float teraBq) {
+    public ReportableQuantity(NuclideModelId nuclideId, RadBigDecimal curie, RadBigDecimal teraBq) {
         try {
             setPropHandler(new PropHandlerFactory().getPropHandler(null));
-            setDefaultVal((float) getPropHandler().getDouble("defaultNum"));
+            setDefaultVal(RadBigDecimal.valueOf(getPropHandler().getDouble("defaultNum")));
         } catch (IOException e) {
             logr.catching(e);
-            setDefaultVal(-2.0f);
+            setDefaultVal(RadBigDecimal.NEG_INFINITY_OBJ);
         }
 
-        setAbbr(abbr);
+        setNuclideId(nuclideId);
         setCurie(curie == null? defaultVal : curie);
         setTeraBq(teraBq == null? defaultVal : teraBq);
     }
@@ -44,49 +46,49 @@ public class ReportableQuantity {
         this.propHandler = propHandler;
     }
 
-    public float getDefaultVal() {
+    public RadBigDecimal getDefaultVal() {
         return defaultVal;
     }
 
-    public void setDefaultVal(float defaultVal) {
+    public void setDefaultVal(RadBigDecimal defaultVal) {
         this.defaultVal = defaultVal;
     }
 
-    public String getAbbr() {
-        return abbr;
+    public NuclideModelId getNuclideId() {
+        return nuclideId;
     }
 
-    public void setAbbr(String abbr) {
-        this.abbr = abbr;
+    public void setNuclideId(NuclideModelId nuclideId) {
+        this.nuclideId = nuclideId;
     }
 
-    public float getCurie() {
+    public RadBigDecimal getCurie() {
         return curieProperty().get();
     }
 
-    public SimpleFloatProperty curieProperty() {
+    public SimpleObjectProperty<RadBigDecimal> curieProperty() {
         return curie;
     }
 
-    public void setCurie(float curie) {
+    public void setCurie(RadBigDecimal curie) {
         curieProperty().set(curie);
     }
 
-    public float getTeraBq() {
+    public RadBigDecimal getTeraBq() {
         return teraBqProperty().get();
     }
 
-    public SimpleFloatProperty teraBqProperty() {
+    public SimpleObjectProperty<RadBigDecimal> teraBqProperty() {
         return teraBq;
     }
 
-    public void setTeraBq(float teraBq) {
+    public void setTeraBq(RadBigDecimal teraBq) {
         teraBqProperty().set(teraBq);
     }
 
     @Override
     public String toString() {
-        return "Reportable Quantity for " + getAbbr() + ": " +
+        return "Reportable Quantity for " + getNuclideId() + ": " +
              getTeraBq() + " TBq, " + getCurie() + " Ci}";
     }
 }

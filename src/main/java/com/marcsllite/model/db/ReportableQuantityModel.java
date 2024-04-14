@@ -1,54 +1,81 @@
 package com.marcsllite.model.db;
 
+import com.marcsllite.util.RadBigDecimal;
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity(name = "Reportable Quantity")
 @Table(name = "REPORTABLE_QUANTITY")
 public class ReportableQuantityModel extends BaseModel {
     private static final long serialVersionUID = 1479886818838786038L;
 
-    @Id
-    @Column(name = "Abbr", length = 15, nullable = false)
-    private String abbr;
+    @EmbeddedId
+    private NuclideModelId nuclideId;
     @Column(name = "Ci")
-    private float curie;
+    private String curieStr;
+    @Transient
+    private RadBigDecimal curie;
     @Column(name = "TBq")
-    private float teraBq;
+    private String teraBqStr;
+    @Transient
+    private RadBigDecimal teraBq;
 
     public ReportableQuantityModel() {
-        this("Abbr", -2.0f, -2.0f);
+        this(new NuclideModelId("XX", "1"),
+            RadBigDecimal.NEG_INFINITY_OBJ.toString(),
+            RadBigDecimal.NEG_INFINITY_OBJ.toString());
     }
 
-    public ReportableQuantityModel(String abbr, float curie, float teraBq) {
-        setAbbr(abbr);
-        setCurie(curie);
-        setTeraBq(teraBq);
+    public ReportableQuantityModel(NuclideModelId nuclideId, String curieStr, String teraBqStr) {
+        setNuclideId(nuclideId);
+        setCurieStr(curieStr);
+        setTeraBqStr(teraBqStr);
     }
 
-    public String getAbbr() {
-        return abbr;
+    public NuclideModelId getNuclideId() {
+        return nuclideId;
     }
 
-    public void setAbbr(String abbr) {
-        this.abbr = abbr;
+    public void setNuclideId(NuclideModelId nuclideId) {
+        this.nuclideId = nuclideId;
     }
 
-    public float getCurie() {
+    public String getCurieStr() {
+        return curieStr;
+    }
+
+    public void setCurieStr(String curieStr) {
+        this.curieStr = curieStr;
+        this.curie = new RadBigDecimal(curieStr);
+    }
+
+    public RadBigDecimal getCurie() {
         return curie;
     }
 
-    public void setCurie(float curie) {
+    public void setCurie(RadBigDecimal curie) {
         this.curie = curie;
+        this.curieStr = curie.toString();
     }
 
-    public float getTeraBq() {
+    public String getTeraBqStr() {
+        return teraBqStr;
+    }
+
+    public void setTeraBqStr(String teraBqStr) {
+        this.teraBqStr = teraBqStr;
+        this.teraBq = new RadBigDecimal(teraBqStr);
+    }
+
+    public RadBigDecimal getTeraBq() {
         return teraBq;
     }
 
-    public void setTeraBq(float teraBq) {
+    public void setTeraBq(RadBigDecimal teraBq) {
         this.teraBq = teraBq;
+        this.teraBqStr = teraBq.toString();
     }
 }

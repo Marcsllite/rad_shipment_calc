@@ -4,34 +4,34 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public final class Conversions {
-    public static final MathContext context = new MathContext(2);
-    private static final BigDecimal YOTTA = BigDecimal.TEN.pow(24, context);   // Y
-    private static final BigDecimal ZETTA = BigDecimal.TEN.pow(21, context);   // Z
-    private static final BigDecimal EXA = BigDecimal.TEN.pow(18, context);   // E
-    private static final BigDecimal PETA = BigDecimal.TEN.pow(15, context);   // P
-    private static final BigDecimal TERA = BigDecimal.TEN.pow(12, context);   // T
-    private static final BigDecimal GIGA = BigDecimal.TEN.pow(9, context);    // G
-    private static final BigDecimal MEGA = BigDecimal.TEN.pow(6, context);    // M
-    private static final BigDecimal KILO = BigDecimal.TEN.pow(3, context);    // k
-    private static final BigDecimal HECTO = BigDecimal.TEN.pow(2, context);    // h
-    private static final BigDecimal DEKA = BigDecimal.TEN.pow(1, context);    // da
-    private static final BigDecimal DECI = BigDecimal.TEN.pow(-1, context);   // d
-    private static final BigDecimal CENTI = BigDecimal.TEN.pow(-2, context);   // c
-    private static final BigDecimal MILLI = BigDecimal.TEN.pow(-3, context);   // m
-    private static final BigDecimal MICRO = BigDecimal.TEN.pow(-6, context);   // MICRO
-    private static final BigDecimal NANO = BigDecimal.TEN.pow(-9, context);   // n
-    private static final BigDecimal PICO = BigDecimal.TEN.pow(-12, context);  // p
-    private static final BigDecimal FEMTO = BigDecimal.TEN.pow(-15, context);  // f
-    private static final BigDecimal ATTO = BigDecimal.TEN.pow(-18, context);  // a
-    private static final BigDecimal ZEPTO = BigDecimal.TEN.pow(-21, context);  // z
-    private static final BigDecimal YOCTO = BigDecimal.TEN.pow(-24, context);  // y
+    private static final RadBigDecimal YOTTA = new RadBigDecimal(BigDecimal.TEN).pow(24);   // Y
+    private static final RadBigDecimal ZETTA = new RadBigDecimal(BigDecimal.TEN).pow(21);   // Z
+    private static final RadBigDecimal EXA = new RadBigDecimal(BigDecimal.TEN).pow(18);   // E
+    private static final RadBigDecimal PETA = new RadBigDecimal(BigDecimal.TEN).pow(15);   // P
+    private static final RadBigDecimal TERA = new RadBigDecimal(BigDecimal.TEN).pow(12);   // T
+    private static final RadBigDecimal GIGA = new RadBigDecimal(BigDecimal.TEN).pow(9);    // G
+    private static final RadBigDecimal MEGA = new RadBigDecimal(BigDecimal.TEN).pow(6);    // M
+    private static final RadBigDecimal KILO = new RadBigDecimal(BigDecimal.TEN).pow(3);    // k
+    private static final RadBigDecimal HECTO = new RadBigDecimal(BigDecimal.TEN).pow(2);    // h
+    private static final RadBigDecimal DEKA = new RadBigDecimal(BigDecimal.TEN).pow(1);    // da
+    private static final RadBigDecimal DECI = new RadBigDecimal(BigDecimal.TEN).pow(-1);   // d
+    private static final RadBigDecimal CENTI = new RadBigDecimal(BigDecimal.TEN).pow(-2);   // c
+    private static final RadBigDecimal MILLI = new RadBigDecimal(BigDecimal.TEN).pow(-3);   // m
+    private static final RadBigDecimal MICRO = new RadBigDecimal(BigDecimal.TEN).pow(-6);   // MICRO
+    private static final RadBigDecimal NANO = new RadBigDecimal(BigDecimal.TEN).pow(-9);   // n
+    private static final RadBigDecimal PICO = new RadBigDecimal(BigDecimal.TEN).pow(-12);  // p
+    private static final RadBigDecimal FEMTO = new RadBigDecimal(BigDecimal.TEN).pow(-15);  // f
+    private static final RadBigDecimal ATTO = new RadBigDecimal(BigDecimal.TEN).pow(-18);  // a
+    private static final RadBigDecimal ZEPTO = new RadBigDecimal(BigDecimal.TEN).pow(-21);  // z
+    private static final RadBigDecimal YOCTO = new RadBigDecimal(BigDecimal.TEN).pow(-24);  // y
     private static final String INVALID_VALUE = "Invalid Value";
+    private static final String ENUM_FIRST_PART_REGEX = "^.*\\(";
+    private static final String ENUM_LAST_PART_REGEX = "\\)$";
     private Conversions() {}
 
     /*////////////////////////////////////////////////// HELPERS /////////////////////////////////////////////////////*/
@@ -43,30 +43,30 @@ public final class Conversions {
      * @param prefix the starting SI prefix
      * @return the converted base value
      */
-    public static BigDecimal convertToBase(BigDecimal value, SIPrefix prefix) throws InvalidParameterException {
+    public static RadBigDecimal convertToBase(RadBigDecimal value, SIPrefix prefix) throws InvalidParameterException {
         if(value == null) throw new InvalidParameterException(INVALID_VALUE);
         if(prefix == null) throw new InvalidParameterException("Invalid SI Prefix");
         switch(prefix) {
-            case YOTTA: return value.multiply(YOTTA, context);
-            case ZETTA: return value.multiply(ZETTA, context);
-            case EXA: return value.multiply(EXA, context);
-            case PETA: return value.multiply(PETA, context);
-            case TERA: return value.multiply(TERA, context);
-            case GIGA: return value.multiply(GIGA, context);
-            case MEGA: return value.multiply(MEGA, context);
-            case KILO: return value.multiply(KILO, context);
-            case HECTO: return value.multiply(HECTO, context);
-            case DEKA: return value.multiply(DEKA, context);
-            case DECI: return value.multiply(DECI, context);
-            case CENTI: return value.multiply(CENTI, context);
-            case MILLI: return value.multiply(MILLI, context);
-            case MICRO: return value.multiply(MICRO, context);
-            case NANO: return value.multiply(NANO, context);
-            case PICO: return value.multiply(PICO, context);
-            case FEMTO: return value.multiply(FEMTO, context);
-            case ATTO: return value.multiply(ATTO, context);
-            case ZEPTO: return value.multiply(ZEPTO, context);
-            case YOCTO: return value.multiply(YOCTO, context);
+            case YOTTA: return value.multiply(YOTTA);
+            case ZETTA: return value.multiply(ZETTA);
+            case EXA: return value.multiply(EXA);
+            case PETA: return value.multiply(PETA);
+            case TERA: return value.multiply(TERA);
+            case GIGA: return value.multiply(GIGA);
+            case MEGA: return value.multiply(MEGA);
+            case KILO: return value.multiply(KILO);
+            case HECTO: return value.multiply(HECTO);
+            case DEKA: return value.multiply(DEKA);
+            case DECI: return value.multiply(DECI);
+            case CENTI: return value.multiply(CENTI);
+            case MILLI: return value.multiply(MILLI);
+            case MICRO: return value.multiply(MICRO);
+            case NANO: return value.multiply(NANO);
+            case PICO: return value.multiply(PICO);
+            case FEMTO: return value.multiply(FEMTO);
+            case ATTO: return value.multiply(ATTO);
+            case ZEPTO: return value.multiply(ZEPTO);
+            case YOCTO: return value.multiply(YOCTO);
             default: return value;
         }
     }
@@ -80,33 +80,33 @@ public final class Conversions {
      * @param end the ending SI prefix
      * @return the value converted from the start prefix to the end prefix
      */
-    public static BigDecimal convertToPrefix(BigDecimal value, SIPrefix start, SIPrefix end) throws InvalidParameterException {
+    public static RadBigDecimal convertToPrefix(RadBigDecimal value, SIPrefix start, SIPrefix end) throws InvalidParameterException {
         if(value == null) throw new InvalidParameterException(INVALID_VALUE);
         if(start == null) throw new InvalidParameterException("Invalid starting SI Prefix");
         if(end == null) throw new InvalidParameterException("Invalid ending SI Prefix");
         
-        BigDecimal baseValue = convertToBase(value, start);
+        RadBigDecimal baseValue = convertToBase(value, start);
         switch(end) {
-            case YOTTA: return baseValue.multiply(YOCTO, context);
-            case ZETTA: return baseValue.multiply(ZEPTO, context);
-            case EXA: return baseValue.multiply(ATTO, context);
-            case PETA: return baseValue.multiply(FEMTO, context);
-            case TERA: return baseValue.multiply(PICO, context);
-            case GIGA: return baseValue.multiply(NANO, context);
-            case MEGA: return baseValue.multiply(MICRO, context);
-            case KILO: return baseValue.multiply(MILLI, context);
-            case HECTO: return baseValue.multiply(CENTI, context);
-            case DEKA: return baseValue.multiply(DECI, context);
-            case DECI: return baseValue.multiply(DEKA, context);
-            case CENTI: return baseValue.multiply(HECTO, context);
-            case MILLI: return baseValue.multiply(KILO, context);
-            case MICRO: return baseValue.multiply(MEGA, context);
-            case NANO: return baseValue.multiply(GIGA, context);
-            case PICO: return baseValue.multiply(TERA, context);
-            case FEMTO: return baseValue.multiply(PETA, context);
-            case ATTO: return baseValue.multiply(EXA, context);
-            case ZEPTO: return baseValue.multiply(ZETTA, context);
-            case YOCTO: return baseValue.multiply(YOTTA, context);
+            case YOTTA: return baseValue.multiply(YOCTO);
+            case ZETTA: return baseValue.multiply(ZEPTO);
+            case EXA: return baseValue.multiply(ATTO);
+            case PETA: return baseValue.multiply(FEMTO);
+            case TERA: return baseValue.multiply(PICO);
+            case GIGA: return baseValue.multiply(NANO);
+            case MEGA: return baseValue.multiply(MICRO);
+            case KILO: return baseValue.multiply(MILLI);
+            case HECTO: return baseValue.multiply(CENTI);
+            case DEKA: return baseValue.multiply(DECI);
+            case DECI: return baseValue.multiply(DEKA);
+            case CENTI: return baseValue.multiply(HECTO);
+            case MILLI: return baseValue.multiply(KILO);
+            case MICRO: return baseValue.multiply(MEGA);
+            case NANO: return baseValue.multiply(GIGA);
+            case PICO: return baseValue.multiply(TERA);
+            case FEMTO: return baseValue.multiply(PETA);
+            case ATTO: return baseValue.multiply(EXA);
+            case ZEPTO: return baseValue.multiply(ZETTA);
+            case YOCTO: return baseValue.multiply(YOTTA);
             default: return baseValue;
         }
     }
@@ -118,9 +118,9 @@ public final class Conversions {
      * @param bq the becquerel value to be converted
      * @return the converted curie value
      */
-    public static BigDecimal bqToCi(BigDecimal bq) throws InvalidParameterException {
+    public static RadBigDecimal bqToCi(RadBigDecimal bq) throws InvalidParameterException {
         if(bq == null) throw new InvalidParameterException(INVALID_VALUE);
-        return bq.multiply(BigDecimal.valueOf(2.7d).multiply(BigDecimal.TEN.pow(-11, context), context), context);
+        return bq.multiply(RadBigDecimal.valueOf(2.7d).multiply(new RadBigDecimal(BigDecimal.TEN).pow(-11)));
     }
 
     /**
@@ -129,9 +129,9 @@ public final class Conversions {
      * @param ci the curie value to be converted
      * @return the converted becquerel value
      */
-    public static BigDecimal ciToBq(BigDecimal ci) throws InvalidParameterException {
+    public static RadBigDecimal ciToBq(RadBigDecimal ci) throws InvalidParameterException {
         if(ci == null) throw new InvalidParameterException(INVALID_VALUE);
-        return ci.multiply(BigDecimal.valueOf(3.7d).multiply(BigDecimal.TEN.pow(10, context), context), context);
+        return ci.multiply(RadBigDecimal.valueOf(3.7d).multiply(new RadBigDecimal(BigDecimal.TEN).pow(10)));
     }
 
     /**
@@ -140,9 +140,9 @@ public final class Conversions {
      * @param gy the gray value to be converted
      * @return the converted rad value
      */
-    public static BigDecimal gyToRad(BigDecimal gy) throws InvalidParameterException {
+    public static RadBigDecimal gyToRad(RadBigDecimal gy) throws InvalidParameterException {
         if(gy == null) throw new InvalidParameterException(INVALID_VALUE);
-        return gy.multiply(BigDecimal.TEN.pow(2, context), context);
+        return gy.multiply(new RadBigDecimal(BigDecimal.TEN).pow(2));
     }
 
     /**
@@ -151,9 +151,9 @@ public final class Conversions {
      * @param rad the rad value to be converted
      * @return the converted gray value
      */
-    public static BigDecimal radToGy(BigDecimal rad) throws InvalidParameterException {
+    public static RadBigDecimal radToGy(RadBigDecimal rad) throws InvalidParameterException {
         if(rad == null) throw new InvalidParameterException(INVALID_VALUE);
-        return rad.multiply(BigDecimal.TEN.pow(-2, context), context);
+        return rad.multiply(new RadBigDecimal(BigDecimal.TEN).pow(-2));
     }
 
     /**
@@ -162,9 +162,9 @@ public final class Conversions {
      * @param sv the sievert value to be converted
      * @return the converted rem value
      */
-    public static BigDecimal svToRem(BigDecimal sv) throws InvalidParameterException {
+    public static RadBigDecimal svToRem(RadBigDecimal sv) throws InvalidParameterException {
         if(sv == null) throw new InvalidParameterException(INVALID_VALUE);
-        return sv.multiply(BigDecimal.TEN.pow(2, context), context);
+        return sv.multiply(new RadBigDecimal(BigDecimal.TEN).pow(2));
     }
 
     /**
@@ -173,9 +173,9 @@ public final class Conversions {
      * @param rem the rem value to be converted
      * @return the converted sievert value
      */
-    public static BigDecimal remToSv(BigDecimal rem) throws InvalidParameterException {
+    public static RadBigDecimal remToSv(RadBigDecimal rem) throws InvalidParameterException {
         if(rem == null) throw new InvalidParameterException(INVALID_VALUE);
-        return rem.multiply(BigDecimal.TEN.pow(-2, context), context);
+        return rem.multiply(new RadBigDecimal(BigDecimal.TEN).pow(-2));
     }
 
     /**
@@ -184,9 +184,9 @@ public final class Conversions {
      * @param ckg the coulomb/kilogram value to be converted
      * @return the converted roentgen value
      */
-    public static BigDecimal ckgToR(BigDecimal ckg) throws InvalidParameterException {
+    public static RadBigDecimal ckgToR(RadBigDecimal ckg) throws InvalidParameterException {
         if(ckg == null) throw new InvalidParameterException(INVALID_VALUE);
-        return ckg.multiply(BigDecimal.valueOf(3.88d).multiply(BigDecimal.TEN.pow(3, context), context), context);
+        return ckg.multiply(RadBigDecimal.valueOf(3.88d).multiply(new RadBigDecimal(BigDecimal.TEN).pow(3)));
     }
 
     /**
@@ -195,9 +195,9 @@ public final class Conversions {
      * @param r the roentgen value to be converted
      * @return the converted coulomb/kilogram value
      */
-    public static BigDecimal rToCkg(BigDecimal r) throws InvalidParameterException {
+    public static RadBigDecimal rToCkg(RadBigDecimal r) throws InvalidParameterException {
         if(r == null) throw new InvalidParameterException(INVALID_VALUE);
-        return r.multiply(BigDecimal.valueOf(2.58d).multiply(BigDecimal.TEN.pow(-4, context), context), context);
+        return r.multiply(RadBigDecimal.valueOf(2.58d).multiply(new RadBigDecimal(BigDecimal.TEN).pow(-4)));
     }
 
     public enum MassUnit {
@@ -215,8 +215,8 @@ public final class Conversions {
         }
 
         public String getAbbrVal() {
-            return val.replaceAll("^.*\\(", "")
-                    .replaceAll("\\)$", "");
+            return val.replaceAll(ENUM_FIRST_PART_REGEX, "")
+                    .replaceAll(ENUM_LAST_PART_REGEX, "");
         }
 
         public static MassUnit toMass(String value) {
@@ -264,8 +264,8 @@ public final class Conversions {
         }
 
         public String getAbbrVal() {
-            return val.replaceAll("^.*\\(", "")
-                    .replaceAll("\\)$", "");
+            return val.replaceAll(ENUM_FIRST_PART_REGEX, "")
+                    .replaceAll(ENUM_LAST_PART_REGEX, "");
         }
 
         public static DoseUnit toDoseUnit(String value) {
@@ -311,14 +311,14 @@ public final class Conversions {
         }
 
         public String getAbbrVal() {
-            return val.replaceAll("^.*\\(", "")
-                .replaceAll("\\)$", "");
+            return val.replaceAll(ENUM_FIRST_PART_REGEX, "")
+                .replaceAll(ENUM_LAST_PART_REGEX, "");
         }
 
         public static ExposureUnit toExposureUnit(String value) {
             for (ExposureUnit enumValue : values()) {
                 if (enumValue.getVal().equalsIgnoreCase(value) ||
-                    enumValue.getAbbrVal().equals(value)) {
+                    enumValue.getAbbrVal().equalsIgnoreCase(value)) {
                     return enumValue;
                 }
             }
@@ -358,15 +358,14 @@ public final class Conversions {
         }
 
         public String getAbbrVal() {
-            return val.equals("----")? "" :
-                val.replaceAll("^.*\\(", "")
-                    .replaceAll("\\)$", "");
+            return val.replaceAll(ENUM_FIRST_PART_REGEX, "")
+                    .replaceAll(ENUM_LAST_PART_REGEX, "");
         }
 
         public static RadUnit toRadUnit(String value) {
             for (RadUnit enumValue : values()) {
                 if (enumValue.getVal().equalsIgnoreCase(value) ||
-                    enumValue.getAbbrVal().equals(value)) {
+                    enumValue.getAbbrVal().equalsIgnoreCase(value)) {
                     return enumValue;
                 }
             }
@@ -420,8 +419,8 @@ public final class Conversions {
 
         public String getAbbrVal() {
             return val.equals("----")? "" :
-                val.replaceAll("^.*\\(", "")
-                    .replaceAll("\\)$", "");
+                val.replaceAll(ENUM_FIRST_PART_REGEX, "")
+                    .replaceAll(ENUM_LAST_PART_REGEX, "");
         }
 
         public static SIPrefix toSIPrefix(String value) {

@@ -1,9 +1,19 @@
 package com.marcsllite.model.db;
 
 import com.marcsllite.util.Conversions;
+import com.marcsllite.util.RadBigDecimal;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+/**
+ * The maximum activity of Class 7 (radioactive) material
+ * permitted in a Type A package other than:
+ * <ul>
+ *     <li>special form material</li>
+ *     <li>Low Specific Activity (LSA) material</li>
+ *     <li>Surface Contaminated Object (SCO)</li>
+ * </ul>
+ */
 @Entity(name = "A2")
 @Table(name = "A_TWO")
 public class A2Model extends BaseDataModel {
@@ -13,8 +23,8 @@ public class A2Model extends BaseDataModel {
         super();
     }
 
-    public A2Model(String abbr, float value) {
-        super(abbr, value);
+    public A2Model(NuclideModelId nuclideId, RadBigDecimal value) {
+        super(nuclideId, value.toString());
         setBasePrefix(Conversions.SIPrefix.TERA);
     }
 }

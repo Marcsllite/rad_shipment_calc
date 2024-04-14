@@ -2,9 +2,10 @@ package com.marcsllite.model;
 
 import com.marcsllite.DBTest;
 import com.marcsllite.PropHandlerTestObj;
-import com.marcsllite.model.db.IsotopeModelId;
+import com.marcsllite.model.db.NuclideModelId;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.Conversions;
+import com.marcsllite.util.RadBigDecimal;
 import com.marcsllite.util.handler.PropHandler;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,18 +25,19 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class IsotopeTest extends DBTest {
-    private final float DEFAULT_NUM = -1f;
-    private static final String DEFAULT_NAME = "Abbreviation";
-    private static final String DEFAULT_ABBR = "Abbr";
-    private static final IsotopeModelId isoId = new IsotopeModelId(DEFAULT_NAME, DEFAULT_ABBR);
+class NuclideTest extends DBTest {
+    private final RadBigDecimal DEFAULT_NUM = RadBigDecimal.NEG_INFINITY_OBJ;
+    private final String DEFAULT_NAME = "Symbol";
+    private final String DEFAULT_SYMBOL = "Sy";
+    private final String DEFAULT_MASS_NUMBER = "1";
+    private final NuclideModelId DEFAULT_ID = new NuclideModelId(DEFAULT_SYMBOL, DEFAULT_MASS_NUMBER);
     private final Conversions.MassUnit DEFAULT_MASS = Conversions.MassUnit.GRAMS;
     private final Conversions.RadUnit DEFAULT_RAD_UNIT = Conversions.RadUnit.CURIE;
-    private final Isotope.Nature DEFAULT_NATURE = Isotope.Nature.REGULAR;
+    private final Nuclide.Nature DEFAULT_NATURE = Nuclide.Nature.REGULAR;
     private final LimitsModelId limitsId = new LimitsModelId();
-    private final Isotope.IsoClass DEFAULT_CLASS = Isotope.IsoClass.TBD;
+    private final Nuclide.NuclideClass DEFAULT_CLASS = Nuclide.NuclideClass.TBD;
     @InjectMocks
-    Isotope iso;
+    Nuclide iso;
 
     @BeforeAll
     public void beforeAll() {
@@ -46,7 +48,7 @@ class IsotopeTest extends DBTest {
     @BeforeEach
     public void setUp() {
         super.setUp();
-        iso = spy(new Isotope(isoId) {
+        iso = spy(new Nuclide(DEFAULT_NAME, DEFAULT_ID) {
             @Override
             public PropHandler getPropHandler() {
                 return new PropHandlerTestObj();
@@ -56,89 +58,51 @@ class IsotopeTest extends DBTest {
 
     @Test
     void testInit() {
-        assertEquals(isoId, iso.getIsoId());
+        assertEquals(DEFAULT_ID, iso.getNuclideId());
         assertEquals(DEFAULT_NATURE, iso.getNature());
         assertEquals(limitsId, iso.getLimitsId());
         assertEquals(DEFAULT_MASS, iso.getMassUnit());
         assertEquals(DEFAULT_RAD_UNIT, iso.getInitActivityUnit());
-        assertEquals(DEFAULT_CLASS, iso.getIsoClass());
+        assertEquals(DEFAULT_CLASS, iso.getNuclideClass());
         assertNotNull(iso.getConstants());
         assertNotNull(iso.getRefDate());
     }
 
     @Test
-    void testToMass() {
+    void testToNuclideClass() {
         String str = "";
-        Conversions.MassUnit actual = Conversions.MassUnit.toMass(str);
-        assertNull(actual);
-        
-        str = "grams";
-        actual = Conversions.MassUnit.toMass(str);
-        assertEquals(Conversions.MassUnit.GRAMS, actual);
-
-        str = "GRAMS";
-        actual = Conversions.MassUnit.toMass(str);
-        assertEquals(Conversions.MassUnit.GRAMS, actual);
-        
-        str = "fake";
-        actual = Conversions.MassUnit.toMass(str);
-        assertNull(actual);
-    }
-
-    @Test
-    void testToRadUnit() {
-        String str = "";
-        Conversions.RadUnit actual = Conversions.RadUnit.toRadUnit(str);
+        Nuclide.NuclideClass actual = Nuclide.NuclideClass.toNuclideClass(str);
         assertNull(actual);
 
-        str = "ci";
-        actual = Conversions.RadUnit.toRadUnit(str);
-        assertEquals(Conversions.RadUnit.CURIE, actual);
+        str = "Non-Radioactive";
+        actual = Nuclide.NuclideClass.toNuclideClass(str);
+        assertEquals(Nuclide.NuclideClass.EXEMPT, actual);
 
-        str = "CI";
-        actual = Conversions.RadUnit.toRadUnit(str);
-        assertEquals(Conversions.RadUnit.CURIE, actual);
+        str = "NON-RADIOACTIVE";
+        actual = Nuclide.NuclideClass.toNuclideClass(str);
+        assertEquals(Nuclide.NuclideClass.EXEMPT, actual);
 
         str = "fake";
-        actual = Conversions.RadUnit.toRadUnit(str);
-        assertNull(actual);
-    }
-
-    @Test
-    void testToIsoClass() {
-        String str = "";
-        Isotope.IsoClass actual = Isotope.IsoClass.toIsoClass(str);
-        assertNull(actual);
-
-        str = "exempt";
-        actual = Isotope.IsoClass.toIsoClass(str);
-        assertEquals(Isotope.IsoClass.EXEMPT, actual);
-
-        str = "EXEMPT";
-        actual = Isotope.IsoClass.toIsoClass(str);
-        assertEquals(Isotope.IsoClass.EXEMPT, actual);
-
-        str = "fake";
-        actual = Isotope.IsoClass.toIsoClass(str);
+        actual = Nuclide.NuclideClass.toNuclideClass(str);
         assertNull(actual);
     }
 
     @Test
     void testToNature() {
         String str = "";
-        Isotope.Nature actual = Isotope.Nature.toNature(str);
+        Nuclide.Nature actual = Nuclide.Nature.toNature(str);
         assertNull(actual);
 
         str = "regular";
-        actual = Isotope.Nature.toNature(str);
-        assertEquals(Isotope.Nature.REGULAR, actual);
+        actual = Nuclide.Nature.toNature(str);
+        assertEquals(Nuclide.Nature.REGULAR, actual);
 
         str = "REGULAR";
-        actual = Isotope.Nature.toNature(str);
-        assertEquals(Isotope.Nature.REGULAR, actual);
+        actual = Nuclide.Nature.toNature(str);
+        assertEquals(Nuclide.Nature.REGULAR, actual);
 
         str = "fake";
-        actual = Isotope.Nature.toNature(str);
+        actual = Nuclide.Nature.toNature(str);
         assertNull(actual);
     }
 
@@ -163,7 +127,7 @@ class IsotopeTest extends DBTest {
 
     @Test
     void testSetConstants() {
-        IsotopeConstants exp = mock(IsotopeConstants.class);
+        NuclideConstants exp = mock(NuclideConstants.class);
         iso.setConstants(exp);
         assertEquals(exp, iso.getConstants());
     }
@@ -198,32 +162,32 @@ class IsotopeTest extends DBTest {
     }
 
     @Test
-    void testGetAbbr_NullProp() {
-        when(iso.abbrProperty()).thenReturn(null);
-        assertEquals("", iso.getAbbr());
+    void testGetMassNumber_NullProp() {
+        when(iso.massNumberProperty()).thenReturn(null);
+        assertEquals("", iso.getMassNumber());
     }
 
     @Test
-    void testSetAbbr_Null() {
-        iso.setAbbr(null);
-        assertEquals("", iso.getAbbr());
+    void testSetMassNumber_Null() {
+        iso.setMassNumber(null);
+        assertEquals("", iso.getMassNumber());
     }
 
     @Test
-    void testSetAbbr_NullProp() {
-        when(iso.abbrProperty())
+    void testSetMassNumber_NullProp() {
+        when(iso.massNumberProperty())
             .thenReturn(null)
             .thenCallRealMethod();
-        String exp = "Abbr";
-        iso.setAbbr(exp);
-        assertEquals(exp, iso.getAbbr());
+        String exp = "MassNumber";
+        iso.setMassNumber(exp);
+        assertEquals(exp, iso.getMassNumber());
     }
 
     @Test
-    void testSetAbbr() {
-        String exp = "Abbr";
-        iso.setAbbr(exp);
-        assertEquals(exp, iso.getAbbr());
+    void testSetMassNumber() {
+        String exp = "MassNumber";
+        iso.setMassNumber(exp);
+        assertEquals(exp, iso.getMassNumber());
     }
 
     @Test
@@ -234,7 +198,7 @@ class IsotopeTest extends DBTest {
 
     @Test
     void testSetMass_NullProp() {
-        float exp = 5F;
+        RadBigDecimal exp = RadBigDecimal.valueOf(5F);
         when(iso.massProperty())
             .thenReturn(null)
             .thenCallRealMethod();
@@ -244,7 +208,7 @@ class IsotopeTest extends DBTest {
 
     @Test
     void testSetMass() {
-        float exp = 5F;
+        RadBigDecimal exp = RadBigDecimal.valueOf(5F);
         iso.setMass(exp);
         assertEquals(exp, iso.getMass());
     }
@@ -261,14 +225,14 @@ class IsotopeTest extends DBTest {
         when(iso.initActivityProperty())
             .thenReturn(null)
             .thenCallRealMethod();
-        float exp = 94F;
+        RadBigDecimal exp = RadBigDecimal.valueOf(94F);
         iso.setInitActivity(exp);
         assertEquals(exp, iso.getInitActivity());
     }
 
     @Test
     void testSetInitActivity() {
-        float exp = 94F;
+        RadBigDecimal exp = RadBigDecimal.valueOf(94F);
         iso.setInitActivity(exp);
         assertEquals(exp, iso.getInitActivity());
     }
@@ -289,11 +253,11 @@ class IsotopeTest extends DBTest {
     
     @Test
     void testEquals() {
-        IsotopeModelId isoId = new IsotopeModelId();
-        Isotope isotope1 = mock(Isotope.class, CALLS_REAL_METHODS);
-        isotope1.setIsoId(isoId);
-        Isotope isotope2 = mock(Isotope.class, CALLS_REAL_METHODS);
-        isotope2.setIsoId(isoId);
+        NuclideModelId DEFAULT_ID = new NuclideModelId();
+        Nuclide isotope1 = mock(Nuclide.class, CALLS_REAL_METHODS);
+        isotope1.setNuclideId(DEFAULT_ID);
+        Nuclide isotope2 = mock(Nuclide.class, CALLS_REAL_METHODS);
+        isotope2.setNuclideId(DEFAULT_ID);
 
         String str = "";
 
@@ -308,7 +272,7 @@ class IsotopeTest extends DBTest {
         assertNotEquals(isotope1, isotope2);
         assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
 
-        isotope1.setNature(Isotope.Nature.INSTRUMENT);
+        isotope1.setNature(Nuclide.Nature.INSTRUMENT);
         assertNotEquals(isotope1, isotope2);
         assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
 
@@ -316,7 +280,7 @@ class IsotopeTest extends DBTest {
         assertNotEquals(isotope1, isotope2);
         assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
 
-        isotope1.setInitActivity(-2F);
+        isotope1.setInitActivity(RadBigDecimal.NEG_INFINITY_OBJ);
         assertNotEquals(isotope1, isotope2);
         assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
 
@@ -324,16 +288,16 @@ class IsotopeTest extends DBTest {
         assertNotEquals(isotope1, isotope2);
         assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
 
-        isotope1.setMass(-2F);
+        isotope1.setMass(RadBigDecimal.NEG_INFINITY_OBJ);
         assertNotEquals(isotope1, isotope2);
         assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
 
-        isotope1.setIsoClass(Isotope.IsoClass.TYPE_B_HIGHWAY);
+        isotope1.setNuclideClass(Nuclide.NuclideClass.TYPE_B_HIGHWAY);
         assertNotEquals(isotope1, isotope2);
         assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
 
-        isoId = new IsotopeModelId("fake", "fke");
-        isotope1.setIsoId(isoId);
+        DEFAULT_ID = new NuclideModelId("fake", "fke");
+        isotope1.setNuclideId(DEFAULT_ID);
         assertNotEquals(isotope1, isotope2);
         assertNotEquals(isotope1.hashCode(), isotope2.hashCode());
     }

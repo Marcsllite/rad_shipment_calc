@@ -1,7 +1,7 @@
 package com.marcsllite.dao;
 
 import com.marcsllite.DBTest;
-import com.marcsllite.model.db.ShipmentsModel;
+import com.marcsllite.model.db.ShipmentModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,7 +16,7 @@ class ShipmentDaoImplTest extends DBTest {
     @InjectMocks
     ShipmentDaoImpl dao;
     @Mock
-    ShipmentsModel model;
+    ShipmentModel model;
 
     @BeforeEach
     public void setUp() {

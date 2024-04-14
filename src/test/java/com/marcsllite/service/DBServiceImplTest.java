@@ -8,20 +8,21 @@ import com.marcsllite.dao.DecayConstantDaoImpl;
 import com.marcsllite.dao.ExemptConcentrationDaoImpl;
 import com.marcsllite.dao.ExemptLimitDaoImpl;
 import com.marcsllite.dao.HalfLifeDaoImpl;
-import com.marcsllite.dao.IsotopeDaoImpl;
 import com.marcsllite.dao.LimitsDaoImpl;
+import com.marcsllite.dao.NuclideDaoImpl;
 import com.marcsllite.dao.ReportableQuantityDaoImpl;
 import com.marcsllite.dao.ShipmentDaoImpl;
-import com.marcsllite.model.Isotope;
 import com.marcsllite.model.Limits;
+import com.marcsllite.model.Nuclide;
 import com.marcsllite.model.ReportableQuantity;
 import com.marcsllite.model.Shipment;
-import com.marcsllite.model.db.IsotopeModel;
-import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModel;
 import com.marcsllite.model.db.LimitsModelId;
+import com.marcsllite.model.db.NuclideModel;
+import com.marcsllite.model.db.NuclideModelId;
 import com.marcsllite.model.db.ReportableQuantityModel;
-import com.marcsllite.model.db.ShipmentsModel;
+import com.marcsllite.model.db.ShipmentModel;
+import com.marcsllite.util.RadBigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,6 +38,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -56,7 +58,7 @@ class DBServiceImplTest extends DBTest {
     @Mock
     private HalfLifeDaoImpl halfLifeDao;
     @Mock
-    private IsotopeDaoImpl isotopeDao;
+    private NuclideDaoImpl nuclideDao;
     @Mock
     private LimitsDaoImpl limitsDao;
     @Mock
@@ -65,6 +67,9 @@ class DBServiceImplTest extends DBTest {
     private ShipmentDaoImpl shipmentDao;
     @InjectMocks
     private DBServiceImpl service;
+    private final String DEFAULT_SYMBOL = "Sy";
+    private final String DEFAULT_MASS_NUMBER = "1";
+    private final NuclideModelId NUCLIDE_ID = new NuclideModelId(DEFAULT_SYMBOL, DEFAULT_MASS_NUMBER);
 
     @BeforeEach
     public void setUp() {
@@ -76,203 +81,215 @@ class DBServiceImplTest extends DBTest {
     void testValidateDB() {
         int exp = 1;
 
-        when(service.getIsotopeDao()).thenReturn(isotopeDao);
-        when(isotopeDao.findSingleResult(anyString())).thenReturn(exp);
+        when(service.getNuclideDao()).thenReturn(nuclideDao);
+        when(nuclideDao.findSingleResult(anyString())).thenReturn(exp);
 
         assertEquals(exp, service.validateDb());
     }
 
     @Test
     void testGetA1() {
-        String abbr = "abbr";
-        float exp = 1.0f;
+        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
 
         when(service.getA1Dao()).thenReturn(a1Dao);
-        when(a1Dao.getA1(abbr)).thenReturn(exp);
+        when(a1Dao.getA1(NUCLIDE_ID)).thenReturn(exp);
 
-        assertEquals(exp, service.getA1(abbr));
-        verify(a1Dao).getA1(abbr);
+        assertEquals(exp, service.getA1(NUCLIDE_ID));
+        verify(a1Dao).getA1(NUCLIDE_ID);
     }
 
     @Test
     void testGetA2() {
-        String abbr = "abbr";
-        float exp = 1.0f;
+        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
 
         when(service.getA2Dao()).thenReturn(a2Dao);
-        when(a2Dao.getA2(abbr)).thenReturn(exp);
+        when(a2Dao.getA2(NUCLIDE_ID)).thenReturn(exp);
 
-        assertEquals(exp, service.getA2(abbr));
-        verify(a2Dao).getA2(abbr);
+        assertEquals(exp, service.getA2(NUCLIDE_ID));
+        verify(a2Dao).getA2(NUCLIDE_ID);
     }
 
     @Test
     void testGetDecayConstant() {
-        String abbr = "abbr";
-        float exp = 1.0f;
+        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
 
         when(service.getDecayConstantDao()).thenReturn(decayConstantDao);
-        when(decayConstantDao.getDecayConstant(abbr)).thenReturn(exp);
+        when(decayConstantDao.getDecayConstant(NUCLIDE_ID)).thenReturn(exp);
 
-        assertEquals(exp, service.getDecayConstant(abbr));
-        verify(decayConstantDao).getDecayConstant(abbr);
+        assertEquals(exp, service.getDecayConstant(NUCLIDE_ID));
+        verify(decayConstantDao).getDecayConstant(NUCLIDE_ID);
     }
 
     @Test
     void testGetExemptConcentration() {
-        String abbr = "abbr";
-        float exp = 1.0f;
+        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
 
         when(service.getExemptConDao()).thenReturn(exemptConDao);
-        when(exemptConDao.getExemptConcentration(abbr)).thenReturn(exp);
+        when(exemptConDao.getExemptConcentration(NUCLIDE_ID)).thenReturn(exp);
 
-        assertEquals(exp, service.getExemptConcentration(abbr));
-        verify(exemptConDao).getExemptConcentration(abbr);
+        assertEquals(exp, service.getExemptConcentration(NUCLIDE_ID));
+        verify(exemptConDao).getExemptConcentration(NUCLIDE_ID);
     }
 
     @Test
     void testGetExemptLimit() {
-        String abbr = "abbr";
-        float exp = 1.0f;
+        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
 
         when(service.getExemptLimitDao()).thenReturn(exemptLimitDao);
-        when(exemptLimitDao.getExemptLimit(abbr)).thenReturn(exp);
+        when(exemptLimitDao.getExemptLimit(NUCLIDE_ID)).thenReturn(exp);
 
-        assertEquals(exp, service.getExemptLimit(abbr));
-        verify(exemptLimitDao).getExemptLimit(abbr);
+        assertEquals(exp, service.getExemptLimit(NUCLIDE_ID));
+        verify(exemptLimitDao).getExemptLimit(NUCLIDE_ID);
     }
 
     @Test
     void testGetHalfLife() {
-        String abbr = "abbr";
-        float exp = 1.0f;
+        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
 
         when(service.getHalfLifeDao()).thenReturn(halfLifeDao);
-        when(halfLifeDao.getHalfLife(abbr)).thenReturn(exp);
+        when(halfLifeDao.getHalfLife(NUCLIDE_ID)).thenReturn(exp);
 
-        assertEquals(exp, service.getHalfLife(abbr));
-        verify(halfLifeDao).getHalfLife(abbr);
+        assertEquals(exp, service.getHalfLife(NUCLIDE_ID));
+        verify(halfLifeDao).getHalfLife(NUCLIDE_ID);
     }
 
     @Test
-    void testCountALlIsotopes() {
+    void testCountAllNuclides() {
         int exp = 10;
 
-        when(service.getIsotopeDao()).thenReturn(isotopeDao);
-        when(isotopeDao.count()).thenReturn(exp);
+        when(service.getNuclideDao()).thenReturn(nuclideDao);
+        when(nuclideDao.count()).thenReturn(exp);
 
-        assertEquals(exp, service.countAllIsotopes());
+        assertEquals(exp, service.countAllNuclides());
     }
 
     @Test
     @SetSystemProperty(key = "keepPlatformOpen",value = "true")
-    void testGetAllIsotopeModels() {
-        IsotopeModel model = new IsotopeModel();
-        List<IsotopeModel> exp = new ArrayList<>();
+    void testGetAllNuclideModels() {
+        NuclideModel model = new NuclideModel();
+        List<NuclideModel> exp = new ArrayList<>();
         exp.add(model);
 
-        when(service.getIsotopeDao()).thenReturn(isotopeDao);
-        when(isotopeDao.getAllIsotopes()).thenReturn(exp);
+        when(service.getNuclideDao()).thenReturn(nuclideDao);
+        when(nuclideDao.getAllNuclides()).thenReturn(exp);
 
-        assertEquals(exp, service.getAllIsotopeModels());
-        verify(isotopeDao).getAllIsotopes();
+        assertEquals(exp, service.getAllNuclideModels());
+        verify(nuclideDao).getAllNuclides();
     }
 
     @Test
     @SetSystemProperty(key = "keepPlatformOpen",value = "true")
-    void testGetAllIsotopes() {
-        IsotopeModel model = new IsotopeModel();
-        List<IsotopeModel> exp = new ArrayList<>();
+    void testGetAllNuclides() {
+        NuclideModel model = new NuclideModel();
+        List<NuclideModel> exp = new ArrayList<>();
         exp.add(model);
 
-        when(service.getIsotopeDao()).thenReturn(isotopeDao);
-        when(isotopeDao.getAllIsotopes()).thenReturn(exp);
-        isoConstantsDbInit(model.getIsotopeId().getAbbr());
+        when(service.getNuclideDao()).thenReturn(nuclideDao);
+        when(nuclideDao.getAllNuclides()).thenReturn(exp);
+        isoConstantsDbInit(model.getNuclideId());
 
-        List<Isotope> actual = service.getAllIsotopes();
-        assertEquals(model.getIsotopeId(), actual.get(0).getIsoId());
-        verify(isotopeDao).getAllIsotopes();
+        List<Nuclide> actual = service.getAllNuclides();
+        assertEquals(model.getNuclideId(), actual.get(0).getNuclideId());
+        verify(nuclideDao).getAllNuclides();
     }
 
     @Test
     @SetSystemProperty(key = "keepPlatformOpen",value = "true")
-    void testGetIsotope_Null() {
-        String name = "name";
-        String abbr = "abbr";
-        IsotopeModelId isoId = new IsotopeModelId(name, abbr);
+    void testGetNuclide_Null() {
+        String symbol = "symbol";
+        String massNumber = "massNumber";
+        NuclideModelId nuclideId = new NuclideModelId(symbol, massNumber);
 
-        when(service.getIsotopeDao()).thenReturn(isotopeDao);
-        when(isotopeDao.getIsotope(isoId)).thenReturn(null);
+        when(service.getNuclideDao()).thenReturn(nuclideDao);
+        when(nuclideDao.getNuclide(nuclideId)).thenReturn(null);
 
-        assertNull(service.getIsotope(isoId));
-        verify(isotopeDao).getIsotope(isoId);
+        assertNull(service.getNuclide(nuclideId));
+        verify(nuclideDao).getNuclide(nuclideId);
     }
 
-    protected void isoConstantsDbInit(String abbr) {
+    protected void isoConstantsDbInit(NuclideModelId nuclideId) {
         LimitsModelId limitsId = new LimitsModelId();
-        float exp = 1.0f;
+        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
 
-        when(service.getA1Dao()).thenReturn(a1Dao);
-        when(a1Dao.getA1(abbr)).thenReturn(exp);
-        when(service.getA2Dao()).thenReturn(a2Dao);
-        when(a2Dao.getA2(abbr)).thenReturn(exp);
-        when(service.getDecayConstantDao()).thenReturn(decayConstantDao);
-        when(decayConstantDao.getDecayConstant(abbr)).thenReturn(exp);
-        when(service.getExemptConDao()).thenReturn(exemptConDao);
-        when(exemptConDao.getExemptConcentration(abbr)).thenReturn(exp);
-        when(service.getExemptLimitDao()).thenReturn(exemptLimitDao);
-        when(exemptLimitDao.getExemptLimit(abbr)).thenReturn(exp);
-        when(service.getHalfLifeDao()).thenReturn(halfLifeDao);
-        when(halfLifeDao.getHalfLife(abbr)).thenReturn(exp);
-        when(service.getLimitsDao()).thenReturn(limitsDao);
-        when(limitsDao.getIALimited(limitsId)).thenReturn(exp);
-        when(limitsDao.getIAPackage(limitsId)).thenReturn(exp);
-        when(limitsDao.getLimited(limitsId)).thenReturn(exp);
-        when(service.getReportableQuanDao()).thenReturn(reportableQuanDao);
-        when(reportableQuanDao.getCi(abbr)).thenReturn(exp);
-        when(reportableQuanDao.getTBq(abbr)).thenReturn(exp);
+        doReturn(exp).when(service).getA1(nuclideId);
+        doReturn(exp).when(service).getA2(nuclideId);
+        doReturn(exp).when(service).getDecayConstant(nuclideId);
+        doReturn(exp).when(service).getExemptConcentration(nuclideId);
+        doReturn(exp).when(service).getExemptLimit(nuclideId);
+        doReturn(exp).when(service).getHalfLife(nuclideId);
+        doReturn(exp).when(service).getIALimited(limitsId);
+        doReturn(exp).when(service).getIAPackage(limitsId);
+        doReturn(exp).when(service).getLimited(limitsId);
+        doReturn(exp).when(service).getCiReportQuan(nuclideId);
+        doReturn(exp).when(service).getTBqReportQuan(nuclideId);
+
+//        when(service.getA1Dao()).thenReturn(a1Dao);
+//        when(a1Dao.getA1(nuclideId)).thenReturn(exp);
+//
+//        when(service.getA2Dao()).thenReturn(a2Dao);
+//        when(a2Dao.getA2(nuclideId)).thenReturn(exp);
+//
+//        when(service.getDecayConstantDao()).thenReturn(decayConstantDao);
+//        when(decayConstantDao.getDecayConstant(nuclideId)).thenReturn(exp);
+//
+//        when(service.getExemptConDao()).thenReturn(exemptConDao);
+//        when(exemptConDao.getExemptConcentration(nuclideId)).thenReturn(exp);
+//
+//        when(service.getExemptLimitDao()).thenReturn(exemptLimitDao);
+//        when(exemptLimitDao.getExemptLimit(nuclideId)).thenReturn(exp);
+//
+//        when(service.getHalfLifeDao()).thenReturn(halfLifeDao);
+//        when(halfLifeDao.getHalfLife(nuclideId)).thenReturn(exp);
+//
+//        when(service.getLimitsDao()).thenReturn(limitsDao);
+//        when(limitsDao.getIALimited(limitsId)).thenReturn(exp);
+//        when(limitsDao.getIAPackage(limitsId)).thenReturn(exp);
+//        when(limitsDao.getLimited(limitsId)).thenReturn(exp);
+//
+//        when(service.getReportableQuanDao()).thenReturn(reportableQuanDao);
+//        when(reportableQuanDao.getCi(nuclideId)).thenReturn(exp);
+//        when(reportableQuanDao.getTBq(nuclideId)).thenReturn(exp);
     }
 
     @Test
     @SetSystemProperty(key = "keepPlatformOpen",value = "true")
-    void testGetIsotope() {
-        String name = "name";
-        String abbr = "abbr";
-        IsotopeModelId isoId = new IsotopeModelId(name, abbr);
-        IsotopeModel model = new IsotopeModel(isoId);
+    void testGetNuclide() {
+        String symbol = "symbol";
+        String massNumber = "massNumber";
+        NuclideModelId nuclideId = new NuclideModelId(symbol, massNumber);
+        NuclideModel model = new NuclideModel(nuclideId);
 
-        when(service.getIsotopeDao()).thenReturn(isotopeDao);
-        when(isotopeDao.getIsotope(isoId)).thenReturn(model);
-        isoConstantsDbInit(abbr);
+        when(service.getNuclideDao()).thenReturn(nuclideDao);
+        when(nuclideDao.getNuclide(nuclideId)).thenReturn(model);
 
-        assertEquals(model.getIsotopeId(), service.getIsotope(isoId).getIsoId());
-        verify(isotopeDao).getIsotope(isoId);
+        assertEquals(model.getNuclideId(), service.getNuclide(nuclideId).getNuclideId());
+        verify(nuclideDao).getNuclide(nuclideId);
     }
 
     @Test
-    void testGetIsotopeName() {
-        String name = "name";
-        String abbr = "abbr";
-        IsotopeModelId isoId = new IsotopeModelId(name, abbr);
+    void testGetNuclideNameNotation() {
+        String symbol = "symbol";
+        String massNumber = "massNumber";
+        NuclideModelId nuclideId = new NuclideModelId(symbol, massNumber);
 
-        when(service.getIsotopeDao()).thenReturn(isotopeDao);
-        when(isotopeDao.getIsotopeName(isoId)).thenReturn(name);
+        when(service.getNuclideDao()).thenReturn(nuclideDao);
+        when(nuclideDao.getNuclideNameNotation(nuclideId)).thenReturn(symbol);
 
-        assertEquals(name, service.getIsotopeName(isoId));
-        verify(isotopeDao).getIsotopeName(isoId);
+        assertEquals(symbol, service.getNuclideNameNotation(nuclideId));
+        verify(nuclideDao).getNuclideNameNotation(nuclideId);
     }
 
     @Test
-    void testGetIsotopeAbbr() {
-        String name = "name";
-        String abbr = "abbr";
-        IsotopeModelId isoId = new IsotopeModelId(name, abbr);
+    void testGetNuclideAbbrNotation() {
+        String symbol = "symbol";
+        String massNumber = "massNumber";
+        NuclideModelId nuclideId = new NuclideModelId(symbol, massNumber);
 
-        when(service.getIsotopeDao()).thenReturn(isotopeDao);
-        when(isotopeDao.getIsotopeAbbr(isoId)).thenReturn(abbr);
+        when(service.getNuclideDao()).thenReturn(nuclideDao);
+        when(nuclideDao.getNuclideAbbrNotation(nuclideId)).thenReturn(massNumber);
 
-        assertEquals(abbr, service.getIsotopeAbbr(isoId));
-        verify(isotopeDao).getIsotopeAbbr(isoId);
+        assertEquals(massNumber, service.getNuclideAbbrNotation(nuclideId));
+        verify(nuclideDao).getNuclideAbbrNotation(nuclideId);
     }
 
     @Test
@@ -288,9 +305,9 @@ class DBServiceImplTest extends DBTest {
     
     @Test
     void testGetLimits() {
-        float expIaLim = 1.0f;
-        float expIaPackage = 2.0f;
-        float expLimited = 3.0f;
+        RadBigDecimal expIaLim = RadBigDecimal.valueOf(1.0f);
+        RadBigDecimal expIaPackage = RadBigDecimal.valueOf(2.0f);
+        RadBigDecimal expLimited = RadBigDecimal.valueOf(3.0f);
         LimitsModel model = new LimitsModel();
         model.setIaLimited(expIaLim);
         model.setIaPackage(expIaPackage);
@@ -310,7 +327,7 @@ class DBServiceImplTest extends DBTest {
 
     @Test
     void testGetIALimited() {
-        float exp = 1.0f;
+        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
         LimitsModelId limitsId = new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL);
 
         when(service.getLimitsDao()).thenReturn(limitsDao);
@@ -322,7 +339,7 @@ class DBServiceImplTest extends DBTest {
 
     @Test
     void testGetIAPackage() {
-        float exp = 1.0f;
+        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
         LimitsModelId limitsId = new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL);
 
         when(service.getLimitsDao()).thenReturn(limitsDao);
@@ -334,7 +351,7 @@ class DBServiceImplTest extends DBTest {
 
     @Test
     void testGetLimited() {
-        float exp = 1.0f;
+        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
         LimitsModelId limitsId = new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL);
 
         when(service.getLimitsDao()).thenReturn(limitsDao);
@@ -346,64 +363,59 @@ class DBServiceImplTest extends DBTest {
 
     @Test
     void testGetReportQuan_Null() {
-        String abbr = "abbr";
-        
         when(service.getReportableQuanDao()).thenReturn(reportableQuanDao);
-        when(reportableQuanDao.getReportQuan(abbr)).thenReturn(null);
+        when(reportableQuanDao.getReportQuan(NUCLIDE_ID)).thenReturn(null);
     
-        assertNull(service.getReportQuan(abbr));
-        verify(reportableQuanDao).getReportQuan(abbr);
+        assertNull(service.getReportQuan(NUCLIDE_ID));
+        verify(reportableQuanDao).getReportQuan(NUCLIDE_ID);
     }
 
     @Test
     void testGetReportQuan() {
-        String abbr = "abbr";
-        float expCi = 1.0f;
-        float expTBq = 2.1f;
+        RadBigDecimal expCi = RadBigDecimal.valueOf(1.0f);
+        RadBigDecimal expTBq = RadBigDecimal.valueOf(2.2f);
         ReportableQuantityModel model = new ReportableQuantityModel();
-        model.setAbbr(abbr);
+        model.setNuclideId(NUCLIDE_ID);
         model.setCurie(expCi);
         model.setTeraBq(expTBq);
 
         when(service.getReportableQuanDao()).thenReturn(reportableQuanDao);
-        when(reportableQuanDao.getReportQuan(abbr)).thenReturn(model);
+        when(reportableQuanDao.getReportQuan(NUCLIDE_ID)).thenReturn(model);
 
-        ReportableQuantity actual = service.getReportQuan(abbr);
+        ReportableQuantity actual = service.getReportQuan(NUCLIDE_ID);
         
-        assertEquals(abbr, actual.getAbbr());
+        assertEquals(NUCLIDE_ID, actual.getNuclideId());
         assertEquals(expCi, actual.getCurie());
         assertEquals(expTBq, actual.getTeraBq());
-        verify(reportableQuanDao).getReportQuan(abbr);
+        verify(reportableQuanDao).getReportQuan(NUCLIDE_ID);
     }
 
     @Test
     void testGetCiReportQuan() {
-        String abbr = "abbr";
-        float exp = 1.0f;
+        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
 
         when(service.getReportableQuanDao()).thenReturn(reportableQuanDao);
-        when(reportableQuanDao.getCi(abbr)).thenReturn(exp);
+        when(reportableQuanDao.getCi(NUCLIDE_ID)).thenReturn(exp);
         
-        assertEquals(exp, service.getCiReportQuan(abbr));
-        verify(reportableQuanDao).getCi(abbr);
+        assertEquals(exp, service.getCiReportQuan(NUCLIDE_ID));
+        verify(reportableQuanDao).getCi(NUCLIDE_ID);
     }
 
     @Test
     void testGetTBqReportQuan() {
-        String abbr = "abbr";
-        float exp = 1.0f;
+        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
 
         when(service.getReportableQuanDao()).thenReturn(reportableQuanDao);
-        when(reportableQuanDao.getTBq(abbr)).thenReturn(exp);
+        when(reportableQuanDao.getTBq(NUCLIDE_ID)).thenReturn(exp);
 
-        assertEquals(exp, service.getTBqReportQuan(abbr));
-        verify(reportableQuanDao).getTBq(abbr);
+        assertEquals(exp, service.getTBqReportQuan(NUCLIDE_ID));
+        verify(reportableQuanDao).getTBq(NUCLIDE_ID);
     }
 
     @Test
     void testGetShipment() {
         long id = -1L;
-        ShipmentsModel model = new ShipmentsModel();
+        ShipmentModel model = new ShipmentModel();
         Shipment exp = new Shipment(model);
 
         when(service.getShipmentDao()).thenReturn(shipmentDao);

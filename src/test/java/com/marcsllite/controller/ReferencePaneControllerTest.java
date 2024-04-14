@@ -1,8 +1,8 @@
 package com.marcsllite.controller;
 
 import com.marcsllite.PropHandlerTestObj;
-import com.marcsllite.model.Isotope;
-import com.marcsllite.model.db.IsotopeModelId;
+import com.marcsllite.model.Nuclide;
+import com.marcsllite.model.db.NuclideModelId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,36 +30,36 @@ class ReferencePaneControllerTest {
     }
 
     @Test
-    void testSetupTableDataLinking_NullIsotope() {
-        doNothing().when(controller).unbindIsotopeConstants();
+    void testSetupTableDataLinking_NullNuclide() {
+        doNothing().when(controller).unbindNuclideConstants();
 
         controller.setupTableDataLinking(null);
 
-        verify(controller).unbindIsotopeConstants();
-        verify(controller, times(0)).bindIsotopeConstants(any());
+        verify(controller).unbindNuclideConstants();
+        verify(controller, times(0)).bindNuclideConstants(any());
         verify(controller, times(0)).selectBaseDropDownItems();
     }
 
     @Test
-    void testDoesIsotopeNameMatch_NullIsotope() {
-        assertFalse(controller.doesIsotopeNameMatch(null, ""));
+    void testDoesNuclideNameMatch_NullNuclide() {
+        assertFalse(controller.doesNuclideNameMatch(null, ""));
     }
 
     @Test
-    void testDoesIsotopeNameMatch_NullString() {
-        Isotope isotope = new Isotope(new IsotopeModelId("Name", "Abbr"));
-        assertTrue(controller.doesIsotopeNameMatch(isotope, null));
-        assertTrue(controller.doesIsotopeNameMatch(isotope, ""));
-        assertTrue(controller.doesIsotopeNameMatch(isotope, " "));
+    void testDoesNuclideNameMatch_NullString() {
+        Nuclide nuclide = new Nuclide("Name", new NuclideModelId("Sy", "1"));
+        assertTrue(controller.doesNuclideNameMatch(nuclide, null));
+        assertTrue(controller.doesNuclideNameMatch(nuclide, ""));
+        assertTrue(controller.doesNuclideNameMatch(nuclide, " "));
     }
 
     @Test
-    void testDoesIsotopeNameMatch() {
-        Isotope isotope = new Isotope(new IsotopeModelId("Ab", "Abbr"));
-        assertTrue(controller.doesIsotopeNameMatch(isotope, "A"));
-        assertTrue(controller.doesIsotopeNameMatch(isotope, "ab"));
-        assertTrue(controller.doesIsotopeNameMatch(isotope, "aBb"));
-        assertFalse(controller.doesIsotopeNameMatch(isotope, "Abbz"));
-        assertTrue(controller.doesIsotopeNameMatch(isotope, "aBBR"));
+    void testDoesNuclideNameMatch() {
+        Nuclide nuclide = new Nuclide("Abbreviation", new NuclideModelId("Ab", "1"));
+        assertTrue(controller.doesNuclideNameMatch(nuclide, "A"));
+        assertTrue(controller.doesNuclideNameMatch(nuclide, "ab"));
+        assertTrue(controller.doesNuclideNameMatch(nuclide, "aB-"));
+        assertFalse(controller.doesNuclideNameMatch(nuclide, "Ab-z"));
+        assertTrue(controller.doesNuclideNameMatch(nuclide, "aB-1"));
     }
 }

@@ -1,66 +1,55 @@
 package com.marcsllite.service;
 
-import com.marcsllite.model.Isotope;
 import com.marcsllite.model.Limits;
+import com.marcsllite.model.Nuclide;
 import com.marcsllite.model.ReportableQuantity;
 import com.marcsllite.model.Shipment;
-import com.marcsllite.model.db.IsotopeModel;
-import com.marcsllite.model.db.IsotopeModelId;
 import com.marcsllite.model.db.LimitsModelId;
-import com.marcsllite.model.db.ValidNuclideModelId;
-import com.marcsllite.model.db.ValidNuclideModel;
+import com.marcsllite.model.db.NuclideModel;
+import com.marcsllite.model.db.NuclideModelId;
+import com.marcsllite.util.RadBigDecimal;
 import javafx.collections.ObservableList;
-
-import java.util.List;
 
 public interface DBService {
     int validateDb();
 
-    float getA1(String abbr);
+    RadBigDecimal getA1(NuclideModelId nuclideId);
 
-    float getA2(String abbr);
+    RadBigDecimal getA2(NuclideModelId nuclideId);
 
-    float getDecayConstant(String abbr);
+    RadBigDecimal getDecayConstant(NuclideModelId nuclideId);
 
-    float getExemptConcentration(String abbr);
+    RadBigDecimal getExemptConcentration(NuclideModelId nuclideId);
 
-    float getExemptLimit(String abbr);
+    RadBigDecimal getExemptLimit(NuclideModelId nuclideId);
 
-    float getHalfLife(String abbr);
+    RadBigDecimal getHalfLife(NuclideModelId nuclideId);
 
-    int countAllIsotopes();
+    int countAllNuclides();
 
-    ObservableList<IsotopeModel> getAllIsotopeModels();
+    ObservableList<NuclideModel> getAllNuclideModels();
 
-    ObservableList<Isotope> getAllIsotopes();
+    ObservableList<Nuclide> getAllNuclides();
 
-    Isotope getIsotope(IsotopeModelId modelId);
+    NuclideModel getNuclide(NuclideModelId nuclideId);
 
-    String getIsotopeName(IsotopeModelId modelId);
+    String getNuclideNameNotation(NuclideModelId nuclideId);
 
-    String getIsotopeAbbr(IsotopeModelId modelId);
-
-    List<ValidNuclideModel> getAllValidIsotopes();
-
-    ValidNuclideModel getValidIsotope(ValidNuclideModelId isoId);
-
-    String getValidIsotopeNameNotation(ValidNuclideModelId isoId);
-
-    String getValidIsotopeAbbrNotation(ValidNuclideModelId isoId);
+    String getNuclideAbbrNotation(NuclideModelId nuclideId);
 
     Limits getLimits(LimitsModelId modelId);
 
-    float getIALimited(LimitsModelId modelId);
+    RadBigDecimal getIALimited(LimitsModelId modelId);
 
-    float getIAPackage(LimitsModelId modelId);
+    RadBigDecimal getIAPackage(LimitsModelId modelId);
 
-    float getLimited(LimitsModelId modelId);
+    RadBigDecimal getLimited(LimitsModelId modelId);
 
-    ReportableQuantity getReportQuan(String abbr);
+    ReportableQuantity getReportQuan(NuclideModelId nuclideId);
 
-    float getCiReportQuan(String abbr);
+    RadBigDecimal getCiReportQuan(NuclideModelId nuclideId);
 
-    float getTBqReportQuan(String abbr);
+    RadBigDecimal getTBqReportQuan(NuclideModelId nuclideId);
 
     Shipment getShipment(Long id);
 }

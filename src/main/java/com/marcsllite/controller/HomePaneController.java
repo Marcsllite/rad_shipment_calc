@@ -1,13 +1,13 @@
 package com.marcsllite.controller;
 
 import com.marcsllite.App;
-import com.marcsllite.model.Isotope;
+import com.marcsllite.model.Nuclide;
 import com.marcsllite.model.PTableColumn;
 import com.marcsllite.model.Shipment;
 import com.marcsllite.util.FXMLView;
+import com.marcsllite.util.RadBigDecimal;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleListProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -24,21 +24,19 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class HomePaneController extends BaseController {
+    private static final Logger logr = LogManager.getLogger();
     @FXML GridPane homePane;
     @FXML Button btnAdd;
     @FXML Button btnEdit;
     @FXML Button btnRemove;
-    @FXML TableView<Isotope> tableViewHome;
-    @FXML PTableColumn<Isotope, String> tableColIsotope;
-    @FXML PTableColumn<Isotope, Float> tableColHalfLife;
-    @FXML PTableColumn<Isotope, String> tableColActivity;
-    @FXML PTableColumn<Isotope, LocalDate> tableColRefDate;
-    @FXML PTableColumn<Isotope, String> tableColMass;
+    @FXML TableView<Nuclide> tableViewHome;
+    @FXML PTableColumn<Nuclide, String> tableColNuclide;
+    @FXML PTableColumn<Nuclide, RadBigDecimal> tableColHalfLife;
+    @FXML PTableColumn<Nuclide, String> tableColActivity;
+    @FXML PTableColumn<Nuclide, LocalDate> tableColRefDate;
+    @FXML PTableColumn<Nuclide, String> tableColMass;
     @FXML Button btnCalculate;
     private Shipment shipment;
-    SimpleListProperty<Isotope> selectedIsotopes = new SimpleListProperty<>();
-
-    private static final Logger logr = LogManager.getLogger();
 
     public HomePaneController() throws IOException {
         this(null);
@@ -81,26 +79,26 @@ public class HomePaneController extends BaseController {
         this.shipment = shipment;
     }
 
-    public boolean isIsoInTable(Isotope isotope) {
-        if(isotope == null ||
+    public boolean isNuclideInTable(Nuclide nuclide) {
+        if(nuclide == null ||
             getShipment() == null ||
             getShipment()
-                .getIsotopes()
+                .getNuclides()
                 .isEmpty()) {
             return false;
         }
-        return getShipment().getIsotopes()
+        return getShipment().getNuclides()
             .stream()
-            .anyMatch(i -> i.getAbbr().equals(isotope.getAbbr()) &&
-                i.getLifeSpan().equals(isotope.getLifeSpan()) &&
-                i.getLungAbsorption().equals(isotope.getLungAbsorption()));
+            .anyMatch(i -> i.getNuclideId().equals(nuclide.getNuclideId()) &&
+                i.getLifeSpan().equals(nuclide.getLifeSpan()) &&
+                i.getLungAbsorption().equals(nuclide.getLungAbsorption()));
     }
 
-    public void updateIsotope(Isotope newV) {
+    public void updateNuclide(Nuclide newV) {
         if(newV != null) {
             try {
                 if(tableViewHome.getSelectionModel().getSelectedItems().size() == 1) {
-                    getShipment().getIsotopes().set(
+                    getShipment().getNuclides().set(
                         tableViewHome.getSelectionModel().getSelectedIndex(), newV
                     );
                 }
@@ -110,7 +108,7 @@ public class HomePaneController extends BaseController {
         }
     }
 
-    public List<Isotope> getSelectedIsotopes() {
+    public List<Nuclide> getSelectedNuclides() {
         return tableViewHome.getSelectionModel().getSelectedItems();
     }
 
@@ -142,14 +140,14 @@ public class HomePaneController extends BaseController {
     /*/////////////////////////////////////////////////// HELPERS ////////////////////////////////////////////////////*/
 
     protected void initTable() {
-        tableColIsotope.setCellValueFactory(new PropertyValueFactory<>("abbr"));
-        tableColHalfLife.setCellValueFactory(i -> i.getValue().getConstants().halfLifeProperty().asObject());
+        tableColNuclide.setCellValueFactory(new PropertyValueFactory<>("nameNotation"));
+        tableColHalfLife.setCellValueFactory(i -> i.getValue().getConstants().halfLifeProperty());
         tableColActivity.setCellValueFactory(new PropertyValueFactory<>("strInitActivity"));
         tableColRefDate.setCellValueFactory(new PropertyValueFactory<>("refDate"));
         tableColMass.setCellValueFactory(new PropertyValueFactory<>("strMass"));
 
         tableViewHome.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        tableViewHome.itemsProperty().bind(getShipment().isotopesProperty());
+        tableViewHome.itemsProperty().bind(getShipment().nuclidesProperty());
     }
 
     /**

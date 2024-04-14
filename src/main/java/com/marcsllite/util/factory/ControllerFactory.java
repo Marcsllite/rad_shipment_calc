@@ -9,6 +9,8 @@ import com.marcsllite.controller.ReferencePaneController;
 import com.marcsllite.controller.ShipmentDetailsController;
 import com.marcsllite.controller.SplashScreenController;
 import com.marcsllite.controller.SummaryPaneController;
+import com.marcsllite.service.DBService;
+import com.marcsllite.service.DBServiceImpl;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,6 +20,15 @@ import java.io.IOException;
 public class ControllerFactory implements Callback<Class<?>, Object> {
     private static final Logger logr = LogManager.getLogger();
     private BaseController.Page page;
+    private DBService dbService;
+
+    public ControllerFactory() {
+        this(null);
+    }
+
+    public ControllerFactory(DBService dbService) {
+        setDbService(dbService == null? new DBServiceImpl() : dbService);
+    }
 
     public BaseController.Page getPage() {
         return page;
@@ -25,6 +36,14 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
 
     public void setPage(BaseController.Page page) {
         this.page = page == null? BaseController.Page.NONE : page;
+    }
+
+    public DBService getDbService() {
+        return dbService;
+    }
+
+    public void setDbService(DBService dbService) {
+        this.dbService = dbService;
     }
 
     @Override
@@ -44,7 +63,12 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
             } else if(name.equals(ReferencePaneController.class.getName())) {
                 ret = new ReferencePaneController();
             } else if(name.equals(ModifyController.class.getName())) {
-                ret = new ModifyController(getPage());
+                ret = new ModifyController(getPage()) {
+                    @Override
+                    public DBService getDbService() {
+                        return ControllerFactory.this.getDbService();
+                    }
+                };
             } else if(name.equals(ShipmentDetailsController.class.getName())) {
                 ret = new ShipmentDetailsController();
             } else if(name.equals(SummaryPaneController.class.getName())) {

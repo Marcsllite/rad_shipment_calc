@@ -2,25 +2,23 @@ package com.marcsllite.model.db;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Transient;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class ValidNuclideModelId implements Serializable {
+public class NuclideModelId implements Serializable {
     private static final long serialVersionUID = 6598716598717598732L;
+
     @Column(name = "Symbol", length = 2, nullable = false)
     private String symbol;
     @Column(name = "Mass_Number", length = 15, nullable = false)
     private String massNumber;
-    @Transient
-    private String isoNotation;
 
-    public ValidNuclideModelId() {
+    public NuclideModelId() {
         this("XX", "1");
     }
-    public ValidNuclideModelId(String symbol, String massNumber) {
+    public NuclideModelId(String symbol, String massNumber) {
         setSymbol(symbol);
         setMassNumber(massNumber);
     }
@@ -49,7 +47,7 @@ public class ValidNuclideModelId implements Serializable {
         if(getClass() != obj.getClass()) {
             return false;
         }
-        ValidNuclideModelId temp = (ValidNuclideModelId) obj;
+        NuclideModelId temp = (NuclideModelId) obj;
         return Objects.equals(this.symbol, temp.symbol) && Objects.equals(this.massNumber, temp.massNumber);
     }
 

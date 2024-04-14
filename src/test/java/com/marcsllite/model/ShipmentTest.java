@@ -2,6 +2,7 @@ package com.marcsllite.model;
 
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.Conversions;
+import com.marcsllite.util.RadBigDecimal;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.collections.ObservableList;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,12 +33,12 @@ class ShipmentTest {
     void testConstructor() {
         assertEquals(-1L, shipment.getId());
         assertNotNull(shipment.getRefDate());
-        assertEquals(-1F, shipment.getMass());
+        assertEquals(RadBigDecimal.NEG_INFINITY_OBJ, shipment.getMass());
         assertEquals(Conversions.MassUnit.GRAMS, shipment.getMassUnit());
-        assertEquals(Isotope.Nature.REGULAR, shipment.getNature());
+        assertEquals(Nuclide.Nature.REGULAR, shipment.getNature());
         assertEquals(LimitsModelId.State.SOLID, shipment.getState());
         assertEquals(LimitsModelId.Form.NORMAL, shipment.getForm());
-        assertNotNull(shipment.getIsotopes());
+        assertNotNull(shipment.getNuclides());
     }
 
     @Test
@@ -63,7 +64,7 @@ class ShipmentTest {
 
     @Test
     void testSetMass() {
-        float exp = -1F;
+        RadBigDecimal exp = RadBigDecimal.valueOf(-1F);
         shipment.setMass(exp);
         assertEquals(exp, shipment.getMass());
     }
@@ -84,12 +85,12 @@ class ShipmentTest {
     @Test
     void testSetNatureUnit_Null() {
         shipment.setNature(null);
-        assertEquals(Isotope.Nature.REGULAR, shipment.getNature());
+        assertEquals(Nuclide.Nature.REGULAR, shipment.getNature());
     }
 
     @Test
     void testSetNatureUnit() {
-        Isotope.Nature exp = Isotope.Nature.ARTICLE;
+        Nuclide.Nature exp = Nuclide.Nature.ARTICLE;
         shipment.setNature(exp);
         assertEquals(exp, shipment.getNature());
     }
@@ -121,18 +122,18 @@ class ShipmentTest {
     }
 
     @Test
-    void testSetIsotopesUnit_Null() {
-        shipment.setIsotopes(null);
-        assertNotNull(shipment.getIsotopes());
+    void testSetNuclidesUnit_Null() {
+        shipment.setNuclides(null);
+        assertNotNull(shipment.getNuclides());
     }
 
     @Test
-    void testSetIsotopesUnit() {
-        Isotope isotope = mock(Isotope.class);
-        ObservableList<Isotope> exp = new ObservableListWrapper<>(new ArrayList<>());
+    void testSetNuclidesUnit() {
+        Nuclide isotope = mock(Nuclide.class);
+        ObservableList<Nuclide> exp = new ObservableListWrapper<>(new ArrayList<>());
         exp.add(isotope);
-        shipment.setIsotopes(exp);
-        assertEquals(exp, shipment.getIsotopes());
+        shipment.setNuclides(exp);
+        assertEquals(exp, shipment.getNuclides());
     }
 
     @Test
@@ -147,12 +148,12 @@ class ShipmentTest {
         assertEquals(shipmentA, shipmentB);
         assertEquals(shipmentA.hashCode(), shipmentB.hashCode());
 
-        shipmentA.setIsotopes(new ObservableListWrapper<>(new ArrayList<>()));
+        shipmentA.setNuclides(new ObservableListWrapper<>(new ArrayList<>()));
         assertEquals(shipmentA, shipmentB);
         assertEquals(shipmentA.hashCode(), shipmentB.hashCode());
 
-        Isotope isotope = mock(Isotope.class);
-        shipmentA.setIsotopes(new ObservableListWrapper<>(List.of(isotope)));
+        Nuclide isotope = mock(Nuclide.class);
+        shipmentA.setNuclides(new ObservableListWrapper<>(List.of(isotope)));
         assertNotEquals(shipmentA, shipmentB);
         assertNotEquals(shipmentA.hashCode(), shipmentB.hashCode());
 
@@ -164,7 +165,7 @@ class ShipmentTest {
         assertNotEquals(shipmentA, shipmentB);
         assertNotEquals(shipmentA.hashCode(), shipmentB.hashCode());
 
-        shipmentA.setNature(Isotope.Nature.INSTRUMENT);
+        shipmentA.setNature(Nuclide.Nature.INSTRUMENT);
         assertNotEquals(shipmentA, shipmentB);
         assertNotEquals(shipmentA.hashCode(), shipmentB.hashCode());
 
@@ -172,7 +173,7 @@ class ShipmentTest {
         assertNotEquals(shipmentA, shipmentB);
         assertNotEquals(shipmentA.hashCode(), shipmentB.hashCode());
 
-        shipmentA.setMass(-2F);
+        shipmentA.setMass(RadBigDecimal.valueOf(-2F));
         assertNotEquals(shipmentA, shipmentB);
         assertNotEquals(shipmentA.hashCode(), shipmentB.hashCode());
 

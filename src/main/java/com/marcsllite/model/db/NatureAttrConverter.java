@@ -1,13 +1,13 @@
 package com.marcsllite.model.db;
 
-import com.marcsllite.model.Isotope;
+import com.marcsllite.model.Nuclide;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 @Converter
-public class NatureAttrConverter implements AttributeConverter<Isotope.Nature, String> {
+public class NatureAttrConverter implements AttributeConverter<Nuclide.Nature, String> {
     @Override
-    public String convertToDatabaseColumn(Isotope.Nature nature) {
+    public String convertToDatabaseColumn(Nuclide.Nature nature) {
         if(nature == null) {
             return null;
         }
@@ -15,10 +15,10 @@ public class NatureAttrConverter implements AttributeConverter<Isotope.Nature, S
     }
 
     @Override
-    public Isotope.Nature convertToEntityAttribute(String str) {
+    public Nuclide.Nature convertToEntityAttribute(String str) {
         if(str == null) {
             return null;
         }
-        return Isotope.Nature.toNature(str);
+        return Nuclide.Nature.toNature(str);
     }
 }

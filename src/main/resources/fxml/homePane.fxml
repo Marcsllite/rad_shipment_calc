@@ -43,7 +43,7 @@
       </font></Button>
     <TableView fx:id="tableViewHome" GridPane.columnSpan="2147483647" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.rowSpan="3" GridPane.vgrow="ALWAYS">
       <columns>
-          <PTableColumn fx:id="tableColIsotope" editable="false" percentageWidth="0.2" styleClass="tableColumn" text="Isotope" />
+          <PTableColumn fx:id="tableColNuclide" editable="false" percentageWidth="0.2" styleClass="tableColumn" text="Nuclide" />
           <PTableColumn fx:id="tableColHalfLife" editable="false" percentageWidth="0.2" styleClass="tableColumn" text="HalfLife" />
           <PTableColumn fx:id="tableColActivity" editable="false" percentageWidth="0.2" styleClass="tableColumn" text="Activity" />
           <PTableColumn fx:id="tableColRefDate" editable="false" percentageWidth="0.2" styleClass="tableColumn" text="Date" />

@@ -1,9 +1,10 @@
 package com.marcsllite.model;
 
 import com.marcsllite.model.db.LimitsModelId;
+import com.marcsllite.util.RadBigDecimal;
 import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
-import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,11 +13,11 @@ import java.io.IOException;
 public class Limits {
     private static final Logger logr = LogManager.getLogger();
     private PropHandler propHandler;
-    private float defaultVal;
+    private RadBigDecimal defaultVal;
     private LimitsModelId limitsId;
-    private final SimpleFloatProperty iaLimited = new SimpleFloatProperty();
-    private final SimpleFloatProperty iaPackage = new SimpleFloatProperty();
-    private final SimpleFloatProperty limited = new SimpleFloatProperty();
+    private final SimpleObjectProperty<RadBigDecimal> iaLimited = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<RadBigDecimal> iaPackage = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<RadBigDecimal> limited = new SimpleObjectProperty<>();
 
     public Limits() {
         this(new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL));
@@ -30,13 +31,13 @@ public class Limits {
         );
     }
 
-    public Limits(LimitsModelId limitsId, Float iaLimited, Float iaPackage, Float limited) {
+    public Limits(LimitsModelId limitsId, RadBigDecimal iaLimited, RadBigDecimal iaPackage, RadBigDecimal limited) {
         try {
             setPropHandler(new PropHandlerFactory().getPropHandler(null));
-            setDefaultVal((float) getPropHandler().getDouble("defaultNum"));
+            setDefaultVal(RadBigDecimal.valueOf(getPropHandler().getDouble("defaultNum")));
         } catch (IOException e) {
             logr.catching(e);
-            setDefaultVal(-2.0f);
+            setDefaultVal(RadBigDecimal.NEG_INFINITY_OBJ);
         }
         setLimitsId(limitsId);
         setIaLimited(iaLimited == null? defaultVal : iaLimited);
@@ -52,11 +53,11 @@ public class Limits {
         this.propHandler = propHandler;
     }
 
-    public float getDefaultVal() {
+    public RadBigDecimal getDefaultVal() {
         return defaultVal;
     }
 
-    public void setDefaultVal(float defaultVal) {
+    public void setDefaultVal(RadBigDecimal defaultVal) {
         this.defaultVal = defaultVal;
     }
 
@@ -68,39 +69,39 @@ public class Limits {
         this.limitsId = limitsId;
     }
 
-    public float getIaLimited() {
+    public RadBigDecimal getIaLimited() {
         return iaLimitedProperty().get();
     }
 
-    public SimpleFloatProperty iaLimitedProperty() {
+    public SimpleObjectProperty<RadBigDecimal> iaLimitedProperty() {
         return iaLimited;
     }
 
-    public void setIaLimited(float iaLimited) {
+    public void setIaLimited(RadBigDecimal iaLimited) {
         iaLimitedProperty().set(iaLimited);
     }
 
-    public float getIaPackage() {
+    public RadBigDecimal getIaPackage() {
         return iaPackageProperty().get();
     }
 
-    public SimpleFloatProperty iaPackageProperty() {
+    public SimpleObjectProperty<RadBigDecimal> iaPackageProperty() {
         return iaPackage;
     }
 
-    public void setIaPackage(float iaPackage) {
+    public void setIaPackage(RadBigDecimal iaPackage) {
         iaPackageProperty().set(iaPackage);
     }
 
-    public float getLimited() {
+    public RadBigDecimal getLimited() {
         return limitedProperty().get();
     }
 
-    public SimpleFloatProperty limitedProperty() {
+    public SimpleObjectProperty<RadBigDecimal> limitedProperty() {
         return limited;
     }
 
-    public void setLimited(float limited) {
+    public void setLimited(RadBigDecimal limited) {
         limitedProperty().set(limited);
     }
 

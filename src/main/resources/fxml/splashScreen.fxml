@@ -7,10 +7,9 @@
 <GridPane fx:id="gridPaneSplash" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="350" prefWidth="450" stylesheets="@../css/splash.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcsllite.controller.SplashScreenController">
     <VBox alignment="CENTER" spacing="10.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../images/color_UMass_logo.png"/>
+            <Image url="@../images/color_UMass_logo.png" />
         </ImageView>
-        <Label styleClass="title-label" text="UMass Lowell Radiation Safety Lab:&#10;Shipment Calculator"
-               textAlignment="CENTER"/>
+        <Label styleClass="title-label" text="Class 7 (radioactive) Materials&#10;Shipment Calculator" textAlignment="CENTER" />
     </VBox>
     <VBox alignment="BOTTOM_CENTER" prefHeight="100" prefWidth="400.0" spacing="15.0" stylesheets="@../css/splash.css" GridPane.columnSpan="2147483647" GridPane.rowIndex="1">
       <Label fx:id="labelSplash" alignment="BOTTOM_CENTER" prefHeight="70.0" prefWidth="450.0" styleClass="progress-label" stylesheets="@../css/splash.css" text="TESTING HAVING A LONG ASS MESSAGE AND SEEING HOW THE WRAPPING IS TREATED. Also looking at the way the ellipses is used. 1&#10;TESTING HAVING A LONG ASS MESSAGE AND SEEING HOW THE WRAPPING IS TREATED. Also looking at the way the ellipses is used. 2&#10;TESTING HAVING A LONG ASS MESSAGE AND SEEING HOW THE WRAPPING IS TREATED. Also looking at the way the ellipses is used. 3" textAlignment="CENTER" wrapText="true" />

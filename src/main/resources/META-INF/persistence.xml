@@ -7,20 +7,18 @@
         <description>
             Persistence unit for the Radiation Shipment Calculator project
         </description>
-
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-
+    
+        <class>com.marcsllite.model.db.NuclideModel</class>
+        <class>com.marcsllite.model.db.ShipmentModel</class>
         <class>com.marcsllite.model.db.A1Model</class>
         <class>com.marcsllite.model.db.A2Model</class>
         <class>com.marcsllite.model.db.DecayConstantModel</class>
         <class>com.marcsllite.model.db.ExemptConcentrationModel</class>
         <class>com.marcsllite.model.db.ExemptLimitModel</class>
         <class>com.marcsllite.model.db.HalfLifeModel</class>
-        <class>com.marcsllite.model.db.IsotopeModel</class>
         <class>com.marcsllite.model.db.LimitsModel</class>
         <class>com.marcsllite.model.db.ReportableQuantityModel</class>
-        <class>com.marcsllite.model.db.ShipmentsModel</class>
-        <class>com.marcsllite.model.db.ValidNuclideModel</class>
 
         <properties>
             <!-- Database connection settings -->

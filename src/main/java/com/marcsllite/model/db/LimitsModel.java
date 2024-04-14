@@ -1,9 +1,11 @@
 package com.marcsllite.model.db;
 
+import com.marcsllite.util.RadBigDecimal;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity(name = "Limits")
 @Table(name = "LIMITS")
@@ -14,26 +16,32 @@ public class LimitsModel extends BaseModel {
     private LimitsModelId limitsId;
 
     @Column(name = "IA_Limited")
-    private float iaLimited;
+    private String iaLimitedStr;
+    @Transient
+    private RadBigDecimal iaLimited;
 
     @Column(name = "IA_Package")
-    private float iaPackage;
+    private String iaPackageStr;
+    @Transient
+    private RadBigDecimal iaPackage;
 
     @Column(name = "Limited")
-    private float limited;
+    private String limitedStr;
+    @Transient
+    private RadBigDecimal limited;
 
     public LimitsModel() {
         this(new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL),
-            -2.0f,
-            -2.0f,
-            -2.0f);
+            RadBigDecimal.NEG_INFINITY_OBJ.toString(),
+            RadBigDecimal.NEG_INFINITY_OBJ.toString(),
+            RadBigDecimal.NEG_INFINITY_OBJ.toString());
     }
 
-    public LimitsModel(LimitsModelId limitsId, float iaLimited, float iaPackage, float limited) {
+    public LimitsModel(LimitsModelId limitsId, String iaLimitedStr, String iaPackageStr, String limitedStr) {
         setLimitsId(limitsId);
-        setIaLimited(iaLimited);
-        setIaPackage(iaPackage);
-        setLimited(limited);
+        setIaLimitedStr(iaLimitedStr);
+        setIaPackageStr(iaPackageStr);
+        setLimitedStr(limitedStr);
     }
 
     public LimitsModelId getLimitsId() {
@@ -44,27 +52,57 @@ public class LimitsModel extends BaseModel {
         this.limitsId = limitsId;
     }
 
-    public float getIaLimited() {
+    public String getIaLimitedStr() {
+        return iaLimitedStr;
+    }
+
+    public void setIaLimitedStr(String iaLimitedStr) {
+        this.iaLimitedStr = iaLimitedStr;
+        this.iaLimited = new RadBigDecimal(iaLimitedStr);
+    }
+
+    public RadBigDecimal getIaLimited() {
         return iaLimited;
     }
 
-    public void setIaLimited(float iaLimited) {
+    public void setIaLimited(RadBigDecimal iaLimited) {
         this.iaLimited = iaLimited;
+        this.iaLimitedStr = iaLimited.toString();
     }
 
-    public float getIaPackage() {
+    public String getIaPackageStr() {
+        return iaPackageStr;
+    }
+
+    public void setIaPackageStr(String iaPackageStr) {
+        this.iaPackageStr = iaPackageStr;
+        this.iaPackage = new RadBigDecimal(iaPackageStr);
+    }
+
+    public RadBigDecimal getIaPackage() {
         return iaPackage;
     }
 
-    public void setIaPackage(float iaPackage) {
+    public void setIaPackage(RadBigDecimal iaPackage) {
         this.iaPackage = iaPackage;
+        this.iaPackageStr = iaPackage.toString();
     }
 
-    public float getLimited() {
+    public String getLimitedStr() {
+        return limitedStr;
+    }
+
+    public void setLimitedStr(String limitedStr) {
+        this.limitedStr = limitedStr;
+        this.limited = new RadBigDecimal(limitedStr);
+    }
+
+    public RadBigDecimal getLimited() {
         return limited;
     }
 
-    public void setLimited(float limited) {
+    public void setLimited(RadBigDecimal limited) {
         this.limited = limited;
+        this.limitedStr = limited.toString();
     }
 }

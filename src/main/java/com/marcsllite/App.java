@@ -19,7 +19,12 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 
 /**
- * JavaFX App
+ * UMass Lowell Radiation Shipment Calculator<br>
+ * <b>author</b>: marcsllite@gmail.com<br>
+ * <b>source</b>:
+ *  <a href="https://www.ecfr.gov/current/title-49/part-173/subpart-I">
+ *      49 CFR Part 173 Subpart I: Class 7 (radioactive) Materials
+ *  </a>
  */
 public class App extends Application {
     private static final Logger logr = LogManager.getLogger();

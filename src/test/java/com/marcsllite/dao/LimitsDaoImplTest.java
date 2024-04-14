@@ -3,6 +3,7 @@ package com.marcsllite.dao;
 import com.marcsllite.DBTest;
 import com.marcsllite.model.db.LimitsModel;
 import com.marcsllite.model.db.LimitsModelId;
+import com.marcsllite.util.RadBigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -49,7 +50,7 @@ class LimitsDaoImplTest extends DBTest {
     @Test
     void testGetIALimited_NoResults() {
         LimitsModelId limitsId = new LimitsModelId();
-        float exp = -123456789.0f;
+        RadBigDecimal exp = RadBigDecimal.NEG_INFINITY_OBJ;
 
         when(em.find(any(), any())).thenReturn(null);
 
@@ -61,7 +62,7 @@ class LimitsDaoImplTest extends DBTest {
     @Test
     void testGetIALimited() {
         LimitsModelId limitsId = new LimitsModelId();
-        float exp = 1f;
+        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
 
         when(em.find(any(), any())).thenReturn(model);
         when(model.getIaLimited()).thenReturn(exp);
@@ -74,7 +75,7 @@ class LimitsDaoImplTest extends DBTest {
     @Test
     void testGetIAPackage_NoResults() {
         LimitsModelId limitsId = new LimitsModelId();
-        float exp = -123456789.0f;
+        RadBigDecimal exp = RadBigDecimal.NEG_INFINITY_OBJ;
 
         when(em.find(any(), any())).thenReturn(null);
 
@@ -86,7 +87,7 @@ class LimitsDaoImplTest extends DBTest {
     @Test
     void testGetIAPackage() {
         LimitsModelId limitsId = new LimitsModelId();
-        float exp = 1f;
+        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
 
         when(em.find(any(), any())).thenReturn(model);
         when(model.getIaPackage()).thenReturn(exp);
@@ -99,7 +100,7 @@ class LimitsDaoImplTest extends DBTest {
     @Test
     void testGetLimited_NoResults() {
         LimitsModelId limitsId = new LimitsModelId();
-        float exp = -123456789.0f;
+        RadBigDecimal exp = RadBigDecimal.NEG_INFINITY_OBJ;
 
         when(em.find(any(), any())).thenReturn(null);
 
@@ -111,7 +112,7 @@ class LimitsDaoImplTest extends DBTest {
     @Test
     void testGetLimited() {
         LimitsModelId limitsId = new LimitsModelId();
-        float exp = 1f;
+        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
 
         when(em.find(any(), any())).thenReturn(model);
         when(model.getLimited()).thenReturn(exp);
