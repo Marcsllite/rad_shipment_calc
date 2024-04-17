@@ -16,6 +16,9 @@ import java.io.IOException;
 
 public class ControllerFactoryTestObj extends ControllerFactory {
 
+    public ControllerFactoryTestObj() {
+        super();
+    }
     public ControllerFactoryTestObj(DBService dbService) {
         super(dbService);
     }
