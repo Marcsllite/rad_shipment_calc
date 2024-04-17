@@ -34,7 +34,6 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.fail;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import static org.testfx.api.FxAssert.assertContext;
 
@@ -65,7 +64,7 @@ public abstract class GUITest extends FxRobot {
         PropHandlerTestObj testPropHandler = new PropHandlerTestObj();
         folderHandler = mock(FolderHandler.class);
         folderHandler.setPropHandler(testPropHandler);
-        dbService = spy(new DBServiceImpl(testPropHandler));
+        dbService = new DBServiceImpl(testPropHandler);
         assertEquals(1, getDbService().validateDb());
     }
 

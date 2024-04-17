@@ -8,6 +8,7 @@ import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.FXMLView;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -32,6 +33,7 @@ import static junit.framework.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -45,12 +47,13 @@ class StageHandlerTest {
     final static String defaultMessage = StageHandler.DEFAULT_MSG;
     private StageHandler stageHandler;
     private Stage primaryStage;
+    private DBService dbService;
 
     @BeforeEach
     public void setUp() {
         try {
             primaryStage = mock(Stage.class);
-            DBService dbService = mock(DBServiceImpl.class);
+            dbService = mock(DBServiceImpl.class);
             stageHandler = spy(new StageHandler(primaryStage, new PropHandlerTestObj(), new ControllerFactoryTestObj(dbService)));
         } catch (IOException e) {
             fail("Failed to initialize test object");
@@ -59,7 +62,7 @@ class StageHandlerTest {
 
     @Test
     void testGetController_NullLoader() {
-        when(stageHandler.getLoader()).thenReturn(null);
+        doReturn(null).when(stageHandler).getLoader();
         assertNull(stageHandler.getController());
     }
 
@@ -67,7 +70,7 @@ class StageHandlerTest {
     void testGetController() {
         String str = "str";
         FXMLLoader loader = mock(FXMLLoader.class);
-        when(stageHandler.getLoader()).thenReturn(loader);
+        doReturn(loader).when(stageHandler).getLoader();
         when(loader.getController()).thenReturn(str);
         assertEquals(str, stageHandler.getController());
     }
@@ -94,7 +97,7 @@ class StageHandlerTest {
 
         Platform.runLater(
             () ->  {
-                when(stageHandler.getCurrentView()).thenReturn(view);
+                doReturn(view).when(stageHandler).getCurrentView();
                 stageHandler.switchSceneModal(view, BaseController.Page.NONE);
                 verify(stageHandler, times(0)).getFactory();
                 verify(stageHandler, times(0)).loadViewNodeHierarchy(view);
@@ -110,9 +113,10 @@ class StageHandlerTest {
 
         Platform.runLater(
             () -> {
-                when(stageHandler.getCurrentView()).thenReturn(view);
-                when(stageHandler.loadViewNodeHierarchy(view)).thenReturn(null);
-                when(stageHandler.getSecondaryStage()).thenReturn(stage);
+                doReturn(view).when(stageHandler).getCurrentView();
+                when(dbService.getAllNuclideModels()).thenReturn(FXCollections.observableArrayList());
+                doReturn(null).when(stageHandler).loadViewNodeHierarchy(view);
+                doReturn(stage).when(stageHandler).getSecondaryStage();
 
                 stageHandler.switchSceneModal(view, BaseController.Page.NONE);
 
@@ -165,7 +169,7 @@ class StageHandlerTest {
     void testShowModal_EmptyView() {
         FXMLView view = FXMLView.TEST;
 
-        when(stageHandler.getSecondaryStage()).thenReturn(primaryStage);
+        doReturn(primaryStage).when(stageHandler).getSecondaryStage();
         doNothing().when(primaryStage).close();
 
         try {
@@ -184,8 +188,8 @@ class StageHandlerTest {
         HomePaneController controller = mock(HomePaneController.class);
 
         doNothing().when(stageHandler).switchSceneModal(view, page);
-        when(stageHandler.getController()).thenReturn(controller);
-        when(stageHandler.getSecondaryStage()).thenReturn(primaryStage);
+        doReturn(controller).when(stageHandler).getController();
+        doReturn(primaryStage).when(stageHandler).getSecondaryStage();
         doNothing().when(primaryStage).close();
 
         stageHandler.showModal(view, page);
@@ -223,7 +227,7 @@ class StageHandlerTest {
     void testLoadViewNodeHierarchy_EmptyView() {
         FXMLView view = FXMLView.TEST;
 
-        when(stageHandler.getSecondaryStage()).thenReturn(null);
+        doReturn(null).when(stageHandler).getSecondaryStage();
         doNothing().when(primaryStage).close();
 
         RuntimeException exception = assertThrows(
@@ -242,9 +246,9 @@ class StageHandlerTest {
         FXMLView view = FXMLView.TEST;
         FXMLLoader loader = mock(FXMLLoader.class);
 
-        when(stageHandler.getLoader()).thenReturn(loader);
+        doReturn(loader).when(stageHandler).getLoader();
         when(loader.load()).thenReturn(null);
-        when(stageHandler.getSecondaryStage()).thenReturn(null);
+        doReturn(null).when(stageHandler).getSecondaryStage();
         doNothing().when(primaryStage).close();
 
         assertThrows(RuntimeException.class, () -> stageHandler.loadViewNodeHierarchy(view));
@@ -258,9 +262,9 @@ class StageHandlerTest {
         FXMLView view = FXMLView.TEST;
         FXMLLoader loader = mock(FXMLLoader.class);
 
-        when(stageHandler.getLoader()).thenReturn(loader);
+        doReturn(loader).when(stageHandler).getLoader();
         when(loader.load()).thenReturn(null);
-        when(stageHandler.getSecondaryStage()).thenReturn(primaryStage);
+        doReturn(primaryStage).when(stageHandler).getSecondaryStage();
         doNothing().when(primaryStage).close();
 
         assertThrows(RuntimeException.class, () -> stageHandler.loadViewNodeHierarchy(view));
