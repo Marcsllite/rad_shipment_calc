@@ -47,8 +47,7 @@ class HomePaneControllerGUITest extends GUITest {
     @Start
     public void start(Stage stage) throws IOException, TimeoutException {
         super.start(stage);
-        controller = (HomePaneController) getController();
-        shipment = controller.getShipment();
+
         gridPaneHome = GUITest.getNode(FXIds.GRID_PANE_HOME);
         btnAdd = GUITest.getNode(FXIds.BTN_ADD);
         btnEdit = GUITest.getNode(FXIds.BTN_EDIT);
@@ -60,7 +59,6 @@ class HomePaneControllerGUITest extends GUITest {
     @BeforeEach
     public void setUp() {
         clearSelection(tableViewHome);
-        shipment.setNuclides(null);
     }
 
     @Test
@@ -75,6 +73,8 @@ class HomePaneControllerGUITest extends GUITest {
 
     @Test
     void testHideShow() {
+        controller = (HomePaneController) getController();
+
         interact(() ->controller.hide());
 
         FxAssert.verifyThat(gridPaneHome, NodeMatchers.isInvisible());
@@ -102,9 +102,10 @@ class HomePaneControllerGUITest extends GUITest {
 
     @Test
     void testEditBtnHandler_ShowHide() {
+        clearNuclideTable();
         assertTrue(btnEdit.isDisabled());
 
-        addIsoToTable();
+        addNuclideToTable();
         selectRow(tableViewHome, 0);
         assertFalse(btnEdit.isDisabled());
 
@@ -120,18 +121,29 @@ class HomePaneControllerGUITest extends GUITest {
         FxAssert.verifyThat(window(stackPaneModify), WindowMatchers.isNotShowing());
     }
 
-    protected void addIsoToTable() {
+    protected void addNuclideToTable() {
+        controller = (HomePaneController) getController();
+        shipment = controller.getShipment();
         Nuclide nuclide = new Nuclide("Name", new NuclideModelId());
         shipment.setNuclides(FXCollections.observableArrayList(nuclide));
         assertFalse(shipment.getNuclides().isEmpty());
         assertEquals(shipment.getNuclides().get(0), tableViewHome.getItems().get(0));
     }
 
+    protected void clearNuclideTable() {
+        controller = (HomePaneController) getController();
+        shipment = controller.getShipment();
+        shipment.setNuclides(FXCollections.observableArrayList());
+        assertTrue(shipment.getNuclides().isEmpty());
+        assertTrue(tableViewHome.getItems().isEmpty());
+    }
+
     @Test
     void testRemoveBtnHandler() {
+        clearNuclideTable();
         assertTrue(btnRemove.isDisabled());
 
-        addIsoToTable();
+        addNuclideToTable();
         selectRow(tableViewHome, 0);
         assertFalse(btnRemove.isDisabled());
 
@@ -141,9 +153,10 @@ class HomePaneControllerGUITest extends GUITest {
 
     @Test
     void testCalculateBtnHandler() {
+        clearNuclideTable();
         assertTrue(btnCalculate.isDisabled());
 
-        addIsoToTable();
+        addNuclideToTable();
         assertFalse(btnCalculate.isDisabled());
         selectRow(tableViewHome, 0);
 

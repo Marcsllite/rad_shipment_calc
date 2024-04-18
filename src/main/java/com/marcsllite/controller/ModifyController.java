@@ -90,7 +90,6 @@ public class ModifyController extends BaseController {
     public ModifyController(BaseController.Page page, PropHandler propHandler) throws IOException {
         super(propHandler);
         setPage(page);
-        setNuclides(getDbService().getAllNuclideModels());
     }
 
     public ObservableList<NuclideModel> getNuclides() {
@@ -138,6 +137,8 @@ public class ModifyController extends BaseController {
     @FXML public void initialize() {
         if(!isInit()) {
             super.initialize();
+
+            setNuclides(getDbService().getAllNuclideModels());
 
             reset();
             setupDropDownItems();

@@ -20,7 +20,7 @@ import java.io.IOException;
 public class ControllerFactory implements Callback<Class<?>, Object> {
     private static final Logger logr = LogManager.getLogger();
     private BaseController.Page page;
-    private DBService dbService;
+    protected DBService dbService;
 
     public ControllerFactory() {
         this(null);
@@ -63,12 +63,9 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
             } else if(name.equals(ReferencePaneController.class.getName())) {
                 ret = new ReferencePaneController();
             } else if(name.equals(ModifyController.class.getName())) {
-                ret = new ModifyController(getPage()) {
-                    @Override
-                    public DBService getDbService() {
-                        return ControllerFactory.this.getDbService();
-                    }
-                };
+                ModifyController temp = new ModifyController(getPage());
+                temp.setDbService(dbService);
+                ret = temp;
             } else if(name.equals(ShipmentDetailsController.class.getName())) {
                 ret = new ShipmentDetailsController();
             } else if(name.equals(SummaryPaneController.class.getName())) {

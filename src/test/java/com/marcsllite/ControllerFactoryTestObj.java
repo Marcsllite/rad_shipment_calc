@@ -39,14 +39,11 @@ public class ControllerFactoryTestObj extends ControllerFactory {
             } else if(name.equals(HomePaneController.class.getName())) {
                 ret = new HomePaneController(propHandler);
             } else if(name.equals(ReferencePaneController.class.getName())) {
-                ret = new ReferencePaneController(propHandler) {
-                    @Override
-                    public DBService getDbService() {
-                        return ControllerFactoryTestObj.this.getDbService();
-                    }
-                };
+                ret = new ReferencePaneController(propHandler);
             } else if(name.equals(ModifyController.class.getName())) {
-                ret = new ModifyController(getPage(), propHandler);
+                ModifyController temp = new ModifyController(getPage(), propHandler);
+                temp.setDbService(dbService);
+                ret = temp;
             } else if(name.equals(ShipmentDetailsController.class.getName())) {
                 ret = new ShipmentDetailsController(propHandler);
             } else if(name.equals(SummaryPaneController.class.getName())) {

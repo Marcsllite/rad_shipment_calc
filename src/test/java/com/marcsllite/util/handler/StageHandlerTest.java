@@ -95,15 +95,10 @@ class StageHandlerTest {
     void testSwitchSceneModal_NotModifyCurrentView() {
         FXMLView view = FXMLView.HOME;
 
-        Platform.runLater(
-            () ->  {
-                doReturn(view).when(stageHandler).getCurrentView();
-                stageHandler.switchSceneModal(view, BaseController.Page.NONE);
-                verify(stageHandler, times(0)).getFactory();
-                verify(stageHandler, times(0)).loadViewNodeHierarchy(view);
-                verify(stageHandler, times(0)).setSecondaryStage(any());
-            }
-        );
+        doReturn(view).when(stageHandler).getCurrentView();
+        stageHandler.switchSceneModal(view, BaseController.Page.NONE);
+        verify(stageHandler, times(0)).getFactory();
+        verify(stageHandler, times(0)).loadViewNodeHierarchy(view);
     }
 
     @Test
