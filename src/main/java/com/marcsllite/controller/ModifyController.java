@@ -183,8 +183,8 @@ public class ModifyController extends BaseController {
             btnFinish.setDisable(true);
         } else {
             // if user inputs any non-numerical characters, remove them
-            String newTxt = str.replaceAll("\\D", "");
-            btnFinish.setDisable(newTxt.isBlank());
+            String newTxt = str.replaceAll("[^\\d.]", "");
+            btnFinish.setDisable(Page.ADD.equals(getPage()) && newTxt.isBlank());
             txtFieldMass.setText(newTxt);
         }
     }
@@ -276,28 +276,31 @@ public class ModifyController extends BaseController {
 
     private void setFirstPageValues() {
         if(getEditingNuclide() != null) {
-            txtFieldNuclideName.setText(getEditingNuclide().getName());
-            txtFieldA0.setText(String.valueOf(getEditingNuclide().getInitActivity()));
+            txtFieldNuclideName.setText(getEditingNuclide().getDisplayNameNotation());
+            txtFieldA0.setText(getEditingNuclide().getInitActivity().toString());
+            if(txtFieldA0.getText().isBlank()) {
+                txtFieldA0.setText("0");
+            }
             comboBoxA0Prefix.getSelectionModel().select(getEditingNuclide().getInitActivityPrefix().getVal());
-            choiceBoxA0RadUnit.getSelectionModel().select(getEditingNuclide().getMassUnit().getVal());
+            choiceBoxA0RadUnit.getSelectionModel().select(getEditingNuclide().getInitActivityUnit().getVal());
     
             txtFirstPageStatus.setVisible(false);
             txtFirstPageStatus.setText(null);
     
-            String abbr = getEditingNuclide().getAbbrNotation().toLowerCase();
-            Pattern lungAbsPattern = Pattern.compile("(slow|medium|fast)$");
+            String abbr = getEditingNuclide().getMassNumber().toLowerCase();
+            Pattern lungAbsPattern = Pattern.compile(Nuclide.LUNG_ABS_PATTERN);
             Matcher lungAbsMatch = lungAbsPattern.matcher(abbr);
-            Pattern shortLongPattern = Pattern.compile("\\)$");
-            Matcher shortLongMatch = shortLongPattern.matcher(abbr);
+            Pattern lifeSpanPattern = Pattern.compile("\\((.*)\\)$");
+            Matcher lifeSpanMatch = lifeSpanPattern.matcher(abbr);
     
-            if(shortLongMatch.find()) {
+            if(lifeSpanMatch.find()) {
                 setLifeSpanVisible(true);
                 Optional<Toggle> toggle = toggleGrpLifeSpan.getToggles()
                     .stream()
                     .filter(t ->
                         Objects.equals(
                             Nuclide.LifeSpan.toLifeSpan((String) t.getUserData()),
-                            getEditingNuclide().getLifeSpan())
+                            Nuclide.LifeSpan.toLifeSpan(lifeSpanMatch.group(1)))
                     ).findFirst();
     
                 toggle.ifPresent(value -> toggleGrpLifeSpan.selectToggle(value));
@@ -310,7 +313,7 @@ public class ModifyController extends BaseController {
                     .filter(t ->
                         Objects.equals(
                             Nuclide.LungAbsorption.toLungAbsorption((String) t.getUserData()),
-                            getEditingNuclide().getLungAbsorption())
+                            Nuclide.LungAbsorption.toLungAbsorption(lungAbsMatch.group(0)))
                     ).findFirst();
     
                 toggle.ifPresent(value -> toggleGrpLungAbs.selectToggle(value));
@@ -323,7 +326,10 @@ public class ModifyController extends BaseController {
     private void setSecondPageValues() {
         if(getEditingNuclide() != null) {
             datePicker.setValue(getEditingNuclide().getRefDate());
-            txtFieldMass.setText(String.valueOf(getEditingNuclide().getMass()));
+            txtFieldMass.setText(getEditingNuclide().getMass().toString());
+            if(txtFieldMass.getText().isBlank()) {
+                txtFieldMass.setText("0");
+            }
             comboBoxMassPrefix.getSelectionModel().select(getEditingNuclide().getMassPrefix().getVal());
             choiceBoxMassUnit.getSelectionModel().select(getEditingNuclide().getMassUnit().getVal());
             choiceBoxNature.getSelectionModel().select(getEditingNuclide().getNature().getVal());
@@ -377,7 +383,7 @@ public class ModifyController extends BaseController {
             boolean isInTable = isNuclideInTable(nuclide);
             String a0 = txtFieldA0.getText();
             btnNext.setDisable(nuclide == null || a0 == null ||
-                a0.isBlank() || isInTable);
+                (Page.ADD.equals(getPage()) && a0.isBlank()) || isInTable);
         } else {
             btnNext.setDisable(true);
         }
@@ -388,9 +394,10 @@ public class ModifyController extends BaseController {
             btnNext.setDisable(true);
         } else {
             // if user inputs any non-numerical characters, remove them
-            String newTxt = str.replaceAll("\\D", "");
+            String newTxt = str.replaceAll("[^\\d.]", "");
             Nuclide nuclide = buildEditedNuclide();
-            btnNext.setDisable(nuclide == null || newTxt.isBlank() ||
+            btnNext.setDisable(nuclide == null ||
+                (Page.ADD.equals(getPage()) && newTxt.isBlank()) ||
                 isAddInfoNotProvided() || isNuclideInTable(nuclide));
             txtFieldA0.setText(newTxt);
         }
@@ -463,15 +470,16 @@ public class ModifyController extends BaseController {
             btnNext.setDisable(true);
             setDuplicateNuclide(false);
         } else {
-            getSearchFilteredNuclides().setPredicate(validNuclideFilteringPredicate(newV));
             getFilteredLifeSpanNuclides().setPredicate(lifeSpanFilteringPredicate(newV));
             getFilteredLungAbsNuclides().setPredicate(lungAbsFilteringPredicate(newV));
+            getSearchFilteredNuclides().setPredicate(validNuclideFilteringPredicate(newV));
             Nuclide nuclide = buildEditedNuclide();
             setLifeSpanVisible(!getFilteredLifeSpanNuclides().isEmpty());
             setLungAbsVisible(!vBoxLifeSpan.isVisible() && !getFilteredLungAbsNuclides().isEmpty());
             String a0 = txtFieldA0.getText();
             btnNext.setDisable(nuclide == null ||
-                a0 == null || a0.isBlank() || isAddInfoNotProvided() || isNuclideInTable(nuclide));
+                a0 == null || (Page.ADD.equals(getPage()) && a0.isBlank()) ||
+                isAddInfoNotProvided() || isNuclideInTable(nuclide));
         }
     }
 
@@ -547,6 +555,19 @@ public class ModifyController extends BaseController {
         String abbr = nuclide.getAbbrNotation();
         String name = nuclide.getNameNotation();
 
+        if(!getFilteredLifeSpanNuclides().isEmpty()) {
+            String replaceStr = "\\(.*$";
+            str = str.replaceAll(replaceStr, "");
+            abbr = abbr.replaceAll(replaceStr, "");
+            name = name.replaceAll(replaceStr, "");
+        }
+
+        if(!getFilteredLungAbsNuclides().isEmpty()) {
+            str = str.replaceAll(Nuclide.LUNG_ABS_PATTERN, "");
+            abbr = abbr.replaceAll(Nuclide.LUNG_ABS_PATTERN, "");
+            name = name.replaceAll(Nuclide.LUNG_ABS_PATTERN, "");
+        }
+
         return abbr.equalsIgnoreCase(str) || name.equalsIgnoreCase(str);
     }
 
@@ -559,7 +580,7 @@ public class ModifyController extends BaseController {
 
         String abbr = nuclide.getAbbrNotation().toLowerCase();
         String name = nuclide.getNameNotation().toLowerCase();
-        Pattern pattern = Pattern.compile("(slow|medium|fast)$");
+        Pattern pattern = Pattern.compile(Nuclide.LUNG_ABS_PATTERN);
         Matcher matchAbbr = pattern.matcher(abbr);
 
         return (name.contains(searchStr) || abbr.contains(searchStr)) && matchAbbr.find();
@@ -587,12 +608,8 @@ public class ModifyController extends BaseController {
             nuclide.setInitActivity(new RadBigDecimal(txtFieldA0.getText()));
             nuclide.setInitActivityPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxA0Prefix.getValue()));
             nuclide.setInitActivityUnit(Conversions.RadUnit.toRadUnit(choiceBoxA0RadUnit.getValue()));
-            nuclide.setStrInitActivity();
-            nuclide.setLungAbsorption(Nuclide.LungAbsorption.NONE);
-            nuclide.setLifeSpan(Nuclide.LifeSpan.REGULAR);
-
-            setNuclideLungAbs(nuclide);
             setNuclideLifeSpan(nuclide);
+            setNuclideLungAbs(nuclide);
         }
         return nuclide;
     }
@@ -641,7 +658,6 @@ public class ModifyController extends BaseController {
                 nuclide.setMassPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxMassPrefix.getValue()));
                 nuclide.setMassUnit(Conversions.MassUnit.toMass(choiceBoxMassUnit.getValue()));
             }
-            nuclide.setStrMass();
 
             if(chckBoxSameNSF.isDisabled()) {
                 Shipment shipment = getMain().getHomePaneController().getShipment();
@@ -706,7 +722,7 @@ public class ModifyController extends BaseController {
         logr.debug("User clicked the Finish button on the {} pane", getPage());
         if(Page.ADD.equals(getPage())) {
             Shipment shipment = getMain().getHomePaneController().getShipment();
-            shipment.add(buildNuclide());
+            shipment.add(buildNuclide().initConstants());
         }
         if(Page.EDIT.equals(getPage())) {
             getMain().getHomePaneController().updateNuclide(buildNuclide());

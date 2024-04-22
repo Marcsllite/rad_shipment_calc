@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Nuclide {
@@ -48,6 +50,7 @@ public class Nuclide {
     private SimpleObjectProperty<LocalDate> refDate;
     private LifeSpan lifeSpan;
     private LungAbsorption lungAbsorption;
+    public static final String LUNG_ABS_PATTERN = "(slow|medium|fast)$";
     
     public Nuclide(NuclideModel model) {
         this(model.getName(), model.getNuclideId());
@@ -67,22 +70,15 @@ public class Nuclide {
         setDbService(new DBServiceImpl());
         setName(name);
         setNuclideId(nuclideId);
-        setFullName();
-        setNameNotation();
-        setAbbrNotation();
         setMassPrefix(Conversions.SIPrefix.BASE);
         setMassUnit(massUnit);
-        setStrMass();
         setInitActivityPrefix(Conversions.SIPrefix.BASE);
         setInitActivityUnit(initActivityUnit);
-        setStrInitActivity();
         setNature(nature);
         setLimitsId(limitsId);
         setNuclideClass(NuclideClass.TBD);
         setPropHandler(null);
         setRefDate(refDate);
-        setLifeSpan(LifeSpan.REGULAR);
-        setLungAbsorption(LungAbsorption.NONE);
 
         logr.trace("Created new Nuclide {}", this::toString);
     }
@@ -159,6 +155,7 @@ public class Nuclide {
         } else {
             massProperty().set(mass);
         }
+        setStrMass();
     }
 
     public Conversions.SIPrefix getMassPrefix() {
@@ -167,14 +164,16 @@ public class Nuclide {
 
     public void setMassPrefix(Conversions.SIPrefix massPrefix) {
         this.massPrefix = massPrefix;
+        setStrMass();
     }
 
     public Conversions.MassUnit getMassUnit() {
-        return massUnit;
+        return massUnit == null? Conversions.MassUnit.GRAMS : massUnit;
     }
 
     public void setMassUnit(Conversions.MassUnit massUnit) {
         this.massUnit = massUnit == null? Conversions.MassUnit.GRAMS : massUnit;
+        setStrMass();
     }
 
     public String getStrInitActivity() {
@@ -210,14 +209,16 @@ public class Nuclide {
         } else {
             initActivityProperty().set(initActivity);
         }
+        setStrInitActivity();
     }
 
     public Conversions.SIPrefix getInitActivityPrefix() {
-        return initActivityPrefix;
+        return initActivityPrefix == null? Conversions.SIPrefix.BASE : initActivityPrefix;
     }
 
     public void setInitActivityPrefix(Conversions.SIPrefix initActivityPrefix) {
         this.initActivityPrefix = initActivityPrefix;
+        setStrInitActivity();
     }
 
     public Conversions.RadUnit getInitActivityUnit() {
@@ -226,6 +227,7 @@ public class Nuclide {
 
     public void setInitActivityUnit(Conversions.RadUnit initActivityUnit) {
         this.initActivityUnit = initActivityUnit == null? Conversions.RadUnit.CURIE : initActivityUnit;
+        setStrInitActivity();
     }
 
     public void setNuclideId(NuclideModelId nuclideId) {
@@ -246,6 +248,18 @@ public class Nuclide {
         return nameNotationProperty() == null?
             getName() + "-" + getMassNumber()
             : nameNotationProperty().get();
+    }
+
+    public String getDisplayNameNotation() {
+        String ret = getNameNotation();
+        if(!LifeSpan.REGULAR.equals(getLifeSpan())) {
+            ret = ret.replaceAll("\\(.*$", "");
+        }
+
+        if(!LungAbsorption.NONE.equals(getLungAbsorption())) {
+            ret = ret.replaceAll(Nuclide.LUNG_ABS_PATTERN, "");
+        }
+        return ret;
     }
 
     public SimpleStringProperty nameNotationProperty() {
@@ -273,10 +287,10 @@ public class Nuclide {
 
     public void setAbbrNotation() {
         String str = getSymbol() + "-" + getMassNumber();
-        if(strInitActivityProperty() == null) {
-            this.nameNotation = new SimpleStringProperty(str);
+        if(abbrNotationProperty() == null) {
+            this.abbrNotation = new SimpleStringProperty(str);
         } else {
-            nameNotationProperty().set(str);
+            abbrNotationProperty().set(str);
         }
     }
 
@@ -295,6 +309,7 @@ public class Nuclide {
         } else {
             symbolProperty().set(val);
         }
+        setFullName();
     }
 
     public String getMassNumber() {
@@ -312,6 +327,30 @@ public class Nuclide {
         } else {
             massNumberProperty().set(val);
         }
+        setNameNotation();
+        setAbbrNotation();
+        setLifeSpan(parseLifeSpanFromMassNumber());
+        setLungAbsorption(parseLungAbsFromMassNumber());
+    }
+
+    public LifeSpan parseLifeSpanFromMassNumber() {
+        Pattern lifeSpanPattern = Pattern.compile("\\((.*)\\)$");
+        Matcher lifeSpanMatch = lifeSpanPattern.matcher(getMassNumber());
+        LifeSpan ret = LifeSpan.REGULAR;
+        if(lifeSpanMatch.find()) {
+            ret = LifeSpan.toLifeSpan(lifeSpanMatch.group(1));
+        }
+        return ret;
+    }
+
+    public LungAbsorption parseLungAbsFromMassNumber() {
+        Pattern lungAbsPattern = Pattern.compile(Nuclide.LUNG_ABS_PATTERN);
+        Matcher lungAbsMatch = lungAbsPattern.matcher(getMassNumber());
+        LungAbsorption ret = LungAbsorption.NONE;
+        if(lungAbsMatch.find()) {
+            ret = LungAbsorption.toLungAbsorption(lungAbsMatch.group(0));
+        }
+        return ret;
     }
 
     public String getFullName() {
@@ -348,6 +387,9 @@ public class Nuclide {
         } else {
             nameProperty().set(val);
         }
+        setFullName();
+        setNameNotation();
+        setAbbrNotation();
     }
 
     public Nature getNature() {
@@ -576,8 +618,7 @@ public class Nuclide {
             return Objects.equals(val, "") ? "" : val + " Lived";
         }
 
-        public String getAbbrVal() { return val.equals("")? "" :
-            "(" + val.toLowerCase() + ")";}
+        public String getAbbrVal() { return val.equals("")? "" : val.toLowerCase();}
 
         public static LifeSpan toLifeSpan(String value) {
             for (LifeSpan enumValue : values()) {
@@ -591,7 +632,7 @@ public class Nuclide {
 
         public static ObservableList<String> getFxValues() {
             return Arrays.stream(LifeSpan.values())
-                .map(LifeSpan::getAbbrVal)
+                .map(LifeSpan::getVal)
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
         }
 
@@ -618,7 +659,7 @@ public class Nuclide {
         }
 
         public String getAbbrVal() { return val.equals("")? "" :
-            val.substring(0,1).toLowerCase();}
+            val.substring(0,val.indexOf(' ')).toLowerCase();}
 
         public static LungAbsorption toLungAbsorption(String value) {
             for (LungAbsorption enumValue : values()) {

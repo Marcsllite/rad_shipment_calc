@@ -6,28 +6,30 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 
 public class RadBigDecimal extends BigDecimal {
-    private static final String INFINITY_STRING = "Infinity";
-    private static final String NEG_INFINITY_STRING = "-Infinity";
-    private static final double INFINITY_DOUBLE = Double.MAX_VALUE;
-    private static final double NEG_INFINITY_DOUBLE = -2.0D;
+    public static final String INFINITY_STRING = "Infinity";
+    public static final String NEG_INFINITY_STRING = "-Infinity";
+    public static final double INFINITY_DOUBLE = Double.MAX_VALUE;
+    public static final double NEG_INFINITY_DOUBLE = -2.0D;
+    public static final int DEFAULT_PRECISION = 2;
+    public static final RoundingMode DEFAULT_ROUNDING_MODE = RoundingMode.HALF_EVEN;
+    public static final MathContext DEFAULT_CONTEXT = new MathContext(DEFAULT_PRECISION, DEFAULT_ROUNDING_MODE);
     public static final RadBigDecimal INFINITY_OBJ = RadBigDecimal.valueOf(INFINITY_DOUBLE);
     public static final RadBigDecimal NEG_INFINITY_OBJ = RadBigDecimal.valueOf(NEG_INFINITY_DOUBLE);
     private boolean infinity;
     private boolean negativeInfinity;
-    public static final int DEFAULT_PRECISION = 2;
-    public static final RoundingMode defaultRoundingMode = RoundingMode.HALF_EVEN;
-    public static final MathContext defaultContext = new MathContext(DEFAULT_PRECISION, defaultRoundingMode);
 
     public RadBigDecimal(String val) {
-        super(parseString(val));
-        setInfinity(INFINITY_STRING.equalsIgnoreCase(val));
-        setNegativeInfinity(NEG_INFINITY_STRING.equalsIgnoreCase(val));
+        super(parseString(val), DEFAULT_CONTEXT);
+        setInfinity(INFINITY_STRING.equalsIgnoreCase(val) ||
+            val != null && Double.parseDouble(val) == INFINITY_DOUBLE);
+        setNegativeInfinity(NEG_INFINITY_STRING.equalsIgnoreCase(val) ||
+            val != null && Double.parseDouble(val) == NEG_INFINITY_DOUBLE);
     }
 
     public RadBigDecimal(BigDecimal val) { this(val.toString()); }
     
     public RadBigDecimal(BigInteger val) {
-        this(val.toString());
+        this(new BigDecimal(val, RadBigDecimal.DEFAULT_CONTEXT));
     }
 
     public static RadBigDecimal valueOf(double val) {
@@ -35,117 +37,107 @@ public class RadBigDecimal extends BigDecimal {
     }
 
     public static RadBigDecimal valueOf(long val) {
-        return new RadBigDecimal(Long.toString(val));
+        RadBigDecimal ret = new RadBigDecimal(Long.toString(val));
+        ret.setInfinity(val == Long.MAX_VALUE);
+        return ret;
     }
 
     protected static String parseString(String str) {
         if(str == null) {
             return "0";
         } else if (INFINITY_STRING.equalsIgnoreCase(str)) {
-            return INFINITY_OBJ.toString();
+            return Double.toString(INFINITY_DOUBLE);
         } else if (NEG_INFINITY_STRING.equalsIgnoreCase(str)) {
-            return NEG_INFINITY_OBJ.toString();
+            return Double.toString(NEG_INFINITY_DOUBLE);
         }
 
         return str;
     }
 
-    public static RadBigDecimal[] toRadBigDecimal(BigDecimal[] val) {
-        RadBigDecimal[] ret = new RadBigDecimal[val.length];
-        for (int i = 0; i < val.length; i++) {
-            ret[i] = new RadBigDecimal(val[i]);
-        }
-        return ret;
-    }
-
     @Override
     public RadBigDecimal subtract(BigDecimal subtrahend) {
-        RadBigDecimal temp = (RadBigDecimal) subtrahend;
-        if(temp.isInfinity()) {
+        RadBigDecimal temp = new RadBigDecimal(subtrahend);
+        if(this.isInfinity()) {
+            return INFINITY_OBJ;
+        } else if(this.isNegativeInfinity()) {
+            return NEG_INFINITY_OBJ;
+        } else if(temp.isInfinity()) {
+            return NEG_INFINITY_OBJ;
+        } else if(temp.isNegativeInfinity()) {
             return INFINITY_OBJ;
         }
 
-        if(temp.isNegativeInfinity()) {
-            return NEG_INFINITY_OBJ;
-        }
-
-        return new RadBigDecimal(super.subtract(subtrahend, defaultContext));
+        return new RadBigDecimal(super.subtract(subtrahend, DEFAULT_CONTEXT));
     }
 
     @Override
     public RadBigDecimal multiply(BigDecimal multiplicand) {
-        RadBigDecimal temp = (RadBigDecimal) multiplicand;
-        if(temp.isInfinity()) {
-            return INFINITY_OBJ;
+        RadBigDecimal temp = new RadBigDecimal(multiplicand);
+        if(this.isInfinity()) {
+            return multiplicand.compareTo(BigDecimal.ZERO) < 0?
+                NEG_INFINITY_OBJ : INFINITY_OBJ;
+        } else if(this.isNegativeInfinity()) {
+            return multiplicand.compareTo(BigDecimal.ZERO) < 0?
+                INFINITY_OBJ : NEG_INFINITY_OBJ;
+        } else if(temp.isInfinity()) {
+            return this.compareTo(BigDecimal.ZERO) < 0?
+                NEG_INFINITY_OBJ : INFINITY_OBJ;
+        } else if(temp.isNegativeInfinity()) {
+            return this.compareTo(BigDecimal.ZERO) < 0?
+                INFINITY_OBJ : NEG_INFINITY_OBJ;
         }
 
-        if(temp.isNegativeInfinity()) {
-            return NEG_INFINITY_OBJ;
-        }
-
-        return new RadBigDecimal(super.multiply(multiplicand, defaultContext));
+        return new RadBigDecimal(super.multiply(multiplicand, DEFAULT_CONTEXT));
     }
 
     @Override
     public RadBigDecimal divide(BigDecimal divisor) {
-        RadBigDecimal temp = (RadBigDecimal) divisor;
-        if(temp.isInfinity()) {
-            return INFINITY_OBJ;
+        RadBigDecimal temp = new RadBigDecimal(divisor);
+        if (divisor.compareTo(BigDecimal.ZERO) == 0) {
+            throw new ArithmeticException("Cannot divide by zero");
         }
 
-        if(temp.isNegativeInfinity()) {
-            return NEG_INFINITY_OBJ;
+        if(this.isInfinity()) {
+            if(temp.isInfinity()) {
+                return new RadBigDecimal("1");
+            } else if(temp.isNegativeInfinity()) {
+                return new RadBigDecimal("-1");
+            }
+
+            return divisor.compareTo(BigDecimal.ZERO) < 0?
+                NEG_INFINITY_OBJ : INFINITY_OBJ;
+        } else if(this.isNegativeInfinity()) {
+            if(temp.isNegativeInfinity()) {
+                return new RadBigDecimal("1");
+            } else if(temp.isInfinity()) {
+                return new RadBigDecimal("-1");
+            }
+
+            return divisor.compareTo(BigDecimal.ZERO) < 0?
+                INFINITY_OBJ : NEG_INFINITY_OBJ;
+        } else if(temp.isInfinity() || temp.isNegativeInfinity()) {
+            return new RadBigDecimal("0");
         }
 
-        return ((RadBigDecimal) divisor).isInfinity()?
-            INFINITY_OBJ :
-            new RadBigDecimal(super.divide(divisor, defaultContext));
+        return new RadBigDecimal(super.divide(divisor, DEFAULT_CONTEXT));
     }
 
     @Override
     public RadBigDecimal divideToIntegralValue(BigDecimal divisor) {
-        RadBigDecimal temp = (RadBigDecimal) divisor;
-        if(temp.isInfinity()) {
-            return INFINITY_OBJ;
-        }
-
-        if(temp.isNegativeInfinity()) {
-            return NEG_INFINITY_OBJ;
-        }
-
-        return ((RadBigDecimal) divisor).isInfinity()?
-            INFINITY_OBJ :
-            new RadBigDecimal(super.divideToIntegralValue(divisor, defaultContext));
+        return RadBigDecimal.valueOf(divide(divisor).intValue());
     }
 
     @Override
     public RadBigDecimal remainder(BigDecimal divisor) {
-        RadBigDecimal temp = (RadBigDecimal) divisor;
-        if(temp.isInfinity()) {
-            return INFINITY_OBJ;
-        }
-
-        if(temp.isNegativeInfinity()) {
-            return NEG_INFINITY_OBJ;
-        }
-
-        return ((RadBigDecimal) divisor).isInfinity()?
-            INFINITY_OBJ :
-            new RadBigDecimal(super.remainder(divisor, defaultContext));
+        return divide(divisor).subtract(divideToIntegralValue(divisor));
     }
 
     @Override
     public RadBigDecimal[] divideAndRemainder(BigDecimal divisor) {
-        RadBigDecimal temp = (RadBigDecimal) divisor;
-        if(temp.isInfinity()) {
-            return new RadBigDecimal[]{INFINITY_OBJ, RadBigDecimal.valueOf(0)};
-        }
-
-        if(temp.isNegativeInfinity()) {
-            return new RadBigDecimal[]{NEG_INFINITY_OBJ, RadBigDecimal.valueOf(0)};
-        }
-
-        return RadBigDecimal.toRadBigDecimal(super.divideAndRemainder(divisor, defaultContext));
+        return new RadBigDecimal[]{
+            divideToIntegralValue(divisor),
+            remainder(divisor)
+        };
     }
 
     public RadBigDecimal sqrt() {
@@ -157,7 +149,7 @@ public class RadBigDecimal extends BigDecimal {
             return NEG_INFINITY_OBJ;
         }
 
-        return new RadBigDecimal(super.sqrt(defaultContext));
+        return new RadBigDecimal(super.sqrt(DEFAULT_CONTEXT));
     }
 
     @Override
@@ -170,7 +162,7 @@ public class RadBigDecimal extends BigDecimal {
             return NEG_INFINITY_OBJ;
         }
 
-        return new RadBigDecimal(super.pow(n, defaultContext));
+        return new RadBigDecimal(super.pow(n, DEFAULT_CONTEXT));
     }
 
     @Override
@@ -184,20 +176,20 @@ public class RadBigDecimal extends BigDecimal {
         }
 
 
-        return new RadBigDecimal(super.abs(defaultContext));
+        return new RadBigDecimal(super.abs(DEFAULT_CONTEXT));
     }
 
     @Override
     public RadBigDecimal negate() {
         if(this.isInfinity()) {
-            return INFINITY_OBJ;
-        }
-
-        if(this.isNegativeInfinity()) {
             return NEG_INFINITY_OBJ;
         }
 
-        return new RadBigDecimal(super.negate(defaultContext));
+        if(this.isNegativeInfinity()) {
+            return INFINITY_OBJ;
+        }
+
+        return new RadBigDecimal(this.toBigInteger().negate());
     }
 
     @Override
@@ -210,7 +202,7 @@ public class RadBigDecimal extends BigDecimal {
             return NEG_INFINITY_OBJ;
         }
 
-        return new RadBigDecimal(super.plus(defaultContext));
+        return new RadBigDecimal(super.plus(DEFAULT_CONTEXT));
     }
 
     public RadBigDecimal round() {
@@ -222,20 +214,19 @@ public class RadBigDecimal extends BigDecimal {
             return NEG_INFINITY_OBJ;
         }
 
-        return new RadBigDecimal(super.round(defaultContext));
+        return new RadBigDecimal(super.round(DEFAULT_CONTEXT));
     }
 
 
     @Override
     public int compareTo(BigDecimal val) {
-        if(val == INFINITY_OBJ) {
-            return this.isInfinity()? 0 : -1;
-        }
+        RadBigDecimal obj = new RadBigDecimal(val);
 
-        if(val == NEG_INFINITY_OBJ) {
-            return (this == NEG_INFINITY_OBJ)? 0 : 1;
+        if(this.isInfinity()) {
+            return obj.isInfinity()? 0 : 1;
+        } else if(this.isNegativeInfinity()) {
+            return obj.isNegativeInfinity()? 0 : -1;
         }
-
         return super.compareTo(val);
     }
 
@@ -351,6 +342,19 @@ public class RadBigDecimal extends BigDecimal {
     }
 
     @Override
+    public short shortValue() {
+        if(this.isInfinity()) {
+            return (short) INFINITY_DOUBLE;
+        }
+
+        if(this.isNegativeInfinity()) {
+            return (short) NEG_INFINITY_DOUBLE;
+        }
+
+        return super.shortValue();
+    }
+
+    @Override
     public short shortValueExact() {
         if(this.isInfinity()) {
             return (short) INFINITY_DOUBLE;
@@ -361,6 +365,19 @@ public class RadBigDecimal extends BigDecimal {
         }
 
         return super.shortValueExact();
+    }
+
+    @Override
+    public byte byteValue() {
+        if(this.isInfinity()) {
+            return (byte) INFINITY_DOUBLE;
+        }
+
+        if(this.isNegativeInfinity()) {
+            return (byte) NEG_INFINITY_DOUBLE;
+        }
+
+        return super.byteValue();
     }
 
     @Override
@@ -400,18 +417,6 @@ public class RadBigDecimal extends BigDecimal {
         }
 
         return super.doubleValue();
-    }
-
-    public static boolean isNumeric(String strNum) {
-        if (strNum == null) {
-            return false;
-        }
-        try {
-            new BigDecimal(strNum);
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-        return true;
     }
 
     public boolean isInfinity() {

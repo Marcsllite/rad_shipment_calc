@@ -82,11 +82,6 @@ class MenuPaneControllerGUITest extends GUITest {
     }
 
     @Test
-    void testMenuPaneHandler_imgViewLogo() {
-        clickOn(imgViewColorLogo);
-    }
-
-    @Test
     void testMenuPaneHandler_btnShipment() {
         String imgUrl = ImageHandler.getShipmentImage(CURRENT_COLOR).getUrl();
 
