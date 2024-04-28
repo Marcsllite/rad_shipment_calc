@@ -3046,7 +3046,7 @@ Atomic_Number, Name, Symbol, Mass_Number, Version
 92, Uranium, U, 230, 0
 92, Uranium, U, 230slow, 0
 92, Uranium, U, 230medium, 0
-92, Uranium, U, 230slow, 0
+92, Uranium, U, 230fast, 0
 92, Uranium, U, 231, 0
 92, Uranium, U, 232, 0
 92, Uranium, U, 232slow, 0
