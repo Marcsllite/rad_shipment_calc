@@ -32,22 +32,15 @@ class LimitsModelTest {
     @Test
     void testSetIa_limited() {
         RadBigDecimal val = RadBigDecimal.valueOf(4.5f);
-        model.setIaLimited(val);
+        model.setIaLimitedStr(val.toString());
         assertEquals(val, model.getIaLimited());
     }
 
     @Test
     void testSetIa_package() {
         RadBigDecimal val = RadBigDecimal.valueOf(4.5f);
-        model.setIaPackage(val);
+        model.setIaPackageStr(val.toString());
         assertEquals(val, model.getIaPackage());
-    }
-
-    @Test
-    void testSetLimited() {
-        RadBigDecimal val = RadBigDecimal.valueOf(4.5f);
-        model.setLimited(val);
-        assertEquals(val, model.getLimited());
     }
 
     @Test

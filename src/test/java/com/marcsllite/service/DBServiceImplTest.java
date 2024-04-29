@@ -309,9 +309,9 @@ class DBServiceImplTest extends DBTest {
         RadBigDecimal expIaPackage = RadBigDecimal.valueOf(2.0f);
         RadBigDecimal expLimited = RadBigDecimal.valueOf(3.0f);
         LimitsModel model = new LimitsModel();
-        model.setIaLimited(expIaLim);
-        model.setIaPackage(expIaPackage);
-        model.setLimited(expLimited);
+        model.setIaLimitedStr(expIaLim.toString());
+        model.setIaPackageStr(expIaPackage.toString());
+        model.setLimitedStr(expLimited.toString());
 
         when(service.getLimitsDao()).thenReturn(limitsDao);
         when(limitsDao.getLimits(model.getLimitsId())).thenReturn(model);
@@ -376,8 +376,8 @@ class DBServiceImplTest extends DBTest {
         RadBigDecimal expTBq = RadBigDecimal.valueOf(2.2f);
         ReportableQuantityModel model = new ReportableQuantityModel();
         model.setNuclideId(NUCLIDE_ID);
-        model.setCurie(expCi);
-        model.setTeraBq(expTBq);
+        model.setCurieStr(expCi.toString());
+        model.setTeraBqStr(expTBq.toString());
 
         when(service.getReportableQuanDao()).thenReturn(reportableQuanDao);
         when(reportableQuanDao.getReportQuan(NUCLIDE_ID)).thenReturn(model);

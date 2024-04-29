@@ -4,7 +4,6 @@ import com.marcsllite.util.RadBigDecimal;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Transient;
 
 @MappedSuperclass
 public abstract class BaseDataModel extends BaseModel {
@@ -14,8 +13,6 @@ public abstract class BaseDataModel extends BaseModel {
     private NuclideModelId nuclideId;
     @Column(name = "Val")
     private String decFloatStr;
-    @Transient
-    private RadBigDecimal value;
 
     BaseDataModel() {
         this(new NuclideModelId("XX", "1"),
@@ -35,12 +32,7 @@ public abstract class BaseDataModel extends BaseModel {
     }
 
     public RadBigDecimal getValue() {
-        return value;
-    }
-
-    public void setValue(RadBigDecimal value) {
-        this.value = value;
-        this.decFloatStr = value.toString();
+        return new RadBigDecimal(decFloatStr);
     }
 
     public String getDecFloatStr() {
@@ -49,6 +41,5 @@ public abstract class BaseDataModel extends BaseModel {
 
     public void setDecFloatStr(String decFloatStr) {
         this.decFloatStr = decFloatStr;
-        this.value = new RadBigDecimal(decFloatStr);
     }
 }

@@ -34,8 +34,8 @@ public class ShipmentModel extends BaseModel {
     @Column(name = "Reference_Date")
     private LocalDate refDate;
 
-    @Column(name = "MassUnit")
-    private RadBigDecimal mass;
+    @Column(name = "Mass")
+    private String mass;
 
     @Column(name = "Mass_Unit", nullable = false)
     @Convert(converter = MassUnitAttrConverter.class)
@@ -81,10 +81,14 @@ public class ShipmentModel extends BaseModel {
     }
 
     public RadBigDecimal getMass() {
+        return new RadBigDecimal(mass);
+    }
+
+    public String getMassStr() {
         return mass;
     }
 
-    public void setMass(RadBigDecimal mass) {
+    public void setMassStr(String mass) {
         this.mass = mass;
     }
 

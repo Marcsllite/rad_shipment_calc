@@ -5,7 +5,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity(name = "Reportable Quantity")
 @Table(name = "REPORTABLE_QUANTITY")
@@ -16,12 +15,8 @@ public class ReportableQuantityModel extends BaseModel {
     private NuclideModelId nuclideId;
     @Column(name = "Ci")
     private String curieStr;
-    @Transient
-    private RadBigDecimal curie;
     @Column(name = "TBq")
     private String teraBqStr;
-    @Transient
-    private RadBigDecimal teraBq;
 
     public ReportableQuantityModel() {
         this(new NuclideModelId("XX", "1"),
@@ -49,16 +44,10 @@ public class ReportableQuantityModel extends BaseModel {
 
     public void setCurieStr(String curieStr) {
         this.curieStr = curieStr;
-        this.curie = new RadBigDecimal(curieStr);
     }
 
     public RadBigDecimal getCurie() {
-        return curie;
-    }
-
-    public void setCurie(RadBigDecimal curie) {
-        this.curie = curie;
-        this.curieStr = curie.toString();
+        return new RadBigDecimal(curieStr);
     }
 
     public String getTeraBqStr() {
@@ -67,15 +56,10 @@ public class ReportableQuantityModel extends BaseModel {
 
     public void setTeraBqStr(String teraBqStr) {
         this.teraBqStr = teraBqStr;
-        this.teraBq = new RadBigDecimal(teraBqStr);
     }
 
     public RadBigDecimal getTeraBq() {
-        return teraBq;
+        return new RadBigDecimal(teraBqStr);
     }
 
-    public void setTeraBq(RadBigDecimal teraBq) {
-        this.teraBq = teraBq;
-        this.teraBqStr = teraBq.toString();
-    }
 }

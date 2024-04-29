@@ -31,14 +31,14 @@ class ReportableQuantityModelTest {
     @Test
     void setCurie() {
         RadBigDecimal val = RadBigDecimal.valueOf(45.2f);
-        model.setCurie(val);
+        model.setCurieStr(val.toString());
         assertEquals(val, model.getCurie());
     }
 
     @Test
     void setTeraBq() {
         RadBigDecimal val = RadBigDecimal.valueOf(45.2f);
-        model.setTeraBq(val);
+        model.setTeraBqStr(val.toString());
         assertEquals(val, model.getTeraBq());
     }
 

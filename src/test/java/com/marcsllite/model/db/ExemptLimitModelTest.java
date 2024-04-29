@@ -28,13 +28,6 @@ class ExemptLimitModelTest {
     }
 
     @Test
-    void testSetValue() {
-        RadBigDecimal val = RadBigDecimal.valueOf(45.2f);
-        model.setValue(val);
-        assertEquals(val, model.getValue());
-    }
-
-    @Test
     void testSetVersion() {
         long version = -1L;
         model.setVersion(version);

@@ -44,6 +44,7 @@ class AbstractDaoTest extends DBTest {
 
     @Override
     @BeforeEach
+    @SuppressWarnings("unchecked")
     public void setUp() {
         super.setUp();
         dao = (AbstractDao<ConcreteModel, String>) mock(AbstractDao.class, Mockito.CALLS_REAL_METHODS);
@@ -112,7 +113,7 @@ class AbstractDaoTest extends DBTest {
 
     @Test
     void testFindSingleResult() {
-        String queryStr = "str";
+        String queryStr = "select 1";
         ConcreteModel exp = new ConcreteModel();
 
         when(emHandler.getEntityManager()).thenReturn(em);
@@ -250,6 +251,7 @@ class AbstractDaoTest extends DBTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void testGetEntityName_NoName() {
         AbstractDao<ConcreteModelNoName, String> dao2 = (AbstractDao<ConcreteModelNoName, String>) mock(AbstractDao.class, Mockito.CALLS_REAL_METHODS);
         when(dao2.getEntityClass()).thenReturn(ConcreteModelNoName.class);
