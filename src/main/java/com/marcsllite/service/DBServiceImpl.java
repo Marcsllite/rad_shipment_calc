@@ -165,7 +165,7 @@ public class DBServiceImpl implements DBService {
     public ObservableList<Nuclide> getAllNuclides() {
         return getNuclideDao().getAllNuclides()
             .stream()
-            .map(model -> (new Nuclide(model) {
+            .map(model -> new Nuclide(model) {
                 @Override
                 public PropHandler getPropHandler() {
                     return DBServiceImpl.this.getPropHandler();
@@ -175,7 +175,7 @@ public class DBServiceImpl implements DBService {
                 public DBService getDbService() {
                     return DBServiceImpl.this;
                 }
-            }).initConstants())
+            })
             .collect(Collectors.toCollection(FXCollections::observableArrayList));
     }
     

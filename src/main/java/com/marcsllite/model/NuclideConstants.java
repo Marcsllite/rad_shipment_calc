@@ -18,11 +18,14 @@ public class NuclideConstants {
     private final SimpleStringProperty exemptConcentration = new SimpleStringProperty();
     private final SimpleStringProperty exemptLimit = new SimpleStringProperty();
     private final SimpleStringProperty halfLife = new SimpleStringProperty();
+    private final SimpleStringProperty halfLifeDisplay = new SimpleStringProperty();
+    private static final String HALF_LIFE_UNIT = " days";
     private final SimpleStringProperty iaLimitedLimit = new SimpleStringProperty();
     private final SimpleStringProperty iaPackageLimit = new SimpleStringProperty();
     private final SimpleStringProperty limitedLimit = new SimpleStringProperty();
     private final SimpleStringProperty curieReportQuan = new SimpleStringProperty();
     private final SimpleStringProperty teraBqReportQuan = new SimpleStringProperty();
+    private boolean isInit = false;
 
     public NuclideConstants() {
         setDbService(new DBServiceImpl());
@@ -41,17 +44,28 @@ public class NuclideConstants {
     }
 
     public void dbInit(NuclideModelId nuclideId, LimitsModelId limitsId) {
-        setA1(getDbService().getA1(nuclideId));
-        setA2(getDbService().getA2(nuclideId));
-        setDecayConstant(getDbService().getDecayConstant(nuclideId));
-        setExemptConcentration(getDbService().getExemptConcentration(nuclideId));
-        setExemptLimit(getDbService().getExemptLimit(nuclideId));
-        setHalfLife(getDbService().getHalfLife(nuclideId));
-        setIaLimitedLimit(getDbService().getIALimited(limitsId));
-        setIaPackageLimit(getDbService().getIAPackage(limitsId));
-        setLimitedLimit(getDbService().getLimited(limitsId));
-        setCurieReportQuan(getDbService().getCiReportQuan(nuclideId));
-        setTeraBqReportQuan(getDbService().getTBqReportQuan(nuclideId));
+        if(!isInit) {
+            setA1(getDbService().getA1(nuclideId));
+            setA2(getDbService().getA2(nuclideId));
+            setDecayConstant(getDbService().getDecayConstant(nuclideId));
+            setExemptConcentration(getDbService().getExemptConcentration(nuclideId));
+            setExemptLimit(getDbService().getExemptLimit(nuclideId));
+            setHalfLife(getDbService().getHalfLife(nuclideId));
+            setIaLimitedLimit(getDbService().getIALimited(limitsId));
+            setIaPackageLimit(getDbService().getIAPackage(limitsId));
+            setLimitedLimit(getDbService().getLimited(limitsId));
+            setCurieReportQuan(getDbService().getCiReportQuan(nuclideId));
+            setTeraBqReportQuan(getDbService().getTBqReportQuan(nuclideId));
+            setInit(true);
+        }
+    }
+
+    public boolean isInit() {
+        return isInit;
+    }
+
+    public void setInit(boolean init) {
+        isInit = init;
     }
 
     public DBService getDbService() {
@@ -134,8 +148,13 @@ public class NuclideConstants {
         return halfLife;
     }
 
+    public SimpleStringProperty halfLifeDisplayProperty() {
+        return halfLifeDisplay;
+    }
+
     public void setHalfLife(RadBigDecimal halfLife) {
         halfLifeProperty().set(halfLife.toDisplayString());
+        halfLifeDisplayProperty().set(halfLife.toDisplayString() + HALF_LIFE_UNIT);
     }
 
     public RadBigDecimal getIaLimitedLimit() {
@@ -243,7 +262,7 @@ public class NuclideConstants {
             "\n\tDecay Constant: " + getDecayConstant() +
             "\n\tExempt Concentration: " + getExemptConcentration() + " Bq/g" +
             "\n\tExempt Limit: " + getExemptLimit() + " Bq" +
-            "\n\tHalfLife: " + getHalfLife() + " days" +
+            "\n\tHalfLife: " + halfLifeDisplayProperty() +
             "\n\tInstruments/Articles Limited Limit: " + getIaLimitedLimit() +
             "\n\tInstruments/Articles Package Limit: " + getIaPackageLimit() +
             "\n\tNormal Limited Limit: " + getLimitedLimit() +

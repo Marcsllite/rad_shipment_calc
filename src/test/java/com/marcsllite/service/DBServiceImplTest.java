@@ -186,7 +186,6 @@ class DBServiceImplTest extends DBTest {
 
         when(service.getNuclideDao()).thenReturn(nuclideDao);
         when(nuclideDao.getAllNuclides()).thenReturn(exp);
-        isoConstantsDbInit(model.getNuclideId());
 
         List<Nuclide> actual = service.getAllNuclides();
         assertEquals(model.getNuclideId(), actual.get(0).getNuclideId());
@@ -222,33 +221,6 @@ class DBServiceImplTest extends DBTest {
         doReturn(exp).when(service).getLimited(limitsId);
         doReturn(exp).when(service).getCiReportQuan(nuclideId);
         doReturn(exp).when(service).getTBqReportQuan(nuclideId);
-
-//        when(service.getA1Dao()).thenReturn(a1Dao);
-//        when(a1Dao.getA1(nuclideId)).thenReturn(exp);
-//
-//        when(service.getA2Dao()).thenReturn(a2Dao);
-//        when(a2Dao.getA2(nuclideId)).thenReturn(exp);
-//
-//        when(service.getDecayConstantDao()).thenReturn(decayConstantDao);
-//        when(decayConstantDao.getDecayConstant(nuclideId)).thenReturn(exp);
-//
-//        when(service.getExemptConDao()).thenReturn(exemptConDao);
-//        when(exemptConDao.getExemptConcentration(nuclideId)).thenReturn(exp);
-//
-//        when(service.getExemptLimitDao()).thenReturn(exemptLimitDao);
-//        when(exemptLimitDao.getExemptLimit(nuclideId)).thenReturn(exp);
-//
-//        when(service.getHalfLifeDao()).thenReturn(halfLifeDao);
-//        when(halfLifeDao.getHalfLife(nuclideId)).thenReturn(exp);
-//
-//        when(service.getLimitsDao()).thenReturn(limitsDao);
-//        when(limitsDao.getIALimited(limitsId)).thenReturn(exp);
-//        when(limitsDao.getIAPackage(limitsId)).thenReturn(exp);
-//        when(limitsDao.getLimited(limitsId)).thenReturn(exp);
-//
-//        when(service.getReportableQuanDao()).thenReturn(reportableQuanDao);
-//        when(reportableQuanDao.getCi(nuclideId)).thenReturn(exp);
-//        when(reportableQuanDao.getTBq(nuclideId)).thenReturn(exp);
     }
 
     @Test

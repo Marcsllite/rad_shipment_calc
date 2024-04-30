@@ -117,7 +117,7 @@ public final class Conversions {
     }
 
     private static boolean isNotValidValue(RadBigDecimal value) {
-        return value == null || value.isInfinity() || value.isNegativeInfinity();
+        return value == null;
     }
 
     /*//////////////////////////////////////////////// CONVERSIONS ///////////////////////////////////////////////////*/

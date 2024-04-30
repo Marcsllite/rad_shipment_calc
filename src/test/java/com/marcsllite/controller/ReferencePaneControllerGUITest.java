@@ -174,13 +174,13 @@ class ReferencePaneControllerGUITest extends GUITest {
     protected void validateRefDataForSelectedRow(int index) {
         NuclideConstants isoConstants = tableViewSearch.getItems().get(index).getConstants();
 
-        assertEquals(String.valueOf(isoConstants.getA1()), txtFieldA1.getText());
-        assertEquals(String.valueOf(isoConstants.getA2()), txtFieldA2.getText());
-        assertEquals(String.valueOf(isoConstants.getDecayConstant()), txtFieldDecayConst.getText());
-        assertEquals(String.valueOf(isoConstants.getExemptConcentration()), txtFieldExemptCon.getText());
-        assertEquals(String.valueOf(isoConstants.getExemptLimit()), txtFieldExemptLim.getText());
-        assertEquals(String.valueOf(isoConstants.getHalfLife()), txtFieldHalfLife.getText());
-        assertEquals(String.valueOf(isoConstants.getTeraBqReportQuan()), txtFieldReportQuan.getText());
+        assertEquals(isoConstants.getA1().toDisplayString(), txtFieldA1.getText());
+        assertEquals(isoConstants.getA2().toDisplayString(), txtFieldA2.getText());
+        assertEquals(isoConstants.getDecayConstant().toDisplayString(), txtFieldDecayConst.getText());
+        assertEquals(isoConstants.getExemptConcentration().toDisplayString(), txtFieldExemptCon.getText());
+        assertEquals(isoConstants.getExemptLimit().toDisplayString(), txtFieldExemptLim.getText());
+        assertEquals(isoConstants.getHalfLife().toDisplayString(), txtFieldHalfLife.getText());
+        assertEquals(isoConstants.getTeraBqReportQuan().toDisplayString(), txtFieldReportQuan.getText());
     }
 
     protected void validateRefTextFields(TextField field, String promptTxt) {
@@ -204,15 +204,15 @@ class ReferencePaneControllerGUITest extends GUITest {
     }
 
     protected void verifyRadUnitConversions(ChoiceBox<String> choiceBox, TextField field, RadBigDecimal original) {
-        String exp = String.valueOf(original);
+        String exp = original.toDisplayString();
         assertEquals(exp, field.getText());
 
         interact(() -> choiceBox.getSelectionModel().select(Conversions.RadUnit.CURIE.getVal()));
-        exp = Conversions.bqToCi(original).toString();
+        exp = Conversions.bqToCi(original).toDisplayString();
         assertEquals(exp, field.getText());
 
         interact(() -> choiceBox.getSelectionModel().select(Conversions.RadUnit.BECQUEREL.getVal()));
-        exp = String.valueOf(original);
+        exp = Conversions.ciToBq(new RadBigDecimal(exp)).toDisplayString();
         assertEquals(exp, field.getText());
     }
 
@@ -230,7 +230,7 @@ class ReferencePaneControllerGUITest extends GUITest {
     }
 
     protected void verifyPrefixConversions(ComboBox<String> comboBox, TextField field, Conversions.SIPrefix start, RadBigDecimal original) {
-        String exp = String.valueOf(original);
+        String exp = original.toDisplayString();
         assertEquals(exp, field.getText());
 
         Optional<Conversions.SIPrefix> end = Arrays.stream(Conversions.SIPrefix.values()).findAny();
@@ -239,11 +239,13 @@ class ReferencePaneControllerGUITest extends GUITest {
         interact(() ->comboBox.getSelectionModel().select(end.get().getVal()));
         exp = Conversions.convertToPrefix(original,
                 start,
-                end.get()).toString();
+                end.get()).toDisplayString();
         assertEquals(exp, field.getText());
 
         interact(() ->comboBox.getSelectionModel().select(start.getVal()));
-        exp = String.valueOf(original);
+        exp = Conversions.convertToPrefix(new RadBigDecimal(exp),
+            end.get(),
+            start).toDisplayString();
         assertEquals(exp, field.getText());
     }
 

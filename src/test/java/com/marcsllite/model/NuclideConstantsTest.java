@@ -11,7 +11,12 @@ import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetSystemProperty;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class NuclideConstantsTest extends DBTest {
@@ -58,6 +63,7 @@ class NuclideConstantsTest extends DBTest {
         NuclideModelId nuclideId = new NuclideModelId(DEFAULT_SYMBOL, DEFAULT_MASS_NUMBER);
         LimitsModelId limitsId = new LimitsModelId(DEFAULT_STATE, DEFAULT_FORM);
         RadBigDecimal expected = RadBigDecimal.valueOf(3.14159f);
+        NuclideConstants constantsSpy = spy(constants);
         
         when(dbService.getA1(nuclideId)).thenReturn(expected);
         when(dbService.getA2(nuclideId)).thenReturn(expected);
@@ -71,19 +77,34 @@ class NuclideConstantsTest extends DBTest {
         when(dbService.getCiReportQuan(nuclideId)).thenReturn(expected);
         when(dbService.getTBqReportQuan(nuclideId)).thenReturn(expected);
 
-        constants.dbInit(nuclideId, limitsId);
-
-        assertEquals(expected, constants.getA1());
-        assertEquals(expected, constants.getA2());
-        assertEquals(expected, constants.getDecayConstant());
-        assertEquals(expected, constants.getExemptConcentration());
-        assertEquals(expected, constants.getExemptLimit());
-        assertEquals(expected, constants.getHalfLife());
-        assertEquals(expected, constants.getIaLimitedLimit());
-        assertEquals(expected, constants.getIaPackageLimit());
-        assertEquals(expected, constants.getLimitedLimit());
-        assertEquals(expected, constants.getCurieReportQuan());
-        assertEquals(expected, constants.getTeraBqReportQuan());
+        assertFalse(constantsSpy.isInit());
+        constantsSpy.dbInit(nuclideId, limitsId);
+        constantsSpy.dbInit(nuclideId, limitsId);
+        assertTrue(constantsSpy.isInit());
+        
+        assertEquals(expected, constantsSpy.getA1());
+        assertEquals(expected, constantsSpy.getA2());
+        assertEquals(expected, constantsSpy.getDecayConstant());
+        assertEquals(expected, constantsSpy.getExemptConcentration());
+        assertEquals(expected, constantsSpy.getExemptLimit());
+        assertEquals(expected, constantsSpy.getHalfLife());
+        assertEquals(expected, constantsSpy.getIaLimitedLimit());
+        assertEquals(expected, constantsSpy.getIaPackageLimit());
+        assertEquals(expected, constantsSpy.getLimitedLimit());
+        assertEquals(expected, constantsSpy.getCurieReportQuan());
+        assertEquals(expected, constantsSpy.getTeraBqReportQuan());
+        
+        verify(constantsSpy).setA1(any(RadBigDecimal.class));
+        verify(constantsSpy).setA2(any(RadBigDecimal.class));
+        verify(constantsSpy).setDecayConstant(any(RadBigDecimal.class));
+        verify(constantsSpy).setExemptConcentration(any(RadBigDecimal.class));
+        verify(constantsSpy).setExemptLimit(any(RadBigDecimal.class));
+        verify(constantsSpy).setHalfLife(any(RadBigDecimal.class));
+        verify(constantsSpy).setIaLimitedLimit(any(RadBigDecimal.class));
+        verify(constantsSpy).setIaPackageLimit(any(RadBigDecimal.class));
+        verify(constantsSpy).setLimitedLimit(any(RadBigDecimal.class));
+        verify(constantsSpy).setCurieReportQuan(any(RadBigDecimal.class));
+        verify(constantsSpy).setTeraBqReportQuan(any(RadBigDecimal.class));
     }
 
     @Test

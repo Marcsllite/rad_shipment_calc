@@ -169,10 +169,10 @@ public class ReferencePaneController extends BaseController {
 
             if(Conversions.RadUnit.CURIE.getVal().equals(oldV) &&
                 Conversions.RadUnit.BECQUEREL.getVal().equals(newV)) {
-                field.setText(Conversions.ciToBq(prev).toString());
+                field.setText(Conversions.ciToBq(prev).toDisplayString());
             } else if(Conversions.RadUnit.BECQUEREL.getVal().equals(oldV) &&
                 Conversions.RadUnit.CURIE.getVal().equals(newV)) {
-                field.setText(Conversions.bqToCi(prev).toString());
+                field.setText(Conversions.bqToCi(prev).toDisplayString());
             }
         } catch (NumberFormatException ignored) {
             // ignored
@@ -187,7 +187,7 @@ public class ReferencePaneController extends BaseController {
                 Conversions.SIPrefix.toSIPrefix(newV));
 
             unbindControl(field);
-            field.setText(converted.toString());
+            field.setText(converted.toDisplayString());
         } catch (NumberFormatException ignored) {
             // ignored
         }
@@ -232,6 +232,7 @@ public class ReferencePaneController extends BaseController {
     protected void setupTableDataLinking(Nuclide nuclide) {
         unbindNuclideConstants();
         if(nuclide != null) {
+            nuclide.getConstants().dbInit(nuclide.getNuclideId(), nuclide.getLimitsId());
             bindNuclideConstants(nuclide);
             selectBaseDropDownItems();
         }

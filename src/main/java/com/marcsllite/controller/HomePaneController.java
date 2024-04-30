@@ -140,7 +140,7 @@ public class HomePaneController extends BaseController {
 
     protected void initTable() {
         tableColNuclide.setCellValueFactory(new PropertyValueFactory<>("nameNotation"));
-        tableColHalfLife.setCellValueFactory(i -> i.getValue().getConstants().halfLifeProperty());
+        tableColHalfLife.setCellValueFactory(i -> i.getValue().getConstants().halfLifeDisplayProperty());
         tableColActivity.setCellValueFactory(new PropertyValueFactory<>("strInitActivity"));
         tableColRefDate.setCellValueFactory(new PropertyValueFactory<>("refDate"));
         tableColMass.setCellValueFactory(new PropertyValueFactory<>("strMass"));

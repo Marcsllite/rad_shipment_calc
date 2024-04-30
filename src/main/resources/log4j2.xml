@@ -17,8 +17,11 @@
     </RollingFile>
   </Appenders>
   <Loggers>
-    <Root level="all">
+    <Root level="debug">
       <AppenderRef ref="file"/>
     </Root>
+    <Logger name="org.hibernate" level="info" additivity="false">
+      <Appender-ref ref="file" level="info" />
+    </Logger>
   </Loggers>
 </Configuration>
