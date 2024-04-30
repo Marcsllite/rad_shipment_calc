@@ -52,10 +52,11 @@ class ShipmentModelTest {
     }
 
     @Test
-    void testSetMass() {
+    void testSetMassStr() {
         RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
-        model.setMass(exp);
+        model.setMassStr(exp.toString());
         assertEquals(exp, model.getMass());
+        assertEquals(exp.toString(), model.getMassStr());
     }
 
     @Test

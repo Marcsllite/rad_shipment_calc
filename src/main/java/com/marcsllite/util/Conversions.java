@@ -46,6 +46,11 @@ public final class Conversions {
     public static RadBigDecimal convertToBase(RadBigDecimal value, SIPrefix prefix) throws InvalidParameterException {
         if(value == null) throw new InvalidParameterException(INVALID_VALUE);
         if(prefix == null) throw new InvalidParameterException("Invalid SI Prefix");
+
+        if(value.isInfinity() || value.isNegativeInfinity()) {
+            return value;
+        }
+        
         switch(prefix) {
             case YOTTA: return value.multiply(YOTTA);
             case ZETTA: return value.multiply(ZETTA);
@@ -81,7 +86,7 @@ public final class Conversions {
      * @return the value converted from the start prefix to the end prefix
      */
     public static RadBigDecimal convertToPrefix(RadBigDecimal value, SIPrefix start, SIPrefix end) throws InvalidParameterException {
-        if(value == null) throw new InvalidParameterException(INVALID_VALUE);
+        if(isNotValidValue(value)) throw new InvalidParameterException(INVALID_VALUE);
         if(start == null) throw new InvalidParameterException("Invalid starting SI Prefix");
         if(end == null) throw new InvalidParameterException("Invalid ending SI Prefix");
         
@@ -110,7 +115,11 @@ public final class Conversions {
             default: return baseValue;
         }
     }
-    
+
+    private static boolean isNotValidValue(RadBigDecimal value) {
+        return value == null || value.isInfinity() || value.isNegativeInfinity();
+    }
+
     /*//////////////////////////////////////////////// CONVERSIONS ///////////////////////////////////////////////////*/
     /**
      * Function to convert the given becquerel to curies
@@ -119,7 +128,10 @@ public final class Conversions {
      * @return the converted curie value
      */
     public static RadBigDecimal bqToCi(RadBigDecimal bq) throws InvalidParameterException {
-        if(bq == null) throw new InvalidParameterException(INVALID_VALUE);
+        if(isNotValidValue(bq)) {
+            throw new InvalidParameterException(INVALID_VALUE);
+        }
+        
         return bq.multiply(RadBigDecimal.valueOf(2.7d).multiply(new RadBigDecimal(BigDecimal.TEN).pow(-11)));
     }
 
@@ -130,7 +142,10 @@ public final class Conversions {
      * @return the converted becquerel value
      */
     public static RadBigDecimal ciToBq(RadBigDecimal ci) throws InvalidParameterException {
-        if(ci == null) throw new InvalidParameterException(INVALID_VALUE);
+        if(isNotValidValue(ci)) {
+            throw new InvalidParameterException(INVALID_VALUE);
+        }
+
         return ci.multiply(RadBigDecimal.valueOf(3.7d).multiply(new RadBigDecimal(BigDecimal.TEN).pow(10)));
     }
 
@@ -141,7 +156,10 @@ public final class Conversions {
      * @return the converted rad value
      */
     public static RadBigDecimal gyToRad(RadBigDecimal gy) throws InvalidParameterException {
-        if(gy == null) throw new InvalidParameterException(INVALID_VALUE);
+        if(isNotValidValue(gy)) {
+            throw new InvalidParameterException(INVALID_VALUE);
+        }
+        
         return gy.multiply(new RadBigDecimal(BigDecimal.TEN).pow(2));
     }
 
@@ -152,7 +170,10 @@ public final class Conversions {
      * @return the converted gray value
      */
     public static RadBigDecimal radToGy(RadBigDecimal rad) throws InvalidParameterException {
-        if(rad == null) throw new InvalidParameterException(INVALID_VALUE);
+        if(isNotValidValue(rad)) {
+            throw new InvalidParameterException(INVALID_VALUE);
+        }
+        
         return rad.multiply(new RadBigDecimal(BigDecimal.TEN).pow(-2));
     }
 
@@ -163,7 +184,10 @@ public final class Conversions {
      * @return the converted rem value
      */
     public static RadBigDecimal svToRem(RadBigDecimal sv) throws InvalidParameterException {
-        if(sv == null) throw new InvalidParameterException(INVALID_VALUE);
+        if(isNotValidValue(sv)) {
+            throw new InvalidParameterException(INVALID_VALUE);
+        }
+        
         return sv.multiply(new RadBigDecimal(BigDecimal.TEN).pow(2));
     }
 
@@ -174,7 +198,10 @@ public final class Conversions {
      * @return the converted sievert value
      */
     public static RadBigDecimal remToSv(RadBigDecimal rem) throws InvalidParameterException {
-        if(rem == null) throw new InvalidParameterException(INVALID_VALUE);
+        if(isNotValidValue(rem)) {
+            throw new InvalidParameterException(INVALID_VALUE);
+        }
+        
         return rem.multiply(new RadBigDecimal(BigDecimal.TEN).pow(-2));
     }
 
@@ -185,7 +212,10 @@ public final class Conversions {
      * @return the converted roentgen value
      */
     public static RadBigDecimal ckgToR(RadBigDecimal ckg) throws InvalidParameterException {
-        if(ckg == null) throw new InvalidParameterException(INVALID_VALUE);
+        if(isNotValidValue(ckg)) {
+            throw new InvalidParameterException(INVALID_VALUE);
+        }
+
         return ckg.multiply(RadBigDecimal.valueOf(3.88d).multiply(new RadBigDecimal(BigDecimal.TEN).pow(3)));
     }
 
@@ -196,7 +226,10 @@ public final class Conversions {
      * @return the converted coulomb/kilogram value
      */
     public static RadBigDecimal rToCkg(RadBigDecimal r) throws InvalidParameterException {
-        if(r == null) throw new InvalidParameterException(INVALID_VALUE);
+        if(isNotValidValue(r)) {
+            throw new InvalidParameterException(INVALID_VALUE);
+        }
+        
         return r.multiply(RadBigDecimal.valueOf(2.58d).multiply(new RadBigDecimal(BigDecimal.TEN).pow(-4)));
     }
 
@@ -399,7 +432,7 @@ public final class Conversions {
         DECI("Deci (d)"),
         CENTI("Centi (c)"),
         MILLI("Milli (m)"),
-        MICRO("Micro (\u00B5)"),
+        MICRO("Micro (µ)"),
         NANO("Nano (n)"),
         PICO("Pico (p)"),
         FEMTO("Femto (f)"),

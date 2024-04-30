@@ -8,6 +8,8 @@ import java.math.RoundingMode;
 public class RadBigDecimal extends BigDecimal {
     public static final String INFINITY_STRING = "Infinity";
     public static final String NEG_INFINITY_STRING = "-Infinity";
+    public static final String INFINITY_DISPLAY_STRING = "Unlimited";
+    public static final String NEG_INFINITY_DISPLAY_STRING = "No data";
     public static final double INFINITY_DOUBLE = Double.MAX_VALUE;
     public static final double NEG_INFINITY_DOUBLE = -2.0D;
     public static final int DEFAULT_PRECISION = 2;
@@ -21,9 +23,14 @@ public class RadBigDecimal extends BigDecimal {
     public RadBigDecimal(String val) {
         super(parseString(val), DEFAULT_CONTEXT);
         setInfinity(INFINITY_STRING.equalsIgnoreCase(val) ||
-            val != null && Double.parseDouble(val) == INFINITY_DOUBLE);
+            INFINITY_DISPLAY_STRING.equalsIgnoreCase(val));
         setNegativeInfinity(NEG_INFINITY_STRING.equalsIgnoreCase(val) ||
-            val != null && Double.parseDouble(val) == NEG_INFINITY_DOUBLE);
+            NEG_INFINITY_DISPLAY_STRING.equalsIgnoreCase(val));
+
+        if(!isInfinity() && !isNegativeInfinity()) {
+            setInfinity(val != null && Double.parseDouble(val) == INFINITY_DOUBLE);
+            setNegativeInfinity(val != null && Double.parseDouble(val) == NEG_INFINITY_DOUBLE);
+        }
     }
 
     public RadBigDecimal(BigDecimal val) { this(val.toString()); }
@@ -45,9 +52,11 @@ public class RadBigDecimal extends BigDecimal {
     protected static String parseString(String str) {
         if(str == null) {
             return "0";
-        } else if (INFINITY_STRING.equalsIgnoreCase(str)) {
+        } else if (INFINITY_STRING.equalsIgnoreCase(str) ||
+            INFINITY_DISPLAY_STRING.equalsIgnoreCase(str)) {
             return Double.toString(INFINITY_DOUBLE);
-        } else if (NEG_INFINITY_STRING.equalsIgnoreCase(str)) {
+        } else if (NEG_INFINITY_STRING.equalsIgnoreCase(str) ||
+            NEG_INFINITY_DISPLAY_STRING.equalsIgnoreCase(str)) {
             return Double.toString(NEG_INFINITY_DOUBLE);
         }
 
@@ -258,6 +267,17 @@ public class RadBigDecimal extends BigDecimal {
 
         if(this.isNegativeInfinity()) {
             return NEG_INFINITY_STRING;
+        }
+        return super.toString();
+    }
+
+    public String toDisplayString() {
+        if(this.isInfinity()) {
+            return INFINITY_DISPLAY_STRING;
+        }
+
+        if(this.isNegativeInfinity()) {
+            return NEG_INFINITY_DISPLAY_STRING;
         }
         return super.toString();
     }

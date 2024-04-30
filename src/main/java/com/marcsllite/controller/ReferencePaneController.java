@@ -152,6 +152,7 @@ public class ReferencePaneController extends BaseController {
         selectDropDownItem(choiceBoxRefReportQuanRadUnit, Conversions.RadUnit.BECQUEREL.getVal());
     }
 
+    @SuppressWarnings("unchecked")
     protected void selectDropDownItem(Control list, String selection) {
         if (list instanceof ChoiceBox) {
             ((ChoiceBox<String>) list).getSelectionModel().select(selection);
@@ -238,13 +239,13 @@ public class ReferencePaneController extends BaseController {
 
     protected void bindNuclideConstants(Nuclide nuclide) {
         if(nuclide != null) {
-            txtFieldA1.textProperty().bind(nuclide.getConstants().a1Property().asString());
-            txtFieldA2.textProperty().bind(nuclide.getConstants().a2Property().asString());
-            txtFieldDecayConst.textProperty().bind(nuclide.getConstants().decayConstantProperty().asString());
-            txtFieldExemptCon.textProperty().bind(nuclide.getConstants().exemptConcentrationProperty().asString());
-            txtFieldExemptLim.textProperty().bind(nuclide.getConstants().exemptLimitProperty().asString());
-            txtFieldHalfLife.textProperty().bind(nuclide.getConstants().halfLifeProperty().asString());
-            txtFieldReportQuan.textProperty().bind(nuclide.getConstants().teraBqReportQuanProperty().asString());
+            txtFieldA1.textProperty().bind(nuclide.getConstants().a1Property());
+            txtFieldA2.textProperty().bind(nuclide.getConstants().a2Property());
+            txtFieldDecayConst.textProperty().bind(nuclide.getConstants().decayConstantProperty());
+            txtFieldExemptCon.textProperty().bind(nuclide.getConstants().exemptConcentrationProperty());
+            txtFieldExemptLim.textProperty().bind(nuclide.getConstants().exemptLimitProperty());
+            txtFieldHalfLife.textProperty().bind(nuclide.getConstants().halfLifeProperty());
+            txtFieldReportQuan.textProperty().bind(nuclide.getConstants().teraBqReportQuanProperty());
         }
     }
     protected void unbindNuclideConstants() {

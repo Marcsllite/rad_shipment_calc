@@ -64,8 +64,14 @@ class RadBigDecimalTest {
         String expStr = RadBigDecimal.INFINITY_STRING;
         assertEquals(new RadBigDecimal(expStr), RadBigDecimal.valueOf(exp));
 
+        expStr = RadBigDecimal.INFINITY_DISPLAY_STRING;
+        assertEquals(new RadBigDecimal(expStr), RadBigDecimal.valueOf(exp));
+
         exp = (long) RadBigDecimal.NEG_INFINITY_DOUBLE;
         expStr = RadBigDecimal.NEG_INFINITY_STRING;
+        assertEquals(new RadBigDecimal(expStr), RadBigDecimal.valueOf(exp));
+
+        expStr = RadBigDecimal.NEG_INFINITY_DISPLAY_STRING;
         assertEquals(new RadBigDecimal(expStr), RadBigDecimal.valueOf(exp));
 
         exp = 5L;
@@ -79,8 +85,14 @@ class RadBigDecimalTest {
         String expStr = RadBigDecimal.INFINITY_STRING;
         assertEquals(new RadBigDecimal(expStr), RadBigDecimal.valueOf(exp));
 
+        expStr = RadBigDecimal.INFINITY_DISPLAY_STRING;
+        assertEquals(new RadBigDecimal(expStr), RadBigDecimal.valueOf(exp));
+
         exp = RadBigDecimal.NEG_INFINITY_DOUBLE;
         expStr = RadBigDecimal.NEG_INFINITY_STRING;
+        assertEquals(new RadBigDecimal(expStr), RadBigDecimal.valueOf(exp));
+
+        expStr = RadBigDecimal.NEG_INFINITY_DISPLAY_STRING;
         assertEquals(new RadBigDecimal(expStr), RadBigDecimal.valueOf(exp));
 
         exp = 5D;
@@ -188,6 +200,15 @@ class RadBigDecimalTest {
         assertEquals(RadBigDecimal.INFINITY_STRING, RadBigDecimal.INFINITY_OBJ.toString());
         assertEquals(RadBigDecimal.NEG_INFINITY_STRING, RadBigDecimal.NEG_INFINITY_OBJ.toString());
         assertEquals(exp, rbd.toString());
+    }
+
+    @Test
+    void testToDisplayString() {
+        String exp = "5";
+        RadBigDecimal rbd = new RadBigDecimal(exp);
+        assertEquals(RadBigDecimal.INFINITY_DISPLAY_STRING, RadBigDecimal.INFINITY_OBJ.toDisplayString());
+        assertEquals(RadBigDecimal.NEG_INFINITY_DISPLAY_STRING, RadBigDecimal.NEG_INFINITY_OBJ.toDisplayString());
+        assertEquals(exp, rbd.toDisplayString());
     }
 
     @Test

@@ -5,7 +5,6 @@ import com.marcsllite.model.Nuclide;
 import com.marcsllite.model.PTableColumn;
 import com.marcsllite.model.Shipment;
 import com.marcsllite.util.FXMLView;
-import com.marcsllite.util.RadBigDecimal;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
@@ -31,7 +30,7 @@ public class HomePaneController extends BaseController {
     @FXML Button btnRemove;
     @FXML TableView<Nuclide> tableViewHome;
     @FXML PTableColumn<Nuclide, String> tableColNuclide;
-    @FXML PTableColumn<Nuclide, RadBigDecimal> tableColHalfLife;
+    @FXML PTableColumn<Nuclide, String> tableColHalfLife;
     @FXML PTableColumn<Nuclide, String> tableColActivity;
     @FXML PTableColumn<Nuclide, LocalDate> tableColRefDate;
     @FXML PTableColumn<Nuclide, String> tableColMass;

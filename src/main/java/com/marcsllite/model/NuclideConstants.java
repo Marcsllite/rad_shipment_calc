@@ -5,24 +5,24 @@ import com.marcsllite.model.db.NuclideModelId;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.RadBigDecimal;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Objects;
 
 public class NuclideConstants {
     private DBService dbService;
     private static final RadBigDecimal DEFAULT_VAL = RadBigDecimal.NEG_INFINITY_OBJ;
-    private final SimpleObjectProperty<RadBigDecimal> a1 = new SimpleObjectProperty<>();
-    private final SimpleObjectProperty<RadBigDecimal> a2 = new SimpleObjectProperty<>();
-    private final SimpleObjectProperty<RadBigDecimal> decayConstant = new SimpleObjectProperty<>();
-    private final SimpleObjectProperty<RadBigDecimal> exemptConcentration = new SimpleObjectProperty<>();
-    private final SimpleObjectProperty<RadBigDecimal> exemptLimit = new SimpleObjectProperty<>();
-    private final SimpleObjectProperty<RadBigDecimal> halfLife = new SimpleObjectProperty<>();
-    private final SimpleObjectProperty<RadBigDecimal> iaLimitedLimit = new SimpleObjectProperty<>();
-    private final SimpleObjectProperty<RadBigDecimal> iaPackageLimit = new SimpleObjectProperty<>();
-    private final SimpleObjectProperty<RadBigDecimal> limitedLimit = new SimpleObjectProperty<>();
-    private final SimpleObjectProperty<RadBigDecimal> curieReportQuan = new SimpleObjectProperty<>();
-    private final SimpleObjectProperty<RadBigDecimal> teraBqReportQuan = new SimpleObjectProperty<>();
+    private final SimpleStringProperty a1 = new SimpleStringProperty();
+    private final SimpleStringProperty a2 = new SimpleStringProperty();
+    private final SimpleStringProperty decayConstant = new SimpleStringProperty();
+    private final SimpleStringProperty exemptConcentration = new SimpleStringProperty();
+    private final SimpleStringProperty exemptLimit = new SimpleStringProperty();
+    private final SimpleStringProperty halfLife = new SimpleStringProperty();
+    private final SimpleStringProperty iaLimitedLimit = new SimpleStringProperty();
+    private final SimpleStringProperty iaPackageLimit = new SimpleStringProperty();
+    private final SimpleStringProperty limitedLimit = new SimpleStringProperty();
+    private final SimpleStringProperty curieReportQuan = new SimpleStringProperty();
+    private final SimpleStringProperty teraBqReportQuan = new SimpleStringProperty();
 
     public NuclideConstants() {
         setDbService(new DBServiceImpl());
@@ -67,135 +67,135 @@ public class NuclideConstants {
     }
 
     public RadBigDecimal getA1() {
-        return a1Property().get();
+        return new RadBigDecimal(a1Property().get());
     }
 
-    public SimpleObjectProperty<RadBigDecimal> a1Property() {
+    public SimpleStringProperty a1Property() {
         return a1;
     }
 
     public void setA1(RadBigDecimal a1) {
-        a1Property().set(a1);
+        a1Property().set(a1.toDisplayString());
     }
 
     public RadBigDecimal getA2() {
-        return a2Property().get();
+        return new RadBigDecimal(a2Property().get());
     }
 
-    public SimpleObjectProperty<RadBigDecimal> a2Property() {
+    public SimpleStringProperty a2Property() {
         return a2;
     }
 
     public void setA2(RadBigDecimal a2) {
-        a2Property().set(a2);
+        a2Property().set(a2.toDisplayString());
     }
 
     public RadBigDecimal getDecayConstant() {
-        return decayConstantProperty().get();
+        return new RadBigDecimal(decayConstantProperty().get());
     }
 
-    public SimpleObjectProperty<RadBigDecimal> decayConstantProperty() {
+    public SimpleStringProperty decayConstantProperty() {
         return decayConstant;
     }
 
     public void setDecayConstant(RadBigDecimal decayConstant) {
-        decayConstantProperty().set(decayConstant);
+        decayConstantProperty().set(decayConstant.toDisplayString());
     }
 
     public RadBigDecimal getExemptConcentration() {
-        return exemptConcentrationProperty().get();
+        return new RadBigDecimal(exemptConcentrationProperty().get());
     }
 
-    public SimpleObjectProperty<RadBigDecimal> exemptConcentrationProperty() {
+    public SimpleStringProperty exemptConcentrationProperty() {
         return exemptConcentration;
     }
 
     public void setExemptConcentration(RadBigDecimal exemptConcentration) {
-        exemptConcentrationProperty().set(exemptConcentration);
+        exemptConcentrationProperty().set(exemptConcentration.toDisplayString());
     }
 
     public RadBigDecimal getExemptLimit() {
-        return exemptLimitProperty().get();
+        return new RadBigDecimal(exemptLimitProperty().get());
     }
 
-    public SimpleObjectProperty<RadBigDecimal> exemptLimitProperty() {
+    public SimpleStringProperty exemptLimitProperty() {
         return exemptLimit;
     }
 
     public void setExemptLimit(RadBigDecimal exemptLimit) {
-        exemptLimitProperty().set(exemptLimit);
+        exemptLimitProperty().set(exemptLimit.toDisplayString());
     }
 
     public RadBigDecimal getHalfLife() {
-        return halfLifeProperty().get();
+        return new RadBigDecimal(halfLifeProperty().get());
     }
 
-    public SimpleObjectProperty<RadBigDecimal> halfLifeProperty() {
+    public SimpleStringProperty halfLifeProperty() {
         return halfLife;
     }
 
     public void setHalfLife(RadBigDecimal halfLife) {
-        halfLifeProperty().set(halfLife);
+        halfLifeProperty().set(halfLife.toDisplayString());
     }
 
     public RadBigDecimal getIaLimitedLimit() {
-        return iaLimitedLimitProperty().get();
+        return new RadBigDecimal(iaLimitedLimitProperty().get());
     }
 
-    public SimpleObjectProperty<RadBigDecimal> iaLimitedLimitProperty() {
+    public SimpleStringProperty iaLimitedLimitProperty() {
         return iaLimitedLimit;
     }
 
     public void setIaLimitedLimit(RadBigDecimal iaLimitedLimit) {
-        iaLimitedLimitProperty().set(iaLimitedLimit);
+        iaLimitedLimitProperty().set(iaLimitedLimit.toDisplayString());
     }
 
     public RadBigDecimal getIaPackageLimit() {
-        return iaPackageLimitProperty().get();
+        return new RadBigDecimal(iaPackageLimitProperty().get());
     }
 
-    public SimpleObjectProperty<RadBigDecimal> iaPackageLimitProperty() {
+    public SimpleStringProperty iaPackageLimitProperty() {
         return iaPackageLimit;
     }
 
     public void setIaPackageLimit(RadBigDecimal iaPackageLimit) {
-        iaPackageLimitProperty().set(iaPackageLimit);
+        iaPackageLimitProperty().set(iaPackageLimit.toDisplayString());
     }
 
     public RadBigDecimal getLimitedLimit() {
-        return limitedLimitProperty().get();
+        return new RadBigDecimal(limitedLimitProperty().get());
     }
 
-    public SimpleObjectProperty<RadBigDecimal> limitedLimitProperty() {
+    public SimpleStringProperty limitedLimitProperty() {
         return limitedLimit;
     }
 
     public void setLimitedLimit(RadBigDecimal limitedLimit) {
-        limitedLimitProperty().set(limitedLimit);
+        limitedLimitProperty().set(limitedLimit.toDisplayString());
     }
 
     public RadBigDecimal getCurieReportQuan() {
-        return curieReportQuanProperty().get();
+        return new RadBigDecimal(curieReportQuanProperty().get());
     }
 
-    public SimpleObjectProperty<RadBigDecimal> curieReportQuanProperty() {
+    public SimpleStringProperty curieReportQuanProperty() {
         return curieReportQuan;
     }
 
     public void setCurieReportQuan(RadBigDecimal curieReportQuan) {
-        curieReportQuanProperty().set(curieReportQuan);
+        curieReportQuanProperty().set(curieReportQuan.toDisplayString());
     }
 
     public RadBigDecimal getTeraBqReportQuan() {
-        return teraBqReportQuanProperty().get();
+        return new RadBigDecimal(teraBqReportQuanProperty().get());
     }
 
-    public SimpleObjectProperty<RadBigDecimal> teraBqReportQuanProperty() {
+    public SimpleStringProperty teraBqReportQuanProperty() {
         return teraBqReportQuan;
     }
 
     public void setTeraBqReportQuan(RadBigDecimal teraBqReportQuan) {
-        teraBqReportQuanProperty().set(teraBqReportQuan);
+        teraBqReportQuanProperty().set(teraBqReportQuan.toDisplayString());
     }
 
     @Override
