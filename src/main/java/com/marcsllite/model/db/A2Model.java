@@ -23,7 +23,6 @@ public class A2Model extends BaseDataModel {
     }
 
     public A2Model(NuclideModelId nuclideId, String value) {
-        super(nuclideId, value);
-        setBasePrefix(Conversions.SIPrefix.TERA);
+        super(nuclideId, value, Conversions.SIPrefix.TERA);
     }
 }

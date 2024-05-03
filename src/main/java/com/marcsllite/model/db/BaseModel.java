@@ -18,6 +18,14 @@ public abstract class BaseModel implements Serializable {
     @Transient
     private Conversions.SIPrefix basePrefix;
 
+    BaseModel() {
+        this(Conversions.SIPrefix.BASE);
+    }
+
+    BaseModel(Conversions.SIPrefix basePrefix) {
+        this.basePrefix = basePrefix;
+    }
+
     public Conversions.SIPrefix getBasePrefix() {
         return basePrefix;
     }

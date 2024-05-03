@@ -28,9 +28,10 @@ public class NuclideModel extends BaseModel {
     }
 
     public NuclideModel(int atomicNumber, String name, NuclideModelId nuclideId) {
-        setAtomicNumber(atomicNumber);
-        setNuclideId(nuclideId);
-        setName(name);
+        super(null);
+        this.atomicNumber = atomicNumber;
+        this.name = name;
+        this.nuclideId = nuclideId;
     }
 
     public int getAtomicNumber() {

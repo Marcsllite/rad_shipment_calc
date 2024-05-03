@@ -25,9 +25,10 @@ public class ReportableQuantityModel extends BaseModel {
     }
 
     public ReportableQuantityModel(NuclideModelId nuclideId, String curieStr, String teraBqStr) {
-        setNuclideId(nuclideId);
-        setCurieStr(curieStr);
-        setTeraBqStr(teraBqStr);
+        super(null);
+        this.nuclideId = nuclideId;
+        this.curieStr = curieStr;
+        this.teraBqStr = teraBqStr;
     }
 
     public NuclideModelId getNuclideId() {

@@ -1,6 +1,5 @@
 package com.marcsllite.model.db;
 
-import com.marcsllite.util.Conversions;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
@@ -15,6 +14,5 @@ public class ExemptLimitModel extends BaseDataModel {
 
     public ExemptLimitModel(NuclideModelId nuclideId, String value) {
         super(nuclideId, value);
-        setBasePrefix(Conversions.SIPrefix.BASE);
     }
 }

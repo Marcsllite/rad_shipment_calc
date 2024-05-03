@@ -19,8 +19,8 @@ public class NuclideModelId implements Serializable {
         this("XX", "1");
     }
     public NuclideModelId(String symbol, String massNumber) {
-        setSymbol(symbol);
-        setMassNumber(massNumber);
+        this.symbol = symbol;
+        this.massNumber = massNumber;
     }
 
     public String getSymbol() {

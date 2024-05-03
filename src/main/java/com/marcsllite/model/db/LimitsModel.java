@@ -31,10 +31,11 @@ public class LimitsModel extends BaseModel {
     }
 
     public LimitsModel(LimitsModelId limitsId, String iaLimitedStr, String iaPackageStr, String limitedStr) {
-        setLimitsId(limitsId);
-        setIaLimitedStr(iaLimitedStr);
-        setIaPackageStr(iaPackageStr);
-        setLimitedStr(limitedStr);
+        super(null);
+        this.limitsId = limitsId;
+        this.iaLimitedStr = iaLimitedStr;
+        this.iaPackageStr = iaPackageStr;
+        this.limitedStr = limitedStr;
     }
 
     public LimitsModelId getLimitsId() {

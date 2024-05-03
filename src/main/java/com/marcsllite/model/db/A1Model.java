@@ -19,7 +19,6 @@ public class A1Model extends BaseDataModel {
     }
 
     public A1Model(NuclideModelId nuclideId, String value) {
-        super(nuclideId, value);
-        setBasePrefix(Conversions.SIPrefix.TERA);
+        super(nuclideId, value, Conversions.SIPrefix.TERA);
     }
 }

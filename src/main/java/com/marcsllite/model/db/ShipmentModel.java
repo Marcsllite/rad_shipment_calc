@@ -24,7 +24,6 @@ public class ShipmentModel extends BaseModel {
 
     public ShipmentModel() {
         super();
-        setBasePrefix(Conversions.SIPrefix.BASE);
     }
 
     @Id

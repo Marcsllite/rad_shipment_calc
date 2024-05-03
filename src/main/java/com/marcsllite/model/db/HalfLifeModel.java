@@ -13,6 +13,6 @@ public class HalfLifeModel extends BaseDataModel {
     }
 
     public HalfLifeModel(NuclideModelId nuclideId, String value) {
-        super(nuclideId, value);
+        super(nuclideId, value, null);
     }
 }
