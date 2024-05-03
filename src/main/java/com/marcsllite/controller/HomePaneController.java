@@ -42,9 +42,8 @@ public class HomePaneController extends BaseController {
     }
 
     public HomePaneController(PropHandler propHandler) throws IOException {
-        super(propHandler);
-        setPage(Page.HOME);
-        setShipment(new Shipment());
+        super(propHandler, Page.HOME);
+        this.shipment = new Shipment();
     }
 
     @Override

@@ -88,8 +88,7 @@ public class ModifyController extends BaseController {
     }
 
     public ModifyController(BaseController.Page page, PropHandler propHandler) throws IOException {
-        super(propHandler);
-        setPage(page);
+        super(propHandler, page);
     }
 
     public ObservableList<NuclideModel> getNuclides() {

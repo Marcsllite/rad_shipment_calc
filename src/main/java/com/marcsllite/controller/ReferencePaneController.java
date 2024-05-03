@@ -51,8 +51,7 @@ public class ReferencePaneController extends BaseController {
     }
 
     public ReferencePaneController(PropHandler propHandler) throws IOException {
-        super(propHandler);
-        setPage(Page.REFERENCE);
+        super(propHandler, Page.REFERENCE);
     }
 
     @Override

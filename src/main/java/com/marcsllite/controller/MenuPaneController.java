@@ -58,8 +58,7 @@ public class MenuPaneController extends BaseController {
     }
 
     public MenuPaneController(PropHandler propHandler) throws IOException {
-        super(propHandler);
-        setPage(BaseController.Page.MENU);
+        super(propHandler, BaseController.Page.MENU);
     }
 
     /**

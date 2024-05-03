@@ -17,13 +17,14 @@ public abstract class BaseController {
     public enum Page {NONE, MAIN, MENU, HOME, REFERENCE, ADD, EDIT, DETAILS, SUMMARY}
 
     protected BaseController() throws IOException {
-        this(null);
+        this(null, null);
     }
 
-    protected BaseController(PropHandler propHandler) throws IOException {
-        setPropHandler(propHandler == null? new PropHandlerFactory().getPropHandler(null): propHandler);
-        setDbService(new DBServiceImpl(getPropHandler()));
-        setMain(MainController.getInstance());
+    protected BaseController(PropHandler propHandler, Page page) throws IOException {
+        this.propHandler = propHandler == null? new PropHandlerFactory().getPropHandler(null): propHandler;
+        this.dbService = new DBServiceImpl(getPropHandler());
+        this.main = MainController.getInstance();
+        this.page = page == null? Page.NONE : page;
     }
 
     /**

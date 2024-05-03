@@ -35,8 +35,7 @@ public class ShipmentDetailsController extends BaseController {
     }
 
     public ShipmentDetailsController(PropHandler propHandler) throws IOException {
-        super(propHandler);
-        setPage(Page.DETAILS);
+        super(propHandler, Page.DETAILS);
     }
 
     @Override
