@@ -151,11 +151,9 @@ public class MenuPaneController extends BaseController {
         if(btnCurrent.equals(btnShipment)) {
             setButtonColor(btnShipment, getCurrentColor());  // setting the single button and icon to be the current color
             currentPage = Page.SHIPMENT;
-            logr.debug("Navigated to {} page.", btnShipment.getText());
         } else if(btnCurrent.equals(btnReference)) {
             setButtonColor(btnReference, getCurrentColor());  // setting the multiple button and icon to be the current color
             currentPage = Page.REFERENCE;
-            logr.debug("Navigated to {} page.", btnReference.getText());
         }
     }
 
@@ -176,6 +174,7 @@ public class MenuPaneController extends BaseController {
      * @param btnMenu the menu button to set the color for
      * @param color the color to set the menu button and icon
      */
+    @SuppressWarnings("DataFlowIssue")
     protected void setButtonColor(Button btnMenu, ImageHandler.Colors color) throws InvalidParameterException {
         var errMsg = "";
         

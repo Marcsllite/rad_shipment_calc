@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
+@SuppressWarnings("AssertBetweenInconvertibleTypes")
 @ExtendWith(MockitoExtension.class)
 class ShipmentTest {
     Shipment shipment;

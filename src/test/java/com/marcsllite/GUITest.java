@@ -50,11 +50,11 @@ public abstract class GUITest extends FxRobot {
     private FolderHandler folderHandler;
     private DBService dbService;
     private App app;
-    private BaseController.Page page = BaseController.Page.NONE;
+    private BaseController.Page page;
 
     public GUITest(FXMLView view, BaseController.Page page) {
         this.view = view;
-        setPage(page == null? BaseController.Page.NONE : page);
+        this.page = page == null? BaseController.Page.NONE : page;
     }
 
     @BeforeAll

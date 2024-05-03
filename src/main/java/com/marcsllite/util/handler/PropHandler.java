@@ -159,7 +159,7 @@ public class PropHandler extends ResourceBundle {
     }
 
     /**
-     * Convenience function to replace any {0}, {1}, {3}, .. strings
+     * Convenience function to replace any {0}, {1}, {3}... strings
      * in the property file with given parameter values
      *
      * @param propKey the name of the key from the property file
@@ -215,13 +215,13 @@ public class PropHandler extends ResourceBundle {
     /**
      * Convenience function to get multiple Strings from the properties file
      * that all start with the given listName
-     * 
+     * <p>
      * NOTE: all lists must be in the following format in the properties file
      *          <entry key="{listName}">element1|element2|...</entry>
      * where {listName} is the name for the list
      * and a pipe (|) character separates the different elements from one another
      * trailing pipe character will be ignored
-     *      
+     * <p>
      * Example: listName = "si", index = 0    
      *      <entry key="siPrefixes">
      *          Yotta (Y)|

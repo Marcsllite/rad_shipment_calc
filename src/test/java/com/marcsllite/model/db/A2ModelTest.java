@@ -11,7 +11,7 @@ class A2ModelTest {
     private final String DEFAULT_MASS_NUMBER = "1";
     private final NuclideModelId DEFAULT_ID = new NuclideModelId(DEFAULT_SYMBOL, DEFAULT_MASS_NUMBER);
     private final RadBigDecimal DEFAULT_VAL = RadBigDecimal.valueOf(1.0f);
-    A2Model model = new A2Model(DEFAULT_ID, DEFAULT_VAL.toString());
+    final A2Model model = new A2Model(DEFAULT_ID, DEFAULT_VAL.toString());
 
     @Test
     void testConstructor() {

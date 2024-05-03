@@ -11,7 +11,7 @@ class LimitsModelTest {
     private final LimitsModelId.Form DEFAULT_FORM = LimitsModelId.Form.NORMAL;
     private final LimitsModelId DEFAULT_LIMITS_ID = new LimitsModelId(DEFAULT_STATE, DEFAULT_FORM);
     private final RadBigDecimal DEFAULT_VAL = RadBigDecimal.valueOf(1.0f);
-    LimitsModel model = new LimitsModel(DEFAULT_LIMITS_ID, DEFAULT_VAL.toString(), DEFAULT_VAL.toString(), DEFAULT_VAL.toString());
+    final LimitsModel model = new LimitsModel(DEFAULT_LIMITS_ID, DEFAULT_VAL.toString(), DEFAULT_VAL.toString(), DEFAULT_VAL.toString());
 
     @Test
     void testConstructor() {

@@ -6,7 +6,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
 class StateAttrConverterTest {
-    StateAttrConverter converter = new StateAttrConverter();
+    final StateAttrConverter converter = new StateAttrConverter();
 
     @Test
     void testConvertToDatabaseColumn_NullState() {

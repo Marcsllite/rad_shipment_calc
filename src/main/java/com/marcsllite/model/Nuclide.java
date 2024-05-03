@@ -518,9 +518,9 @@ public class Nuclide {
         // Source: https://remm.hhs.gov/NRC_for-educators_11.pdf
         TBD("To Be Determined", ""),
         EXEMPT("Non-Radioactive",
-            "The amount of material is less than 0.002 \u00B5curies per gram."),
+            "The amount of material is less than 0.002 µ curies per gram."),
         EXCEPTED("Limited Quantity",
-            "The amount is greater than 0.002 \u00B5curies per gram but does not exceed\n" +
+            "The amount is greater than 0.002 µ curies per gram but does not exceed\n" +
                 "one thousandth of the A1 or A2 value (depending on the form)."),
         TYPE_A("Type A Quantity",
             "The amount is less than or equal to the A1 or A2 value (depending on the\n" +
@@ -615,10 +615,10 @@ public class Nuclide {
         }
 
         public String getVal() {
-            return Objects.equals(val, "") ? "" : val + " Lived";
+            return val.isEmpty() ? "" : val + " Lived";
         }
 
-        public String getAbbrVal() { return val.equals("")? "" : val.toLowerCase();}
+        public String getAbbrVal() { return val.isEmpty() ? "" : val.toLowerCase();}
 
         public static LifeSpan toLifeSpan(String value) {
             for (LifeSpan enumValue : values()) {
@@ -658,7 +658,7 @@ public class Nuclide {
             return val;
         }
 
-        public String getAbbrVal() { return val.equals("")? "" :
+        public String getAbbrVal() { return val.isEmpty() ? "" :
             val.substring(0,val.indexOf(' ')).toLowerCase();}
 
         public static LungAbsorption toLungAbsorption(String value) {

@@ -35,9 +35,9 @@ import static org.mockito.Mockito.spy;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SplashScreenControllerGUITest extends FxRobot {
     SplashScreenController controller;
-    FXMLView view = FXMLView.SPLASH;
+    final FXMLView view = FXMLView.SPLASH;
     StageHandler stageHandler;
-    PropHandlerTestObj testPropHandler = new PropHandlerTestObj();
+    final PropHandlerTestObj testPropHandler = new PropHandlerTestObj();
     DBService dbService;
     GridPane gridPaneSplash;
     Label labelSplash;

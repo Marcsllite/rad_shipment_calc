@@ -11,7 +11,7 @@ class DecayConstantModelTest {
     private final String DEFAULT_MASS_NUMBER = "1";
     private final NuclideModelId DEFAULT_ID = new NuclideModelId(DEFAULT_SYMBOL, DEFAULT_MASS_NUMBER);
     private final RadBigDecimal DEFAULT_VAL = RadBigDecimal.valueOf(1.0f);
-    DecayConstantModel model = new DecayConstantModel(DEFAULT_ID, DEFAULT_VAL.toString());
+    final DecayConstantModel model = new DecayConstantModel(DEFAULT_ID, DEFAULT_VAL.toString());
 
     @Test
     void testConstructor() {

@@ -7,7 +7,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
 class NatureAttrConverterTest {
-    NatureAttrConverter converter = new NatureAttrConverter();
+    final NatureAttrConverter converter = new NatureAttrConverter();
 
     @Test
     void testConvertToDatabaseColumn_NullNature() {

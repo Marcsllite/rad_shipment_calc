@@ -1,7 +1,9 @@
+// noinspection JSUnusedGlobalSymbols
+
 /*
 Copyright (c) 2019 by Marc Pierre. All rights reserved.
 Author: Marc Pierre, Marc.Pierre@kronos.com.,
-updated by Marc Pierre on June 18, 2019 at 10:19 AM
+updated by Marc Pierre on June 18, 2019, at 10:19 AM
 Description: Javascript to sort the table in the Duration Test Tracker tool status report
 */
 /* USE ONLY MULTILINE QUOTES (when adding to html file new line characters are not added, so the file is one line)
@@ -10,7 +12,7 @@ Description: Javascript to sort the table in the Duration Test Tracker tool stat
  */
 
 /* Declaring global variables */
-var table = document.getElementById("table"), /*holds the table in the document*/
+let table = document.getElementById("table"), /*holds the table in the document*/
     rows,  /* array of all the rows in the table */
     switching = false, /*boolean that describes if a switch should be made*/
     i, /* holds the index of the current row */
@@ -137,7 +139,7 @@ function sortDeviceTypes() {
  */
 function sortUpTimes() {
     /*i at the end of regex returns first string that matches (case-insensitive)*/
-    var currentRowVal = x.innerHTML,
+    const currentRowVal = x.innerHTML,
         nextRowVal = y.innerHTML,
         regexYRS = /(\d+)yrs?/i, /*regular expressions to get the years string from the uptime*/
         regexMOS = /(\d+)mos?/i,  /*regular expressions to get the months string from the uptime*/
@@ -145,18 +147,18 @@ function sortUpTimes() {
         regexD = /(\d+)d/i,  /*regular expressions to get the days string from the uptime*/
         regexHRS = /(\d+)hrs?/i,  /*regular expressions to get the hours string from the uptime*/
         regexMINS = /(\d+)mins?/i,  /*regular expressions to get the minutes string from the uptime*/
-        yearsX = (regexYRS.exec(currentRowVal) == null)? 0 : Number(regexYRS.exec(currentRowVal)[1]),  /*array containing the results of the regular expression search*/
-        monthsX = (regexMOS.exec(currentRowVal) == null)? 0 : Number(regexMOS.exec(currentRowVal)[1]),  /*array containing the results of the regular expression search*/
-        weeksX = (regexWKS.exec(currentRowVal) == null)? 0 : Number(regexWKS.exec(currentRowVal)[1]),  /*array containing the results of the regular expression search*/
-        daysX = (regexD.exec(currentRowVal) == null)? 0 : Number(regexD.exec(currentRowVal)[1]),  /*array containing the results of the regular expression search*/
-        hoursX = (regexHRS.exec(currentRowVal) == null)? 0 : Number(regexHRS.exec(currentRowVal)[1]),  /*array containing the results of the regular expression search*/
-        minutesX = (regexMINS.exec(currentRowVal) == null)? 0 : Number(regexMINS.exec(currentRowVal)[1]),  /*array containing the results of the regular expression search*/
-        yearsY = (regexYRS.exec(nextRowVal) == null)? 0 : Number(regexYRS.exec(nextRowVal)[1]),  /*array containing the results of the regular expression search*/
-        monthsY = (regexMOS.exec(nextRowVal) == null)? 0 : Number(regexMOS.exec(nextRowVal)[1]),  /*array containing the results of the regular expression search*/
-        weeksY = (regexWKS.exec(nextRowVal) == null)? 0 : Number(regexWKS.exec(nextRowVal)[1]),  /*array containing the results of the regular expression search*/
-        daysY = (regexD.exec(nextRowVal) == null)? 0 : Number(regexD.exec(nextRowVal)[1]),  /*array containing the results of the regular expression search*/
-        hoursY = (regexHRS.exec(nextRowVal) == null)? 0 : Number(regexHRS.exec(nextRowVal)[1]),  /*array containing the results of the regular expression search*/
-        minutesY = (regexMINS.exec(nextRowVal) == null)? 0 : Number(regexMINS.exec(nextRowVal)[1]);  /*array containing the results of the regular expression search*/
+        yearsX = (regexYRS.exec(currentRowVal) == null) ? 0 : Number(regexYRS.exec(currentRowVal)[1]),  /*array containing the results of the regular expression search*/
+        monthsX = (regexMOS.exec(currentRowVal) == null) ? 0 : Number(regexMOS.exec(currentRowVal)[1]),  /*array containing the results of the regular expression search*/
+        weeksX = (regexWKS.exec(currentRowVal) == null) ? 0 : Number(regexWKS.exec(currentRowVal)[1]),  /*array containing the results of the regular expression search*/
+        daysX = (regexD.exec(currentRowVal) == null) ? 0 : Number(regexD.exec(currentRowVal)[1]),  /*array containing the results of the regular expression search*/
+        hoursX = (regexHRS.exec(currentRowVal) == null) ? 0 : Number(regexHRS.exec(currentRowVal)[1]),  /*array containing the results of the regular expression search*/
+        minutesX = (regexMINS.exec(currentRowVal) == null) ? 0 : Number(regexMINS.exec(currentRowVal)[1]),  /*array containing the results of the regular expression search*/
+        yearsY = (regexYRS.exec(nextRowVal) == null) ? 0 : Number(regexYRS.exec(nextRowVal)[1]),  /*array containing the results of the regular expression search*/
+        monthsY = (regexMOS.exec(nextRowVal) == null) ? 0 : Number(regexMOS.exec(nextRowVal)[1]),  /*array containing the results of the regular expression search*/
+        weeksY = (regexWKS.exec(nextRowVal) == null) ? 0 : Number(regexWKS.exec(nextRowVal)[1]),  /*array containing the results of the regular expression search*/
+        daysY = (regexD.exec(nextRowVal) == null) ? 0 : Number(regexD.exec(nextRowVal)[1]),  /*array containing the results of the regular expression search*/
+        hoursY = (regexHRS.exec(nextRowVal) == null) ? 0 : Number(regexHRS.exec(nextRowVal)[1]),  /*array containing the results of the regular expression search*/
+        minutesY = (regexMINS.exec(nextRowVal) == null) ? 0 : Number(regexMINS.exec(nextRowVal)[1]);  /*array containing the results of the regular expression search*/
 
     if (isAsc) {
         if (yearsX > yearsY){

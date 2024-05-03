@@ -183,6 +183,7 @@ public final class Conversions {
      * @param sv the sievert value to be converted
      * @return the converted rem value
      */
+    @SuppressWarnings("JavaExistingMethodCanBeUsed")
     public static RadBigDecimal svToRem(RadBigDecimal sv) throws InvalidParameterException {
         if(isNotValidValue(sv)) {
             throw new InvalidParameterException(INVALID_VALUE);
@@ -197,6 +198,7 @@ public final class Conversions {
      * @param rem the rem value to be converted
      * @return the converted sievert value
      */
+    @SuppressWarnings("JavaExistingMethodCanBeUsed")
     public static RadBigDecimal remToSv(RadBigDecimal rem) throws InvalidParameterException {
         if(isNotValidValue(rem)) {
             throw new InvalidParameterException(INVALID_VALUE);

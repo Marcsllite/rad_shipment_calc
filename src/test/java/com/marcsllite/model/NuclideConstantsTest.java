@@ -19,6 +19,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings("AssertBetweenInconvertibleTypes")
 class NuclideConstantsTest extends DBTest {
     RadBigDecimal DEFAULT_NUM = RadBigDecimal.NEG_INFINITY_OBJ;
     NuclideConstants constants;

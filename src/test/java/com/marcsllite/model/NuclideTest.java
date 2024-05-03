@@ -24,6 +24,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings("AssertBetweenInconvertibleTypes")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class NuclideTest extends DBTest {
     private final RadBigDecimal DEFAULT_NUM = RadBigDecimal.NEG_INFINITY_OBJ;

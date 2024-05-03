@@ -31,20 +31,24 @@ HBox, VBox { -fx-alignment: CENTER; }
     -fx-spacing: 15;
 }
 
+/*noinspection ALL*/
 .validRegion {
     -fx-border-color: null;
     -fx-border-width: null;
 }
 
+/*noinspection ALL*/
 .invalidRegion {
     -fx-border-color: red;
     -fx-border-width: 1;
 }
 
+/*noinspection ALL*/
 .txtFirstPageStatus {
     -fx-fill: red;
 }
 
+/*noinspection ALL*/
 .hBoxAdd, .hBoxMoreInfoBody {
     -fx-spacing: 10;
 }
@@ -82,6 +86,7 @@ HBox, VBox { -fx-alignment: CENTER; }
     -fx-valignment: BOTTOM;
 }
 
+/*noinspection ALL*/
 .vBoxMoreInfo, .hBoxMoreInfoHeader {
     -fx-spacing: 5;
 }
@@ -91,6 +96,7 @@ HBox, VBox { -fx-alignment: CENTER; }
     -fx-spacing: 5;
 }
 
+/*noinspection ALL*/
 .moreInfoRadioBtns {
     -fx-font-family: System;
     -fx-font-style: normal;
@@ -98,6 +104,7 @@ HBox, VBox { -fx-alignment: CENTER; }
     -fx-font-size: 14px;
 }
 
+/*noinspection ALL*/
 .moreInfoRadioBtns:disabled {
     -fx-font-family: System;
     -fx-font-style: normal;

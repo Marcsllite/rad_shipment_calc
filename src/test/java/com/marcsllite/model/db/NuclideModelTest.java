@@ -14,7 +14,7 @@ class NuclideModelTest {
     private final String DEFAULT_SYMBOL = "XX";
     private final String DEFAULT_MASS_NUMBER = "1";
     private final NuclideModelId DEFAULT_ISO_ID = new NuclideModelId(DEFAULT_SYMBOL, DEFAULT_MASS_NUMBER);
-    NuclideModel model = new NuclideModel(DEFAULT_ATOMIC_NUMBER, DEFAULT_NAME, DEFAULT_ISO_ID);
+    final NuclideModel model = new NuclideModel(DEFAULT_ATOMIC_NUMBER, DEFAULT_NAME, DEFAULT_ISO_ID);
 
     @Test
     void testConstructor() {

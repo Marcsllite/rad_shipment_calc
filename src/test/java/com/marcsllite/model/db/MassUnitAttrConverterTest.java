@@ -7,7 +7,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
 class MassUnitAttrConverterTest {
-    MassUnitAttrConverter converter = new MassUnitAttrConverter();
+    final MassUnitAttrConverter converter = new MassUnitAttrConverter();
 
     @Test
     void testConvertToDatabaseColumn_NullMass() {

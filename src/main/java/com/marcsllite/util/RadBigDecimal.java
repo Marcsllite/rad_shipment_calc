@@ -256,6 +256,11 @@ public class RadBigDecimal extends BigDecimal {
 
     @Override
     public int hashCode() {
+        if(this.isInfinity()) {
+            return INFINITY_STRING.hashCode();
+        } else if(this.isNegativeInfinity()) {
+            return NEG_INFINITY_STRING.hashCode();
+        }
         return super.hashCode();
     }
 

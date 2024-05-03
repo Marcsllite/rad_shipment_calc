@@ -40,7 +40,7 @@ class AbstractDaoTest extends DBTest {
     }
 
     AbstractDao<ConcreteModel, String> dao;
-    ConcreteModel model = new ConcreteModel();
+    final ConcreteModel model = new ConcreteModel();
 
     @Override
     @BeforeEach

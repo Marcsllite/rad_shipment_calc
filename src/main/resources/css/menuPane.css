@@ -58,6 +58,7 @@
     -fx-background-radius: 3px, 3px, 2px, 1px;
 }
 
+/*noinspection ALL*/
 .label {
     -fx-focus-traversable: false;
     -fx-font-family: System;

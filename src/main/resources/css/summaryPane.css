@@ -33,6 +33,7 @@
     -fx-stroke-width: 0;
 }
 
+/*noinspection ALL*/
 .text-are:readonly {
     -fx-cursor: default;
     -fx-focus-traversable: false;

@@ -10,7 +10,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SuppressWarnings("EqualsWithItself")
+@SuppressWarnings({"EqualsWithItself", "AssertBetweenInconvertibleTypes"})
 class RadBigDecimalTest {
     @Test
     void testConstructor_Null() {

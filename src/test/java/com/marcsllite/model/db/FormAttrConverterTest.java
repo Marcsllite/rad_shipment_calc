@@ -6,7 +6,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
 class FormAttrConverterTest {
-    FormAttrConverter converter = new FormAttrConverter();
+    final FormAttrConverter converter = new FormAttrConverter();
 
     @Test
     void testConvertToDatabaseColumn_NullForm() {

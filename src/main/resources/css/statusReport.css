@@ -15,6 +15,8 @@ body {
     margin: 30px 50px; /*30px top and bottom, 50px left and right for entire body of website*/
     line-height: 1.4;
 }
+
+/*noinspection ALL*/
 .wrapper {
     display: grid;
     grid-gap: 20px;
