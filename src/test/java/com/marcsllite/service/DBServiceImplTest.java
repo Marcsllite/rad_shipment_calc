@@ -229,7 +229,7 @@ class DBServiceImplTest extends DBTest {
         String symbol = "symbol";
         String massNumber = "massNumber";
         NuclideModelId nuclideId = new NuclideModelId(symbol, massNumber);
-        NuclideModel model = new NuclideModel(nuclideId);
+        NuclideModel model = new NuclideModel(1, "Name", nuclideId);
 
         when(service.getNuclideDao()).thenReturn(nuclideDao);
         when(nuclideDao.getNuclide(nuclideId)).thenReturn(model);

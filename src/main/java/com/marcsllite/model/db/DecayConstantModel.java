@@ -1,7 +1,6 @@
 package com.marcsllite.model.db;
 
 import com.marcsllite.util.Conversions;
-import com.marcsllite.util.RadBigDecimal;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
@@ -14,8 +13,8 @@ public class DecayConstantModel extends BaseDataModel {
         super();
     }
 
-    public DecayConstantModel(NuclideModelId nuclideId, RadBigDecimal value) {
-        super(nuclideId, value.toString());
+    public DecayConstantModel(NuclideModelId nuclideId, String value) {
+        super(nuclideId, value);
         setBasePrefix(Conversions.SIPrefix.BASE);
     }
 }

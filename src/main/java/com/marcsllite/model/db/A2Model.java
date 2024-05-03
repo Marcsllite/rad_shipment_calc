@@ -1,7 +1,6 @@
 package com.marcsllite.model.db;
 
 import com.marcsllite.util.Conversions;
-import com.marcsllite.util.RadBigDecimal;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
@@ -23,8 +22,8 @@ public class A2Model extends BaseDataModel {
         super();
     }
 
-    public A2Model(NuclideModelId nuclideId, RadBigDecimal value) {
-        super(nuclideId, value.toString());
+    public A2Model(NuclideModelId nuclideId, String value) {
+        super(nuclideId, value);
         setBasePrefix(Conversions.SIPrefix.TERA);
     }
 }

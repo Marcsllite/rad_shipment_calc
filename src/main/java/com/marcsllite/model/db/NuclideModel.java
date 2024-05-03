@@ -24,12 +24,13 @@ public class NuclideModel extends BaseModel {
     private List<ShipmentModel> shipments;
 
     public NuclideModel() {
-        this(new NuclideModelId("XX", "1"));
+        this(1, "XX", new NuclideModelId("XX", "1"));
     }
 
-    public NuclideModel(NuclideModelId nuclideId) {
+    public NuclideModel(int atomicNumber, String name, NuclideModelId nuclideId) {
+        setAtomicNumber(atomicNumber);
         setNuclideId(nuclideId);
-        setName("XX");
+        setName(name);
     }
 
     public int getAtomicNumber() {

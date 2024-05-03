@@ -87,10 +87,10 @@ class NuclideDaoImplTest extends DBTest {
         NuclideModelId isoId3 = new NuclideModelId("AA", null);
         NuclideModelId isoId4 = new NuclideModelId("BB", "Num4");
 
-        NuclideModel model1 = new NuclideModel(isoId1);
-        NuclideModel model2 = new NuclideModel(isoId2);
-        NuclideModel model3 = new NuclideModel(isoId3);
-        NuclideModel model4 = new NuclideModel(isoId4);
+        NuclideModel model1 = new NuclideModel(1, "name1", isoId1);
+        NuclideModel model2 = new NuclideModel(2, "name2", isoId2);
+        NuclideModel model3 = new NuclideModel(3, "name3", isoId3);
+        NuclideModel model4 = new NuclideModel(4, "name4", isoId4);
 
         when(em.find(any(), any())).thenReturn(model1, model2, model3, model4);
 
@@ -124,10 +124,10 @@ class NuclideDaoImplTest extends DBTest {
         NuclideModelId isoId3 = new NuclideModelId("AA", null);
         NuclideModelId isoId4 = new NuclideModelId("BB", "Num4");
 
-        NuclideModel model1 = new NuclideModel(isoId1);
-        NuclideModel model2 = new NuclideModel(isoId2);
-        NuclideModel model3 = new NuclideModel(isoId3);
-        NuclideModel model4 = new NuclideModel(isoId4);
+        NuclideModel model1 = new NuclideModel(1, "name1", isoId1);
+        NuclideModel model2 = new NuclideModel(2, "name2", isoId2);
+        NuclideModel model3 = new NuclideModel(3, "name3", isoId3);
+        NuclideModel model4 = new NuclideModel(4, "name4", isoId4);
 
         when(em.find(any(), any())).thenReturn(model1, model2, model3, model4);
 

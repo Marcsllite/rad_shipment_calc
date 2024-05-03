@@ -1,6 +1,5 @@
 package com.marcsllite.model.db;
 
-import com.marcsllite.util.RadBigDecimal;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
@@ -13,7 +12,7 @@ public class HalfLifeModel extends BaseDataModel {
         super();
     }
 
-    public HalfLifeModel(NuclideModelId nuclideId, RadBigDecimal value) {
-        super(nuclideId, value.toString());
+    public HalfLifeModel(NuclideModelId nuclideId, String value) {
+        super(nuclideId, value);
     }
 }
