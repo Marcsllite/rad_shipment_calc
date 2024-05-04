@@ -6,6 +6,7 @@ import com.marcsllite.util.Conversions;
 import com.marcsllite.util.RadBigDecimal;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -17,49 +18,52 @@ import java.util.stream.Collectors;
 
 public class Shipment {
     private long id;
-    private SimpleObjectProperty<LocalDate> refDate;
-    private SimpleObjectProperty<RadBigDecimal> mass;
+    private final SimpleObjectProperty<LocalDate> refDate;
+    private final SimpleStringProperty massStr;
     private Conversions.SIPrefix massPrefix;
     private Conversions.MassUnit massUnit;
     private Nuclide.Nature nature;
-    private LimitsModelId.State state;
-    private LimitsModelId.Form form;
-    private SimpleListProperty<Nuclide> nuclides;
+    private LimitsModelId limitsId;
+    private final SimpleListProperty<Nuclide> nuclides;
 
     public Shipment() {
-        this(-1L,
-            null,
-            RadBigDecimal.NEG_INFINITY_OBJ,
-            null,
-            null,
-            null,
-            null);
+        id = -1L;
+        refDate = new SimpleObjectProperty<>(LocalDate.now());
+        massPrefix = Conversions.SIPrefix.BASE;
+        massUnit = Conversions.MassUnit.GRAMS;
+        massStr = new SimpleStringProperty(RadBigDecimal.NEG_INFINITY_DISPLAY_STRING);
+        nature = Nuclide.Nature.REGULAR;
+        limitsId = new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL);
+        nuclides = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
 
     public Shipment(ShipmentModel model) {
         this(model.getId(),
             model.getRefDate(),
-            model.getMass(),
+            model.getMassPrefix(),
             model.getMassUnit(),
+            model.getMassStr(),
             model.getNature(),
-            model.getState(),
-            model.getForm());
+            model.getLimitsId());
+
         setNuclides(model.getNuclides()
                 .stream()
                 .map(Nuclide::new)
-                .collect(Collectors.toCollection(FXCollections::observableArrayList)));
+                .collect(Collectors.toList()));
     }
 
-    public Shipment(long id, LocalDate refDate, RadBigDecimal mass, Conversions.MassUnit massUnit, Nuclide.Nature nature, LimitsModelId.State state, LimitsModelId.Form form) {
+    public Shipment(long id, LocalDate refDate,
+                    Conversions.SIPrefix massPrefix, Conversions.MassUnit massUnit, String massStr,
+                    Nuclide.Nature nature, LimitsModelId limitsId) {
+        this();
+
         setId(id);
         setRefDate(refDate);
-        setMass(mass);
-        setMassPrefix(Conversions.SIPrefix.BASE);
+        setMassStr(massStr);
+        setMassPrefix(massPrefix);
         setMassUnit(massUnit);
         setNature(nature);
-        setState(state);
-        setForm(form);
-        setNuclides(FXCollections.observableArrayList());
+        setLimitsId(limitsId);
     }
 
     public long getId() {
@@ -70,38 +74,32 @@ public class Shipment {
         this.id = id;
     }
 
-    public LocalDate getRefDate() {
-        return refDateProperty() == null? LocalDate.now() : refDateProperty().get();
-    }
-
     public SimpleObjectProperty<LocalDate> refDateProperty() {
         return refDate;
     }
 
-    public void setRefDate(LocalDate refDate) {
-        LocalDate val = refDate == null? LocalDate.now() : refDate;
+    public LocalDate getRefDate() {
+        return refDateProperty().get();
+    }
 
-        if(refDateProperty() == null) {
-            this.refDate = new SimpleObjectProperty<>(val);
-        } else {
-            refDateProperty().set(val);
-        }
+    public void setRefDate(LocalDate refDate) {
+        refDateProperty().set(refDate == null? LocalDate.now() : refDate);
     }
 
     public RadBigDecimal getMass() {
-        return massProperty() == null? RadBigDecimal.NEG_INFINITY_OBJ : massProperty().get();
+        return new RadBigDecimal(getMassStr());
     }
 
-    public void setMass(RadBigDecimal mass) {
-        if(massProperty() == null) {
-            this.mass = new SimpleObjectProperty<>(mass);
-        } else {
-            massProperty().set(mass);
-        }
+    public SimpleStringProperty massStrProperty() {
+        return massStr;
     }
 
-    public SimpleObjectProperty<RadBigDecimal> massProperty() {
-        return mass;
+    public String getMassStr() {
+        return massStrProperty().get();
+    }
+
+    public void setMassStr(String massStr) {
+        massStrProperty().set(massStr);
     }
 
     public Conversions.SIPrefix getMassPrefix() {
@@ -125,51 +123,35 @@ public class Shipment {
     }
 
     public void setNature(Nuclide.Nature nature) {
-        this.nature = nature == null? Nuclide.Nature.REGULAR: nature;
+        this.nature = nature == null? Nuclide.Nature.REGULAR : nature;
     }
 
-    public LimitsModelId.State getState() {
-        return state;
+    public LimitsModelId getLimitsId() {
+        return limitsId;
     }
 
-    public void setState(LimitsModelId.State state) {
-        this.state = state == null? LimitsModelId.State.SOLID : state;
-    }
-
-    public LimitsModelId.Form getForm() {
-        return form;
-    }
-
-    public void setForm(LimitsModelId.Form form) {
-        this.form = form == null? LimitsModelId.Form.NORMAL : form;
-    }
-
-    public ObservableList<Nuclide> getNuclides() {
-        return nuclidesProperty() == null? FXCollections.observableArrayList() : nuclidesProperty().get();
+    public void setLimitsId(LimitsModelId limitsId) {
+        this.limitsId = limitsId;
     }
 
     public SimpleListProperty<Nuclide> nuclidesProperty() {
         return nuclides;
     }
 
-    public void setNuclides(ObservableList<Nuclide> nuclides) {
-        if(nuclidesProperty() == null) {
-            this.nuclides = new SimpleListProperty<>(nuclides == null? FXCollections.observableArrayList() : nuclides);
-        } else {
-            nuclidesProperty().addAll(nuclides == null? FXCollections.observableArrayList() : nuclides);
-        }
+    public ObservableList<Nuclide> getNuclides() {
+        return nuclidesProperty().get();
     }
 
-    public void addAll(List<Nuclide> list) {
-        getNuclides().addAll(list);
+    public void setNuclides(List<Nuclide> nuclides) {
+        nuclidesProperty().addAll(nuclides == null? FXCollections.observableArrayList() : nuclides);
     }
 
     public void add(Nuclide isotope) {
-        getNuclides().add(isotope);
+        nuclidesProperty().add(isotope);
     }
 
     public void remove(List<Nuclide> isotopes) {
-        getNuclides().removeAll(isotopes);
+        nuclidesProperty().removeAll(isotopes);
     }
 
     @Override
@@ -186,8 +168,7 @@ public class Shipment {
             Objects.equals(this.getMass(), temp.getMass()) &&
             Objects.equals(this.getMassUnit(), temp.getMassUnit()) &&
             Objects.equals(this.getNature(), temp.getNature()) &&
-            Objects.equals(this.getState(), temp.getState()) &&
-            Objects.equals(this.getForm(), temp.getForm()) &&
+            Objects.equals(this.getLimitsId(), temp.getLimitsId()) &&
             Objects.equals(this.getNuclides(), temp.getNuclides());
     }
 
@@ -199,8 +180,7 @@ public class Shipment {
         hash = 7 * hash + this.getMass().intValue();
         hash = 7 * hash + (this.getMassUnit() != null ? this.getMassUnit().hashCode() : 0);
         hash = 7 * hash + (this.getNature() != null ? this.getNature().hashCode() : 0);
-        hash = 7 * hash + (this.getState() != null ? this.getState().hashCode() : 0);
-        hash = 7 * hash + (this.getForm() != null ? this.getForm().hashCode() : 0);
+        hash = 7 * hash + (this.getLimitsId() != null ? this.getLimitsId().hashCode() : 0);
         hash = 7 * hash + (this.getNuclides() != null? this.getNuclides().hashCode() : 0);
         return hash;
     }
@@ -211,19 +191,18 @@ public class Shipment {
             "\nReference Date: " + getRefDate() +
             "\nMass: " + getMass() + " " + getMassPrefix() + getMassUnit() +
             "\nNature: " + getNature() +
-            "\nState: " + getState() +
-            "\nForm: " + getForm() +
+            "\nLimits Id: " + getLimitsId() +
             "\nNuclides: " + getNuclides() + "\n}";
     }
 
     public enum Label {
         // Source: https://remm.hhs.gov/NRC_for-educators_11.pdf
         WHITE_1("White 1",
-            "Surface: Does not exceed 0.5 millirem/hour, TI: N/A"),
+            "Surface: Does not exceed 0.5 milli rem/hour, TI: N/A"),
         YELLOW_1("Yellow 1",
-            "Surface: Does not exceed 50 millirems/hour, TI: Does not exceed 1 millirem/hour"),
+            "Surface: Does not exceed 50 milli rems/hour, TI: Does not exceed 1 milli rem/hour"),
         YELLOW_2("Yellow 2",
-            "Surface: Exceeds 50 millirems/hour, TI: Exceeds 1 millirem/hour");
+            "Surface: Exceeds 50 milli rems/hour, TI: Exceeds 1 milli rem/hour");
 
         private final String val;
         private final String info;

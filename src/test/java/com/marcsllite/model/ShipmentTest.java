@@ -37,8 +37,8 @@ class ShipmentTest {
         assertEquals(RadBigDecimal.NEG_INFINITY_OBJ, shipment.getMass());
         assertEquals(Conversions.MassUnit.GRAMS, shipment.getMassUnit());
         assertEquals(Nuclide.Nature.REGULAR, shipment.getNature());
-        assertEquals(LimitsModelId.State.SOLID, shipment.getState());
-        assertEquals(LimitsModelId.Form.NORMAL, shipment.getForm());
+        assertEquals(LimitsModelId.State.SOLID, shipment.getLimitsId().getState());
+        assertEquals(LimitsModelId.Form.NORMAL, shipment.getLimitsId().getForm());
         assertNotNull(shipment.getNuclides());
     }
 
@@ -66,7 +66,7 @@ class ShipmentTest {
     @Test
     void testSetMass() {
         RadBigDecimal exp = RadBigDecimal.valueOf(-1F);
-        shipment.setMass(exp);
+        shipment.setMassStr(exp.toDisplayString());
         assertEquals(exp, shipment.getMass());
     }
 
@@ -94,32 +94,6 @@ class ShipmentTest {
         Nuclide.Nature exp = Nuclide.Nature.ARTICLE;
         shipment.setNature(exp);
         assertEquals(exp, shipment.getNature());
-    }
-
-    @Test
-    void testSetStateUnit_Null() {
-        shipment.setState(null);
-        assertEquals(LimitsModelId.State.SOLID, shipment.getState());
-    }
-
-    @Test
-    void testSetStateUnit() {
-        LimitsModelId.State exp = LimitsModelId.State.GAS;
-        shipment.setState(exp);
-        assertEquals(exp, shipment.getState());
-    }
-
-    @Test
-    void testSetFormUnit_Null() {
-        shipment.setForm(null);
-        assertEquals(LimitsModelId.Form.NORMAL, shipment.getForm());
-    }
-
-    @Test
-    void testSetFormUnit() {
-        LimitsModelId.Form exp = LimitsModelId.Form.SPECIAL;
-        shipment.setForm(exp);
-        assertEquals(exp, shipment.getForm());
     }
 
     @Test
@@ -158,11 +132,13 @@ class ShipmentTest {
         assertNotEquals(shipmentA, shipmentB);
         assertNotEquals(shipmentA.hashCode(), shipmentB.hashCode());
 
-        shipmentA.setForm(LimitsModelId.Form.SPECIAL);
+        LimitsModelId limitsId = new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.SPECIAL);
+        shipmentA.setLimitsId(limitsId);
         assertNotEquals(shipmentA, shipmentB);
         assertNotEquals(shipmentA.hashCode(), shipmentB.hashCode());
 
-        shipmentA.setState(LimitsModelId.State.LIQUID);
+        limitsId = new LimitsModelId(LimitsModelId.State.LIQUID, LimitsModelId.Form.NORMAL);
+        shipmentA.setLimitsId(limitsId);
         assertNotEquals(shipmentA, shipmentB);
         assertNotEquals(shipmentA.hashCode(), shipmentB.hashCode());
 
@@ -174,7 +150,7 @@ class ShipmentTest {
         assertNotEquals(shipmentA, shipmentB);
         assertNotEquals(shipmentA.hashCode(), shipmentB.hashCode());
 
-        shipmentA.setMass(RadBigDecimal.valueOf(-2F));
+        shipmentA.setMassStr(RadBigDecimal.valueOf(-2F).toDisplayString());
         assertNotEquals(shipmentA, shipmentB);
         assertNotEquals(shipmentA.hashCode(), shipmentB.hashCode());
 
