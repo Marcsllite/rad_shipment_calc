@@ -6,7 +6,7 @@ import com.marcsllite.util.RadBigDecimal;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
-import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -49,7 +49,7 @@ public class ShipmentModel extends BaseModel {
     @Convert(converter = NatureAttrConverter.class)
     private Nuclide.Nature nature;
 
-    @EmbeddedId
+    @Embedded
     private LimitsModelId limitsId;
     
     @ManyToMany(cascade = {CascadeType.ALL})

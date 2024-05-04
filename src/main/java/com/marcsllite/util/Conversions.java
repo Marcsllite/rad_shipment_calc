@@ -461,7 +461,7 @@ public final class Conversions {
         public static SIPrefix toSIPrefix(String value) {
             for (SIPrefix enumValue : values()) {
                 if (enumValue.getVal().equalsIgnoreCase(value) ||
-                    enumValue.getAbbrVal().equals(value)) {
+                    enumValue.getAbbrVal().equalsIgnoreCase(value)) {
                     return enumValue;
                 }
             }
