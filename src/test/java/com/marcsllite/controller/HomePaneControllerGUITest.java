@@ -2,13 +2,12 @@ package com.marcsllite.controller;
 
 import com.marcsllite.FXIds;
 import com.marcsllite.GUITest;
+import com.marcsllite.TestUtils;
 import com.marcsllite.model.Nuclide;
 import com.marcsllite.model.Shipment;
 import com.marcsllite.model.db.LimitsModelId;
-import com.marcsllite.model.db.NuclideModelId;
 import com.marcsllite.util.Conversions;
 import com.marcsllite.util.FXMLView;
-import com.marcsllite.util.RadBigDecimal;
 import javafx.collections.FXCollections;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -31,10 +30,6 @@ import org.testfx.matcher.base.NodeMatchers;
 import org.testfx.matcher.base.WindowMatchers;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
@@ -186,76 +181,11 @@ class HomePaneControllerGUITest extends GUITest {
 
     protected static Object[] testEditBtnHandler_Data() {
         return new Object[] {
-            new Object[] {createNuclide("Abbreviation", "Ab", "1")},
-            new Object[] {createNuclide("Annual", "An", "1")},
-            new Object[] {createNuclide("Bofuri", "Bf", "1(short)")},
-            new Object[] {createNuclide("Best", "Bst", "1fast")},
+            new Object[] {TestUtils.createNuclide("Abbreviation", "Ab", "1")},
+            new Object[] {TestUtils.createNuclide("Annual", "An", "1")},
+            new Object[] {TestUtils.createNuclide("Bofuri", "Bf", "1(short)")},
+            new Object[] {TestUtils.createNuclide("Best", "Bst", "1fast")},
         };
-    }
-
-    protected static Nuclide createNuclide(String name, String symbol, String massNum) {
-        Nuclide nuclide = new Nuclide(name, new NuclideModelId(symbol, massNum));
-        nuclide.setInitActivity(getRandomRadBigDecimal());
-        nuclide.setInitActivityPrefix(getRandomSIPrefix());
-        nuclide.setInitActivityUnit(getRandomRadUnit());
-        nuclide.setRefDate(getRandomDate());
-        nuclide.setMass(getRandomRadBigDecimal());
-        nuclide.setMassPrefix(getRandomSIPrefix());
-        nuclide.setMassUnit(getRandomMassUnit());
-        nuclide.setNature(getRandomNature());
-        nuclide.setState(getRandomState());
-        nuclide.setForm(getRandomForm());
-        nuclide.initConstants();
-        return nuclide;
-    }
-    
-    protected static RadBigDecimal getRandomRadBigDecimal() {
-        double min = 0;
-        double max = 100;
-        double randNum = ((Math.random() * (max - min)) + min);
-        return RadBigDecimal.valueOf(randNum);
-    }
-    
-    protected static Conversions.SIPrefix getRandomSIPrefix() {
-        Optional<Conversions.SIPrefix> any = Arrays.stream(Conversions.SIPrefix.values()).findAny();
-        assertTrue(any.isPresent());
-        return any.get();
-    }
-
-    protected static Conversions.RadUnit getRandomRadUnit() {
-        Optional<Conversions.RadUnit> any = Arrays.stream(Conversions.RadUnit.values()).findAny();
-        assertTrue(any.isPresent());
-        return any.get();
-    }
-
-    protected static LocalDate getRandomDate() {
-        int hundredYears = 100 * 365;
-        return LocalDate.ofEpochDay(ThreadLocalRandom
-            .current().nextInt(-hundredYears, hundredYears));
-    }
-
-    protected static Conversions.MassUnit getRandomMassUnit() {
-        Optional<Conversions.MassUnit> any = Arrays.stream(Conversions.MassUnit.values()).findAny();
-        assertTrue(any.isPresent());
-        return any.get();
-    }
-
-    protected static Nuclide.Nature getRandomNature() {
-        Optional<Nuclide.Nature> any = Arrays.stream(Nuclide.Nature.values()).findAny();
-        assertTrue(any.isPresent());
-        return any.get();
-    }
-
-    protected static LimitsModelId.State getRandomState() {
-        Optional<LimitsModelId.State> any = Arrays.stream(LimitsModelId.State.values()).findAny();
-        assertTrue(any.isPresent());
-        return any.get();
-    }
-
-    protected static LimitsModelId.Form getRandomForm() {
-        Optional<LimitsModelId.Form> any = Arrays.stream(LimitsModelId.Form.values()).findAny();
-        assertTrue(any.isPresent());
-        return any.get();
     }
     
     protected void verifyModifyPane(Nuclide nuclide) {
@@ -295,8 +225,8 @@ class HomePaneControllerGUITest extends GUITest {
             assertEquals(nuclide.getMassPrefix().getVal(), comboBoxMassPrefix.getSelectionModel().getSelectedItem());
             assertEquals(nuclide.getMassUnit().getVal(), choiceBoxMassUnit.getSelectionModel().getSelectedItem());
             assertEquals(nuclide.getNature().getVal(), choiceBoxNature.getSelectionModel().getSelectedItem());
-            assertEquals(nuclide.getState().getVal(), choiceBoxState.getSelectionModel().getSelectedItem());
-            assertEquals(nuclide.getForm().getVal(), choiceBoxForm.getSelectionModel().getSelectedItem());
+            assertEquals(nuclide.getLimitsId().getState().getVal(), choiceBoxState.getSelectionModel().getSelectedItem());
+            assertEquals(nuclide.getLimitsId().getForm().getVal(), choiceBoxForm.getSelectionModel().getSelectedItem());
             assertFalse(btnBack.isDisabled());
             assertFalse(btnFinish.isDisabled());
         }
@@ -304,7 +234,7 @@ class HomePaneControllerGUITest extends GUITest {
 
     protected void addNuclideToTable(Nuclide nuclide) {
         if(nuclide == null) {
-            nuclide = new Nuclide("Name", new NuclideModelId());
+            nuclide = new Nuclide();
         }
 
         controller = (HomePaneController) getController();
