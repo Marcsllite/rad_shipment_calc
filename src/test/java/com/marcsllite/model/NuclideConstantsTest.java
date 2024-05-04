@@ -14,7 +14,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -44,7 +44,6 @@ class NuclideConstantsTest extends DBTest {
     void testConstructor() {
         constants = new NuclideConstants();
 
-        assertEquals(DEFAULT_NUM, NuclideConstants.getDefaultVal());
         assertEquals(DEFAULT_NUM, constants.getA1());
         assertEquals(DEFAULT_NUM, constants.getA2());
         assertEquals(DEFAULT_NUM, constants.getDecayConstant());
@@ -61,22 +60,23 @@ class NuclideConstantsTest extends DBTest {
     @Test
     @SetSystemProperty(key = "keepPlatformOpen",value = "true")
     void testDbInit() {
-        NuclideModelId nuclideId = new NuclideModelId(DEFAULT_SYMBOL, DEFAULT_MASS_NUMBER);
+        NuclideModelId nuclideId = DEFAULT_ID;
         LimitsModelId limitsId = new LimitsModelId(DEFAULT_STATE, DEFAULT_FORM);
         RadBigDecimal expected = RadBigDecimal.valueOf(3.14159f);
+        String expectedStr = expected.toDisplayString();
         NuclideConstants constantsSpy = spy(constants);
         
-        when(dbService.getA1(nuclideId)).thenReturn(expected);
-        when(dbService.getA2(nuclideId)).thenReturn(expected);
-        when(dbService.getDecayConstant(nuclideId)).thenReturn(expected);
-        when(dbService.getExemptConcentration(nuclideId)).thenReturn(expected);
-        when(dbService.getExemptLimit(nuclideId)).thenReturn(expected);
-        when(dbService.getHalfLife(nuclideId)).thenReturn(expected);
-        when(dbService.getIALimited(limitsId)).thenReturn(expected);
-        when(dbService.getIAPackage(limitsId)).thenReturn(expected);
-        when(dbService.getLimited(limitsId)).thenReturn(expected);
-        when(dbService.getCiReportQuan(nuclideId)).thenReturn(expected);
-        when(dbService.getTBqReportQuan(nuclideId)).thenReturn(expected);
+        when(dbService.getA1(nuclideId)).thenReturn(expectedStr);
+        when(dbService.getA2(nuclideId)).thenReturn(expectedStr);
+        when(dbService.getDecayConstant(nuclideId)).thenReturn(expectedStr);
+        when(dbService.getExemptConcentration(nuclideId)).thenReturn(expectedStr);
+        when(dbService.getExemptLimit(nuclideId)).thenReturn(expectedStr);
+        when(dbService.getHalfLife(nuclideId)).thenReturn(expectedStr);
+        when(dbService.getIALimited(limitsId)).thenReturn(expectedStr);
+        when(dbService.getIAPackage(limitsId)).thenReturn(expectedStr);
+        when(dbService.getLimited(limitsId)).thenReturn(expectedStr);
+        when(dbService.getCiReportQuan(nuclideId)).thenReturn(expectedStr);
+        when(dbService.getTBqReportQuan(nuclideId)).thenReturn(expectedStr);
 
         assertFalse(constantsSpy.isInit());
         constantsSpy.dbInit(nuclideId, limitsId);
@@ -95,22 +95,22 @@ class NuclideConstantsTest extends DBTest {
         assertEquals(expected, constantsSpy.getCurieReportQuan());
         assertEquals(expected, constantsSpy.getTeraBqReportQuan());
         
-        verify(constantsSpy).setA1(any(RadBigDecimal.class));
-        verify(constantsSpy).setA2(any(RadBigDecimal.class));
-        verify(constantsSpy).setDecayConstant(any(RadBigDecimal.class));
-        verify(constantsSpy).setExemptConcentration(any(RadBigDecimal.class));
-        verify(constantsSpy).setExemptLimit(any(RadBigDecimal.class));
-        verify(constantsSpy).setHalfLife(any(RadBigDecimal.class));
-        verify(constantsSpy).setIaLimitedLimit(any(RadBigDecimal.class));
-        verify(constantsSpy).setIaPackageLimit(any(RadBigDecimal.class));
-        verify(constantsSpy).setLimitedLimit(any(RadBigDecimal.class));
-        verify(constantsSpy).setCurieReportQuan(any(RadBigDecimal.class));
-        verify(constantsSpy).setTeraBqReportQuan(any(RadBigDecimal.class));
+        verify(constantsSpy).setA1Str(anyString());
+        verify(constantsSpy).setA2Str(anyString());
+        verify(constantsSpy).setDecayConstantStr(anyString());
+        verify(constantsSpy).setExemptConcentrationStr(anyString());
+        verify(constantsSpy).setExemptLimitStr(anyString());
+        verify(constantsSpy).setHalfLifeStr(anyString());
+        verify(constantsSpy).setIaLimitedLimitStr(anyString());
+        verify(constantsSpy).setIaPackageLimitStr(anyString());
+        verify(constantsSpy).setLimitedLimitStr(anyString());
+        verify(constantsSpy).setCurieReportQuanStr(anyString());
+        verify(constantsSpy).setTeraBqReportQuanStr(anyString());
     }
 
     @Test
     void testEquals() {
-        RadBigDecimal val = RadBigDecimal.valueOf(-512F);
+        String val = RadBigDecimal.valueOf(-512F).toDisplayString();
         NuclideConstants constants1 = new NuclideConstants();
         NuclideConstants constants2 = new NuclideConstants();
         String str = "";
@@ -121,43 +121,43 @@ class NuclideConstantsTest extends DBTest {
         assertEquals(constants1, constants2);
         assertEquals(constants1.hashCode(), constants2.hashCode());
 
-        constants1.setTeraBqReportQuan(val);
+        constants1.setTeraBqReportQuanStr(val);
         assertNotEquals(constants1, constants2);
         assertNotEquals(constants1.hashCode(), constants2.hashCode());
 
-        constants1.setLimitedLimit(val);
+        constants1.setLimitedLimitStr(val);
         assertNotEquals(constants1, constants2);
         assertNotEquals(constants1.hashCode(), constants2.hashCode());
 
-        constants1.setIaPackageLimit(val);
+        constants1.setIaPackageLimitStr(val);
         assertNotEquals(constants1, constants2);
         assertNotEquals(constants1.hashCode(), constants2.hashCode());
 
-        constants1.setIaLimitedLimit(val);
+        constants1.setIaLimitedLimitStr(val);
         assertNotEquals(constants1, constants2);
         assertNotEquals(constants1.hashCode(), constants2.hashCode());
 
-        constants1.setHalfLife(val);
+        constants1.setHalfLifeStr(val);
         assertNotEquals(constants1, constants2);
         assertNotEquals(constants1.hashCode(), constants2.hashCode());
 
-        constants1.setExemptLimit(val);
+        constants1.setExemptLimitStr(val);
         assertNotEquals(constants1, constants2);
         assertNotEquals(constants1.hashCode(), constants2.hashCode());
 
-        constants1.setExemptConcentration(val);
+        constants1.setExemptConcentrationStr(val);
         assertNotEquals(constants1, constants2);
         assertNotEquals(constants1.hashCode(), constants2.hashCode());
 
-        constants1.setDecayConstant(val);
+        constants1.setDecayConstantStr(val);
         assertNotEquals(constants1, constants2);
         assertNotEquals(constants1.hashCode(), constants2.hashCode());
 
-        constants1.setA2(val);
+        constants1.setA2Str(val);
         assertNotEquals(constants1, constants2);
         assertNotEquals(constants1.hashCode(), constants2.hashCode());
 
-        constants1.setA1(val);
+        constants1.setA1Str(val);
         assertNotEquals(constants1, constants2);
         assertNotEquals(constants1.hashCode(), constants2.hashCode());
     }

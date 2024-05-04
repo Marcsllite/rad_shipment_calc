@@ -11,14 +11,14 @@ import java.util.Objects;
 
 public class NuclideConstants {
     private DBService dbService;
-    private static final RadBigDecimal DEFAULT_VAL = RadBigDecimal.NEG_INFINITY_OBJ;
+    private static final String DEFAULT_VAL_STR = RadBigDecimal.NEG_INFINITY_DISPLAY_STRING;
     private final SimpleStringProperty a1 = new SimpleStringProperty();
     private final SimpleStringProperty a2 = new SimpleStringProperty();
     private final SimpleStringProperty decayConstant = new SimpleStringProperty();
     private final SimpleStringProperty exemptConcentration = new SimpleStringProperty();
     private final SimpleStringProperty exemptLimit = new SimpleStringProperty();
     private final SimpleStringProperty halfLife = new SimpleStringProperty();
-    private final SimpleStringProperty halfLifeDisplay = new SimpleStringProperty();
+    private final SimpleStringProperty displayHalfLife = new SimpleStringProperty();
     private static final String HALF_LIFE_UNIT = " days";
     private final SimpleStringProperty iaLimitedLimit = new SimpleStringProperty();
     private final SimpleStringProperty iaPackageLimit = new SimpleStringProperty();
@@ -30,32 +30,32 @@ public class NuclideConstants {
     public NuclideConstants() {
         setDbService(new DBServiceImpl());
 
-        setA1(NuclideConstants.getDefaultVal());
-        setA2(NuclideConstants.getDefaultVal());
-        setDecayConstant(NuclideConstants.getDefaultVal());
-        setExemptConcentration(NuclideConstants.getDefaultVal());
-        setExemptLimit(NuclideConstants.getDefaultVal());
-        setHalfLife(NuclideConstants.getDefaultVal());
-        setIaLimitedLimit(NuclideConstants.getDefaultVal());
-        setIaPackageLimit(NuclideConstants.getDefaultVal());
-        setLimitedLimit(NuclideConstants.getDefaultVal());
-        setCurieReportQuan(NuclideConstants.getDefaultVal());
-        setTeraBqReportQuan(NuclideConstants.getDefaultVal());
+        setA1Str(NuclideConstants.DEFAULT_VAL_STR);
+        setA2Str(NuclideConstants.DEFAULT_VAL_STR);
+        setDecayConstantStr(NuclideConstants.DEFAULT_VAL_STR);
+        setExemptConcentrationStr(NuclideConstants.DEFAULT_VAL_STR);
+        setExemptLimitStr(NuclideConstants.DEFAULT_VAL_STR);
+        setHalfLifeStr(NuclideConstants.DEFAULT_VAL_STR);
+        setIaLimitedLimitStr(NuclideConstants.DEFAULT_VAL_STR);
+        setIaPackageLimitStr(NuclideConstants.DEFAULT_VAL_STR);
+        setLimitedLimitStr(NuclideConstants.DEFAULT_VAL_STR);
+        setCurieReportQuanStr(NuclideConstants.DEFAULT_VAL_STR);
+        setTeraBqReportQuanStr(NuclideConstants.DEFAULT_VAL_STR);
     }
 
     public void dbInit(NuclideModelId nuclideId, LimitsModelId limitsId) {
         if(!isInit) {
-            setA1(getDbService().getA1(nuclideId));
-            setA2(getDbService().getA2(nuclideId));
-            setDecayConstant(getDbService().getDecayConstant(nuclideId));
-            setExemptConcentration(getDbService().getExemptConcentration(nuclideId));
-            setExemptLimit(getDbService().getExemptLimit(nuclideId));
-            setHalfLife(getDbService().getHalfLife(nuclideId));
-            setIaLimitedLimit(getDbService().getIALimited(limitsId));
-            setIaPackageLimit(getDbService().getIAPackage(limitsId));
-            setLimitedLimit(getDbService().getLimited(limitsId));
-            setCurieReportQuan(getDbService().getCiReportQuan(nuclideId));
-            setTeraBqReportQuan(getDbService().getTBqReportQuan(nuclideId));
+            setA1Str(getDbService().getA1(nuclideId));
+            setA2Str(getDbService().getA2(nuclideId));
+            setDecayConstantStr(getDbService().getDecayConstant(nuclideId));
+            setExemptConcentrationStr(getDbService().getExemptConcentration(nuclideId));
+            setExemptLimitStr(getDbService().getExemptLimit(nuclideId));
+            setHalfLifeStr(getDbService().getHalfLife(nuclideId));
+            setIaLimitedLimitStr(getDbService().getIALimited(limitsId));
+            setIaPackageLimitStr(getDbService().getIAPackage(limitsId));
+            setLimitedLimitStr(getDbService().getLimited(limitsId));
+            setCurieReportQuanStr(getDbService().getCiReportQuan(nuclideId));
+            setTeraBqReportQuanStr(getDbService().getTBqReportQuan(nuclideId));
             setInit(true);
         }
     }
@@ -76,145 +76,190 @@ public class NuclideConstants {
         this.dbService = dbService;
     }
 
-    public static RadBigDecimal getDefaultVal() {
-        return NuclideConstants.DEFAULT_VAL;
-    }
-
     public RadBigDecimal getA1() {
-        return new RadBigDecimal(a1Property().get());
+        return new RadBigDecimal(getA1Str());
     }
 
     public SimpleStringProperty a1Property() {
         return a1;
     }
 
-    public void setA1(RadBigDecimal a1) {
-        a1Property().set(a1.toDisplayString());
+    public String getA1Str() {
+        return a1Property().get();
+    }
+
+    public void setA1Str(String a1Str) {
+        a1Property().set(a1Str);
     }
 
     public RadBigDecimal getA2() {
-        return new RadBigDecimal(a2Property().get());
+        return new RadBigDecimal(getA2Str());
     }
 
     public SimpleStringProperty a2Property() {
         return a2;
     }
 
-    public void setA2(RadBigDecimal a2) {
-        a2Property().set(a2.toDisplayString());
+    public String getA2Str() {
+        return a2Property().get();
+    }
+
+    public void setA2Str(String a2Str) {
+        a2Property().set(a2Str);
     }
 
     public RadBigDecimal getDecayConstant() {
-        return new RadBigDecimal(decayConstantProperty().get());
+        return new RadBigDecimal(getDecayConstantStr());
     }
 
     public SimpleStringProperty decayConstantProperty() {
         return decayConstant;
     }
 
-    public void setDecayConstant(RadBigDecimal decayConstant) {
-        decayConstantProperty().set(decayConstant.toDisplayString());
+    public String getDecayConstantStr() {
+        return decayConstantProperty().get();
+    }
+
+    public void setDecayConstantStr(String decayConstantStr) {
+        decayConstantProperty().set(decayConstantStr);
     }
 
     public RadBigDecimal getExemptConcentration() {
-        return new RadBigDecimal(exemptConcentrationProperty().get());
+        return new RadBigDecimal(getExemptConcentrationStr());
     }
 
     public SimpleStringProperty exemptConcentrationProperty() {
         return exemptConcentration;
     }
 
-    public void setExemptConcentration(RadBigDecimal exemptConcentration) {
-        exemptConcentrationProperty().set(exemptConcentration.toDisplayString());
+    public String getExemptConcentrationStr() {
+        return exemptConcentrationProperty().get();
+    }
+
+    public void setExemptConcentrationStr(String exemptConcentrationStr) {
+        exemptConcentrationProperty().set(exemptConcentrationStr);
     }
 
     public RadBigDecimal getExemptLimit() {
-        return new RadBigDecimal(exemptLimitProperty().get());
+        return new RadBigDecimal(getExemptLimitStr());
     }
 
     public SimpleStringProperty exemptLimitProperty() {
         return exemptLimit;
     }
 
-    public void setExemptLimit(RadBigDecimal exemptLimit) {
-        exemptLimitProperty().set(exemptLimit.toDisplayString());
+    public String getExemptLimitStr() {
+        return exemptLimitProperty().get();
+    }
+
+    public void setExemptLimitStr(String exemptLimitStr) {
+        exemptLimitProperty().set(exemptLimitStr);
     }
 
     public RadBigDecimal getHalfLife() {
-        return new RadBigDecimal(halfLifeProperty().get());
+        return new RadBigDecimal(getHalfLifeStr());
     }
 
     public SimpleStringProperty halfLifeProperty() {
         return halfLife;
     }
 
-    public SimpleStringProperty halfLifeDisplayProperty() {
-        return halfLifeDisplay;
+    public String getHalfLifeStr() {
+        return halfLifeProperty().get();
     }
 
-    public void setHalfLife(RadBigDecimal halfLife) {
-        halfLifeProperty().set(halfLife.toDisplayString());
-        halfLifeDisplayProperty().set(halfLife.toDisplayString() + HALF_LIFE_UNIT);
+    public void setHalfLifeStr(String halfLifeStr) {
+        halfLifeProperty().set(halfLifeStr);
+        setDisplayHalfLife();
+    }
+
+    public SimpleStringProperty displayHalfLifeProperty() {
+        return displayHalfLife;
+    }
+
+    public void setDisplayHalfLife() {
+        displayHalfLifeProperty().set(getHalfLifeStr() + HALF_LIFE_UNIT);
     }
 
     public RadBigDecimal getIaLimitedLimit() {
-        return new RadBigDecimal(iaLimitedLimitProperty().get());
+        return new RadBigDecimal(getIaLimitedLimitStr());
     }
 
     public SimpleStringProperty iaLimitedLimitProperty() {
         return iaLimitedLimit;
     }
 
-    public void setIaLimitedLimit(RadBigDecimal iaLimitedLimit) {
-        iaLimitedLimitProperty().set(iaLimitedLimit.toDisplayString());
+    public String getIaLimitedLimitStr() {
+        return iaLimitedLimitProperty().get();
+    }
+
+    public void setIaLimitedLimitStr(String iaLimitedLimitStr) {
+        iaLimitedLimitProperty().set(iaLimitedLimitStr);
     }
 
     public RadBigDecimal getIaPackageLimit() {
-        return new RadBigDecimal(iaPackageLimitProperty().get());
+        return new RadBigDecimal(getIaPackageLimitStr());
     }
 
     public SimpleStringProperty iaPackageLimitProperty() {
         return iaPackageLimit;
     }
 
-    public void setIaPackageLimit(RadBigDecimal iaPackageLimit) {
-        iaPackageLimitProperty().set(iaPackageLimit.toDisplayString());
+    public String getIaPackageLimitStr() {
+        return iaPackageLimitProperty().get();
+    }
+
+    public void setIaPackageLimitStr(String iaPackageLimitStr) {
+        iaPackageLimitProperty().set(iaPackageLimitStr);
     }
 
     public RadBigDecimal getLimitedLimit() {
-        return new RadBigDecimal(limitedLimitProperty().get());
+        return new RadBigDecimal(getLimitedLimitStr());
     }
 
     public SimpleStringProperty limitedLimitProperty() {
         return limitedLimit;
     }
 
-    public void setLimitedLimit(RadBigDecimal limitedLimit) {
-        limitedLimitProperty().set(limitedLimit.toDisplayString());
+    public String getLimitedLimitStr() {
+        return limitedLimitProperty().get();
+    }
+
+    public void setLimitedLimitStr(String limitedLimitStr) {
+        limitedLimitProperty().set(limitedLimitStr);
     }
 
     public RadBigDecimal getCurieReportQuan() {
-        return new RadBigDecimal(curieReportQuanProperty().get());
+        return new RadBigDecimal(getCurieReportQuanStr());
     }
 
     public SimpleStringProperty curieReportQuanProperty() {
         return curieReportQuan;
     }
 
-    public void setCurieReportQuan(RadBigDecimal curieReportQuan) {
-        curieReportQuanProperty().set(curieReportQuan.toDisplayString());
+    public String getCurieReportQuanStr() {
+        return curieReportQuanProperty().get();
+    }
+
+
+    public void setCurieReportQuanStr(String curieReportQuanStr) {
+        curieReportQuanProperty().set(curieReportQuanStr);
     }
 
     public RadBigDecimal getTeraBqReportQuan() {
-        return new RadBigDecimal(teraBqReportQuanProperty().get());
+        return new RadBigDecimal(getTeraBqReportQuanStr());
     }
 
     public SimpleStringProperty teraBqReportQuanProperty() {
         return teraBqReportQuan;
     }
 
-    public void setTeraBqReportQuan(RadBigDecimal teraBqReportQuan) {
-        teraBqReportQuanProperty().set(teraBqReportQuan.toDisplayString());
+    public String getTeraBqReportQuanStr() {
+        return teraBqReportQuanProperty().get();
+    }
+
+    public void setTeraBqReportQuanStr(String teraBqReportQuan) {
+        teraBqReportQuanProperty().set(teraBqReportQuan);
     }
 
     @Override
@@ -262,7 +307,7 @@ public class NuclideConstants {
             "\n\tDecay Constant: " + getDecayConstant() +
             "\n\tExempt Concentration: " + getExemptConcentration() + " Bq/g" +
             "\n\tExempt Limit: " + getExemptLimit() + " Bq" +
-            "\n\tHalfLife: " + halfLifeDisplayProperty() +
+            "\n\tHalfLife: " + displayHalfLifeProperty() +
             "\n\tInstruments/Articles Limited Limit: " + getIaLimitedLimit() +
             "\n\tInstruments/Articles Package Limit: " + getIaPackageLimit() +
             "\n\tNormal Limited Limit: " + getLimitedLimit() +
