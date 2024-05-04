@@ -9,13 +9,15 @@ public class ReportableQuantityDaoImpl extends AbstractDao<ReportableQuantityMod
         return findById(nuclideId);
     }
 
-    public RadBigDecimal getCi(NuclideModelId nuclideId) {
+    public String getCi(NuclideModelId nuclideId) {
         ReportableQuantityModel model = getReportQuan(nuclideId);
-        return model == null? RadBigDecimal.NEG_INFINITY_OBJ : model.getCurie();
+        return model == null?
+            RadBigDecimal.NEG_INFINITY_DISPLAY_STRING : model.getCurieStr();
     }
 
-    public RadBigDecimal getTBq(NuclideModelId nuclideId) {
+    public String getTBq(NuclideModelId nuclideId) {
         ReportableQuantityModel model = getReportQuan(nuclideId);
-        return model == null? RadBigDecimal.NEG_INFINITY_OBJ : model.getTeraBq();
+        return model == null?
+            RadBigDecimal.NEG_INFINITY_DISPLAY_STRING : model.getTeraBqStr();
     }
 }

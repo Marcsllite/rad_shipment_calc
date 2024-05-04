@@ -7,23 +7,22 @@ import com.marcsllite.model.Shipment;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.model.db.NuclideModel;
 import com.marcsllite.model.db.NuclideModelId;
-import com.marcsllite.util.RadBigDecimal;
 import javafx.collections.ObservableList;
 
 public interface DBService {
     int validateDb();
 
-    RadBigDecimal getA1(NuclideModelId nuclideId);
+    String getA1(NuclideModelId nuclideId);
 
-    RadBigDecimal getA2(NuclideModelId nuclideId);
+    String getA2(NuclideModelId nuclideId);
 
-    RadBigDecimal getDecayConstant(NuclideModelId nuclideId);
+    String getDecayConstant(NuclideModelId nuclideId);
 
-    RadBigDecimal getExemptConcentration(NuclideModelId nuclideId);
+    String getExemptConcentration(NuclideModelId nuclideId);
 
-    RadBigDecimal getExemptLimit(NuclideModelId nuclideId);
+    String getExemptLimit(NuclideModelId nuclideId);
 
-    RadBigDecimal getHalfLife(NuclideModelId nuclideId);
+    String getHalfLife(NuclideModelId nuclideId);
 
     int countAllNuclides();
 
@@ -39,17 +38,17 @@ public interface DBService {
 
     Limits getLimits(LimitsModelId modelId);
 
-    RadBigDecimal getIALimited(LimitsModelId modelId);
+    String getIALimited(LimitsModelId modelId);
 
-    RadBigDecimal getIAPackage(LimitsModelId modelId);
+    String getIAPackage(LimitsModelId modelId);
 
-    RadBigDecimal getLimited(LimitsModelId modelId);
+    String getLimited(LimitsModelId modelId);
 
     ReportableQuantity getReportQuan(NuclideModelId nuclideId);
 
-    RadBigDecimal getCiReportQuan(NuclideModelId nuclideId);
+    String getCiReportQuan(NuclideModelId nuclideId);
 
-    RadBigDecimal getTBqReportQuan(NuclideModelId nuclideId);
+    String getTBqReportQuan(NuclideModelId nuclideId);
 
     Shipment getShipment(Long id);
 }

@@ -50,7 +50,7 @@ class LimitsDaoImplTest extends DBTest {
     @Test
     void testGetIALimited_NoResults() {
         LimitsModelId limitsId = new LimitsModelId();
-        RadBigDecimal exp = RadBigDecimal.NEG_INFINITY_OBJ;
+        String exp = RadBigDecimal.NEG_INFINITY_DISPLAY_STRING;
 
         when(em.find(any(), any())).thenReturn(null);
 
@@ -62,10 +62,10 @@ class LimitsDaoImplTest extends DBTest {
     @Test
     void testGetIALimited() {
         LimitsModelId limitsId = new LimitsModelId();
-        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
+        String exp = RadBigDecimal.valueOf(1.0f).toDisplayString();
 
         when(em.find(any(), any())).thenReturn(model);
-        when(model.getIaLimited()).thenReturn(exp);
+        when(model.getIaLimitedStr()).thenReturn(exp);
 
         assertEquals(exp, daoSpy.getIALimited(limitsId));
 
@@ -75,7 +75,7 @@ class LimitsDaoImplTest extends DBTest {
     @Test
     void testGetIAPackage_NoResults() {
         LimitsModelId limitsId = new LimitsModelId();
-        RadBigDecimal exp = RadBigDecimal.NEG_INFINITY_OBJ;
+        String exp = RadBigDecimal.NEG_INFINITY_DISPLAY_STRING;
 
         when(em.find(any(), any())).thenReturn(null);
 
@@ -87,10 +87,10 @@ class LimitsDaoImplTest extends DBTest {
     @Test
     void testGetIAPackage() {
         LimitsModelId limitsId = new LimitsModelId();
-        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
+        String exp = RadBigDecimal.valueOf(1.0f).toDisplayString();
 
         when(em.find(any(), any())).thenReturn(model);
-        when(model.getIaPackage()).thenReturn(exp);
+        when(model.getIaPackageStr()).thenReturn(exp);
 
         assertEquals(exp, daoSpy.getIAPackage(limitsId));
 
@@ -100,7 +100,7 @@ class LimitsDaoImplTest extends DBTest {
     @Test
     void testGetLimited_NoResults() {
         LimitsModelId limitsId = new LimitsModelId();
-        RadBigDecimal exp = RadBigDecimal.NEG_INFINITY_OBJ;
+        String exp = RadBigDecimal.NEG_INFINITY_DISPLAY_STRING;
 
         when(em.find(any(), any())).thenReturn(null);
 
@@ -112,10 +112,10 @@ class LimitsDaoImplTest extends DBTest {
     @Test
     void testGetLimited() {
         LimitsModelId limitsId = new LimitsModelId();
-        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
+        String exp = RadBigDecimal.valueOf(1.0f).toDisplayString();
 
         when(em.find(any(), any())).thenReturn(model);
-        when(model.getLimited()).thenReturn(exp);
+        when(model.getLimitedStr()).thenReturn(exp);
 
         assertEquals(exp, daoSpy.getLimited(limitsId));
 

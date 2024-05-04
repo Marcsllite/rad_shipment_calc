@@ -9,18 +9,21 @@ public class LimitsDaoImpl extends AbstractDao<LimitsModel, LimitsModelId> {
         return findById(modelId);
     }
 
-    public RadBigDecimal getIALimited(LimitsModelId modelId) {
+    public String getIALimited(LimitsModelId modelId) {
         LimitsModel model = getLimits(modelId);
-        return model == null? RadBigDecimal.NEG_INFINITY_OBJ : model.getIaLimited();
+        return model == null?
+            RadBigDecimal.NEG_INFINITY_DISPLAY_STRING : model.getIaLimitedStr();
     }
 
-    public RadBigDecimal getIAPackage(LimitsModelId modelId) {
+    public String getIAPackage(LimitsModelId modelId) {
         LimitsModel model = getLimits(modelId);
-        return model == null? RadBigDecimal.NEG_INFINITY_OBJ : model.getIaPackage();
+        return model == null?
+            RadBigDecimal.NEG_INFINITY_DISPLAY_STRING : model.getIaPackageStr();
     }
 
-    public RadBigDecimal getLimited(LimitsModelId modelId) {
+    public String getLimited(LimitsModelId modelId) {
         LimitsModel model = getLimits(modelId);
-        return model == null? RadBigDecimal.NEG_INFINITY_OBJ : model.getLimited();
+        return model == null?
+            RadBigDecimal.NEG_INFINITY_DISPLAY_STRING : model.getLimitedStr();
     }
 }

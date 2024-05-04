@@ -48,7 +48,7 @@ class ReportableQuantityDaoImplTest extends DBTest {
 
     @Test
     void testGetCi_NoResults() {
-        RadBigDecimal exp = RadBigDecimal.NEG_INFINITY_OBJ;
+        String exp = RadBigDecimal.NEG_INFINITY_DISPLAY_STRING;
 
         ReportableQuantityDaoImpl daoSpy = spy(dao);
 
@@ -60,12 +60,12 @@ class ReportableQuantityDaoImplTest extends DBTest {
 
     @Test
     void testGetCi() {
-        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
+        String exp = RadBigDecimal.valueOf(1.0f).toDisplayString();
 
         ReportableQuantityDaoImpl daoSpy = spy(dao);
 
         when(em.find(any(), any())).thenReturn(model);
-        when(model.getCurie()).thenReturn(exp);
+        when(model.getCurieStr()).thenReturn(exp);
 
         assertEquals(exp, daoSpy.getCi(DEFAULT_ID));
         verify(daoSpy).getReportQuan(DEFAULT_ID);
@@ -73,7 +73,7 @@ class ReportableQuantityDaoImplTest extends DBTest {
 
     @Test
     void testGetTBq_NoResults() {
-        RadBigDecimal exp = RadBigDecimal.NEG_INFINITY_OBJ;
+        String exp = RadBigDecimal.NEG_INFINITY_DISPLAY_STRING;
 
         ReportableQuantityDaoImpl daoSpy = spy(dao);
 
@@ -85,12 +85,12 @@ class ReportableQuantityDaoImplTest extends DBTest {
 
     @Test
     void testGetTBq() {
-        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
+        String exp = RadBigDecimal.valueOf(1.0f).toDisplayString();
 
         ReportableQuantityDaoImpl daoSpy = spy(dao);
 
         when(em.find(any(), any())).thenReturn(model);
-        when(model.getTeraBq()).thenReturn(exp);
+        when(model.getTeraBqStr()).thenReturn(exp);
 
         assertEquals(exp, daoSpy.getTBq(DEFAULT_ID));
         verify(daoSpy).getReportQuan(DEFAULT_ID);

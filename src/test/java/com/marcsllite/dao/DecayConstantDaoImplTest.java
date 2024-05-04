@@ -32,17 +32,18 @@ class DecayConstantDaoImplTest extends DBTest {
 
     @Test
     void testGetA2_NoResult() {
+        String exp = RadBigDecimal.NEG_INFINITY_DISPLAY_STRING;
         when(em.find(any(), any())).thenReturn(null);
 
-        assertEquals(RadBigDecimal.NEG_INFINITY_OBJ, dao.getDecayConstant(DEFAULT_ID));
+        assertEquals(exp, dao.getDecayConstant(DEFAULT_ID));
     }
 
     @Test
     void testGetDecayConstant() {
-        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
+        String exp = RadBigDecimal.valueOf(1.0f).toDisplayString();
 
         when(em.find(any(), any())).thenReturn(model);
-        when(model.getValue()).thenReturn(exp);
+        when(model.getDecFloatStr()).thenReturn(exp);
 
         assertEquals(exp, dao.getDecayConstant(DEFAULT_ID));
     }

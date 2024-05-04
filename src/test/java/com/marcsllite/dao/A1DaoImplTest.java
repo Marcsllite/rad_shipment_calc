@@ -31,17 +31,18 @@ class A1DaoImplTest extends DBTest {
 
     @Test
     void testGetA1_NoResult() {
+        String exp = RadBigDecimal.NEG_INFINITY_DISPLAY_STRING;
         when(em.find(any(), any())).thenReturn(null);
 
-        assertEquals(RadBigDecimal.NEG_INFINITY_OBJ, dao.getA1(DEFAULT_ID));
+        assertEquals(exp, dao.getA1(DEFAULT_ID));
     }
 
     @Test
     void testGetA1() {
-        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
+        String exp = RadBigDecimal.valueOf(1.0f).toDisplayString();
 
         when(em.find(any(), any())).thenReturn(model);
-        when(model.getValue()).thenReturn(exp);
+        when(model.getDecFloatStr()).thenReturn(exp);
 
         assertEquals(exp, dao.getA1(DEFAULT_ID));
     }

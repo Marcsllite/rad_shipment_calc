@@ -38,7 +38,6 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -70,6 +69,7 @@ class DBServiceImplTest extends DBTest {
     private final String DEFAULT_SYMBOL = "Sy";
     private final String DEFAULT_MASS_NUMBER = "1";
     private final NuclideModelId NUCLIDE_ID = new NuclideModelId(DEFAULT_SYMBOL, DEFAULT_MASS_NUMBER);
+    private final String expected = RadBigDecimal.valueOf(1.0f).toDisplayString();
 
     @BeforeEach
     public void setUp() {
@@ -89,67 +89,55 @@ class DBServiceImplTest extends DBTest {
 
     @Test
     void testGetA1() {
-        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
-
         when(service.getA1Dao()).thenReturn(a1Dao);
-        when(a1Dao.getA1(NUCLIDE_ID)).thenReturn(exp);
+        when(a1Dao.getA1(NUCLIDE_ID)).thenReturn(expected);
 
-        assertEquals(exp, service.getA1(NUCLIDE_ID));
+        assertEquals(expected, service.getA1(NUCLIDE_ID));
         verify(a1Dao).getA1(NUCLIDE_ID);
     }
 
     @Test
     void testGetA2() {
-        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
-
         when(service.getA2Dao()).thenReturn(a2Dao);
-        when(a2Dao.getA2(NUCLIDE_ID)).thenReturn(exp);
+        when(a2Dao.getA2(NUCLIDE_ID)).thenReturn(expected);
 
-        assertEquals(exp, service.getA2(NUCLIDE_ID));
+        assertEquals(expected, service.getA2(NUCLIDE_ID));
         verify(a2Dao).getA2(NUCLIDE_ID);
     }
 
     @Test
     void testGetDecayConstant() {
-        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
-
         when(service.getDecayConstantDao()).thenReturn(decayConstantDao);
-        when(decayConstantDao.getDecayConstant(NUCLIDE_ID)).thenReturn(exp);
+        when(decayConstantDao.getDecayConstant(NUCLIDE_ID)).thenReturn(expected);
 
-        assertEquals(exp, service.getDecayConstant(NUCLIDE_ID));
+        assertEquals(expected, service.getDecayConstant(NUCLIDE_ID));
         verify(decayConstantDao).getDecayConstant(NUCLIDE_ID);
     }
 
     @Test
     void testGetExemptConcentration() {
-        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
-
         when(service.getExemptConDao()).thenReturn(exemptConDao);
-        when(exemptConDao.getExemptConcentration(NUCLIDE_ID)).thenReturn(exp);
+        when(exemptConDao.getExemptConcentration(NUCLIDE_ID)).thenReturn(expected);
 
-        assertEquals(exp, service.getExemptConcentration(NUCLIDE_ID));
+        assertEquals(expected, service.getExemptConcentration(NUCLIDE_ID));
         verify(exemptConDao).getExemptConcentration(NUCLIDE_ID);
     }
 
     @Test
     void testGetExemptLimit() {
-        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
-
         when(service.getExemptLimitDao()).thenReturn(exemptLimitDao);
-        when(exemptLimitDao.getExemptLimit(NUCLIDE_ID)).thenReturn(exp);
+        when(exemptLimitDao.getExemptLimit(NUCLIDE_ID)).thenReturn(expected);
 
-        assertEquals(exp, service.getExemptLimit(NUCLIDE_ID));
+        assertEquals(expected, service.getExemptLimit(NUCLIDE_ID));
         verify(exemptLimitDao).getExemptLimit(NUCLIDE_ID);
     }
 
     @Test
     void testGetHalfLife() {
-        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
-
         when(service.getHalfLifeDao()).thenReturn(halfLifeDao);
-        when(halfLifeDao.getHalfLife(NUCLIDE_ID)).thenReturn(exp);
+        when(halfLifeDao.getHalfLife(NUCLIDE_ID)).thenReturn(expected);
 
-        assertEquals(exp, service.getHalfLife(NUCLIDE_ID));
+        assertEquals(expected, service.getHalfLife(NUCLIDE_ID));
         verify(halfLifeDao).getHalfLife(NUCLIDE_ID);
     }
 
@@ -204,23 +192,6 @@ class DBServiceImplTest extends DBTest {
 
         assertNull(service.getNuclide(nuclideId));
         verify(nuclideDao).getNuclide(nuclideId);
-    }
-
-    protected void isoConstantsDbInit(NuclideModelId nuclideId) {
-        LimitsModelId limitsId = new LimitsModelId();
-        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
-
-        doReturn(exp).when(service).getA1(nuclideId);
-        doReturn(exp).when(service).getA2(nuclideId);
-        doReturn(exp).when(service).getDecayConstant(nuclideId);
-        doReturn(exp).when(service).getExemptConcentration(nuclideId);
-        doReturn(exp).when(service).getExemptLimit(nuclideId);
-        doReturn(exp).when(service).getHalfLife(nuclideId);
-        doReturn(exp).when(service).getIALimited(limitsId);
-        doReturn(exp).when(service).getIAPackage(limitsId);
-        doReturn(exp).when(service).getLimited(limitsId);
-        doReturn(exp).when(service).getCiReportQuan(nuclideId);
-        doReturn(exp).when(service).getTBqReportQuan(nuclideId);
     }
 
     @Test
@@ -299,37 +270,34 @@ class DBServiceImplTest extends DBTest {
 
     @Test
     void testGetIALimited() {
-        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
         LimitsModelId limitsId = new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL);
 
         when(service.getLimitsDao()).thenReturn(limitsDao);
-        when(limitsDao.getIALimited(limitsId)).thenReturn(exp);
+        when(limitsDao.getIALimited(limitsId)).thenReturn(expected);
 
-        assertEquals(exp, service.getIALimited(limitsId));
+        assertEquals(expected, service.getIALimited(limitsId));
         verify(limitsDao).getIALimited(limitsId);
     }
 
     @Test
     void testGetIAPackage() {
-        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
         LimitsModelId limitsId = new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL);
 
         when(service.getLimitsDao()).thenReturn(limitsDao);
-        when(limitsDao.getIAPackage(limitsId)).thenReturn(exp);
+        when(limitsDao.getIAPackage(limitsId)).thenReturn(expected);
 
-        assertEquals(exp, service.getIAPackage(limitsId));
+        assertEquals(expected, service.getIAPackage(limitsId));
         verify(limitsDao).getIAPackage(limitsId);
     }
 
     @Test
     void testGetLimited() {
-        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
         LimitsModelId limitsId = new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL);
 
         when(service.getLimitsDao()).thenReturn(limitsDao);
-        when(limitsDao.getLimited(limitsId)).thenReturn(exp);
+        when(limitsDao.getLimited(limitsId)).thenReturn(expected);
 
-        assertEquals(exp, service.getLimited(limitsId));
+        assertEquals(expected, service.getLimited(limitsId));
         verify(limitsDao).getLimited(limitsId);
     }
 
@@ -364,23 +332,19 @@ class DBServiceImplTest extends DBTest {
 
     @Test
     void testGetCiReportQuan() {
-        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
-
         when(service.getReportableQuanDao()).thenReturn(reportableQuanDao);
-        when(reportableQuanDao.getCi(NUCLIDE_ID)).thenReturn(exp);
+        when(reportableQuanDao.getCi(NUCLIDE_ID)).thenReturn(expected);
         
-        assertEquals(exp, service.getCiReportQuan(NUCLIDE_ID));
+        assertEquals(expected, service.getCiReportQuan(NUCLIDE_ID));
         verify(reportableQuanDao).getCi(NUCLIDE_ID);
     }
 
     @Test
     void testGetTBqReportQuan() {
-        RadBigDecimal exp = RadBigDecimal.valueOf(1.0f);
-
         when(service.getReportableQuanDao()).thenReturn(reportableQuanDao);
-        when(reportableQuanDao.getTBq(NUCLIDE_ID)).thenReturn(exp);
+        when(reportableQuanDao.getTBq(NUCLIDE_ID)).thenReturn(expected);
 
-        assertEquals(exp, service.getTBqReportQuan(NUCLIDE_ID));
+        assertEquals(expected, service.getTBqReportQuan(NUCLIDE_ID));
         verify(reportableQuanDao).getTBq(NUCLIDE_ID);
     }
 

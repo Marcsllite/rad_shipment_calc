@@ -19,7 +19,6 @@ import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.model.db.NuclideModel;
 import com.marcsllite.model.db.NuclideModelId;
 import com.marcsllite.model.db.ReportableQuantityModel;
-import com.marcsllite.util.RadBigDecimal;
 import com.marcsllite.util.factory.PropHandlerFactory;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.collections.FXCollections;
@@ -121,32 +120,32 @@ public class DBServiceImpl implements DBService {
     }
 
     @Override
-    public RadBigDecimal getA1(NuclideModelId nuclideId) {
+    public String getA1(NuclideModelId nuclideId) {
         return getA1Dao().getA1(nuclideId);
     }
 
     @Override
-    public RadBigDecimal getA2(NuclideModelId nuclideId) {
+    public String getA2(NuclideModelId nuclideId) {
         return getA2Dao().getA2(nuclideId);
     }
 
     @Override
-    public RadBigDecimal getDecayConstant(NuclideModelId nuclideId) {
+    public String getDecayConstant(NuclideModelId nuclideId) {
         return getDecayConstantDao().getDecayConstant(nuclideId);
     }
 
     @Override
-    public RadBigDecimal getExemptConcentration(NuclideModelId nuclideId) {
+    public String getExemptConcentration(NuclideModelId nuclideId) {
         return getExemptConDao().getExemptConcentration(nuclideId);
     }
 
     @Override
-    public RadBigDecimal getExemptLimit(NuclideModelId nuclideId) {
+    public String getExemptLimit(NuclideModelId nuclideId) {
         return getExemptLimitDao().getExemptLimit(nuclideId);
     }
 
     @Override
-    public RadBigDecimal getHalfLife(NuclideModelId nuclideId) {
+    public String getHalfLife(NuclideModelId nuclideId) {
         return getHalfLifeDao().getHalfLife(nuclideId);
     }
 
@@ -166,11 +165,6 @@ public class DBServiceImpl implements DBService {
         return getNuclideDao().getAllNuclides()
             .stream()
             .map(model -> new Nuclide(model) {
-                @Override
-                public PropHandler getPropHandler() {
-                    return DBServiceImpl.this.getPropHandler();
-                }
-
                 @Override
                 public DBService getDbService() {
                     return DBServiceImpl.this;
@@ -198,29 +192,24 @@ public class DBServiceImpl implements DBService {
     public Limits getLimits(LimitsModelId modelId) {
         LimitsModel model = getLimitsDao().getLimits(modelId);
         return model == null? null : new Limits(model.getLimitsId(),
-            model.getIaLimited(),
-            model.getIaPackage(),
-            model.getLimited()
-        ) {
-            @Override
-            public PropHandler getPropHandler() {
-                return DBServiceImpl.this.getPropHandler();
-            }
-        };
+            model.getIaLimitedStr(),
+            model.getIaPackageStr(),
+            model.getLimitedStr()
+        );
     }
 
     @Override
-    public RadBigDecimal getIALimited(LimitsModelId modelId) {
+    public String getIALimited(LimitsModelId modelId) {
         return getLimitsDao().getIALimited(modelId);
     }
 
     @Override
-    public RadBigDecimal getIAPackage(LimitsModelId modelId) {
+    public String getIAPackage(LimitsModelId modelId) {
         return getLimitsDao().getIAPackage(modelId);
     }
 
     @Override
-    public RadBigDecimal getLimited(LimitsModelId modelId) {
+    public String getLimited(LimitsModelId modelId) {
         return getLimitsDao().getLimited(modelId);
     }
 
@@ -240,12 +229,12 @@ public class DBServiceImpl implements DBService {
     }
 
     @Override
-    public RadBigDecimal getCiReportQuan(NuclideModelId nuclideId) {
+    public String getCiReportQuan(NuclideModelId nuclideId) {
         return getReportableQuanDao().getCi(nuclideId);
     }
 
     @Override
-    public RadBigDecimal getTBqReportQuan(NuclideModelId nuclideId) {
+    public String getTBqReportQuan(NuclideModelId nuclideId) {
         return getReportableQuanDao().getTBq(nuclideId);
     }
 
