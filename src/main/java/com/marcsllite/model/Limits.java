@@ -2,63 +2,34 @@ package com.marcsllite.model;
 
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.RadBigDecimal;
-import com.marcsllite.util.factory.PropHandlerFactory;
-import com.marcsllite.util.handler.PropHandler;
-import javafx.beans.property.SimpleObjectProperty;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.io.IOException;
+import javafx.beans.property.SimpleStringProperty;
 
 public class Limits {
-    private static final Logger logr = LogManager.getLogger();
-    private PropHandler propHandler;
-    private RadBigDecimal defaultVal;
     private LimitsModelId limitsId;
-    private final SimpleObjectProperty<RadBigDecimal> iaLimited = new SimpleObjectProperty<>();
-    private final SimpleObjectProperty<RadBigDecimal> iaPackage = new SimpleObjectProperty<>();
-    private final SimpleObjectProperty<RadBigDecimal> limited = new SimpleObjectProperty<>();
+    private final SimpleStringProperty iaLimitedStr = new SimpleStringProperty();
+    private final SimpleStringProperty iaPackageStr = new SimpleStringProperty();
+    private final SimpleStringProperty limitedStr = new SimpleStringProperty();
 
     public Limits() {
-        this(new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL));
+        this(new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL),
+            RadBigDecimal.NEG_INFINITY_DISPLAY_STRING,
+            RadBigDecimal.NEG_INFINITY_DISPLAY_STRING,
+            RadBigDecimal.NEG_INFINITY_DISPLAY_STRING);
     }
 
     public Limits(LimitsModelId limitsId) {
         this(limitsId,
-            null,
-            null,
-            null
+            RadBigDecimal.NEG_INFINITY_DISPLAY_STRING,
+            RadBigDecimal.NEG_INFINITY_DISPLAY_STRING,
+            RadBigDecimal.NEG_INFINITY_DISPLAY_STRING
         );
     }
 
-    public Limits(LimitsModelId limitsId, RadBigDecimal iaLimited, RadBigDecimal iaPackage, RadBigDecimal limited) {
-        try {
-            setPropHandler(new PropHandlerFactory().getPropHandler(null));
-            setDefaultVal(RadBigDecimal.valueOf(getPropHandler().getDouble("defaultNum")));
-        } catch (IOException e) {
-            logr.catching(e);
-            setDefaultVal(RadBigDecimal.NEG_INFINITY_OBJ);
-        }
-        setLimitsId(limitsId);
-        setIaLimited(iaLimited == null? defaultVal : iaLimited);
-        setIaPackage(iaPackage == null? defaultVal : iaPackage);
-        setLimited(limited == null? defaultVal : limited);
-    }
-
-    public PropHandler getPropHandler() {
-        return propHandler;
-    }
-
-    public void setPropHandler(PropHandler propHandler) {
-        this.propHandler = propHandler;
-    }
-
-    public RadBigDecimal getDefaultVal() {
-        return defaultVal;
-    }
-
-    public void setDefaultVal(RadBigDecimal defaultVal) {
-        this.defaultVal = defaultVal;
+    public Limits(LimitsModelId limitsId, String iaLimitedStr, String iaPackageStr, String limitedStr) {
+        this.limitsId = limitsId;
+        this.iaLimitedStr.set(iaLimitedStr);
+        this.iaPackageStr.set(iaPackageStr);
+        this.limitedStr.set(limitedStr);
     }
 
     public LimitsModelId getLimitsId() {
@@ -70,46 +41,58 @@ public class Limits {
     }
 
     public RadBigDecimal getIaLimited() {
-        return iaLimitedProperty().get();
+        return new RadBigDecimal(getIaLimitedStr());
     }
 
-    public SimpleObjectProperty<RadBigDecimal> iaLimitedProperty() {
-        return iaLimited;
+    public SimpleStringProperty iaLimitedStrProperty() {
+        return iaLimitedStr;
     }
 
-    public void setIaLimited(RadBigDecimal iaLimited) {
-        iaLimitedProperty().set(iaLimited);
+    public String getIaLimitedStr() {
+        return iaLimitedStrProperty().get();
+    }
+
+    public void setIaLimitedStr(String iaLimitedStr) {
+        iaLimitedStrProperty().set(iaLimitedStr);
     }
 
     public RadBigDecimal getIaPackage() {
-        return iaPackageProperty().get();
+        return new RadBigDecimal(getIaPackageStr());
     }
 
-    public SimpleObjectProperty<RadBigDecimal> iaPackageProperty() {
-        return iaPackage;
+    public SimpleStringProperty iaPackageStrProperty() {
+        return iaPackageStr;
     }
 
-    public void setIaPackage(RadBigDecimal iaPackage) {
-        iaPackageProperty().set(iaPackage);
+    public String getIaPackageStr() {
+        return iaPackageStrProperty().get();
+    }
+
+    public void setIaPackageStr(String iaPackageStr) {
+        iaPackageStrProperty().set(iaPackageStr);
     }
 
     public RadBigDecimal getLimited() {
-        return limitedProperty().get();
+        return new RadBigDecimal(getLimitedStr());
     }
 
-    public SimpleObjectProperty<RadBigDecimal> limitedProperty() {
-        return limited;
+    public SimpleStringProperty limitedStrProperty() {
+        return limitedStr;
     }
 
-    public void setLimited(RadBigDecimal limited) {
-        limitedProperty().set(limited);
+    public String getLimitedStr() {
+        return limitedStrProperty().get();
+    }
+
+    public void setLimitedStr(String limitedStr) {
+        limitedStrProperty().set(limitedStr);
     }
 
     @Override
     public String toString() {
         return "Limits for " + getLimitsId() +
-            ": {\n\tInstruments/Articles Limited Limit: " + getIaLimited() +
-            "\n\tInstruments/Articles Package Limit: " + getIaPackage() +
-            "\n\tNormal Limited Limit: " + getLimited() + "TBq\n}";
+            ": {\n\tInstruments/Articles Limited Limit: " + getIaLimitedStr() +
+            "\n\tInstruments/Articles Package Limit: " + getIaPackageStr() +
+            "\n\tNormal Limited Limit: " + getLimitedStr() + "TBq\n}";
     }
 }

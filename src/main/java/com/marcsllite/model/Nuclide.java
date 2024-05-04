@@ -7,86 +7,105 @@ import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.Conversions;
 import com.marcsllite.util.RadBigDecimal;
-import com.marcsllite.util.factory.PropHandlerFactory;
-import com.marcsllite.util.handler.PropHandler;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Nuclide {
-    private static final Logger logr = LogManager.getLogger();
     private DBService dbService;
-    private PropHandler propHandler;
     private NuclideConstants constants;
+
+    private final SimpleIntegerProperty atomicNumber;
+    private final SimpleStringProperty name;
+    private NuclideModelId nuclideId;
+    private final SimpleStringProperty fullName;
+    private final SimpleStringProperty nameNotation;
+    private final SimpleStringProperty displayNameNotation;
+    private final SimpleStringProperty symbolNotation;
+    private final SimpleStringProperty displaySymbolNotation;
+
     private Nature nature;
-    private SimpleStringProperty fullName;
-    private SimpleStringProperty name;
-    private SimpleStringProperty symbol;
-    private SimpleStringProperty nameNotation;
-    private SimpleStringProperty abbrNotation;
-    private SimpleStringProperty massNumber;
-    private LimitsModelId.State state;
-    private LimitsModelId.Form form;
-    private SimpleStringProperty strMass;
-    private SimpleObjectProperty<RadBigDecimal> mass;
-    private Conversions.SIPrefix massPrefix;
-    private Conversions.MassUnit massUnit;
-    private SimpleStringProperty strInitActivity;
-    private SimpleObjectProperty<RadBigDecimal> initActivity;
-    private Conversions.SIPrefix initActivityPrefix;
-    private Conversions.RadUnit initActivityUnit;
+    private LimitsModelId limitsId;
+    private final SimpleObjectProperty<LocalDate> refDate;
+
     private NuclideClass nuclideClass;
-    private SimpleObjectProperty<LocalDate> refDate;
     private LifeSpan lifeSpan;
     private LungAbsorption lungAbsorption;
-    public static final String LUNG_ABS_PATTERN = "(slow|medium|fast)$";
+
+    private Conversions.SIPrefix massPrefix;
+    private Conversions.MassUnit massUnit;
+    private final SimpleStringProperty mass;
+    private final SimpleStringProperty displayMass;
+
+    private Conversions.SIPrefix initActivityPrefix;
+    private Conversions.RadUnit initActivityUnit;
+    private final SimpleStringProperty initActivity;
+    private final SimpleStringProperty displayInitActivity;
     
+    public Nuclide() {
+        dbService = new DBServiceImpl();
+        constants = new NuclideConstants();
+
+        atomicNumber = new SimpleIntegerProperty(0);
+        name = new SimpleStringProperty("XX");
+        nuclideId = new NuclideModelId();
+        fullName = new SimpleStringProperty(name + " (" + nuclideId.getSymbol() + ")");
+        nameNotation = new SimpleStringProperty(name + "-" + nuclideId.getMassNumber());
+        displayNameNotation = new SimpleStringProperty(name + "-" + nuclideId.getDisplayMassNumber());
+        symbolNotation = new SimpleStringProperty(nuclideId.getSymbolNotation());
+        displaySymbolNotation = new SimpleStringProperty(nuclideId.getDisplaySymbolNotation());
+
+        nature = Nature.REGULAR;
+        limitsId = new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL);
+        refDate = new SimpleObjectProperty<>(LocalDate.now());
+
+        nuclideClass = NuclideClass.TBD;
+        lifeSpan = LifeSpan.REGULAR;
+        lungAbsorption = LungAbsorption.NONE;
+
+        massPrefix = Conversions.SIPrefix.BASE;
+        massUnit = Conversions.MassUnit.GRAMS;
+        mass = new SimpleStringProperty(RadBigDecimal.NEG_INFINITY_DISPLAY_STRING);
+        displayMass = new SimpleStringProperty(mass + " " +
+            massPrefix.getAbbrVal() + massUnit.getAbbrVal());
+
+        initActivityPrefix = Conversions.SIPrefix.BASE;
+        initActivityUnit = Conversions.RadUnit.CURIE;
+        initActivity = new SimpleStringProperty(RadBigDecimal.NEG_INFINITY_DISPLAY_STRING);
+        displayInitActivity = new SimpleStringProperty(initActivity + " " +
+            initActivityPrefix.getAbbrVal() + initActivityUnit.getAbbrVal());
+    }
+
     public Nuclide(NuclideModel model) {
-        this(model.getName(), model.getNuclideId());
+        this(model.getAtomicNumber(), model.getName(), model.getNuclideId());
     }
 
-    public Nuclide(String name, NuclideModelId nuclideId) {
-        this(name,
-            nuclideId,
-            null,
-            null,
-            null,
-            null,
-            LocalDate.now());
-    }
+    public Nuclide(int atomicNumber, String name, NuclideModelId nuclideId) {
+        this();
 
-    public Nuclide(String name, NuclideModelId nuclideId, Conversions.MassUnit massUnit, Conversions.RadUnit initActivityUnit, Nature nature, LimitsModelId limitsId, LocalDate refDate) {
-        setDbService(new DBServiceImpl());
+        setAtomicNumber(atomicNumber);
         setName(name);
         setNuclideId(nuclideId);
-        setMassPrefix(Conversions.SIPrefix.BASE);
-        setMassUnit(massUnit);
-        setInitActivityPrefix(Conversions.SIPrefix.BASE);
-        setInitActivityUnit(initActivityUnit);
-        setNature(nature);
-        setLimitsId(limitsId);
-        setNuclideClass(NuclideClass.TBD);
-        setPropHandler(null);
-        setRefDate(refDate);
-
-        logr.trace("Created new Nuclide {}", this::toString);
     }
 
-    public Nuclide initConstants() {
-        getConstants().setDbService(getDbService());
-        getConstants().dbInit(getNuclideId(), getLimitsId());
-        return this;
+    public Nuclide(Conversions.SIPrefix massPrefix, Conversions.MassUnit massUnit, String massStr,
+                   Conversions.SIPrefix initActivityPrefix, Conversions.RadUnit initActivityUnit, String initActivityStr) {
+        this();
+
+        setMassPrefix(massPrefix);
+        setMassUnit(massUnit);
+        setMassStr(massStr);
+
+        setInitActivityPrefix(initActivityPrefix);
+        setInitActivityUnit(initActivityUnit);
+        setInitActivityStr(initActivityStr);
     }
 
     public DBService getDbService() {
@@ -97,25 +116,7 @@ public class Nuclide {
         this.dbService = dbService;
     }
 
-    public PropHandler getPropHandler() {
-        return propHandler;
-    }
-
-    public void setPropHandler(PropHandler propHandler) {
-        try {
-            this.propHandler = propHandler == null?
-                new PropHandlerFactory().getPropHandler(null):
-            propHandler;
-        } catch (IOException e) {
-            logr.catching(e);
-            logr.error("Failed to set PropHandler for isotope {}", this::getNuclideId);
-        }
-    }
-
     public NuclideConstants getConstants() {
-        if(constants == null) {
-            setConstants(null);
-        }
         return constants;
     }
 
@@ -123,102 +124,252 @@ public class Nuclide {
         this.constants = constants == null? new NuclideConstants() : constants;
     }
 
-    public String getStrMass() {
-        return strMassProperty() == null ?
-            getMass() + " " + getMassPrefix().getAbbrVal() + getMassUnit().getAbbrVal() : strMassProperty().get();
+    public Nuclide initConstants() {
+        getConstants().setDbService(getDbService());
+        getConstants().dbInit(getNuclideId(), getLimitsId());
+        return this;
     }
 
-    public SimpleStringProperty strMassProperty() {
-        return strMass;
+    public SimpleIntegerProperty atomicNumberProperty() {
+        return atomicNumber;
     }
 
-    public void setStrMass() {
-        String str = getMass() + " " + getMassPrefix().getAbbrVal() + getMassUnit().getAbbrVal();
-        if(strMassProperty() == null) {
-            this.strMass = new SimpleStringProperty(str);
-        } else {
-            strMassProperty().set(str);
+    public int getAtomicNumber() {
+        return atomicNumber.get();
+    }
+
+    public void setAtomicNumber(int atomicNumber) {
+        this.atomicNumber.set(atomicNumber);
+    }
+
+    public SimpleStringProperty nameProperty() {
+        return name;
+    }
+
+    public String getName() {
+        return nameProperty().get();
+    }
+
+    public void setName(String name) {
+        nameProperty().set(name == null? "" : name);
+        setFullName();
+        setNameNotation();
+        setDisplayNameNotation();
+        setSymbolNotation();
+        setDisplaySymbolNotation();
+    }
+
+    public NuclideModelId getNuclideId() {
+        return nuclideId;
+    }
+
+    public void setNuclideId(NuclideModelId nuclideId) {
+        this.nuclideId = nuclideId == null ? new NuclideModelId() : nuclideId;
+        setFullName();
+        setNameNotation();
+        setDisplayNameNotation();
+        setSymbolNotation();
+        setDisplaySymbolNotation();
+    }
+
+    public SimpleStringProperty fullNameProperty() {
+        return fullName;
+    }
+
+    public String getFullName() {
+        return fullNameProperty().get();
+    }
+
+    public void setFullName() {
+        String str = "";
+        if(nameProperty() != null) {
+            str += getName();
         }
-    }
-
-    public RadBigDecimal getMass() {
-        return massProperty() == null? RadBigDecimal.NEG_INFINITY_OBJ : massProperty().get();
-    }
-
-    public SimpleObjectProperty<RadBigDecimal> massProperty() {
-        return mass;
-    }
-
-    public void setMass(RadBigDecimal mass) {
-        if(massProperty() == null) {
-            this.mass = new SimpleObjectProperty<>(mass);
-        } else {
-            massProperty().set(mass);
+        if(getNuclideId() != null) {
+            str += " (" + getNuclideId().getSymbol() + ")";
         }
-        setStrMass();
+        fullNameProperty().set(str);
+    }
+
+    public SimpleStringProperty nameNotationProperty() {
+        return nameNotation;
+    }
+
+    public String getNameNotation() {
+        return nameNotationProperty().get();
+    }
+
+    public void setNameNotation() {
+        String str = getName();
+        if(getNuclideId() != null) {
+            str += "-" + getNuclideId().getMassNumber();
+        }
+        nameNotationProperty().set(str);
+    }
+
+    public SimpleStringProperty displayNameNotationProperty() {
+        return displayNameNotation;
+    }
+
+    public String getDisplayNameNotation() {
+        return displayNameNotationProperty().get();
+    }
+
+    public void setDisplayNameNotation() {
+        String str = getName();
+        if(getNuclideId() != null) {
+            str += "-" + getNuclideId().getDisplayMassNumber();
+        }
+        displayNameNotationProperty().set(str);
+    }
+
+    public SimpleStringProperty symbolNotationProperty() {
+        return symbolNotation;
+    }
+
+    public String getSymbolNotation() {
+        return symbolNotationProperty().get();
+    }
+
+    public void setSymbolNotation() {
+        String str = "";
+        if(getNuclideId() != null) {
+            str = getNuclideId().getSymbolNotation();
+        }
+        symbolNotationProperty().set(str);
+    }
+
+    public SimpleStringProperty displaySymbolNotationProperty() {
+        return displaySymbolNotation;
+    }
+
+    public String getDisplaySymbolNotation() {
+        return displaySymbolNotationProperty().get();
+    }
+
+    public void setDisplaySymbolNotation() {
+        String str = "";
+        if(getNuclideId() != null) {
+            str = getNuclideId().getDisplaySymbolNotation();
+        }
+        displaySymbolNotationProperty().set(str);
+    }
+
+    public Nature getNature() {
+        return nature;
+    }
+
+    public void setNature(Nature nature) {
+        this.nature = nature;
+    }
+
+    public LimitsModelId getLimitsId() {
+        return limitsId;
+    }
+
+    public void setLimitsId(LimitsModelId limitsId) {
+        this.limitsId = limitsId == null ? new LimitsModelId() : limitsId;
+    }
+
+    public SimpleObjectProperty<LocalDate> refDateProperty() {
+        return refDate;
+    }
+
+    public LocalDate getRefDate() {
+        return refDateProperty().get();
+    }
+
+    public void setRefDate(LocalDate refDate) {
+        refDateProperty().set(refDate == null? LocalDate.now() : refDate);
+    }
+
+    public NuclideClass getNuclideClass() {
+        return nuclideClass;
+    }
+
+    public void setNuclideClass(NuclideClass nuclideClass) {
+        this.nuclideClass = nuclideClass;
+    }
+
+    public LifeSpan getLifeSpan() {
+        return lifeSpan;
+    }
+
+    public void setLifeSpan(LifeSpan lifeSpan) {
+        this.lifeSpan =  lifeSpan;
+    }
+
+    public LungAbsorption getLungAbsorption() {
+        return lungAbsorption;
+    }
+
+    public void setLungAbsorption(LungAbsorption lungAbsorption) {
+        this.lungAbsorption =  lungAbsorption;
     }
 
     public Conversions.SIPrefix getMassPrefix() {
-        return massPrefix == null? Conversions.SIPrefix.BASE : massPrefix;
+        return massPrefix;
     }
 
     public void setMassPrefix(Conversions.SIPrefix massPrefix) {
-        this.massPrefix = massPrefix;
-        setStrMass();
+        this.massPrefix = massPrefix == null? Conversions.SIPrefix.BASE : massPrefix;
+        setDisplayMass();
     }
 
     public Conversions.MassUnit getMassUnit() {
-        return massUnit == null? Conversions.MassUnit.GRAMS : massUnit;
+        return massUnit;
     }
 
     public void setMassUnit(Conversions.MassUnit massUnit) {
         this.massUnit = massUnit == null? Conversions.MassUnit.GRAMS : massUnit;
-        setStrMass();
+        setDisplayMass();
     }
 
-    public String getStrInitActivity() {
-        return strInitActivityProperty() == null?
-            getInitActivity() + " " + getInitActivityPrefix().getAbbrVal() + getInitActivityUnit() :
-            strInitActivityProperty().get();
+    public RadBigDecimal getMass() {
+        return new RadBigDecimal(getMassStr());
     }
 
-    public SimpleStringProperty strInitActivityProperty() {
-        return strInitActivity;
+    public SimpleStringProperty massProperty() {
+        return mass;
     }
 
-    public void setStrInitActivity() {
-        String str = getInitActivity() + " " + getInitActivityPrefix().getAbbrVal() + getInitActivityUnit();
-        if(strInitActivityProperty() == null) {
-            this.strInitActivity = new SimpleStringProperty(str);
-        } else {
-            strInitActivityProperty().set(str);
+    public String getMassStr() {
+        return massProperty().get();
+    }
+
+    public void setMassStr(String massStr) {
+        massProperty().set(massStr == null?
+            RadBigDecimal.NEG_INFINITY_DISPLAY_STRING : massStr);
+        setDisplayMass();
+    }
+
+    public SimpleStringProperty displayMassProperty() {
+        return displayMass;
+    }
+
+    public String getDisplayMass() {
+        return displayMassProperty().get();
+    }
+
+    public void setDisplayMass() {
+        String str = getMass() + " ";
+        if(getMassPrefix()!= null) {
+            str += getMassPrefix().getAbbrVal();
         }
-    }
 
-    public RadBigDecimal getInitActivity() {
-        return initActivityProperty() == null? RadBigDecimal.NEG_INFINITY_OBJ : initActivityProperty().get();
-    }
-
-    public SimpleObjectProperty<RadBigDecimal> initActivityProperty() {
-        return initActivity;
-    }
-
-    public void setInitActivity(RadBigDecimal initActivity) {
-        if(initActivityProperty() == null) {
-            this.initActivity = new SimpleObjectProperty<>(initActivity);
-        } else {
-            initActivityProperty().set(initActivity);
+        if(getMassUnit()!= null) {
+            str += getMassUnit().getAbbrVal();
         }
-        setStrInitActivity();
+        displayMassProperty().set(str);
     }
 
     public Conversions.SIPrefix getInitActivityPrefix() {
-        return initActivityPrefix == null? Conversions.SIPrefix.BASE : initActivityPrefix;
+        return initActivityPrefix;
     }
 
     public void setInitActivityPrefix(Conversions.SIPrefix initActivityPrefix) {
-        this.initActivityPrefix = initActivityPrefix;
-        setStrInitActivity();
+        this.initActivityPrefix = initActivityPrefix == null? Conversions.SIPrefix.BASE : initActivityPrefix;
+        setDisplayInitActivity();
     }
 
     public Conversions.RadUnit getInitActivityUnit() {
@@ -227,249 +378,47 @@ public class Nuclide {
 
     public void setInitActivityUnit(Conversions.RadUnit initActivityUnit) {
         this.initActivityUnit = initActivityUnit == null? Conversions.RadUnit.CURIE : initActivityUnit;
-        setStrInitActivity();
+        setDisplayInitActivity();
     }
 
-    public void setNuclideId(NuclideModelId nuclideId) {
-        if(nuclideId == null) {
-            setSymbol("");
-            setMassNumber("");
-        } else {
-            setSymbol(nuclideId.getSymbol());
-            setMassNumber(nuclideId.getMassNumber());
+    public RadBigDecimal getInitActivity() {
+        return new RadBigDecimal(getInitActivityStr());
+    }
+
+    public SimpleStringProperty initActivityProperty() {
+        return initActivity;
+    }
+
+    public String getInitActivityStr() {
+        return initActivityProperty().get();
+    }
+
+    public void setInitActivityStr(String initActivityStr) {
+        initActivityProperty().set(initActivityStr == null?
+            RadBigDecimal.NEG_INFINITY_DISPLAY_STRING : initActivityStr);
+        setDisplayInitActivity();
+    }
+
+    public SimpleStringProperty displayInitActivityProperty() {
+        return displayInitActivity;
+    }
+
+    public String getDisplayInitActivity() {
+        return displayInitActivityProperty().get();
+    }
+
+    public void setDisplayInitActivity() {
+        String str = getInitActivity() + " ";
+        if(getInitActivityPrefix()!= null) {
+            str += getInitActivityPrefix().getAbbrVal();
         }
-    }
 
-    public NuclideModelId getNuclideId() {
-        return new NuclideModelId(getSymbol(), getMassNumber());
-    }
-
-    public String getNameNotation() {
-        return nameNotationProperty() == null?
-            getName() + "-" + getMassNumber()
-            : nameNotationProperty().get();
-    }
-
-    public String getDisplayNameNotation() {
-        String ret = getNameNotation();
-        if(!LifeSpan.REGULAR.equals(getLifeSpan())) {
-            ret = ret.replaceAll("\\(.*$", "");
+        if(getInitActivityUnit()!= null) {
+            str += getInitActivityUnit().getAbbrVal();
         }
-
-        if(!LungAbsorption.NONE.equals(getLungAbsorption())) {
-            ret = ret.replaceAll(Nuclide.LUNG_ABS_PATTERN, "");
-        }
-        return ret;
+        displayInitActivityProperty().set(str);
     }
-
-    public SimpleStringProperty nameNotationProperty() {
-        return nameNotation;
-    }
-
-    public void setNameNotation() {
-        String str = getName() + "-" + getMassNumber();
-        if(strInitActivityProperty() == null) {
-            this.nameNotation = new SimpleStringProperty(str);
-        } else {
-            nameNotationProperty().set(str);
-        }
-    }
-
-    public String getAbbrNotation() {
-        return abbrNotationProperty() == null?
-            getSymbol() + "-" + getMassNumber()
-            :abbrNotationProperty().get();
-    }
-
-    public SimpleStringProperty abbrNotationProperty() {
-        return abbrNotation;
-    }
-
-    public void setAbbrNotation() {
-        String str = getSymbol() + "-" + getMassNumber();
-        if(abbrNotationProperty() == null) {
-            this.abbrNotation = new SimpleStringProperty(str);
-        } else {
-            abbrNotationProperty().set(str);
-        }
-    }
-
-    public String getSymbol() {
-        return symbolProperty() == null? "" : symbolProperty().get();
-    }
-
-    public SimpleStringProperty symbolProperty() {
-        return symbol;
-    }
-
-    public void setSymbol(String symbol) {
-        String val = symbol == null? "" : symbol;
-        if(symbolProperty() == null) {
-            this.symbol = new SimpleStringProperty(val);
-        } else {
-            symbolProperty().set(val);
-        }
-        setFullName();
-    }
-
-    public String getMassNumber() {
-        return massNumberProperty() == null? "" : massNumberProperty().get();
-    }
-
-    public SimpleStringProperty massNumberProperty() {
-        return massNumber;
-    }
-
-    public void setMassNumber(String massNumber) {
-        String val = massNumber == null? "" : massNumber;
-        if(massNumberProperty() == null) {
-            this.massNumber = new SimpleStringProperty(val);
-        } else {
-            massNumberProperty().set(val);
-        }
-        setNameNotation();
-        setAbbrNotation();
-        setLifeSpan(parseLifeSpanFromMassNumber());
-        setLungAbsorption(parseLungAbsFromMassNumber());
-    }
-
-    public LifeSpan parseLifeSpanFromMassNumber() {
-        Pattern lifeSpanPattern = Pattern.compile("\\((.*)\\)$");
-        Matcher lifeSpanMatch = lifeSpanPattern.matcher(getMassNumber());
-        LifeSpan ret = LifeSpan.REGULAR;
-        if(lifeSpanMatch.find()) {
-            ret = LifeSpan.toLifeSpan(lifeSpanMatch.group(1));
-        }
-        return ret;
-    }
-
-    public LungAbsorption parseLungAbsFromMassNumber() {
-        Pattern lungAbsPattern = Pattern.compile(Nuclide.LUNG_ABS_PATTERN);
-        Matcher lungAbsMatch = lungAbsPattern.matcher(getMassNumber());
-        LungAbsorption ret = LungAbsorption.NONE;
-        if(lungAbsMatch.find()) {
-            ret = LungAbsorption.toLungAbsorption(lungAbsMatch.group(0));
-        }
-        return ret;
-    }
-
-    public String getFullName() {
-        return fullNameProperty() == null?
-            getName() + " (" + getSymbol() + ")":
-            fullNameProperty().get();
-    }
-
-    public SimpleStringProperty fullNameProperty() {
-        return fullName;
-    }
-
-    public void setFullName() {
-        String str = getName() + " (" + getSymbol() + ")";
-        if(fullNameProperty() == null) {
-            this.fullName = new SimpleStringProperty(str);
-        } else {
-            fullNameProperty().set(str);
-        }
-    }
-
-    public String getName() {
-        return nameProperty() == null? "" : nameProperty().get();
-    }
-
-    public SimpleStringProperty nameProperty() {
-        return name;
-    }
-
-    public void setName(String name) {
-        String val = name == null? "" : name;
-        if(nameProperty() == null) {
-            this.name = new SimpleStringProperty(val);
-        } else {
-            nameProperty().set(val);
-        }
-        setFullName();
-        setNameNotation();
-        setAbbrNotation();
-    }
-
-    public Nature getNature() {
-        return nature;
-    }
-
-    public void setNature(Nature nature) {
-        this.nature = nature == null? Nuclide.Nature.REGULAR: nature;
-    }
-
-    public LimitsModelId getLimitsId() {
-        return new LimitsModelId(getState(), getForm());
-    }
-
-    public void setLimitsId(LimitsModelId limitsId) {
-        if(limitsId == null) {
-            limitsId = new LimitsModelId();
-        }
-        setState(limitsId.getState());
-        setForm(limitsId.getForm());
-    }
-
-    public LimitsModelId.State getState() {
-        return state;
-    }
-
-    public void setState(LimitsModelId.State state) {
-        this.state = state == null? LimitsModelId.State.SOLID : state;
-    }
-
-    public LimitsModelId.Form getForm() {
-        return form;
-    }
-
-    public void setForm(LimitsModelId.Form form) {
-        this.form = form == null? LimitsModelId.Form.NORMAL : form;
-    }
-
-    public NuclideClass getNuclideClass() {
-        return nuclideClass;
-    }
-
-    public void setNuclideClass(NuclideClass nuclideClass) {
-        this.nuclideClass = nuclideClass == null? NuclideClass.TBD : nuclideClass;
-    }
-
-    public LocalDate getRefDate() {
-        return refDateProperty() == null? LocalDate.now() : refDateProperty().get();
-    }
-
-    public SimpleObjectProperty<LocalDate> refDateProperty() {
-        return refDate;
-    }
-
-    public void setRefDate(LocalDate refDate) {
-        LocalDate val = refDate == null? LocalDate.now() : refDate;
-
-        if(refDateProperty() == null) {
-            this.refDate = new SimpleObjectProperty<>(val);
-        } else {
-            refDateProperty().set(val);
-        }
-    }
-
-    public LifeSpan getLifeSpan() {
-        return lifeSpan;
-    }
-
-    public void setLifeSpan(LifeSpan lifeSpan) {
-        this.lifeSpan = lifeSpan == null? LifeSpan.REGULAR : lifeSpan;
-    }
-
-    public LungAbsorption getLungAbsorption() {
-        return lungAbsorption;
-    }
-
-    public void setLungAbsorption(LungAbsorption lungAbsorption) {
-        this.lungAbsorption = lungAbsorption == null? LungAbsorption.NONE : lungAbsorption;
-    }
-
+    
     @Override
     public boolean equals(Object obj) {
         if(obj == null) {
@@ -481,8 +430,8 @@ public class Nuclide {
         Nuclide temp = (Nuclide) obj;
         return Objects.equals(this.getNuclideId(), temp.getNuclideId()) &&
             Objects.equals(this.getNuclideClass(), temp.getNuclideClass()) &&
-            Objects.equals(this.getStrMass(), temp.getStrMass()) &&
-            Objects.equals(this.getStrInitActivity(), temp.getStrInitActivity()) &&
+            Objects.equals(this.getDisplayMass(), temp.getDisplayMass()) &&
+            Objects.equals(this.getDisplayInitActivity(), temp.getDisplayInitActivity()) &&
             Objects.equals(this.getNature(), temp.getNature()) &&
             Objects.equals(this.getLimitsId(), temp.getLimitsId());
     }
@@ -493,8 +442,8 @@ public class Nuclide {
         hash = 2 * hash + (this.getNuclideId() != null ? this.getNuclideId().hashCode() : 0);
         hash = 2 * hash + (this.getNuclideClass() != null ? this.getNuclideClass().hashCode() : 0);
         hash = 2 * hash + (this.getRefDate() != null ? this.getRefDate().hashCode() : 0);
-        hash = 2 * hash + (this.getStrMass().hashCode());
-        hash = 2 * hash + (this.getStrInitActivity().hashCode());
+        hash = 2 * hash + (this.getDisplayMass().hashCode());
+        hash = 2 * hash + (this.getDisplayInitActivity().hashCode());
         hash = 2 * hash + (this.getNature() != null ? this.getNature().hashCode() : 0);
         hash = 2 * hash + (this.getLimitsId() != null ? this.getLimitsId().hashCode() : 0);
         return hash;
@@ -505,8 +454,8 @@ public class Nuclide {
         return "Nuclide: { " + getNuclideId() +
             "\nClass: " + getNuclideClass() +
             "\nRef Date: " + getRefDate() +
-            "\nMass: " + getStrMass() +
-            "\nInitial Activity: " + getStrInitActivity() +
+            "\nMass: " + getDisplayMass() +
+            "\nInitial Activity: " + getDisplayInitActivity() +
             "\nNature: " + getNature() +
             "\nLifeSpan: " + getLifeSpan() +
             "\nLung Absorption: " + getLungAbsorption() +
