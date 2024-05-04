@@ -6,6 +6,7 @@ import com.marcsllite.util.RadBigDecimal;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -33,24 +34,23 @@ public class ShipmentModel extends BaseModel {
     @Column(name = "Reference_Date")
     private LocalDate refDate;
 
-    @Column(name = "Mass")
-    private String mass;
+    @Column(name = "Mass_Prefix", nullable = false)
+    @Convert(converter = SIPrefixAttrConverter.class)
+    private Conversions.SIPrefix massPrefix;
 
     @Column(name = "Mass_Unit", nullable = false)
     @Convert(converter = MassUnitAttrConverter.class)
     private Conversions.MassUnit massUnit;
 
+    @Column(name = "Mass")
+    private String mass;
+
     @Column(name = "Nature", nullable = false)
     @Convert(converter = NatureAttrConverter.class)
     private Nuclide.Nature nature;
 
-    @Column(name = "State", nullable = false)
-    @Convert(converter = StateAttrConverter.class)
-    private LimitsModelId.State state;
-
-    @Column(name = "Form", nullable = false)
-    @Convert(converter = FormAttrConverter.class)
-    private LimitsModelId.Form form;
+    @EmbeddedId
+    private LimitsModelId limitsId;
     
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
@@ -79,6 +79,22 @@ public class ShipmentModel extends BaseModel {
         this.refDate = refDate == null? LocalDate.now() : refDate;
     }
 
+    public Conversions.SIPrefix getMassPrefix() {
+        return massPrefix;
+    }
+
+    public void setMassPrefix(Conversions.SIPrefix massPrefix) {
+        this.massPrefix = massPrefix;
+    }
+
+    public Conversions.MassUnit getMassUnit() {
+        return massUnit;
+    }
+
+    public void setMassUnit(Conversions.MassUnit massUnit) {
+        this.massUnit = massUnit == null? Conversions.MassUnit.GRAMS : massUnit;
+    }
+
     public RadBigDecimal getMass() {
         return new RadBigDecimal(mass);
     }
@@ -91,14 +107,6 @@ public class ShipmentModel extends BaseModel {
         this.mass = mass;
     }
 
-    public Conversions.MassUnit getMassUnit() {
-        return massUnit;
-    }
-
-    public void setMassUnit(Conversions.MassUnit massUnit) {
-        this.massUnit = massUnit == null? Conversions.MassUnit.GRAMS : massUnit;
-    }
-
     public Nuclide.Nature getNature() {
         return nature;
     }
@@ -107,20 +115,12 @@ public class ShipmentModel extends BaseModel {
         this.nature = nature == null? Nuclide.Nature.REGULAR: nature;
     }
 
-    public LimitsModelId.State getState() {
-        return state;
+    public LimitsModelId getLimitsId() {
+        return limitsId;
     }
 
-    public void setState(LimitsModelId.State state) {
-        this.state = state == null? LimitsModelId.State.SOLID : state;
-    }
-
-    public LimitsModelId.Form getForm() {
-        return form;
-    }
-
-    public void setForm(LimitsModelId.Form form) {
-        this.form = form == null? LimitsModelId.Form.NORMAL : form;
+    public void setLimitsId(LimitsModelId limitsId) {
+        this.limitsId = limitsId;
     }
 
     public List<NuclideModel> getNuclides() {

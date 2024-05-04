@@ -25,9 +25,9 @@ public class LimitsModel extends BaseModel {
 
     public LimitsModel() {
         this(new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL),
-            RadBigDecimal.NEG_INFINITY_OBJ.toString(),
-            RadBigDecimal.NEG_INFINITY_OBJ.toString(),
-            RadBigDecimal.NEG_INFINITY_OBJ.toString());
+            RadBigDecimal.NEG_INFINITY_DISPLAY_STRING,
+            RadBigDecimal.NEG_INFINITY_DISPLAY_STRING,
+            RadBigDecimal.NEG_INFINITY_DISPLAY_STRING);
     }
 
     public LimitsModel(LimitsModelId limitsId, String iaLimitedStr, String iaPackageStr, String limitedStr) {

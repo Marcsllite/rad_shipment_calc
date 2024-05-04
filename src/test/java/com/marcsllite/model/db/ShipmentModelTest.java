@@ -86,32 +86,6 @@ class ShipmentModelTest {
     }
 
     @Test
-    void testSetStateUnit_Null() {
-        model.setState(null);
-        assertEquals(LimitsModelId.State.SOLID, model.getState());
-    }
-
-    @Test
-    void testSetStateUnit() {
-        LimitsModelId.State exp = LimitsModelId.State.GAS;
-        model.setState(exp);
-        assertEquals(exp, model.getState());
-    }
-
-    @Test
-    void testSetFormUnit_Null() {
-        model.setForm(null);
-        assertEquals(LimitsModelId.Form.NORMAL, model.getForm());
-    }
-
-    @Test
-    void testSetFormUnit() {
-        LimitsModelId.Form exp = LimitsModelId.Form.SPECIAL;
-        model.setForm(exp);
-        assertEquals(exp, model.getForm());
-    }
-
-    @Test
     void testSetNuclidesUnit_Null() {
         model.setNuclides(null);
         assertNotNull(model.getNuclides());
