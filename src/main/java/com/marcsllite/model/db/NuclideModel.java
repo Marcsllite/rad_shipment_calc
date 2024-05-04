@@ -70,7 +70,7 @@ public class NuclideModel extends BaseModel {
         return getName() + "-" + getNuclideId().getMassNumber();
     }
 
-    public String getAbbrNotation() {
-        return getNuclideId().getSymbol() + "-" + getNuclideId().getMassNumber();
+    public String getSymbolNotation() {
+        return getNuclideId().getSymbolNotation();
     }
 }

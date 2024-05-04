@@ -49,7 +49,7 @@ class HomePaneControllerTest {
     @Test
     void testIsIsoInTable_NullShipment() {
         controller.setShipment(null);
-        assertFalse(controller.isNuclideInTable(new Nuclide("", new NuclideModelId())));
+        assertFalse(controller.isNuclideInTable(new Nuclide()));
     }
 
     @Test
@@ -58,17 +58,17 @@ class HomePaneControllerTest {
         shipment.setNuclides(FXCollections.observableArrayList());
         controller.setShipment(shipment);
 
-        assertFalse(controller.isNuclideInTable(new Nuclide("", new NuclideModelId())));
+        assertFalse(controller.isNuclideInTable(new Nuclide()));
     }
 
     @Test
     void testIsIsoInTable() {
         Shipment shipment = spy(Shipment.class);
-        Nuclide nuclide = new Nuclide("", new NuclideModelId());
+        Nuclide nuclide = new Nuclide();
         shipment.setNuclides(FXCollections.observableArrayList(nuclide));
         controller.setShipment(shipment);
 
-        Nuclide nuclide2 = new Nuclide("", new NuclideModelId());
+        Nuclide nuclide2 = new Nuclide();
         assertTrue(controller.isNuclideInTable(nuclide2));
 
         nuclide2.setLungAbsorption(Nuclide.LungAbsorption.FAST);

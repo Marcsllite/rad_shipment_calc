@@ -47,7 +47,7 @@ class ReferencePaneControllerTest {
 
     @Test
     void testDoesNuclideNameMatch_NullString() {
-        Nuclide nuclide = new Nuclide("Name", new NuclideModelId("Sy", "1"));
+        Nuclide nuclide = new Nuclide(1, "Name", new NuclideModelId("Sy", "1"));
         assertTrue(controller.doesNuclideNameMatch(nuclide, null));
         assertTrue(controller.doesNuclideNameMatch(nuclide, ""));
         assertTrue(controller.doesNuclideNameMatch(nuclide, " "));
@@ -55,7 +55,7 @@ class ReferencePaneControllerTest {
 
     @Test
     void testDoesNuclideNameMatch() {
-        Nuclide nuclide = new Nuclide("Abbreviation", new NuclideModelId("Ab", "1"));
+        Nuclide nuclide = new Nuclide(1, "Abbreviation", new NuclideModelId("Ab", "1"));
         assertTrue(controller.doesNuclideNameMatch(nuclide, "A"));
         assertTrue(controller.doesNuclideNameMatch(nuclide, "ab"));
         assertTrue(controller.doesNuclideNameMatch(nuclide, "aB-"));

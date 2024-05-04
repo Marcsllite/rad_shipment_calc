@@ -225,7 +225,7 @@ public class ReferencePaneController extends BaseController {
         String searchStr = str.toLowerCase();
 
         return nuclide.getNameNotation().toLowerCase().contains(searchStr) ||
-            nuclide.getAbbrNotation().toLowerCase().contains(searchStr);
+            nuclide.getSymbolNotation().toLowerCase().contains(searchStr);
     }
 
     protected void setupTableDataLinking(Nuclide nuclide) {

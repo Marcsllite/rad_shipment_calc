@@ -6,7 +6,6 @@ import com.marcsllite.model.Shipment;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.model.db.NuclideModel;
 import com.marcsllite.util.Conversions;
-import com.marcsllite.util.RadBigDecimal;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -38,6 +37,9 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.marcsllite.model.db.NuclideModelId.LIFE_SPAN_PATTERN;
+import static com.marcsllite.model.db.NuclideModelId.LUNG_ABS_PATTERN;
 
 public class ModifyController extends BaseController {
     private static final Logger logr = LogManager.getLogger();
@@ -286,11 +288,11 @@ public class ModifyController extends BaseController {
             txtFirstPageStatus.setVisible(false);
             txtFirstPageStatus.setText(null);
     
-            String abbr = getEditingNuclide().getMassNumber().toLowerCase();
-            Pattern lungAbsPattern = Pattern.compile(Nuclide.LUNG_ABS_PATTERN);
-            Matcher lungAbsMatch = lungAbsPattern.matcher(abbr);
-            Pattern lifeSpanPattern = Pattern.compile("\\((.*)\\)$");
-            Matcher lifeSpanMatch = lifeSpanPattern.matcher(abbr);
+            String massNumber = getEditingNuclide().getNuclideId().getMassNumber().toLowerCase();
+            Pattern lungAbsPattern = Pattern.compile(LUNG_ABS_PATTERN);
+            Matcher lungAbsMatch = lungAbsPattern.matcher(massNumber);
+            Pattern lifeSpanPattern = Pattern.compile(LIFE_SPAN_PATTERN);
+            Matcher lifeSpanMatch = lifeSpanPattern.matcher(massNumber);
     
             if(lifeSpanMatch.find()) {
                 setLifeSpanVisible(true);
@@ -332,8 +334,8 @@ public class ModifyController extends BaseController {
             comboBoxMassPrefix.getSelectionModel().select(getEditingNuclide().getMassPrefix().getVal());
             choiceBoxMassUnit.getSelectionModel().select(getEditingNuclide().getMassUnit().getVal());
             choiceBoxNature.getSelectionModel().select(getEditingNuclide().getNature().getVal());
-            choiceBoxState.getSelectionModel().select(getEditingNuclide().getState().getVal());
-            choiceBoxForm.getSelectionModel().select(getEditingNuclide().getForm().getVal());
+            choiceBoxState.getSelectionModel().select(getEditingNuclide().getLimitsId().getState().getVal());
+            choiceBoxForm.getSelectionModel().select(getEditingNuclide().getLimitsId().getForm().getVal());
             chckBoxSameMass.setSelected(false);
             chckBoxSameNSF.setSelected(false);
 
@@ -551,7 +553,7 @@ public class ModifyController extends BaseController {
             return false;
         }
 
-        String abbr = nuclide.getAbbrNotation();
+        String abbr = nuclide.getSymbolNotation();
         String name = nuclide.getNameNotation();
 
         if(!getFilteredLifeSpanNuclides().isEmpty()) {
@@ -562,9 +564,9 @@ public class ModifyController extends BaseController {
         }
 
         if(!getFilteredLungAbsNuclides().isEmpty()) {
-            str = str.replaceAll(Nuclide.LUNG_ABS_PATTERN, "");
-            abbr = abbr.replaceAll(Nuclide.LUNG_ABS_PATTERN, "");
-            name = name.replaceAll(Nuclide.LUNG_ABS_PATTERN, "");
+            str = str.replaceAll(LUNG_ABS_PATTERN, "");
+            abbr = abbr.replaceAll(LUNG_ABS_PATTERN, "");
+            name = name.replaceAll(LUNG_ABS_PATTERN, "");
         }
 
         return abbr.equalsIgnoreCase(str) || name.equalsIgnoreCase(str);
@@ -577,9 +579,9 @@ public class ModifyController extends BaseController {
 
         String searchStr = str.toLowerCase();
 
-        String abbr = nuclide.getAbbrNotation().toLowerCase();
+        String abbr = nuclide.getSymbolNotation().toLowerCase();
         String name = nuclide.getNameNotation().toLowerCase();
-        Pattern pattern = Pattern.compile(Nuclide.LUNG_ABS_PATTERN);
+        Pattern pattern = Pattern.compile(LUNG_ABS_PATTERN);
         Matcher matchAbbr = pattern.matcher(abbr);
 
         return (name.contains(searchStr) || abbr.contains(searchStr)) && matchAbbr.find();
@@ -592,7 +594,7 @@ public class ModifyController extends BaseController {
 
         String searchStr = str.toLowerCase();
 
-        String abbr = nuclide.getAbbrNotation().toLowerCase();
+        String abbr = nuclide.getSymbolNotation().toLowerCase();
         String name = nuclide.getNameNotation().toLowerCase();
         Pattern pattern = Pattern.compile("\\)$");
         Matcher matchAbbr = pattern.matcher(abbr);
@@ -604,7 +606,7 @@ public class ModifyController extends BaseController {
         Nuclide nuclide = null;
         if(!btnNext.isDisabled()) {
             nuclide = new Nuclide(getSearchFilteredNuclides().get(0));
-            nuclide.setInitActivity(new RadBigDecimal(txtFieldA0.getText()));
+            nuclide.setInitActivityStr(txtFieldA0.getText());
             nuclide.setInitActivityPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxA0Prefix.getValue()));
             nuclide.setInitActivityUnit(Conversions.RadUnit.toRadUnit(choiceBoxA0RadUnit.getValue()));
             setNuclideLifeSpan(nuclide);
@@ -626,7 +628,7 @@ public class ModifyController extends BaseController {
     private void setNuclideLifeSpan(Nuclide nuclide) {
         if(toggleGrpLifeSpan.getSelectedToggle() != null) {
             RadioButton radioBtn = (RadioButton) toggleGrpLifeSpan.getSelectedToggle();
-            nuclide.getNuclideId().setMassNumber(nuclide.getMassNumber() + radioBtn.getUserData());
+            nuclide.getNuclideId().setMassNumber(nuclide.getNuclideId().getMassNumber() + radioBtn.getUserData());
             nuclide.setLifeSpan(Nuclide.LifeSpan.toLifeSpan((String) radioBtn.getUserData()));
         } else {
             nuclide.setLifeSpan(null);
@@ -636,7 +638,7 @@ public class ModifyController extends BaseController {
     protected void setNuclideLungAbs(Nuclide nuclide) {
         if(toggleGrpLungAbs.getSelectedToggle() != null) {
             RadioButton radioBtn = (RadioButton) toggleGrpLungAbs.getSelectedToggle();
-            nuclide.getNuclideId().setMassNumber(nuclide.getMassNumber() + radioBtn.getUserData());
+            nuclide.getNuclideId().setMassNumber(nuclide.getNuclideId().getMassNumber() + radioBtn.getUserData());
             nuclide.setLungAbsorption(Nuclide.LungAbsorption.toLungAbsorption((String) radioBtn.getUserData()));
         } else {
             nuclide.setLungAbsorption(null);
@@ -649,11 +651,11 @@ public class ModifyController extends BaseController {
             nuclide.setRefDate(datePicker.getValue());
             if(chckBoxSameMass.isDisabled()) {
                 Shipment shipment = getMain().getHomePaneController().getShipment();
-                nuclide.setMass(shipment.getMass());
+                nuclide.setMassStr(shipment.getMassStr());
                 nuclide.setMassPrefix(shipment.getMassPrefix());
                 nuclide.setMassUnit(shipment.getMassUnit());
             } else {
-                nuclide.setMass(new RadBigDecimal(txtFieldMass.getText()));
+                nuclide.setMassStr(txtFieldMass.getText());
                 nuclide.setMassPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxMassPrefix.getValue()));
                 nuclide.setMassUnit(Conversions.MassUnit.toMass(choiceBoxMassUnit.getValue()));
             }
@@ -661,12 +663,11 @@ public class ModifyController extends BaseController {
             if(chckBoxSameNSF.isDisabled()) {
                 Shipment shipment = getMain().getHomePaneController().getShipment();
                 nuclide.setNature(shipment.getNature());
-                nuclide.setState(shipment.getState());
-                nuclide.setForm(shipment.getForm());
+                nuclide.setLimitsId(shipment.getLimitsId());
             } else {
                 nuclide.setNature(Nuclide.Nature.toNature(choiceBoxNature.getValue()));
-                nuclide.setState(LimitsModelId.State.toState(choiceBoxState.getValue()));
-                nuclide.setForm(LimitsModelId.Form.toForm(choiceBoxForm.getValue()));
+                nuclide.getLimitsId().setState(LimitsModelId.State.toState(choiceBoxState.getValue()));
+                nuclide.getLimitsId().setForm(LimitsModelId.Form.toForm(choiceBoxForm.getValue()));
             }
             nuclide.getConstants().dbInit(nuclide.getNuclideId(), nuclide.getLimitsId());
         }
