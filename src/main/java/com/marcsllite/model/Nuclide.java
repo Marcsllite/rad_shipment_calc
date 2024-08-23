@@ -25,6 +25,7 @@ public class Nuclide {
     private final SimpleIntegerProperty atomicNumber;
     private final SimpleStringProperty name;
     private NuclideModelId nuclideId;
+    private final SimpleStringProperty massNumber;
     private final SimpleStringProperty fullName;
     private final SimpleStringProperty nameNotation;
     private final SimpleStringProperty displayNameNotation;
@@ -56,9 +57,10 @@ public class Nuclide {
         atomicNumber = new SimpleIntegerProperty(0);
         name = new SimpleStringProperty("XX");
         nuclideId = new NuclideModelId();
-        fullName = new SimpleStringProperty(name + " (" + nuclideId.getSymbol() + ")");
-        nameNotation = new SimpleStringProperty(name + "-" + nuclideId.getMassNumber());
-        displayNameNotation = new SimpleStringProperty(name + "-" + nuclideId.getDisplayMassNumber());
+        massNumber = new SimpleStringProperty(nuclideId.getMassNumber());
+        fullName = new SimpleStringProperty(name.getValue() + " (" + nuclideId.getSymbol() + ")");
+        nameNotation = new SimpleStringProperty(name.getValue() + "-" + massNumber.getValue());
+        displayNameNotation = new SimpleStringProperty(name.getValue() + "-" + nuclideId.getDisplayMassNumber());
         symbolNotation = new SimpleStringProperty(nuclideId.getSymbolNotation());
         displaySymbolNotation = new SimpleStringProperty(nuclideId.getDisplaySymbolNotation());
 
@@ -73,14 +75,12 @@ public class Nuclide {
         massPrefix = Conversions.SIPrefix.BASE;
         massUnit = Conversions.MassUnit.GRAMS;
         mass = new SimpleStringProperty(RadBigDecimal.NEG_INFINITY_DISPLAY_STRING);
-        displayMass = new SimpleStringProperty(mass + " " +
-            massPrefix.getAbbrVal() + massUnit.getAbbrVal());
+        displayMass = new SimpleStringProperty(mass.getValue());
 
         initActivityPrefix = Conversions.SIPrefix.BASE;
         initActivityUnit = Conversions.RadUnit.CURIE;
         initActivity = new SimpleStringProperty(RadBigDecimal.NEG_INFINITY_DISPLAY_STRING);
-        displayInitActivity = new SimpleStringProperty(initActivity + " " +
-            initActivityPrefix.getAbbrVal() + initActivityUnit.getAbbrVal());
+        displayInitActivity = new SimpleStringProperty(initActivity.getValue());
     }
 
     public Nuclide(NuclideModel model) {
@@ -93,6 +93,8 @@ public class Nuclide {
         setAtomicNumber(atomicNumber);
         setName(name);
         setNuclideId(nuclideId);
+        setLifeSpan(nuclideId.parseLifeSpanFromMassNumber());
+        setLungAbsorption(nuclideId.parseLungAbsFromMassNumber());
     }
 
     public Nuclide(Conversions.SIPrefix massPrefix, Conversions.MassUnit massUnit, String massStr,
@@ -165,11 +167,28 @@ public class Nuclide {
 
     public void setNuclideId(NuclideModelId nuclideId) {
         this.nuclideId = nuclideId == null ? new NuclideModelId() : nuclideId;
+        setMassNumber();
         setFullName();
         setNameNotation();
         setDisplayNameNotation();
         setSymbolNotation();
         setDisplaySymbolNotation();
+    }
+
+    public SimpleStringProperty massNumberProperty() {
+        return massNumber;
+    }
+
+    public String getMassNumber() {
+        return massNumber.get();
+    }
+
+    public void setMassNumber() {
+        if(nuclideId != null) {
+            massNumber.set(nuclideId.getMassNumber());
+        } else {
+            massNumber.set("N/A");
+        }
     }
 
     public SimpleStringProperty fullNameProperty() {
@@ -352,13 +371,16 @@ public class Nuclide {
     }
 
     public void setDisplayMass() {
-        String str = getMass() + " ";
-        if(getMassPrefix()!= null) {
-            str += getMassPrefix().getAbbrVal();
-        }
+        String str = getMass().toDisplayString();
+        if(!str.equals(RadBigDecimal.NEG_INFINITY_DISPLAY_STRING)) {
+            str += " ";
+            if(getMassPrefix()!= null) {
+                str += getMassPrefix().getAbbrVal();
+            }
 
-        if(getMassUnit()!= null) {
-            str += getMassUnit().getAbbrVal();
+            if(getMassUnit()!= null) {
+                str += getMassUnit().getAbbrVal();
+            }
         }
         displayMassProperty().set(str);
     }
@@ -408,13 +430,16 @@ public class Nuclide {
     }
 
     public void setDisplayInitActivity() {
-        String str = getInitActivity() + " ";
-        if(getInitActivityPrefix()!= null) {
-            str += getInitActivityPrefix().getAbbrVal();
-        }
+        String str = getInitActivity().toDisplayString();
+        if(!str.equals(RadBigDecimal.NEG_INFINITY_DISPLAY_STRING)) {
+            str += " ";
+            if(getInitActivityPrefix()!= null) {
+                str += getInitActivityPrefix().getAbbrVal();
+            }
 
-        if(getInitActivityUnit()!= null) {
-            str += getInitActivityUnit().getAbbrVal();
+            if(getInitActivityUnit()!= null) {
+                str += getInitActivityUnit().getAbbrVal();
+            }
         }
         displayInitActivityProperty().set(str);
     }
@@ -452,15 +477,15 @@ public class Nuclide {
     @Override
     public String toString() {
         return "Nuclide: { " + getNuclideId() +
-            "\nClass: " + getNuclideClass() +
-            "\nRef Date: " + getRefDate() +
-            "\nMass: " + getDisplayMass() +
-            "\nInitial Activity: " + getDisplayInitActivity() +
-            "\nNature: " + getNature() +
-            "\nLifeSpan: " + getLifeSpan() +
-            "\nLung Absorption: " + getLungAbsorption() +
-            "\n" + getLimitsId() +
-            "\n" + getConstants() + "\n}";
+            "\n Class: " + getNuclideClass() +
+            "\n Ref Date: " + getRefDate() +
+            "\n Mass: " + getDisplayMass() +
+            "\n Initial Activity: " + getDisplayInitActivity() +
+            "\n Nature: " + getNature() +
+            "\n LifeSpan: " + getLifeSpan() +
+            "\n Lung Absorption: " + getLungAbsorption() +
+            "\n " + getLimitsId() +
+            "\n " + getConstants() + "\n}";
     }
 
     public enum NuclideClass {

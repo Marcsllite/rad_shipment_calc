@@ -8,7 +8,6 @@ import com.marcsllite.model.Shipment;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.Conversions;
 import com.marcsllite.util.FXMLView;
-import javafx.collections.FXCollections;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
@@ -239,7 +238,7 @@ class HomePaneControllerGUITest extends GUITest {
     protected void clearNuclideTable() {
         controller = (HomePaneController) getController();
         shipment = controller.getShipment();
-        shipment.setNuclides(FXCollections.observableArrayList());
+        shipment.setNuclides(null);
         assertTrue(shipment.getNuclides().isEmpty());
         assertTrue(tableViewHome.getItems().isEmpty());
     }

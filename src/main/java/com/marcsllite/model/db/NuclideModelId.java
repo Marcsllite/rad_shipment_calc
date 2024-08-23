@@ -46,14 +46,15 @@ public class NuclideModelId implements Serializable {
     public String getDisplayMassNumber() {
         return massNumber == null ? null : massNumber
             .replaceAll(LIFE_SPAN_PATTERN, "")
-            .replaceAll(LUNG_ABS_PATTERN, "");
+            .replaceAll(LUNG_ABS_PATTERN, "")
+            .trim();
     }
 
     public void setMassNumber(String massNumber) {
         this.massNumber = massNumber;
     }
 
-    public String getSymbolNotation() { return symbol + "-" + massNumber; }
+    public String getSymbolNotation() { return symbol + "-" + getMassNumber(); }
 
     public String getDisplaySymbolNotation() { return symbol + "-" + getDisplayMassNumber(); }
 

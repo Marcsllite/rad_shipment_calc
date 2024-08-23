@@ -143,7 +143,11 @@ public class Shipment {
     }
 
     public void setNuclides(List<Nuclide> nuclides) {
-        nuclidesProperty().addAll(nuclides == null? FXCollections.observableArrayList() : nuclides);
+        if (nuclides == null) {
+            nuclidesProperty().clear();
+        } else {
+            nuclidesProperty().setAll(nuclides);
+        }
     }
 
     public void add(Nuclide isotope) {

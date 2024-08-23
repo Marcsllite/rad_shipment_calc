@@ -69,18 +69,16 @@ public class TestUtils {
         return createNuclide(getRandomTestNuclide());
     }
 
+    public static double getRandomNumber(double min, double max) {
+        return ((Math.random() * (max - min)) + min);
+    }
+
     public static TestNuclide getRandomTestNuclide() {
-        int min = 0;
-        int max = testNuclides.size();
-        int randNum = (int) ((Math.random() * (max - min)) + min);
-        return testNuclides.get(randNum);
+        return testNuclides.get((int) getRandomNumber(0, testNuclides.size()));
     }
 
     public static RadBigDecimal getRandomRadBigDecimal() {
-        double min = 0;
-        double max = 100;
-        double randNum = ((Math.random() * (max - min)) + min);
-        return RadBigDecimal.valueOf(randNum);
+        return RadBigDecimal.valueOf(getRandomNumber(0, 100));
     }
 
     public static Conversions.SIPrefix getRandomSIPrefix() {

@@ -140,9 +140,9 @@ public class HomePaneController extends BaseController {
     protected void initTable() {
         tableColNuclide.setCellValueFactory(new PropertyValueFactory<>("nameNotation"));
         tableColHalfLife.setCellValueFactory(i -> i.getValue().getConstants().displayHalfLifeProperty());
-        tableColActivity.setCellValueFactory(new PropertyValueFactory<>("strInitActivity"));
+        tableColActivity.setCellValueFactory(new PropertyValueFactory<>("displayInitActivity"));
         tableColRefDate.setCellValueFactory(new PropertyValueFactory<>("refDate"));
-        tableColMass.setCellValueFactory(new PropertyValueFactory<>("strMass"));
+        tableColMass.setCellValueFactory(new PropertyValueFactory<>("displayMass"));
 
         tableViewHome.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tableViewHome.itemsProperty().bind(getShipment().nuclidesProperty());
