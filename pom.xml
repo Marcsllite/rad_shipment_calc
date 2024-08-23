@@ -27,7 +27,7 @@
         <mockito.version>3.11.2</mockito.version>
         <log4j.version>2.17.1</log4j.version>
         <jacoco.version>0.8.10</jacoco.version>
-        <junit.version>5.8.0-M1</junit.version>
+        <junit.version>5.11.0</junit.version>
         <assertj.version>3.20.2</assertj.version>
         <testfx.version>4.0.15-alpha</testfx.version>
         <surefire.version>3.0.0-M5</surefire.version>

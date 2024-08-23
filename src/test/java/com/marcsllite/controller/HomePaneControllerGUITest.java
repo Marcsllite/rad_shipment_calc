@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.FieldSource;
 import org.mockito.Spy;
 import org.testfx.api.FxAssert;
 import org.testfx.framework.junit5.Start;
@@ -155,8 +155,9 @@ class HomePaneControllerGUITest extends GUITest {
     }
 
     @ParameterizedTest(name = "testEditNuclide-{0}")
-    @MethodSource("testEditBtnHandler_Data")
-    void testEditBtnHandler_ShowHide(Nuclide nuclide) {
+    @FieldSource("com.marcsllite.TestUtils#testNuclides")
+    void testEditBtnHandler_ShowHide(TestUtils.TestNuclide testNuclide) {
+        Nuclide nuclide = TestUtils.createNuclide(testNuclide);
         clearNuclideTable();
         assertTrue(btnEdit.isDisabled());
 
@@ -177,15 +178,6 @@ class HomePaneControllerGUITest extends GUITest {
         clickOn(btnFinish);
         FxAssert.verifyThat(window(gridPaneHome), WindowMatchers.isShowing());
         FxAssert.verifyThat(window(stackPaneModify), WindowMatchers.isNotShowing());
-    }
-
-    protected static Object[] testEditBtnHandler_Data() {
-        return new Object[] {
-            new Object[] {TestUtils.createNuclide("Abbreviation", "Ab", "1")},
-            new Object[] {TestUtils.createNuclide("Annual", "An", "1")},
-            new Object[] {TestUtils.createNuclide("Bofuri", "Bf", "1(short)")},
-            new Object[] {TestUtils.createNuclide("Best", "Bst", "1fast")},
-        };
     }
     
     protected void verifyModifyPane(Nuclide nuclide) {
@@ -257,7 +249,7 @@ class HomePaneControllerGUITest extends GUITest {
         clearNuclideTable();
         assertTrue(btnRemove.isDisabled());
 
-        addNuclideToTable(null);
+        addNuclideToTable(TestUtils.createNuclide());
         selectRow(tableViewHome, 0);
         assertFalse(btnRemove.isDisabled());
 
@@ -270,7 +262,7 @@ class HomePaneControllerGUITest extends GUITest {
         clearNuclideTable();
         assertTrue(btnCalculate.isDisabled());
 
-        addNuclideToTable(null);
+        addNuclideToTable(TestUtils.createNuclide());
         assertFalse(btnCalculate.isDisabled());
         selectRow(tableViewHome, 0);
 
