@@ -27,8 +27,8 @@ public class NuclideModelId implements Serializable {
         this("XX", "1");
     }
     public NuclideModelId(String symbol, String massNumber) {
-        this.symbol = symbol;
-        this.massNumber = massNumber;
+        this.symbol = symbol == null? null : symbol.trim();
+        this.massNumber = massNumber == null? null : massNumber.trim();
     }
 
     public String getSymbol() {
@@ -36,7 +36,7 @@ public class NuclideModelId implements Serializable {
     }
 
     public void setSymbol(String symbol) {
-        this.symbol = symbol;
+        this.symbol = symbol == null? null : symbol.trim();
     }
 
     public String getMassNumber() {
@@ -51,12 +51,12 @@ public class NuclideModelId implements Serializable {
     }
 
     public void setMassNumber(String massNumber) {
-        this.massNumber = massNumber;
+        this.massNumber = massNumber == null? null : massNumber.trim();
     }
 
-    public String getSymbolNotation() { return symbol + "-" + getMassNumber(); }
+    public String getSymbolNotation() { return getSymbol() + "-" + getMassNumber(); }
 
-    public String getDisplaySymbolNotation() { return symbol + "-" + getDisplayMassNumber(); }
+    public String getDisplaySymbolNotation() { return getSymbol() + "-" + getDisplayMassNumber(); }
 
     public Nuclide.LifeSpan parseLifeSpanFromMassNumber() {
         Pattern lifeSpanPattern = Pattern.compile(LIFE_SPAN_PATTERN);
