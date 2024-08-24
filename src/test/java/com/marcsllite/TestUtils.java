@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static com.marcsllite.model.db.NuclideModelId.LIFE_SPAN_PATTERN;
+import static com.marcsllite.model.db.NuclideModelId.LUNG_ABS_PATTERN;
 import static junit.framework.Assert.assertTrue;
 
 public class TestUtils {
@@ -19,11 +21,26 @@ public class TestUtils {
         String name;
         String symbol;
         String massNumber;
+        Nuclide.LifeSpan lifeSpan;
+        Nuclide.LungAbsorption lungAbsorption;
 
-        public TestNuclide(String name, String symbol, String massNumber) {
+        public TestNuclide(String name, String symbol, String massNumber, Nuclide.LifeSpan lifeSpan, Nuclide.LungAbsorption lungAbsorption) {
             this.name = name;
             this.symbol = symbol;
             this.massNumber = massNumber;
+            this.lifeSpan = lifeSpan;
+            this.lungAbsorption = lungAbsorption;
+        }
+
+        public String getSymbolNotation() {
+            return symbol + "-" + massNumber
+                .replaceAll(LIFE_SPAN_PATTERN, "")
+                .replaceAll(LUNG_ABS_PATTERN, "")
+                .trim();
+        }
+
+        public String getFullSymbolNotation() {
+            return symbol + "-" + massNumber;
         }
 
         @Override
@@ -37,14 +54,28 @@ public class TestUtils {
     }
 
     public static final List<TestNuclide> testNuclides = Arrays.asList(
-        new TestNuclide("Abbreviation", "Ab", "1"),
-        new TestNuclide("Annual", "An", "1"),
-        new TestNuclide("Bofuri", "Bf", "1(short)"),
-        new TestNuclide("Best", "Bst", "1fast")
+        new TestNuclide("Abbreviation", "Ab", "1", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.NONE),
+        new TestNuclide("Annual", "An", "1", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.NONE),
+        new TestNuclide("Bofuri", "Bf", "1(short)", Nuclide.LifeSpan.SHORT, Nuclide.LungAbsorption.NONE),
+        new TestNuclide("Best", "Bst", "1fast", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.FAST)
     );
 
     private TestUtils() {}
-    
+
+    public static TestNuclide getLifeSpanNuclide() {
+        return testNuclides.stream()
+            .filter(nuclide -> !Nuclide.LifeSpan.REGULAR.equals(nuclide.lifeSpan))
+            .findFirst()
+            .orElse(null);
+    }
+
+    public static TestNuclide getLungAbsNuclide() {
+        return testNuclides.stream()
+            .filter(nuclide -> !Nuclide.LungAbsorption.NONE.equals(nuclide.lungAbsorption))
+            .findFirst()
+            .orElse(null);
+    }
+
     public static Nuclide createNuclide(String name, String symbol, String massNum) {
         Nuclide nuclide = new Nuclide(-1, name, new NuclideModelId(symbol, massNum));
         nuclide.setInitActivityStr(getRandomRadBigDecimal().toDisplayString());

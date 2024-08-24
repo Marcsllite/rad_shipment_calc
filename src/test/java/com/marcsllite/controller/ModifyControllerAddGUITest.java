@@ -1,5 +1,6 @@
 package com.marcsllite.controller;
 
+import com.marcsllite.TestUtils;
 import com.marcsllite.model.Nuclide;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
@@ -87,22 +88,22 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
 
     @ParameterizedTest
     @MethodSource("radioLifeSpan_data")
-    void testBtnNext_EnabledDisabled_RadioLifeSpan_Checker(String name, String a0, Nuclide.LifeSpan lifeSpan, Matcher<Node> matcher, int filteredIsoSize, VBox visibleRadio) {
+    void testBtnNext_EnabledDisabled_RadioLifeSpan_Checker(String name, String a0, Nuclide.LifeSpan lifeSpan, Matcher<Node> matcher, int filteredIsoSize, boolean visibleRadio) {
         setupEnabledDisabled();
 
-        visibleRadio = visibleRadio == null? null : vBoxLifeSpan;
+        VBox additionalInfo = visibleRadio? vBoxLifeSpan : null;
 
         interact(() -> txtFieldIsoName.setText(name));
         assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size());
-        assertAdditionalInfoShowing(visibleRadio);
+        assertAdditionalInfoShowing(additionalInfo);
         FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
 
         setInitialActivity(a0);
-        assertAdditionalInfoShowing(visibleRadio);
+        assertAdditionalInfoShowing(additionalInfo);
         FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
 
         setLifeSpan(lifeSpan);
-        assertAdditionalInfoShowing(visibleRadio);
+        assertAdditionalInfoShowing(additionalInfo);
         FxAssert.verifyThat(btnNext, matcher);
 
         clearFirstPageForm();
@@ -112,33 +113,36 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
 
         interact(() -> txtFieldIsoName.setText(name));
         assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size());
-        assertAdditionalInfoShowing(visibleRadio);
+        assertAdditionalInfoShowing(additionalInfo);
         FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
 
         setLifeSpan(lifeSpan);
-        assertAdditionalInfoShowing(visibleRadio);
+        assertAdditionalInfoShowing(additionalInfo);
         FxAssert.verifyThat(btnNext, matcher);
     }
 
     private static Object[] radioLifeSpan_data() {
+        TestUtils.TestNuclide lifeSpanNuclide = TestUtils.getLifeSpanNuclide();
+        String shortSymbol = lifeSpanNuclide.getSymbolNotation();
+        String fullSymbol = lifeSpanNuclide.getFullSymbolNotation();
         return new Object[] {
-            new Object[] { " ", null, Nuclide.LifeSpan.SHORT, NodeMatchers.isDisabled(), 0, null },
-            new Object[] { null, "1sdf23", Nuclide.LifeSpan.SHORT, NodeMatchers.isDisabled(), 0, null },
-            new Object[] { "B", "1sdf23", Nuclide.LifeSpan.SHORT, NodeMatchers.isDisabled(), 0, new VBox() },
-            new Object[] { "Bf-1", "123", Nuclide.LifeSpan.SHORT, NodeMatchers.isEnabled(), 1, new VBox() },
-            new Object[] { "Bf-1(short)", "123", Nuclide.LifeSpan.SHORT, NodeMatchers.isEnabled(), 1, new VBox() },
+            new Object[] { " ", null, Nuclide.LifeSpan.SHORT, NodeMatchers.isDisabled(), 0, false },
+            new Object[] { null, "1sdf23", Nuclide.LifeSpan.SHORT, NodeMatchers.isDisabled(), 0, false },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LifeSpan.SHORT, NodeMatchers.isDisabled(), 0, true },
+            new Object[] { shortSymbol, "123", Nuclide.LifeSpan.SHORT, NodeMatchers.isEnabled(), 1, true },
+            new Object[] { fullSymbol, "123", Nuclide.LifeSpan.SHORT, NodeMatchers.isEnabled(), 1, true },
 
-            new Object[] { " ", null, Nuclide.LifeSpan.LONG, NodeMatchers.isDisabled(), 0, null },
-            new Object[] { null, "1sdf23", Nuclide.LifeSpan.LONG, NodeMatchers.isDisabled(), 0, null },
-            new Object[] { "B", "1sdf23", Nuclide.LifeSpan.LONG, NodeMatchers.isDisabled(), 0, new VBox() },
-            new Object[] { "Bf-1", "123", Nuclide.LifeSpan.LONG, NodeMatchers.isEnabled(), 1, new VBox() },
-            new Object[] { "Bf-1(short)", "123", Nuclide.LifeSpan.LONG, NodeMatchers.isEnabled(), 1, new VBox() },
+            new Object[] { " ", null, Nuclide.LifeSpan.LONG, NodeMatchers.isDisabled(), 0, false },
+            new Object[] { null, "1sdf23", Nuclide.LifeSpan.LONG, NodeMatchers.isDisabled(), 0, false },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LifeSpan.LONG, NodeMatchers.isDisabled(), 0, true },
+            new Object[] { shortSymbol, "123", Nuclide.LifeSpan.LONG, NodeMatchers.isEnabled(), 1, true },
+            new Object[] { fullSymbol, "123", Nuclide.LifeSpan.LONG, NodeMatchers.isEnabled(), 1, true },
 
-            new Object[] { " ", null, Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), 0, null },
-            new Object[] { null, "1sdf23", Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), 0, null },
-            new Object[] { "B", "1sdf23", Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), 0, new VBox() },
-            new Object[] { "Bf-1", "123", Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), 1, new VBox() },
-            new Object[] { "Bf-1(short)", "123", Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), 1, new VBox() }
+            new Object[] { " ", null, Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), 0, false },
+            new Object[] { null, "1sdf23", Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), 0, false },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), 0, true },
+            new Object[] { shortSymbol, "123", Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), 1, true },
+            new Object[] { fullSymbol, "123", Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), 1, true }
         };
     }
 
@@ -170,30 +174,31 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
     
     @ParameterizedTest
     @MethodSource("radioLungAbsorption_data")
-    void testBtnNext_EnabledDisabled_RadioLungAbsorption_Checker(String name, String a0, Nuclide.LungAbsorption lungAbs, Matcher<Node> matcher, int filteredIsoSize, VBox visibleRadio) {
+    void testBtnNext_EnabledDisabled_RadioLungAbsorption_Checker(String name, String a0, Nuclide.LungAbsorption lungAbs, Matcher<Node> matcher, int filteredIsoSize, boolean visibleRadio) {
         setupEnabledDisabled();
 
-        if(visibleRadio != null && filteredIsoSize == 0) {
-            visibleRadio = vBoxLifeSpan;
+        VBox additionalInfo;
+        if(visibleRadio && filteredIsoSize == 0) {
+            additionalInfo = vBoxLifeSpan;
         } else if(filteredIsoSize == 1) {
-            visibleRadio = vBoxLungAbs;
+            additionalInfo = vBoxLungAbs;
         } else {
-            visibleRadio = null;
+            additionalInfo = null;
         }
 
         interact(() -> txtFieldIsoName.setText(name));
         assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size());
-        assertAdditionalInfoShowing(visibleRadio);
+        assertAdditionalInfoShowing(additionalInfo);
         FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
 
         setInitialActivity(a0);
-        assertAdditionalInfoShowing(visibleRadio);
+        assertAdditionalInfoShowing(additionalInfo);
         FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
 
         if(filteredIsoSize == 1) {
             setLungAbsorption(lungAbs);
         }
-        assertAdditionalInfoShowing(visibleRadio);
+        assertAdditionalInfoShowing(additionalInfo);
         FxAssert.verifyThat(btnNext, matcher);
         
         clearFirstPageForm();
@@ -203,41 +208,44 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
 
         interact(() -> txtFieldIsoName.setText(name));
         assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size());
-        assertAdditionalInfoShowing(visibleRadio);
+        assertAdditionalInfoShowing(additionalInfo);
         FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
 
         if(filteredIsoSize == 1) {
             setLungAbsorption(lungAbs);
         }
-        assertAdditionalInfoShowing(visibleRadio);
+        assertAdditionalInfoShowing(additionalInfo);
         FxAssert.verifyThat(btnNext, matcher);
     }
 
     private static Object[] radioLungAbsorption_data() {
+        TestUtils.TestNuclide lungAbsNuclide = TestUtils.getLungAbsNuclide();
+        String shortSymbol = lungAbsNuclide.getSymbolNotation();
+        String fullSymbol = lungAbsNuclide.getFullSymbolNotation();
         return new Object[] {
-            new Object[] { " ", null, Nuclide.LungAbsorption.SLOW, NodeMatchers.isDisabled(), 0, null },
-            new Object[] { null, "1sdf23", Nuclide.LungAbsorption.SLOW, NodeMatchers.isDisabled(), 0, null },
-            new Object[] { "B", "1sdf23", Nuclide.LungAbsorption.SLOW, NodeMatchers.isDisabled(), 0, new VBox() },
-            new Object[] { "Bs-1", "123", Nuclide.LungAbsorption.SLOW, NodeMatchers.isEnabled(), 1, new VBox() },
-            new Object[] { "Bs-1fast", "123", Nuclide.LungAbsorption.SLOW, NodeMatchers.isEnabled(), 1, new VBox() },
+            new Object[] { " ", null, Nuclide.LungAbsorption.SLOW, NodeMatchers.isDisabled(), 0, false },
+            new Object[] { null, "1sdf23", Nuclide.LungAbsorption.SLOW, NodeMatchers.isDisabled(), 0, false },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.SLOW, NodeMatchers.isDisabled(), 0, true },
+            new Object[] { shortSymbol, "123", Nuclide.LungAbsorption.SLOW, NodeMatchers.isEnabled(), 1, true },
+            new Object[] { fullSymbol, "123", Nuclide.LungAbsorption.SLOW, NodeMatchers.isEnabled(), 1, true },
             
-            new Object[] { " ", null, Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isDisabled(), 0, null },
-            new Object[] { null, "1sdf23", Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isDisabled(), 0, null },
-            new Object[] { "B", "1sdf23", Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isDisabled(), 0, new VBox() },
-            new Object[] { "Bs-1", "123", Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isEnabled(), 1, new VBox() },
-            new Object[] { "Bs-1fast", "123", Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isEnabled(), 1, new VBox() },
+            new Object[] { " ", null, Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isDisabled(), 0, false },
+            new Object[] { null, "1sdf23", Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isDisabled(), 0, false },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isDisabled(), 0, true },
+            new Object[] { shortSymbol, "123", Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isEnabled(), 1, true },
+            new Object[] { fullSymbol, "123", Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isEnabled(), 1, true },
 
-            new Object[] { " ", null, Nuclide.LungAbsorption.FAST, NodeMatchers.isDisabled(), 0, null },
-            new Object[] { null, "1sdf23", Nuclide.LungAbsorption.FAST, NodeMatchers.isDisabled(), 0, null },
-            new Object[] { "B", "1sdf23", Nuclide.LungAbsorption.FAST, NodeMatchers.isDisabled(), 0, new VBox() },
-            new Object[] { "Bs-1", "123", Nuclide.LungAbsorption.FAST, NodeMatchers.isEnabled(), 1, new VBox() },
-            new Object[] { "Bs-1fast", "123", Nuclide.LungAbsorption.FAST, NodeMatchers.isEnabled(), 1, new VBox() },
+            new Object[] { " ", null, Nuclide.LungAbsorption.FAST, NodeMatchers.isDisabled(), 0, false },
+            new Object[] { null, "1sdf23", Nuclide.LungAbsorption.FAST, NodeMatchers.isDisabled(), 0, false },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.FAST, NodeMatchers.isDisabled(), 0, true },
+            new Object[] { shortSymbol, "123", Nuclide.LungAbsorption.FAST, NodeMatchers.isEnabled(), 1, true },
+            new Object[] { fullSymbol, "123", Nuclide.LungAbsorption.FAST, NodeMatchers.isEnabled(), 1, true },
 
-            new Object[] { " ", null, Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), 0, null },
-            new Object[] { null, "1sdf23", Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), 0, null },
-            new Object[] { "B", "1sdf23", Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), 0, new VBox() },
-            new Object[] { "Bs-1", "123", Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), 1, new VBox() },
-            new Object[] { "Bs-1fast", "123", Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), 1, new VBox() }
+            new Object[] { " ", null, Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), 0, false },
+            new Object[] { null, "1sdf23", Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), 0, false },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), 0, true },
+            new Object[] { shortSymbol, "123", Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), 1, true },
+            new Object[] { fullSymbol, "123", Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), 1, true }
         };
     }
 
