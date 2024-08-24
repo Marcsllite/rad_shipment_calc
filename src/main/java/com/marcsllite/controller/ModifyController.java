@@ -386,7 +386,6 @@ public class ModifyController extends BaseController {
             btnNext.setDisable(!Page.EDIT.equals(getPage()) &&
                 nuclide == null ||
                 a0 == null || a0.isBlank() ||
-                isAddInfoNotProvided() ||
                 isInTable);
         } else {
             btnNext.setDisable(!Page.EDIT.equals(getPage()));
@@ -564,10 +563,9 @@ public class ModifyController extends BaseController {
         String name = nuclide.getNameNotation();
 
         if(!getFilteredLifeSpanNuclides().isEmpty()) {
-            String replaceStr = "\\(.*$";
-            str = str.replaceAll(replaceStr, "");
-            symbol = symbol.replaceAll(replaceStr, "");
-            name = name.replaceAll(replaceStr, "");
+            str = str.replaceAll(LIFE_SPAN_PATTERN, "");
+            symbol = symbol.replaceAll(LIFE_SPAN_PATTERN, "");
+            name = name.replaceAll(LIFE_SPAN_PATTERN, "");
         }
 
         if(!getFilteredLungAbsNuclides().isEmpty()) {
