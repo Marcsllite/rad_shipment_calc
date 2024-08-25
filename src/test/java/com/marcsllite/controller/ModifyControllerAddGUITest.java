@@ -74,11 +74,13 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
     }
 
     private static Object[] noRadio_data() {
+        TestUtils.TestNuclide regularNuclide = TestUtils.getRegularNuclide();
+        String symbolNotation = regularNuclide.getSymbolNotation();
         return new Object[] {
             new Object[] { " ", null, NodeMatchers.isDisabled(), 0 },
             new Object[] { null, "1sdf23", NodeMatchers.isDisabled(), 0 },
-            new Object[] { "An", "1sdf23", NodeMatchers.isDisabled(), 0 },
-            new Object[] { "An-1", "123", NodeMatchers.isEnabled(), 1 }
+            new Object[] { regularNuclide.getSymbol(), "1sdf23", NodeMatchers.isDisabled(), 0 },
+            new Object[] { symbolNotation, "123", NodeMatchers.isEnabled(), 1 }
         };
     }
     

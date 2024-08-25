@@ -32,6 +32,10 @@ public class TestUtils {
             this.lungAbsorption = lungAbsorption;
         }
 
+        public String getSymbol() {
+            return symbol;
+        }
+
         public String getSymbolNotation() {
             return symbol + "-" + massNumber
                 .replaceAll(LIFE_SPAN_PATTERN, "")
@@ -61,6 +65,15 @@ public class TestUtils {
     );
 
     private TestUtils() {}
+
+    public static TestNuclide getRegularNuclide() {
+        return testNuclides.stream()
+            .filter(nuclide ->
+                Nuclide.LifeSpan.REGULAR.equals(nuclide.lifeSpan) &&
+                Nuclide.LungAbsorption.NONE.equals(nuclide.lungAbsorption))
+            .findFirst()
+            .orElse(null);
+    }
 
     public static TestNuclide getLifeSpanNuclide() {
         return testNuclides.stream()
