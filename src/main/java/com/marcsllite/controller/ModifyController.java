@@ -510,7 +510,9 @@ public class ModifyController extends BaseController {
         txtFieldNuclideName.getStyleClass().removeAll("validRegion", "invalidRegion");
         txtFieldNuclideName.getStyleClass().add(isInvalid ? "invalidRegion" : "validRegion");
         txtFirstPageStatus.setVisible(isInvalid);
-        txtFirstPageStatus.setText("Nuclide already in the table.");
+        if(isInvalid){
+            txtFirstPageStatus.setText("Nuclide already in the table.");
+        }
     }
 
     protected void bindMassInputDisabledProp() {
