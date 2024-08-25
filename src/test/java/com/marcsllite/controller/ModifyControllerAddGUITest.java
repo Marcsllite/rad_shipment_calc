@@ -2,10 +2,12 @@ package com.marcsllite.controller;
 
 import com.marcsllite.TestUtils;
 import com.marcsllite.model.Nuclide;
+import com.marcsllite.util.Conversions;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.hamcrest.Matcher;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -31,12 +33,26 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
         super.start(stage);
     }
 
+    @BeforeEach
+    public void setUp() {
+        clearFirstPageForm();
+        clearSecondPageForm();
+        goToPage(1);
+    }
+
+    @Test
+    void testAddInit() {
+        assertEquals(Conversions.SIPrefix.BASE.getVal(), comboBoxA0Prefix.getSelectionModel().getSelectedItem());
+        assertEquals(Conversions.RadUnit.CURIE.getVal(), choiceBoxA0RadUnit.getSelectionModel().getSelectedItem());
+        assertEquals(Conversions.SIPrefix.BASE.getVal(), comboBoxMassPrefix.getSelectionModel().getSelectedItem());
+        assertEquals(Conversions.MassUnit.GRAMS.getVal(), choiceBoxMassUnit.getSelectionModel().getSelectedItem());
+        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
+    }
+
     @ParameterizedTest
     @MethodSource("noRadio_data")
     void testBtnNext_EnabledDisabled_NoRadio_Checker(String name, String a0, Matcher<Node> matcher, int filteredIsoSize) {
-        setupEnabledDisabled();
-
-        interact(() -> txtFieldIsoName.setText(name));
+        interact(() -> txtFieldNuclideName.setText(name));
         assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size());
         assertAdditionalInfoShowing(null);
         FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
@@ -51,7 +67,7 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
         assertAdditionalInfoShowing(null);
         FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
 
-        interact(() -> txtFieldIsoName.setText(name));
+        interact(() -> txtFieldNuclideName.setText(name));
         assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size());
         assertAdditionalInfoShowing(null);
         FxAssert.verifyThat(btnNext, matcher);
@@ -69,14 +85,12 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
 
     @Test
     void testBtnNextHandler_NoRadio() {
-        setupEnabledDisabled();
-        
         setInitialActivity("123");
         assertEquals(0, controller.getSearchFilteredNuclides().size());
         assertAdditionalInfoShowing(null);
         FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
 
-        interact(() -> txtFieldIsoName.setText("An-1"));
+        interact(() -> txtFieldNuclideName.setText("An-1"));
         assertEquals(1, controller.getSearchFilteredNuclides().size());
         assertAdditionalInfoShowing(null);
         FxAssert.verifyThat(btnNext, NodeMatchers.isEnabled());
@@ -89,13 +103,11 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
     @ParameterizedTest
     @MethodSource("radioLifeSpan_data")
     void testBtnNext_EnabledDisabled_RadioLifeSpan_Checker(String name, String a0, Nuclide.LifeSpan lifeSpan, Matcher<Node> matcher, int filteredIsoSize, boolean visibleRadio) {
-        setupEnabledDisabled();
-
         VBox additionalInfo = visibleRadio? vBoxLifeSpan : null;
 
-        interact(() -> txtFieldIsoName.setText(name));
-        assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size());
+        interact(() -> txtFieldNuclideName.setText(name));
         assertAdditionalInfoShowing(additionalInfo);
+        assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size());
         FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
 
         setInitialActivity(a0);
@@ -111,7 +123,7 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
         assertAdditionalInfoShowing(null);
         FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
 
-        interact(() -> txtFieldIsoName.setText(name));
+        interact(() -> txtFieldNuclideName.setText(name));
         assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size());
         assertAdditionalInfoShowing(additionalInfo);
         FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
@@ -148,18 +160,16 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
 
     @Test
     void testBtnNextHandler_RadioLifeSpan() {
-        setupEnabledDisabled();
-
         setInitialActivity("123");
         assertEquals(4, controller.getSearchFilteredNuclides().size());
         assertAdditionalInfoShowing(null);
         FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
 
-        interact(() -> txtFieldIsoName.setText("Bf-1"));
+        interact(() -> txtFieldNuclideName.setText("Bf-1"));
         assertEquals(1, controller.getSearchFilteredNuclides().size());
         assertAdditionalInfoShowing(vBoxLifeSpan);
 
-        interact(() -> txtFieldIsoName.setText("Bf-1(short)"));
+        interact(() -> txtFieldNuclideName.setText("Bf-1(short)"));
         assertEquals(1, controller.getSearchFilteredNuclides().size());
         assertAdditionalInfoShowing(vBoxLifeSpan);
 
@@ -175,8 +185,6 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
     @ParameterizedTest
     @MethodSource("radioLungAbsorption_data")
     void testBtnNext_EnabledDisabled_RadioLungAbsorption_Checker(String name, String a0, Nuclide.LungAbsorption lungAbs, Matcher<Node> matcher, int filteredIsoSize, boolean visibleRadio) {
-        setupEnabledDisabled();
-
         VBox additionalInfo;
         if(visibleRadio && filteredIsoSize == 0) {
             additionalInfo = vBoxLifeSpan;
@@ -186,7 +194,7 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
             additionalInfo = null;
         }
 
-        interact(() -> txtFieldIsoName.setText(name));
+        interact(() -> txtFieldNuclideName.setText(name));
         assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size());
         assertAdditionalInfoShowing(additionalInfo);
         FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
@@ -206,7 +214,7 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
         assertAdditionalInfoShowing(null);
         FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
 
-        interact(() -> txtFieldIsoName.setText(name));
+        interact(() -> txtFieldNuclideName.setText(name));
         assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size());
         assertAdditionalInfoShowing(additionalInfo);
         FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
@@ -251,18 +259,16 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
 
     @Test
     void testBtnNextHandler_RadioLungAbsorption() {
-        setupEnabledDisabled();
-
         setInitialActivity("123");
         assertEquals(0, controller.getSearchFilteredNuclides().size());
         assertAdditionalInfoShowing(null);
         FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
 
-        interact(() -> txtFieldIsoName.setText("Bs-1"));
+        interact(() -> txtFieldNuclideName.setText("Bs-1"));
         assertEquals(1, controller.getSearchFilteredNuclides().size());
         assertAdditionalInfoShowing(vBoxLungAbs);
 
-        interact(() -> txtFieldIsoName.setText("Bs-1fast"));
+        interact(() -> txtFieldNuclideName.setText("Bs-1fast"));
         assertEquals(1, controller.getSearchFilteredNuclides().size());
         assertAdditionalInfoShowing(vBoxLungAbs);
 

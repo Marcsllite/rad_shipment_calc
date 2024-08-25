@@ -16,11 +16,17 @@ import java.io.IOException;
 
 public class ControllerFactoryTestObj extends ControllerFactory {
 
+    private MainController mainController;
+
     public ControllerFactoryTestObj() {
-        super();
+        this(null, null);
     }
     public ControllerFactoryTestObj(DBService dbService) {
+        this(dbService, null);
+    }
+    public ControllerFactoryTestObj(DBService dbService, MainController mainController) {
         super(dbService);
+        this.mainController = mainController == null? MainController.getInstance() : mainController;
     }
 
     @Override
@@ -33,21 +39,32 @@ public class ControllerFactoryTestObj extends ControllerFactory {
             if(name.equals(SplashScreenController.class.getName())) {
                 ret = new SplashScreenController(propHandler);
             } else if(name.equals(MainController.class.getName())) {
-                ret = MainController.getInstance();
+                ret = mainController;
             } else if(name.equals(MenuPaneController.class.getName())) {
-                ret = new MenuPaneController(propHandler);
+                MenuPaneController menu = new MenuPaneController(propHandler);
+                menu.setMain(mainController);
+                ret = menu;
             } else if(name.equals(HomePaneController.class.getName())) {
-                ret = new HomePaneController(propHandler);
+                HomePaneController home = new HomePaneController(propHandler);
+                home.setMain(mainController);
+                ret = home;
             } else if(name.equals(ReferencePaneController.class.getName())) {
-                ret = new ReferencePaneController(propHandler);
+                ReferencePaneController reference = new ReferencePaneController(propHandler);
+                reference.setMain(mainController);
+                ret = reference;
             } else if(name.equals(ModifyController.class.getName())) {
-                ModifyController temp = new ModifyController(getPage(), propHandler);
-                temp.setDbService(dbService);
-                ret = temp;
+                ModifyController modify = new ModifyController(getPage(), propHandler);
+                modify.setMain(mainController);
+                modify.setDbService(dbService);
+                ret = modify;
             } else if(name.equals(ShipmentDetailsController.class.getName())) {
-                ret = new ShipmentDetailsController(propHandler);
+                ShipmentDetailsController details = new ShipmentDetailsController(propHandler);
+                details.setMain(mainController);
+                ret = details;
             } else if(name.equals(SummaryPaneController.class.getName())) {
-                ret = new SummaryPaneController(propHandler);
+                SummaryPaneController summary = new SummaryPaneController(propHandler);
+                summary.setMain(mainController);
+                ret = summary;
             }
 
             return ret;

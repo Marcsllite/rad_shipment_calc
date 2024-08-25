@@ -1,6 +1,10 @@
 package com.marcsllite;
 
 import com.marcsllite.controller.BaseController;
+import com.marcsllite.controller.HomePaneController;
+import com.marcsllite.controller.MainController;
+import com.marcsllite.controller.MenuPaneController;
+import com.marcsllite.controller.ReferencePaneController;
 import com.marcsllite.model.Nuclide;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
@@ -26,6 +30,7 @@ import org.testfx.service.query.EmptyNodeQueryException;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
@@ -33,6 +38,7 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.testfx.api.FxAssert.assertContext;
@@ -51,6 +57,11 @@ public abstract class GUITest extends FxRobot {
     private DBService dbService;
     private App app;
     private BaseController.Page page;
+    private MainController mainController;
+    private MenuPaneController menuPaneController;
+    private HomePaneController homePaneController;
+    private ReferencePaneController referencePaneController;
+    private Nuclide editingNuclide;
 
     public GUITest(FXMLView view, BaseController.Page page) {
         this.view = view;
@@ -60,6 +71,7 @@ public abstract class GUITest extends FxRobot {
     @BeforeAll
     public void beforeAll() {
         app = new App(false, false);
+        setupMainController();
 
         PropHandlerTestObj testPropHandler = new PropHandlerTestObj();
         folderHandler = mock(FolderHandler.class);
@@ -73,7 +85,7 @@ public abstract class GUITest extends FxRobot {
         Platform.setImplicitExit(false);
         when(folderHandler.getDataFolderPath()).thenReturn(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
 
-        app.init(view, new PropHandlerTestObj(), folderHandler, getDbService(), new ControllerFactoryTestObj(getDbService()));
+        app.init(view, new PropHandlerTestObj(), folderHandler, getDbService(), new ControllerFactoryTestObj(getDbService(), mainController));
         App.setPage(getPage());
 
         app.start(stage);
@@ -107,6 +119,8 @@ public abstract class GUITest extends FxRobot {
         return page;
     }
 
+    public Nuclide getEditingNuclide() { return editingNuclide; }
+
     public void setPage(BaseController.Page page) {
         this.page = page == null? BaseController.Page.NONE : page;
     }
@@ -121,6 +135,27 @@ public abstract class GUITest extends FxRobot {
 
     public void setStageHandler(StageHandler stageHandler) {
         this.stageHandler = stageHandler;
+    }
+
+    private void setupMainController() {
+        mainController = MainController.getInstance();
+        menuPaneController = mock(MenuPaneController.class);
+        homePaneController = mock(HomePaneController.class);
+        referencePaneController = mock(ReferencePaneController.class);
+        mainController.registerController(menuPaneController);
+        mainController.registerController(homePaneController);
+        mainController.registerController(referencePaneController);
+
+        switch (getPage()) {
+            case ADD:
+                when(homePaneController.isNuclideInTable(any())).thenReturn(false);
+                break;
+            case EDIT:
+                editingNuclide = TestUtils.createNuclide();
+                when(homePaneController.getSelectedNuclides()).thenReturn(List.of(editingNuclide));
+                break;
+            default:
+        }
     }
 
     /**

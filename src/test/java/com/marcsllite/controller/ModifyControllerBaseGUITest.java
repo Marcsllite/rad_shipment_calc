@@ -20,7 +20,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.api.FxAssert;
 import org.testfx.framework.junit5.Start;
@@ -31,9 +30,6 @@ import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 abstract class ModifyControllerBaseGUITest extends GUITest {
     ModifyController controller;
@@ -41,7 +37,7 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
 
     // First Page
     VBox vBoxFirstPage;
-    TextField txtFieldIsoName;
+    TextField txtFieldNuclideName;
     TextField txtFieldA0;
     ComboBox<String> comboBoxA0Prefix;
     ChoiceBox<String> choiceBoxA0RadUnit;
@@ -84,7 +80,7 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
         stackPaneModify = GUITest.getNode(FXIds.STACK_PANE_MODIFY);
         // First Page
         vBoxFirstPage = GUITest.getNode(FXIds.VBOX_FIRST_PAGE);
-        txtFieldIsoName = GUITest.getNode(FXIds.TXT_FIELD_ISO_NAME);
+        txtFieldNuclideName = GUITest.getNode(FXIds.TXT_FIELD_ISO_NAME);
         txtFieldA0 = GUITest.getNode(FXIds.TXT_FIELD_A0);
         comboBoxA0Prefix = GUITest.getNode(FXIds.COMBO_BOX_A0_PREFIX);
         choiceBoxA0RadUnit = GUITest.getNode(FXIds.CHOICE_BOX_AO_RAD_UNIT);
@@ -115,13 +111,6 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
         txtSecondPageStatus = GUITest.getNode(FXIds.TXT_SECOND_PAGE_STATUS);
     }
 
-    @BeforeEach
-    public void setUp() {
-        clearFirstPageForm();
-        clearSecondPageForm();
-        goToPage(1);
-    }
-
     @Test
     void testInit() {
         FxAssert.verifyThat(FXIds.STACK_PANE_MODIFY, NodeMatchers.isVisible());
@@ -134,11 +123,6 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
         assertEquals(Nuclide.Nature.getFxValues(), choiceBoxNature.getItems());
         assertEquals(LimitsModelId.State.getFxValues(), choiceBoxState.getItems());
         assertEquals(LimitsModelId.Form.getFxValues(), choiceBoxForm.getItems());
-
-        assertEquals(Conversions.SIPrefix.BASE.getVal(), comboBoxA0Prefix.getSelectionModel().getSelectedItem());
-        assertEquals(Conversions.RadUnit.CURIE.getVal(), choiceBoxA0RadUnit.getSelectionModel().getSelectedItem());
-        assertEquals(Conversions.SIPrefix.BASE.getVal(), comboBoxMassPrefix.getSelectionModel().getSelectedItem());
-        assertEquals(Conversions.MassUnit.GRAMS.getVal(), choiceBoxMassUnit.getSelectionModel().getSelectedItem());
     }
 
     @Test
@@ -159,16 +143,6 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
         });
     }
 
-    protected void setupEnabledDisabled() {
-        MainController mainController = mock(MainController.class);
-        HomePaneController homePaneController = mock(HomePaneController.class);
-        controller.setMain(mainController);
-        when(mainController.getHomePaneController()).thenReturn(homePaneController);
-        when(homePaneController.isNuclideInTable(any())).thenReturn(false);
-
-        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
-    }
-
     protected void assertAdditionalInfoShowing(VBox vbox) {
         if(vbox == null) {
             FxAssert.verifyThat(vBoxLifeSpan, NodeMatchers.isInvisible());
@@ -183,7 +157,7 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
     }
 
     protected void clearFirstPageForm() {
-        interact(() -> txtFieldIsoName.setText(null));
+        interact(() -> txtFieldNuclideName.setText(null));
         setInitialActivity(null);
         setSIPrefix(1, null);
         setRadUnit(null);
