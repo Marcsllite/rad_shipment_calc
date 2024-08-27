@@ -35,6 +35,7 @@
         <h2.version>2.2.224</h2.version>
         <hibernate-core.version>6.4.4.Final</hibernate-core.version>
         <pioneer.version>2.2.0</pioneer.version>
+        <build-helper.version>3.6.0</build-helper.version>
 
         <!-- SonarQube Properties -->
         <sonar.version>3.9.0.2155</sonar.version>
@@ -202,6 +203,25 @@
                 <version>${sonar.version}</version>
             </plugin>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${build-helper.version}</version>
+                <executions>
+                    <execution>
+                        <id>add-integration-test-source</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/integration-test/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.version}</version>
@@ -246,7 +266,6 @@
                     <trimStackTrace>false</trimStackTrace>
                     <includes>
                         <include>**/*GUITest.java</include>
-
                     </includes>
                 </configuration>
                 <executions>
