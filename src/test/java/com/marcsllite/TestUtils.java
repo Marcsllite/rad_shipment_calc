@@ -37,10 +37,9 @@ public class TestUtils {
         }
 
         public String getSymbolNotation() {
-            return symbol + "-" + massNumber
+            return symbol + "-" + massNumber.trim()
                 .replaceAll(LIFE_SPAN_PATTERN, "")
-                .replaceAll(LUNG_ABS_PATTERN, "")
-                .trim();
+                .replaceAll(LUNG_ABS_PATTERN, "");
         }
 
         public String getFullSymbolNotation() {
@@ -61,31 +60,30 @@ public class TestUtils {
         new TestNuclide("Abbreviation", "Ab", "1", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.NONE),
         new TestNuclide("Annual", "An", "1", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.NONE),
         new TestNuclide("Bofuri", "Bf", "1(short)", Nuclide.LifeSpan.SHORT, Nuclide.LungAbsorption.NONE),
-        new TestNuclide("Best", "Bst", "1fast", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.FAST)
+        new TestNuclide("Best", "Bs", "1fast", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.FAST)
     );
 
     private TestUtils() {}
 
     public static TestNuclide getRegularNuclide() {
         return testNuclides.stream()
-            .filter(nuclide ->
-                Nuclide.LifeSpan.REGULAR.equals(nuclide.lifeSpan) &&
+            .filter(nuclide -> Nuclide.LifeSpan.REGULAR.equals(nuclide.lifeSpan) &&
                 Nuclide.LungAbsorption.NONE.equals(nuclide.lungAbsorption))
-            .findFirst()
+            .findAny()
             .orElse(null);
     }
 
     public static TestNuclide getLifeSpanNuclide() {
         return testNuclides.stream()
             .filter(nuclide -> !Nuclide.LifeSpan.REGULAR.equals(nuclide.lifeSpan))
-            .findFirst()
+            .findAny()
             .orElse(null);
     }
 
     public static TestNuclide getLungAbsNuclide() {
         return testNuclides.stream()
             .filter(nuclide -> !Nuclide.LungAbsorption.NONE.equals(nuclide.lungAbsorption))
-            .findFirst()
+            .findAny()
             .orElse(null);
     }
 
