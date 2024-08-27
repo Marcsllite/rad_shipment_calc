@@ -7,6 +7,7 @@ import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.Conversions;
 import com.marcsllite.util.FXMLView;
 import com.marcsllite.util.RadBigDecimal;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -19,6 +20,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.hamcrest.Matcher;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.testfx.api.FxAssert;
@@ -26,6 +28,7 @@ import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.base.NodeMatchers;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
@@ -143,6 +146,12 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
         });
     }
 
+    protected void assertSettingField(int filteredIsoSize, VBox vbox, Matcher<Node> nodeMatcher) {
+        assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size());
+        assertAdditionalInfoShowing(vbox);
+        FxAssert.verifyThat(btnNext, nodeMatcher);
+    }
+
     protected void assertAdditionalInfoShowing(VBox vbox) {
         if(vbox == null) {
             FxAssert.verifyThat(vBoxLifeSpan, NodeMatchers.isInvisible());
@@ -157,7 +166,7 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
     }
 
     protected void clearFirstPageForm() {
-        interact(() -> txtFieldNuclideName.setText(null));
+        setNuclideName(null);
         setInitialActivity(null);
         setSIPrefix(1, null);
         setRadUnit(null);
@@ -165,16 +174,23 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
         setLungAbsorption(null);
     }
 
+    protected void setNuclideName(String name) {
+        interact(() -> txtFieldNuclideName.setText(name));
+    }
+
     protected void setInitialActivity(String str) {
         interact(() ->txtFieldA0.setText(str));
+        verifyNumericalText(txtFieldA0, str);
+    }
 
+    private void verifyNumericalText(TextField field, String str) {
         if(str != null) {
             String replacedStr = str.replaceAll("\\D", "");
             RadBigDecimal initialActivity = new RadBigDecimal(replacedStr);
-            assertEquals(replacedStr, txtFieldA0.getText());
-            assertEquals(initialActivity, new RadBigDecimal(txtFieldA0.getText()));
+            assertEquals(replacedStr, field.getText());
+            assertEquals(initialActivity, new RadBigDecimal(field.getText()));
         } else {
-            assertNull(txtFieldA0.getText());
+            assertNull(field.getText());
         }
     }
 
@@ -189,15 +205,6 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
         } else {
             interact(() -> comboBoxMassPrefix.setValue(finalPrefix.getVal()));
         }
-    }
-
-    protected void setMassUnit(Conversions.MassUnit massUnit) {
-        if(massUnit == null) {
-            massUnit = Conversions.MassUnit.GRAMS;
-        }
-
-        Conversions.MassUnit finalUnit = massUnit;
-        interact(() -> choiceBoxMassUnit.setValue(finalUnit.getVal()));
     }
 
     protected void setRadUnit(Conversions.RadUnit radUnit) {
@@ -250,8 +257,8 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
     }
 
     protected void clearSecondPageForm() {
-        interact(() -> datePicker.setValue(null));
-        interact(() -> txtFieldMass.setText(null));
+        setDate(null);
+        setMass(null);
         setSIPrefix(2, null);
         setMassUnit(null);
         setNature(null);
@@ -259,6 +266,24 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
         setForm(null);
         chckBoxSameMass.setSelected(false);
         chckBoxSameNSF.setSelected(false);
+    }
+
+    protected void setDate(LocalDate localDate) {
+        interact(() -> datePicker.setValue(localDate));
+    }
+
+    protected void setMass(String str) {
+        interact(() ->txtFieldMass.setText(str));
+        verifyNumericalText(txtFieldMass, str);
+    }
+
+    protected void setMassUnit(Conversions.MassUnit massUnit) {
+        if(massUnit == null) {
+            massUnit = Conversions.MassUnit.GRAMS;
+        }
+
+        Conversions.MassUnit finalUnit = massUnit;
+        interact(() -> choiceBoxMassUnit.setValue(finalUnit.getVal()));
     }
 
     protected void setNature(Nuclide.Nature nature) {

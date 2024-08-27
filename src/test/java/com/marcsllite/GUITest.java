@@ -58,9 +58,6 @@ public abstract class GUITest extends FxRobot {
     private App app;
     private BaseController.Page page;
     private MainController mainController;
-    private MenuPaneController menuPaneController;
-    private HomePaneController homePaneController;
-    private ReferencePaneController referencePaneController;
     private Nuclide editingNuclide;
 
     public GUITest(FXMLView view, BaseController.Page page) {
@@ -85,7 +82,7 @@ public abstract class GUITest extends FxRobot {
         Platform.setImplicitExit(false);
         when(folderHandler.getDataFolderPath()).thenReturn(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
 
-        app.init(view, new PropHandlerTestObj(), folderHandler, getDbService(), new ControllerFactoryTestObj(getDbService(), mainController));
+        app.init(view, new PropHandlerTestObj(), folderHandler, getDbService(), getControllerFactory());
         App.setPage(getPage());
 
         app.start(stage);
@@ -101,6 +98,16 @@ public abstract class GUITest extends FxRobot {
     public void beforeEach() {
         Assumptions.assumeTrue(FxToolkit.isFXApplicationThreadRunning());
         baseStageAssertions(getStageHandler().getPrimaryStage());
+    }
+
+    private ControllerFactoryTestObj getControllerFactory() {
+        switch (getPage()) {
+            case ADD:
+            case EDIT:
+                return new ControllerFactoryTestObj(getDbService(), mainController);
+            default:
+                return new ControllerFactoryTestObj(getDbService());
+        }
     }
 
     protected void baseStageAssertions(Stage stage) {
@@ -139,9 +146,9 @@ public abstract class GUITest extends FxRobot {
 
     private void setupMainController() {
         mainController = MainController.getInstance();
-        menuPaneController = mock(MenuPaneController.class);
-        homePaneController = mock(HomePaneController.class);
-        referencePaneController = mock(ReferencePaneController.class);
+        MenuPaneController menuPaneController = mock(MenuPaneController.class);
+        HomePaneController homePaneController = mock(HomePaneController.class);
+        ReferencePaneController referencePaneController = mock(ReferencePaneController.class);
         mainController.registerController(menuPaneController);
         mainController.registerController(homePaneController);
         mainController.registerController(referencePaneController);

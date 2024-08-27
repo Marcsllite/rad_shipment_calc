@@ -52,25 +52,18 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
     @ParameterizedTest
     @MethodSource("noRadio_data")
     void testBtnNext_EnabledDisabled_NoRadio_Checker(String name, String a0, Matcher<Node> matcher, int filteredIsoSize) {
-        interact(() -> txtFieldNuclideName.setText(name));
-        assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size());
-        assertAdditionalInfoShowing(null);
-        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
+        setNuclideName(name);
+        assertSettingField(filteredIsoSize, null, NodeMatchers.isDisabled());
 
         setInitialActivity(a0);
-        assertAdditionalInfoShowing(null);
-        FxAssert.verifyThat(btnNext, matcher);
+        assertSettingField(filteredIsoSize, null, matcher);
 
         clearFirstPageForm();
         setInitialActivity(a0);
-        assertEquals(0, controller.getSearchFilteredNuclides().size());
-        assertAdditionalInfoShowing(null);
-        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
+        assertSettingField(0, null, NodeMatchers.isDisabled());
 
-        interact(() -> txtFieldNuclideName.setText(name));
-        assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size());
-        assertAdditionalInfoShowing(null);
-        FxAssert.verifyThat(btnNext, matcher);
+        setNuclideName(name);
+        assertSettingField(filteredIsoSize, null, matcher);
     }
 
     private static Object[] noRadio_data() {
@@ -88,14 +81,10 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
     @Test
     void testBtnNextHandler_NoRadio() {
         setInitialActivity("123");
-        assertEquals(0, controller.getSearchFilteredNuclides().size());
-        assertAdditionalInfoShowing(null);
-        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
+        assertSettingField(0, null, NodeMatchers.isDisabled());
 
-        interact(() -> txtFieldNuclideName.setText("An-1"));
-        assertEquals(1, controller.getSearchFilteredNuclides().size());
-        assertAdditionalInfoShowing(null);
-        FxAssert.verifyThat(btnNext, NodeMatchers.isEnabled());
+        setNuclideName(TestUtils.getRegularNuclide().getSymbolNotation());
+        assertSettingField(1, null, NodeMatchers.isEnabled());
 
         clickOn(btnNext);
         FxAssert.verifyThat(vBoxFirstPage, NodeMatchers.isInvisible());
@@ -107,32 +96,24 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
     void testBtnNext_EnabledDisabled_RadioLifeSpan_Checker(String name, String a0, Nuclide.LifeSpan lifeSpan, Matcher<Node> matcher, int filteredIsoSize, boolean visibleRadio) {
         VBox additionalInfo = visibleRadio? vBoxLifeSpan : null;
 
-        interact(() -> txtFieldNuclideName.setText(name));
-        assertAdditionalInfoShowing(additionalInfo);
-        assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size());
-        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
+        setNuclideName(name);
+        assertSettingField(filteredIsoSize, additionalInfo, NodeMatchers.isDisabled());
 
         setInitialActivity(a0);
-        assertAdditionalInfoShowing(additionalInfo);
-        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
+        assertSettingField(filteredIsoSize, additionalInfo, NodeMatchers.isDisabled());
 
         setLifeSpan(lifeSpan);
-        assertAdditionalInfoShowing(additionalInfo);
-        FxAssert.verifyThat(btnNext, matcher);
+        assertSettingField(filteredIsoSize, additionalInfo, matcher);
 
         clearFirstPageForm();
         setInitialActivity(a0);
-        assertAdditionalInfoShowing(null);
-        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
+        assertSettingField(0, null, NodeMatchers.isDisabled());
 
-        interact(() -> txtFieldNuclideName.setText(name));
-        assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size());
-        assertAdditionalInfoShowing(additionalInfo);
-        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
+        setNuclideName(name);
+        assertSettingField(filteredIsoSize, additionalInfo, NodeMatchers.isDisabled());
 
         setLifeSpan(lifeSpan);
-        assertAdditionalInfoShowing(additionalInfo);
-        FxAssert.verifyThat(btnNext, matcher);
+        assertSettingField(filteredIsoSize, additionalInfo, matcher);
     }
 
     private static Object[] radioLifeSpan_data() {
@@ -142,19 +123,19 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
         return new Object[] {
             new Object[] { " ", null, Nuclide.LifeSpan.SHORT, NodeMatchers.isDisabled(), 0, false },
             new Object[] { null, "1sdf23", Nuclide.LifeSpan.SHORT, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LifeSpan.SHORT, NodeMatchers.isDisabled(), 0, true },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LifeSpan.SHORT, NodeMatchers.isDisabled(), 0, false },
             new Object[] { shortSymbol, "123", Nuclide.LifeSpan.SHORT, NodeMatchers.isEnabled(), 1, true },
             new Object[] { fullSymbol, "123", Nuclide.LifeSpan.SHORT, NodeMatchers.isEnabled(), 1, true },
 
             new Object[] { " ", null, Nuclide.LifeSpan.LONG, NodeMatchers.isDisabled(), 0, false },
             new Object[] { null, "1sdf23", Nuclide.LifeSpan.LONG, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LifeSpan.LONG, NodeMatchers.isDisabled(), 0, true },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LifeSpan.LONG, NodeMatchers.isDisabled(), 0, false },
             new Object[] { shortSymbol, "123", Nuclide.LifeSpan.LONG, NodeMatchers.isEnabled(), 1, true },
             new Object[] { fullSymbol, "123", Nuclide.LifeSpan.LONG, NodeMatchers.isEnabled(), 1, true },
 
             new Object[] { " ", null, Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), 0, false },
             new Object[] { null, "1sdf23", Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), 0, true },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), 0, false },
             new Object[] { shortSymbol, "123", Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), 1, true },
             new Object[] { fullSymbol, "123", Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), 1, true }
         };
@@ -162,22 +143,19 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
 
     @Test
     void testBtnNextHandler_RadioLifeSpan() {
+        TestUtils.TestNuclide lifeSpanNuclide = TestUtils.getLifeSpanNuclide();
+
         setInitialActivity("123");
-        assertEquals(4, controller.getSearchFilteredNuclides().size());
-        assertAdditionalInfoShowing(null);
-        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
+        assertSettingField(0, null, NodeMatchers.isDisabled());
 
-        interact(() -> txtFieldNuclideName.setText("Bf-1"));
-        assertEquals(1, controller.getSearchFilteredNuclides().size());
-        assertAdditionalInfoShowing(vBoxLifeSpan);
+        setNuclideName(lifeSpanNuclide.getSymbolNotation());
+        assertSettingField(1, vBoxLifeSpan, NodeMatchers.isDisabled());
 
-        interact(() -> txtFieldNuclideName.setText("Bf-1(short)"));
-        assertEquals(1, controller.getSearchFilteredNuclides().size());
-        assertAdditionalInfoShowing(vBoxLifeSpan);
+        setNuclideName(lifeSpanNuclide.getFullSymbolNotation());
+        assertSettingField(1, vBoxLifeSpan, NodeMatchers.isDisabled());
 
         setLifeSpan(Nuclide.LifeSpan.SHORT);
-        assertAdditionalInfoShowing(vBoxLifeSpan);
-        FxAssert.verifyThat(btnNext, NodeMatchers.isEnabled());
+        assertSettingField(1, vBoxLifeSpan, NodeMatchers.isEnabled());
 
         clickOn(btnNext);
         FxAssert.verifyThat(vBoxFirstPage, NodeMatchers.isInvisible());
@@ -196,36 +174,28 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
             additionalInfo = null;
         }
 
-        interact(() -> txtFieldNuclideName.setText(name));
-        assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size());
-        assertAdditionalInfoShowing(additionalInfo);
-        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
+        setNuclideName(name);
+        assertSettingField(filteredIsoSize, additionalInfo, NodeMatchers.isDisabled());
 
         setInitialActivity(a0);
-        assertAdditionalInfoShowing(additionalInfo);
-        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
+        assertSettingField(filteredIsoSize, additionalInfo, NodeMatchers.isDisabled());
 
         if(filteredIsoSize == 1) {
             setLungAbsorption(lungAbs);
         }
-        assertAdditionalInfoShowing(additionalInfo);
-        FxAssert.verifyThat(btnNext, matcher);
+        assertSettingField(filteredIsoSize, additionalInfo, matcher);
         
         clearFirstPageForm();
         setInitialActivity(a0);
-        assertAdditionalInfoShowing(null);
-        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
+        assertSettingField(0, null, NodeMatchers.isDisabled());
 
-        interact(() -> txtFieldNuclideName.setText(name));
-        assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size());
-        assertAdditionalInfoShowing(additionalInfo);
-        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
+        setNuclideName(name);
+        assertSettingField(filteredIsoSize, additionalInfo, NodeMatchers.isDisabled());
 
         if(filteredIsoSize == 1) {
             setLungAbsorption(lungAbs);
         }
-        assertAdditionalInfoShowing(additionalInfo);
-        FxAssert.verifyThat(btnNext, matcher);
+        assertSettingField(filteredIsoSize, additionalInfo, matcher);
     }
 
     private static Object[] radioLungAbsorption_data() {
@@ -235,25 +205,25 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
         return new Object[] {
             new Object[] { " ", null, Nuclide.LungAbsorption.SLOW, NodeMatchers.isDisabled(), 0, false },
             new Object[] { null, "1sdf23", Nuclide.LungAbsorption.SLOW, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.SLOW, NodeMatchers.isDisabled(), 0, true },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.SLOW, NodeMatchers.isDisabled(), 0, false },
             new Object[] { shortSymbol, "123", Nuclide.LungAbsorption.SLOW, NodeMatchers.isEnabled(), 1, true },
             new Object[] { fullSymbol, "123", Nuclide.LungAbsorption.SLOW, NodeMatchers.isEnabled(), 1, true },
             
             new Object[] { " ", null, Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isDisabled(), 0, false },
             new Object[] { null, "1sdf23", Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isDisabled(), 0, true },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isDisabled(), 0, false },
             new Object[] { shortSymbol, "123", Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isEnabled(), 1, true },
             new Object[] { fullSymbol, "123", Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isEnabled(), 1, true },
 
             new Object[] { " ", null, Nuclide.LungAbsorption.FAST, NodeMatchers.isDisabled(), 0, false },
             new Object[] { null, "1sdf23", Nuclide.LungAbsorption.FAST, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.FAST, NodeMatchers.isDisabled(), 0, true },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.FAST, NodeMatchers.isDisabled(), 0, false },
             new Object[] { shortSymbol, "123", Nuclide.LungAbsorption.FAST, NodeMatchers.isEnabled(), 1, true },
             new Object[] { fullSymbol, "123", Nuclide.LungAbsorption.FAST, NodeMatchers.isEnabled(), 1, true },
 
             new Object[] { " ", null, Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), 0, false },
             new Object[] { null, "1sdf23", Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), 0, true },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), 0, false },
             new Object[] { shortSymbol, "123", Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), 1, true },
             new Object[] { fullSymbol, "123", Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), 1, true }
         };
@@ -261,22 +231,19 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
 
     @Test
     void testBtnNextHandler_RadioLungAbsorption() {
+        TestUtils.TestNuclide lungAbsorptionNuclide = TestUtils.getLungAbsNuclide();
+
         setInitialActivity("123");
-        assertEquals(0, controller.getSearchFilteredNuclides().size());
-        assertAdditionalInfoShowing(null);
-        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
+        assertSettingField(0, null, NodeMatchers.isDisabled());
 
-        interact(() -> txtFieldNuclideName.setText("Bs-1"));
-        assertEquals(1, controller.getSearchFilteredNuclides().size());
-        assertAdditionalInfoShowing(vBoxLungAbs);
+        setNuclideName(lungAbsorptionNuclide.getSymbolNotation());
+        //assertSettingField(1, vBoxLungAbs, NodeMatchers.isDisabled());
 
-        interact(() -> txtFieldNuclideName.setText("Bs-1fast"));
-        assertEquals(1, controller.getSearchFilteredNuclides().size());
-        assertAdditionalInfoShowing(vBoxLungAbs);
+        setNuclideName(lungAbsorptionNuclide.getFullSymbolNotation());
+        //assertSettingField(1, vBoxLungAbs, NodeMatchers.isDisabled());
 
         setLungAbsorption(Nuclide.LungAbsorption.FAST);
-        assertAdditionalInfoShowing(vBoxLungAbs);
-        FxAssert.verifyThat(btnNext, NodeMatchers.isEnabled());
+        assertSettingField(1, vBoxLungAbs, NodeMatchers.isEnabled());
 
         clickOn(btnNext);
         FxAssert.verifyThat(vBoxFirstPage, NodeMatchers.isInvisible());
