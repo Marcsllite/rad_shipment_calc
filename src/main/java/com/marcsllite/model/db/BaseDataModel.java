@@ -16,9 +16,7 @@ public abstract class BaseDataModel extends BaseModel {
     private String decFloatStr;
 
     BaseDataModel() {
-        this(new NuclideModelId("XX", "1"),
-            RadBigDecimal.NEG_INFINITY_OBJ.toString(),
-            Conversions.SIPrefix.BASE);
+        this(null, null, Conversions.SIPrefix.BASE);
     }
 
     BaseDataModel(NuclideModelId nuclideId, String decFloatStr) {
@@ -27,8 +25,8 @@ public abstract class BaseDataModel extends BaseModel {
 
     BaseDataModel(NuclideModelId nuclideId, String decFloatStr, Conversions.SIPrefix basePrefix) {
         super(basePrefix);
-        this.nuclideId = nuclideId;
-        this.decFloatStr = decFloatStr;
+        this.nuclideId = nuclideId == null? new NuclideModelId() : nuclideId;
+        this.decFloatStr = decFloatStr == null? RadBigDecimal.NEG_INFINITY_OBJ.toString() : decFloatStr;
     }
 
     public NuclideModelId getNuclideId() {
