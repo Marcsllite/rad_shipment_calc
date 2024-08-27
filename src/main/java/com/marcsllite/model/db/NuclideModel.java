@@ -94,10 +94,18 @@ public class NuclideModel extends BaseModel {
     }
 
     public String getNameNotation() {
+        return getName() + "-" + getNuclideId().getDisplayMassNumber();
+    }
+
+    public String getFullNameNotation() {
         return getName() + "-" + getNuclideId().getMassNumber();
     }
 
     public String getSymbolNotation() {
         return getNuclideId().getSymbolNotation();
+    }
+
+    public String getFullSymbolNotation() {
+        return getNuclideId().getFullSymbolNotation();
     }
 }

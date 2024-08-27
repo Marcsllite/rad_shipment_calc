@@ -178,7 +178,11 @@ public class NuclideConstants {
     }
 
     public void setDisplayHalfLife() {
-        displayHalfLifeProperty().set(getHalfLifeStr() + HALF_LIFE_UNIT);
+        if(DEFAULT_VAL_STR.equals(getHalfLifeStr())) {
+            displayHalfLifeProperty().set(getHalfLifeStr());
+        } else {
+            displayHalfLifeProperty().set(getHalfLifeStr() + HALF_LIFE_UNIT);
+        }
     }
 
     public RadBigDecimal getIaLimitedLimit() {
@@ -302,15 +306,15 @@ public class NuclideConstants {
 
     @Override
     public String toString() {
-        return "Nuclide Constants: {\n\tA1: " + getA1() + " TBq" +
-            "\n\tA2: " + getA2() + " TBq" +
-            "\n\tDecay Constant: " + getDecayConstant() +
-            "\n\tExempt Concentration: " + getExemptConcentration() + " Bq/g" +
-            "\n\tExempt Limit: " + getExemptLimit() + " Bq" +
+        return "Nuclide Constants: {\n\tA1: " + getA1().toDisplayString() + " TBq" +
+            "\n\tA2: " + getA2().toDisplayString() + " TBq" +
+            "\n\tDecay Constant: " + getDecayConstant().toDisplayString() +
+            "\n\tExempt Concentration: " + getExemptConcentration().toDisplayString() + " Bq/g" +
+            "\n\tExempt Limit: " + getExemptLimit().toDisplayString() + " Bq" +
             "\n\tHalfLife: " + displayHalfLifeProperty() +
-            "\n\tInstruments/Articles Limited Limit: " + getIaLimitedLimit() +
-            "\n\tInstruments/Articles Package Limit: " + getIaPackageLimit() +
-            "\n\tNormal Limited Limit: " + getLimitedLimit() +
-            "\n\tReportable Quantity: " + getTeraBqReportQuan() + " TBq\n}";
+            "\n\tInstruments/Articles Limited Limit: " + getIaLimitedLimit().toDisplayString() +
+            "\n\tInstruments/Articles Package Limit: " + getIaPackageLimit().toDisplayString() +
+            "\n\tNormal Limited Limit: " + getLimitedLimit().toDisplayString() +
+            "\n\tReportable Quantity: " + getTeraBqReportQuan().toDisplayString() + " TBq\n}";
     }
 }

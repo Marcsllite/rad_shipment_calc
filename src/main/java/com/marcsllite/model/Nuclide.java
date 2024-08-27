@@ -581,7 +581,7 @@ public class Nuclide {
     public enum LifeSpan {
         SHORT("Short"),
         LONG("Long"),
-        REGULAR("");
+        REGULAR("N/A");
 
         private final String val;
 
@@ -590,7 +590,7 @@ public class Nuclide {
         }
 
         public String getVal() {
-            return val.isEmpty() ? "" : val + " Lived";
+            return val + ("N/A".equals(val) ? "" : " Lived");
         }
 
         public String getAbbrVal() { return val.isEmpty() ? "" : val.toLowerCase();}
@@ -621,7 +621,7 @@ public class Nuclide {
         SLOW("Slow Lung Absorption"),
         MEDIUM("Medium Lung Absorption"),
         FAST("Fast Lung Absorption"),
-        NONE("");
+        NONE("N/A");
 
         private final String val;
 
