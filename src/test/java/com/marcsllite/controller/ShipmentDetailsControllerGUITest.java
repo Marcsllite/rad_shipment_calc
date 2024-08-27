@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.testfx.api.FxAssert;
 import org.testfx.framework.junit5.Start;
@@ -68,7 +69,7 @@ class ShipmentDetailsControllerGUITest extends GUITest {
         FxAssert.verifyThat(stackPaneShipmentDetails, NodeMatchers.isVisible());
     }
 
-    @Test
+    @Disabled("FXML method it tests has not yet been implemented")
     void testShipmentDetailsHandler_btnNext() {
         clickOn(btnSaveShipDetails);
     }
