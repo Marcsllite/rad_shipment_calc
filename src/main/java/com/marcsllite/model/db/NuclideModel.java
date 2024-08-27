@@ -1,10 +1,13 @@
 package com.marcsllite.model.db;
 
+import com.marcsllite.model.Nuclide;
+import com.marcsllite.util.NuclideUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,10 @@ public class NuclideModel extends BaseModel {
     private String name;
     @ManyToMany(mappedBy = "nuclides")
     private List<ShipmentModel> shipments;
+    @Transient
+    private Nuclide.LifeSpan lifeSpan;
+    @Transient
+    private Nuclide.LungAbsorption lungAbsorption;
 
     public NuclideModel() {
         this(1, "XX", new NuclideModelId("XX", "1"));
@@ -32,6 +39,8 @@ public class NuclideModel extends BaseModel {
         this.atomicNumber = atomicNumber;
         this.name = name;
         this.nuclideId = nuclideId;
+        this.lifeSpan = NuclideUtils.parseLifeSpanFromMassNumber(this.nuclideId == null? "" : this.nuclideId.getMassNumber());
+        this.lungAbsorption = NuclideUtils.parseLungAbsFromMassNumber(this.nuclideId == null? "" : this.nuclideId.getMassNumber());
     }
 
     public int getAtomicNumber() {
@@ -48,6 +57,8 @@ public class NuclideModel extends BaseModel {
 
     public void setNuclideId(NuclideModelId nuclideId) {
         this.nuclideId = nuclideId;
+        lifeSpan = NuclideUtils.parseLifeSpanFromMassNumber(this.nuclideId == null? "" : this.nuclideId.getMassNumber());
+        lungAbsorption = NuclideUtils.parseLungAbsFromMassNumber(this.nuclideId == null? "" : this.nuclideId.getMassNumber());
     }
 
     public String getName() {
@@ -64,6 +75,22 @@ public class NuclideModel extends BaseModel {
 
     public void setShipments(List<ShipmentModel> shipments) {
         this.shipments = shipments == null? new ArrayList<>() : shipments;
+    }
+
+    public Nuclide.LifeSpan getLifeSpan() {
+        return lifeSpan;
+    }
+
+    public void setLifeSpan(Nuclide.LifeSpan lifeSpan) {
+        this.lifeSpan = lifeSpan;
+    }
+
+    public Nuclide.LungAbsorption getLungAbsorption() {
+        return lungAbsorption;
+    }
+
+    public void setLungAbsorption(Nuclide.LungAbsorption lungAbsorption) {
+        this.lungAbsorption = lungAbsorption;
     }
 
     public String getNameNotation() {

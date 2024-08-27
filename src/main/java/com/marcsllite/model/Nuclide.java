@@ -6,6 +6,7 @@ import com.marcsllite.model.db.NuclideModelId;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.Conversions;
+import com.marcsllite.util.NuclideUtils;
 import com.marcsllite.util.RadBigDecimal;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -93,8 +94,8 @@ public class Nuclide {
         setAtomicNumber(atomicNumber);
         setName(name);
         setNuclideId(nuclideId);
-        setLifeSpan(nuclideId.parseLifeSpanFromMassNumber());
-        setLungAbsorption(nuclideId.parseLungAbsFromMassNumber());
+        setLifeSpan(NuclideUtils.parseLifeSpanFromMassNumber(getNuclideId().getMassNumber()));
+        setLungAbsorption(NuclideUtils.parseLungAbsFromMassNumber(getNuclideId().getMassNumber()));
     }
 
     public Nuclide(Conversions.SIPrefix massPrefix, Conversions.MassUnit massUnit, String massStr,

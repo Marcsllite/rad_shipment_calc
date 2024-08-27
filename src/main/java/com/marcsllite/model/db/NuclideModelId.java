@@ -1,22 +1,15 @@
 package com.marcsllite.model.db;
 
-import com.marcsllite.model.Nuclide;
+import com.marcsllite.util.NuclideUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Transient;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Embeddable
 public class NuclideModelId implements Serializable {
     private static final long serialVersionUID = 6598716598717598732L;
-    @Transient
-    public static final String LUNG_ABS_PATTERN = "(slow|medium|fast)$";
-    @Transient
-    public static final String LIFE_SPAN_PATTERN = "\\((.*)\\)$";
 
     @Column(name = "Symbol", length = 2, nullable = false)
     private String symbol;
@@ -44,10 +37,9 @@ public class NuclideModelId implements Serializable {
     }
 
     public String getDisplayMassNumber() {
-        return massNumber == null ? null : massNumber
-            .replaceAll(LIFE_SPAN_PATTERN, "")
-            .replaceAll(LUNG_ABS_PATTERN, "")
-            .trim();
+        return massNumber == null ? "" : massNumber.trim()
+            .replaceAll(NuclideUtils.LIFE_SPAN_PATTERN, "")
+            .replaceAll(NuclideUtils.LUNG_ABS_PATTERN, "");
     }
 
     public void setMassNumber(String massNumber) {
@@ -57,26 +49,6 @@ public class NuclideModelId implements Serializable {
     public String getSymbolNotation() { return getSymbol() + "-" + getMassNumber(); }
 
     public String getDisplaySymbolNotation() { return getSymbol() + "-" + getDisplayMassNumber(); }
-
-    public Nuclide.LifeSpan parseLifeSpanFromMassNumber() {
-        Pattern lifeSpanPattern = Pattern.compile(LIFE_SPAN_PATTERN);
-        Matcher lifeSpanMatch = lifeSpanPattern.matcher(getMassNumber());
-        Nuclide.LifeSpan ret = Nuclide.LifeSpan.REGULAR;
-        if(lifeSpanMatch.find()) {
-            ret = Nuclide.LifeSpan.toLifeSpan(lifeSpanMatch.group(1));
-        }
-        return ret;
-    }
-
-    public Nuclide.LungAbsorption parseLungAbsFromMassNumber() {
-        Pattern lungAbsPattern = Pattern.compile(LUNG_ABS_PATTERN);
-        Matcher lungAbsMatch = lungAbsPattern.matcher(getMassNumber());
-        Nuclide.LungAbsorption ret = Nuclide.LungAbsorption.NONE;
-        if(lungAbsMatch.find()) {
-            ret = Nuclide.LungAbsorption.toLungAbsorption(lungAbsMatch.group(0));
-        }
-        return ret;
-    }
 
     @Override
     public boolean equals(Object obj) {
