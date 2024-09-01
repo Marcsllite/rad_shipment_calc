@@ -2,6 +2,7 @@ package com.marcsllite.controller;
 
 import com.marcsllite.FXIds;
 import com.marcsllite.GUITest;
+import com.marcsllite.TestUtils;
 import com.marcsllite.model.Nuclide;
 import com.marcsllite.model.NuclideConstants;
 import com.marcsllite.util.Conversions;
@@ -146,7 +147,6 @@ class ReferencePaneControllerGUITest extends GUITest {
 
     @Test
     void testTableDataLinking() {
-        assertNull(tableViewSearch.getSelectionModel().getSelectedItem());
         validateRefTextFields(txtFieldA1, "A1");
         validateRefTextFields(txtFieldA2, "A2");
         validateRefTextFields(txtFieldDecayConst, "Decay Constant");
@@ -156,31 +156,24 @@ class ReferencePaneControllerGUITest extends GUITest {
         validateRefTextFields(txtFieldReportQuan, "Reportable Quantity");
 
         ObservableList<Nuclide> tableItems = tableViewSearch.getItems();
-        assertEquals(4, tableItems.size());
+        assertEquals(TestUtils.getTestNuclideSize(), tableItems.size());
 
-        selectRow(tableViewSearch, 0);
-        validateRefDataForSelectedRow(0);
-
-        selectRow(tableViewSearch, 1);
-        validateRefDataForSelectedRow(1);
-
-        selectRow(tableViewSearch, 2);
-        validateRefDataForSelectedRow(2);
-
-        selectRow(tableViewSearch, 3);
-        validateRefDataForSelectedRow(3);
+        for (int i = 0; i < tableItems.size(); i++) {
+            selectRow(tableViewSearch, i);
+            validateRefDataForSelectedRow(i);
+        }
     }
 
     protected void validateRefDataForSelectedRow(int index) {
         NuclideConstants isoConstants = tableViewSearch.getItems().get(index).getConstants();
 
-        assertEquals(isoConstants.getA1().toDisplayString(), txtFieldA1.getText());
-        assertEquals(isoConstants.getA2().toDisplayString(), txtFieldA2.getText());
-        assertEquals(isoConstants.getDecayConstant().toDisplayString(), txtFieldDecayConst.getText());
-        assertEquals(isoConstants.getExemptConcentration().toDisplayString(), txtFieldExemptCon.getText());
-        assertEquals(isoConstants.getExemptLimit().toDisplayString(), txtFieldExemptLim.getText());
-        assertEquals(isoConstants.getHalfLife().toDisplayString(), txtFieldHalfLife.getText());
-        assertEquals(isoConstants.getTeraBqReportQuan().toDisplayString(), txtFieldReportQuan.getText());
+        assertEquals("Incorrect A1 for index " + index, isoConstants.getA1().toDisplayString(), txtFieldA1.getText());
+        assertEquals("Incorrect A2 for index " + index, isoConstants.getA2().toDisplayString(), txtFieldA2.getText());
+        assertEquals("Incorrect Decay Constant for index " + index, isoConstants.getDecayConstant().toDisplayString(), txtFieldDecayConst.getText());
+        assertEquals("Incorrect Exempt Concentration for index " + index, isoConstants.getExemptConcentration().toDisplayString(), txtFieldExemptCon.getText());
+        assertEquals("Incorrect Exempt Limit for index " + index, isoConstants.getExemptLimit().toDisplayString(), txtFieldExemptLim.getText());
+        assertEquals("Incorrect Half LIfe for index " + index, isoConstants.getHalfLife().toDisplayString(), txtFieldHalfLife.getText());
+        assertEquals("Incorrect Report Quantity (TBq) for index " + index, isoConstants.getTeraBqReportQuan().toDisplayString(), txtFieldReportQuan.getText());
     }
 
     protected void validateRefTextFields(TextField field, String promptTxt) {
@@ -191,16 +184,16 @@ class ReferencePaneControllerGUITest extends GUITest {
 
     @Test
     void testRadUnitListener() {
-        selectRow(tableViewSearch, 0);
+        int index = TestUtils.getRandomRow(tableViewSearch);
+        selectRow(tableViewSearch, index);
 
-        NuclideConstants isoConstants = tableViewSearch.getItems().get(0).getConstants();
+        NuclideConstants isoConstants = tableViewSearch.getItems().get(index).getConstants();
 
         verifyRadUnitConversions(choiceBoxRefA1RadUnit, txtFieldA1, isoConstants.getA1());
         verifyRadUnitConversions(choiceBoxRefA2RadUnit, txtFieldA2, isoConstants.getA2());
         verifyRadUnitConversions(choiceBoxRefExemptConRadUnit, txtFieldExemptCon, isoConstants.getExemptConcentration());
         verifyRadUnitConversions(choiceBoxRefExemptLimRadUnit, txtFieldExemptLim, isoConstants.getExemptLimit());
         verifyRadUnitConversions(choiceBoxRefReportQuanRadUnit, txtFieldReportQuan, isoConstants.getTeraBqReportQuan());
-        interact(() -> clearSelection(tableViewSearch));
     }
 
     protected void verifyRadUnitConversions(ChoiceBox<String> choiceBox, TextField field, RadBigDecimal original) {
@@ -218,9 +211,10 @@ class ReferencePaneControllerGUITest extends GUITest {
 
     @Test
     void testPrefixListener() {
-        selectRow(tableViewSearch, 0);
+        int index = TestUtils.getRandomRow(tableViewSearch);
+        selectRow(tableViewSearch, index);
 
-        NuclideConstants isoConstants = tableViewSearch.getItems().get(0).getConstants();
+        NuclideConstants isoConstants = tableViewSearch.getItems().get(index).getConstants();
 
         verifyPrefixConversions(comboBoxRefA1Prefix, txtFieldA1, Conversions.SIPrefix.TERA, isoConstants.getA1());
         verifyPrefixConversions(comboBoxRefA2Prefix, txtFieldA2, Conversions.SIPrefix.TERA, isoConstants.getA2());
@@ -251,45 +245,42 @@ class ReferencePaneControllerGUITest extends GUITest {
 
     @Test
     void testUnselectRowOnSearch() {
-        selectRow(tableViewSearch, 0);
+        selectRow(tableViewSearch, TestUtils.getRandomRow(tableViewSearch));
+        assertEquals(TestUtils.getTestNuclideSize(), tableViewSearch.getItems().size());
 
-        interact(() ->txtFieldSearch.setText(null));
+        setString("", txtFieldSearch);
         assertNotNull(tableViewSearch.getSelectionModel().getSelectedItem());
+        assertEquals(TestUtils.getTestNuclideSize(), tableViewSearch.getItems().size());
 
-        interact(() ->txtFieldSearch.setText(""));
-        assertNotNull(tableViewSearch.getSelectionModel().getSelectedItem());
-
-        interact(() ->txtFieldSearch.setText(" "));
-        assertNotNull(tableViewSearch.getSelectionModel().getSelectedItem());
-
-        interact(() ->txtFieldSearch.setText("z"));
+        setString("z", txtFieldSearch);
         assertNull(tableViewSearch.getSelectionModel().getSelectedItem());
+        assertEquals(TestUtils.subStringTestNuclide("z"), tableViewSearch.getItems().size());
 
-        interact(() ->txtFieldSearch.setText(null));
+        setString(null, txtFieldSearch);
+        assertEquals(TestUtils.getTestNuclideSize(), tableViewSearch.getItems().size());
+        selectRow(tableViewSearch, TestUtils.getRandomRow(tableViewSearch));
+
+        setString(" ", txtFieldSearch);
         assertNull(tableViewSearch.getSelectionModel().getSelectedItem());
     }
 
     @Test
     void testSearchFiltering() {
-        interact(() -> txtFieldSearch.setText(null));
-        assertEquals(4, tableViewSearch.getItems().size());
+        Nuclide nuclide = TestUtils.createNuclide();
+        String symbolNotation = nuclide.getDisplaySymbolNotation();
+        int notationSize = symbolNotation.length();
 
-        interact(() -> txtFieldSearch.setText(""));
-        assertEquals(4, tableViewSearch.getItems().size());
+        setString("", txtFieldSearch);
+        assertEquals(TestUtils.getTestNuclideSize(), tableViewSearch.getItems().size());
 
-        interact(() -> txtFieldSearch.setText("A"));
-        assertEquals(3, tableViewSearch.getItems().size());
-
-        interact(() -> txtFieldSearch.setText("An"));
-        assertEquals(1, tableViewSearch.getItems().size());
-
-        interact(() -> txtFieldSearch.setText("An-"));
-        assertEquals(1, tableViewSearch.getItems().size());
-
-        interact(() -> txtFieldSearch.setText("An-z"));
+        setString("NAN", txtFieldSearch);
         assertTrue(tableViewSearch.getItems().isEmpty());
 
-        interact(() -> txtFieldSearch.setText("An-1"));
-        assertEquals(1, tableViewSearch.getItems().size());
+        for (int i = 1; i < notationSize; i++) {
+            setString(symbolNotation.substring(0, i), txtFieldSearch);
+            assertEquals("Incorrect search results for substring length "+i+", ("+symbolNotation.substring(0, i)+")",
+                TestUtils.subStringTestNuclide(symbolNotation.substring(0, i)),
+                tableViewSearch.getItems().size());
+        }
     }
 }

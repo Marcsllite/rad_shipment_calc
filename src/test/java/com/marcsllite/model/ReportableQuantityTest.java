@@ -57,7 +57,7 @@ class ReportableQuantityTest {
         };
 
         String actual = reportQuan.toString();
-//        assertTrue(actual.contains(DEFAULT_ID));
+        assertTrue(actual.contains(DEFAULT_ID.toString()));
         assertTrue(actual.contains(val + " TBq"));
         assertTrue(actual.contains(val + " Ci"));
     }

@@ -1,6 +1,7 @@
 package com.marcsllite.controller;
 
 import com.marcsllite.PropHandlerTestObj;
+import com.marcsllite.TestUtils;
 import com.marcsllite.model.Nuclide;
 import com.marcsllite.model.Shipment;
 import com.marcsllite.model.db.NuclideModelId;
@@ -86,6 +87,13 @@ class HomePaneControllerTest {
     void testUpdateNuclide_NullNuclide() {
         controller.updateNuclide(null);
 
+        verify(controller, times(0)).getShipment();
+    }
+
+    @Test
+    void testUpdateNuclide_NotSelected() {
+        controller.updateNuclide(TestUtils.createNuclide());
+        
         verify(controller, times(0)).getShipment();
     }
 }

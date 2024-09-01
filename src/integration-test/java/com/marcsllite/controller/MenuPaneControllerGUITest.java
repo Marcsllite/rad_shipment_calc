@@ -82,16 +82,46 @@ class MenuPaneControllerGUITest extends GUITest {
     }
 
     @Test
+    void testMouseHover() {
+        moveTo(stackPaneLogo);
+        FxAssert.verifyThat(imgViewColorLogo, NodeMatchers.isInvisible());
+        FxAssert.verifyThat(imgViewGreyLogo, NodeMatchers.isVisible());
+        assertEquals(Paint.valueOf(CURRENT_COLOR.getVal()), btnShipment.getTextFill());
+        assertEquals(Paint.valueOf(IDLE_COLOR.getVal()), btnReference.getTextFill());
+
+        moveTo(btnReference);
+        FxAssert.verifyThat(imgViewColorLogo, NodeMatchers.isVisible());
+        FxAssert.verifyThat(imgViewGreyLogo, NodeMatchers.isInvisible());
+        assertEquals(Paint.valueOf(CURRENT_COLOR.getVal()), btnShipment.getTextFill());
+        assertEquals(Paint.valueOf(HOVER_COLOR.getVal()), btnReference.getTextFill());
+
+        clickOn(btnReference);
+        assertEquals(Paint.valueOf(IDLE_COLOR.getVal()), btnShipment.getTextFill());
+        assertEquals(Paint.valueOf(CURRENT_COLOR.getVal()), btnReference.getTextFill());
+
+        moveTo(btnShipment);
+        FxAssert.verifyThat(imgViewColorLogo, NodeMatchers.isVisible());
+        FxAssert.verifyThat(imgViewGreyLogo, NodeMatchers.isInvisible());
+        assertEquals(Paint.valueOf(HOVER_COLOR.getVal()), btnShipment.getTextFill());
+        assertEquals(Paint.valueOf(CURRENT_COLOR.getVal()), btnReference.getTextFill());
+    }
+
+    private void assertButtonClick(Button btn, MenuPaneController.Page page, ImageView view, String imgUrl) {
+        clickOn(btn);
+        moveTo(stackPaneLogo);
+        assertEquals(page, controller.getCurrentPage());
+        assertEquals(Paint.valueOf(CURRENT_COLOR.getVal()), btn.getTextFill());
+        assertEquals(imgUrl, view.getImage().getUrl());
+    }
+
+    @Test
     void testMenuPaneHandler_btnShipment() {
         String imgUrl = ImageHandler.getShipmentImage(CURRENT_COLOR).getUrl();
 
         controller.unsetCurrentPage();
 
-        clickOn(btnShipment);
-
-        assertEquals(MenuPaneController.Page.SHIPMENT, controller.getCurrentPage());
-        assertEquals(Paint.valueOf(CURRENT_COLOR.getVal()), btnShipment.getTextFill());
-        assertEquals(imgUrl, imgViewShipment.getImage().getUrl());
+        assertButtonClick(btnShipment, MenuPaneController.Page.SHIPMENT, imgViewShipment, imgUrl);
+        assertButtonClick(btnShipment, MenuPaneController.Page.SHIPMENT, imgViewShipment, imgUrl);
     }
 
     @Test
@@ -99,10 +129,8 @@ class MenuPaneControllerGUITest extends GUITest {
         String imgUrl = ImageHandler.getReferenceImage(CURRENT_COLOR).getUrl();
 
         controller.unsetCurrentPage();
-        clickOn(btnReference);
 
-        assertEquals(MenuPaneController.Page.REFERENCE, controller.getCurrentPage());
-        assertEquals(Paint.valueOf(CURRENT_COLOR.getVal()), btnReference.getTextFill());
-        assertEquals(imgUrl, imgViewReference.getImage().getUrl());
+        assertButtonClick(btnReference, MenuPaneController.Page.REFERENCE, imgViewReference, imgUrl);
+        assertButtonClick(btnReference, MenuPaneController.Page.REFERENCE, imgViewReference, imgUrl);
     }
 }

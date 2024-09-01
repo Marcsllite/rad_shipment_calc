@@ -38,8 +38,7 @@ import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 
 class HomePaneControllerGUITest extends GUITest {
-    @Spy
-    HomePaneController controller;
+    @Spy HomePaneController controller;
     GridPane gridPaneHome;
     Button btnAdd;
     Button btnEdit;
@@ -199,9 +198,9 @@ class HomePaneControllerGUITest extends GUITest {
             assertEquals(nuclide.getDisplayNameNotation(), txtFieldNuclideName.getText());
             if(nuclide.getInitActivity().isInfinity() ||
                 nuclide.getInitActivity().isNegativeInfinity()) {
-                assertEquals("0", txtFieldA0.getText());
+                assertNull(txtFieldA0.getText());
             } else {
-                assertEquals(nuclide.getInitActivity().toString(), txtFieldA0.getText());
+                assertEquals(nuclide.getInitActivityStr(), txtFieldA0.getText());
             }
             assertEquals(nuclide.getInitActivityPrefix().getVal(), comboBoxA0Prefix.getSelectionModel().getSelectedItem());
             assertEquals(nuclide.getInitActivityUnit().getVal(), choiceBoxA0RadUnit.getSelectionModel().getSelectedItem());
@@ -209,9 +208,9 @@ class HomePaneControllerGUITest extends GUITest {
             assertEquals(nuclide.getRefDate(), datePicker.getValue());
             if(nuclide.getMass().isInfinity() ||
                 nuclide.getMass().isNegativeInfinity()) {
-                assertEquals("0", txtFieldMass.getText());
+                assertNull(txtFieldMass.getText());
             } else {
-                assertEquals(nuclide.getMass().toString(), txtFieldMass.getText());
+                assertEquals(nuclide.getMassStr(), txtFieldMass.getText());
             }
             assertEquals(nuclide.getMassPrefix().getVal(), comboBoxMassPrefix.getSelectionModel().getSelectedItem());
             assertEquals(nuclide.getMassUnit().getVal(), choiceBoxMassUnit.getSelectionModel().getSelectedItem());
@@ -230,9 +229,11 @@ class HomePaneControllerGUITest extends GUITest {
 
         controller = (HomePaneController) getController();
         shipment = controller.getShipment();
+        int size = shipment.getNuclides().size();
         shipment.getNuclides().add(nuclide);
+        assertEquals(size+1, shipment.getNuclides().size());
         assertFalse(shipment.getNuclides().isEmpty());
-        assertEquals(shipment.getNuclides().get(0), tableViewHome.getItems().get(0));
+        assertEquals(shipment.getNuclides().get(size), tableViewHome.getItems().get(size));
     }
 
     protected void clearNuclideTable() {
@@ -268,5 +269,22 @@ class HomePaneControllerGUITest extends GUITest {
         clickOn(btnCalculate);
 
         assertNull(tableViewHome.getSelectionModel().getSelectedItem());
+    }
+
+    @Test
+    void testUpdateNuclide_MultipleSelection() {
+        clearNuclideTable();
+        int nuclidesInTable = (int) TestUtils.getRandomNumber(3, 10);
+        int selection = (int) TestUtils.getRandomNumber(2, nuclidesInTable);
+
+        for(int i = 0; i < nuclidesInTable; i++) {
+            addNuclideToTable(TestUtils.createNuclide());
+        }
+
+        selectRows(tableViewHome, 0, selection+1);
+        assertFalse(btnAdd.isDisabled());
+        assertTrue(btnEdit.isDisabled());
+        assertFalse(btnRemove.isDisabled());
+        assertFalse(btnCalculate.isDisabled());
     }
 }
