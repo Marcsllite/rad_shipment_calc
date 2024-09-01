@@ -24,15 +24,13 @@ public class RadBigDecimal extends BigDecimal {
 
     public RadBigDecimal(String val) {
         super(parseString(val), DEFAULT_CONTEXT);
-        setInfinity(INFINITY_STRING.equalsIgnoreCase(val) ||
-            INFINITY_DISPLAY_STRING.equalsIgnoreCase(val));
-        setNegativeInfinity(NEG_INFINITY_STRING.equalsIgnoreCase(val) ||
-            NEG_INFINITY_DISPLAY_STRING.equalsIgnoreCase(val));
-
-        if(!isInfinity() && !isNegativeInfinity()) {
-            setInfinity(val != null && Double.parseDouble(val) == INFINITY_DOUBLE);
-            setNegativeInfinity(val != null && Double.parseDouble(val) == NEG_INFINITY_DOUBLE);
-        }
+        String str = parseString(val);
+        setInfinity(INFINITY_STRING.equalsIgnoreCase(str) ||
+            INFINITY_DISPLAY_STRING.equalsIgnoreCase(str) ||
+            Double.parseDouble(str) == INFINITY_DOUBLE);
+        setNegativeInfinity(NEG_INFINITY_STRING.equalsIgnoreCase(str) ||
+            NEG_INFINITY_DISPLAY_STRING.equalsIgnoreCase(str) ||
+            Double.parseDouble(str) == NEG_INFINITY_DOUBLE);
     }
 
     public RadBigDecimal(BigDecimal val) { this(val.toString()); }
