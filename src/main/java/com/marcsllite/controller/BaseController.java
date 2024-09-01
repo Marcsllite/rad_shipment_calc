@@ -28,6 +28,16 @@ public abstract class BaseController {
     }
 
     /**
+     * Function to show the controller's scene
+     */
+    public abstract void show();
+
+    /**
+     * Function to hide the controller's scene
+     */
+    public abstract void hide();
+
+    /**
      * FXML Function to initialize GUI
      * Links controller to main controller (mediator)
      */
@@ -51,16 +61,6 @@ public abstract class BaseController {
     public void setInit(boolean init) {
         this.init = init;
     }
-
-    /**
-     * Function to show the controller's scene
-     */
-    public abstract void show();
-    
-    /**
-     * Function to hide the controller's scene
-     */
-    public abstract void hide();
 
     public PropHandler getPropHandler() {
         return propHandler;
