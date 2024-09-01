@@ -456,6 +456,8 @@ public class Nuclide {
         }
         Nuclide temp = (Nuclide) obj;
         return Objects.equals(this.getNuclideId(), temp.getNuclideId()) &&
+            Objects.equals(this.lifeSpan, temp.getLifeSpan()) &&
+            Objects.equals(this.lungAbsorption, temp.getLungAbsorption()) &&
             Objects.equals(this.getNuclideClass(), temp.getNuclideClass()) &&
             Objects.equals(this.getDisplayMass(), temp.getDisplayMass()) &&
             Objects.equals(this.getDisplayInitActivity(), temp.getDisplayInitActivity()) &&

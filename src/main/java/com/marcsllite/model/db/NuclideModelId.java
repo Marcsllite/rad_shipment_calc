@@ -50,7 +50,16 @@ public class NuclideModelId implements Serializable {
 
     public String getFullSymbolNotation() { return getSymbol() + "-" + getMassNumber(); }
 
-    public String getDisplaySymbolNotation() { return getSymbol() + "-" + getDisplayMassNumber(); }
+    public boolean minimumEquals(Object obj) {
+        if(obj == null) {
+            return false;
+        }
+        if(getClass() != obj.getClass()) {
+            return false;
+        }
+        NuclideModelId temp = (NuclideModelId) obj;
+        return Objects.equals(this.symbol, temp.symbol) && Objects.equals(this.getDisplayMassNumber(), temp.getDisplayMassNumber());
+    }
 
     @Override
     public boolean equals(Object obj) {
