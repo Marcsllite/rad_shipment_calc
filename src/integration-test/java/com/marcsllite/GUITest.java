@@ -9,12 +9,17 @@ import com.marcsllite.model.Nuclide;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.FXMLView;
+import com.marcsllite.util.RadBigDecimal;
 import com.marcsllite.util.handler.FolderHandler;
 import com.marcsllite.util.handler.StageHandler;
 import javafx.application.Platform;
 import javafx.scene.Node;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.codehaus.plexus.util.StringUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -175,12 +180,20 @@ public abstract class GUITest extends FxRobot {
     }
 
     protected void selectRow(TableView<Nuclide> table, int index) {
+        selectRows(table, index, index+1);
+    }
+
+    protected void selectRows(TableView<Nuclide> table, int start, int end) {
         if(table.getItems().isEmpty()) {
             fail("Table has no items to select from");
         }
 
-        interact(() ->table.getSelectionModel().select(index));
-        assertNotNull(table.getSelectionModel().getSelectedItem());
+        interact(() -> {
+            for (int i = start; i < end; i++) {
+                table.getSelectionModel().select(i);
+            }
+        });
+        assertEquals("Unable to select rows: {"+start+", "+(end-1)+"} from the table",end-start, table.getSelectionModel().getSelectedItems().size());
     }
 
     protected void clearSelection(TableView<Nuclide> table) {
