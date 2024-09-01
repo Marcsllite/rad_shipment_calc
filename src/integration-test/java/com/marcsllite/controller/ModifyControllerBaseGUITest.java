@@ -6,7 +6,6 @@ import com.marcsllite.model.Nuclide;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.Conversions;
 import com.marcsllite.util.FXMLView;
-import com.marcsllite.util.RadBigDecimal;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -32,7 +31,8 @@ import java.time.LocalDate;
 import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 
 abstract class ModifyControllerBaseGUITest extends GUITest {
     ModifyController controller;
@@ -119,8 +119,10 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
         FxAssert.verifyThat(FXIds.STACK_PANE_MODIFY, NodeMatchers.isVisible());
         Assertions.assertEquals(getPage(), controller.getPage());
 
+        goToPage(1);
         assertEquals(Conversions.SIPrefix.getFxValues(), comboBoxA0Prefix.getItems());
         assertEquals(Conversions.RadUnit.getFxValues(), choiceBoxA0RadUnit.getItems());
+        goToPage(2);
         assertEquals(Conversions.SIPrefix.getFxValues(), comboBoxMassPrefix.getItems());
         assertEquals(Conversions.MassUnit.getFxValues(), choiceBoxMassUnit.getItems());
         assertEquals(Nuclide.Nature.getFxValues(), choiceBoxNature.getItems());
@@ -139,33 +141,68 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
         FxAssert.verifyThat(stackPaneModify, NodeMatchers.isVisible());
     }
 
+    @Test
+    void testMassListener_NullBlank() {
+        goToPage(2);
+        String goodMass = "21";
+
+        setDate(LocalDate.now());
+        setMass("  ");
+        FxAssert.verifyThat(btnFinish, NodeMatchers.isDisabled());
+
+        setMass(goodMass);
+        FxAssert.verifyThat(btnFinish, NodeMatchers.isEnabled());
+
+        setMass(null);
+        FxAssert.verifyThat(btnFinish, NodeMatchers.isDisabled());
+
+        setMass(goodMass);
+        FxAssert.verifyThat(btnFinish, NodeMatchers.isEnabled());
+
+        setMass("NAN");
+        FxAssert.verifyThat(btnFinish, NodeMatchers.isDisabled());
+    }
+
     protected void goToPage(int pageNum) {
         interact(() ->{
             vBoxFirstPage.setVisible(pageNum == 1);
             vBoxSecondPage.setVisible(pageNum == 2);
         });
+        assertEquals(pageNum == 1, vBoxFirstPage.isVisible());
+        assertEquals(pageNum == 2, vBoxSecondPage.isVisible());
     }
 
     protected void assertSettingField(int filteredIsoSize, VBox vbox, Matcher<Node> nodeMatcher) {
-        assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size());
+        assertEquals("Incorrect number of filtered Isotopes based off search.",filteredIsoSize, controller.getSearchFilteredNuclides().size());
         assertAdditionalInfoShowing(vbox);
         FxAssert.verifyThat(btnNext, nodeMatcher);
     }
 
     protected void assertAdditionalInfoShowing(VBox vbox) {
+        String lifeSpanVisible = "Life Span additional info is visible. Error: ";
+        String lifeSpanInvisible = "Life Span additional info is invisible. Error: ";
+        String lungAbsVisible = "Lung Absorption additional info is visible. Error: ";
+        String lungAbsInvisible = "Lung Absorption additional info is invisible. Error: ";
         if(vbox == null) {
-            FxAssert.verifyThat(vBoxLifeSpan, NodeMatchers.isInvisible());
-            FxAssert.verifyThat(vBoxLungAbs, NodeMatchers.isInvisible());
+            FxAssert.verifyThat(vBoxLifeSpan, NodeMatchers.isInvisible(),
+                stringBuilder -> new StringBuilder(lifeSpanVisible + stringBuilder.toString()));
+            FxAssert.verifyThat(vBoxLungAbs, NodeMatchers.isInvisible(),
+                stringBuilder -> new StringBuilder(lungAbsVisible + stringBuilder.toString()));
         } else if(vbox == vBoxLifeSpan){
-            FxAssert.verifyThat(vBoxLifeSpan, NodeMatchers.isVisible());
-            FxAssert.verifyThat(vBoxLungAbs, NodeMatchers.isInvisible());
+            FxAssert.verifyThat(vBoxLifeSpan, NodeMatchers.isVisible(),
+                stringBuilder -> new StringBuilder(lifeSpanInvisible + stringBuilder.toString()));
+            FxAssert.verifyThat(vBoxLungAbs, NodeMatchers.isInvisible(),
+                stringBuilder -> new StringBuilder(lungAbsVisible + stringBuilder.toString()));
         } else if(vbox == vBoxLungAbs) {
-            FxAssert.verifyThat(vBoxLifeSpan, NodeMatchers.isInvisible());
-            FxAssert.verifyThat(vBoxLungAbs, NodeMatchers.isVisible());
+            FxAssert.verifyThat(vBoxLifeSpan, NodeMatchers.isInvisible(),
+                stringBuilder -> new StringBuilder(lifeSpanVisible + stringBuilder.toString()));
+            FxAssert.verifyThat(vBoxLungAbs, NodeMatchers.isVisible(),
+                stringBuilder -> new StringBuilder(lungAbsInvisible + stringBuilder.toString()));
         }
     }
 
     protected void clearFirstPageForm() {
+        goToPage(1);
         setNuclideName(null);
         setInitialActivity(null);
         setSIPrefix(1, null);
@@ -175,23 +212,11 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
     }
 
     protected void setNuclideName(String name) {
-        interact(() -> txtFieldNuclideName.setText(name));
+        setString(name, txtFieldNuclideName);
     }
 
     protected void setInitialActivity(String str) {
-        interact(() ->txtFieldA0.setText(str));
-        verifyNumericalText(txtFieldA0, str);
-    }
-
-    private void verifyNumericalText(TextField field, String str) {
-        if(str != null) {
-            String replacedStr = str.replaceAll("\\D", "");
-            RadBigDecimal initialActivity = new RadBigDecimal(replacedStr);
-            assertEquals(replacedStr, field.getText());
-            assertEquals(initialActivity, new RadBigDecimal(field.getText()));
-        } else {
-            assertNull(field.getText());
-        }
+        setNumber(str, txtFieldA0);
     }
 
     protected void setSIPrefix(int page, Conversions.SIPrefix siPrefix) {
@@ -202,8 +227,10 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
         Conversions.SIPrefix finalPrefix = siPrefix;
         if (page == 1) {
             interact(() -> comboBoxA0Prefix.setValue(finalPrefix.getVal()));
+            assertEquals(finalPrefix.getVal(), comboBoxA0Prefix.getValue());
         } else {
             interact(() -> comboBoxMassPrefix.setValue(finalPrefix.getVal()));
+            assertEquals(finalPrefix.getVal(), comboBoxMassPrefix.getValue());
         }
     }
 
@@ -214,6 +241,7 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
 
         Conversions.RadUnit finalUnit = radUnit;
         interact(() -> choiceBoxA0RadUnit.setValue(finalUnit.getVal()));
+        assertEquals(finalUnit.getVal(), choiceBoxA0RadUnit.getValue());
     }
 
     protected void setLifeSpan(Nuclide.LifeSpan lifeSpan) {
@@ -224,13 +252,18 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
         switch (lifeSpan) {
             case SHORT:
                 interact(() -> radioBtnShortLived.setSelected(true));
+                assertTrue(radioBtnShortLived.selectedProperty().get());
                 break;
             case LONG:
                 interact(() -> radioBtnLongLived.setSelected(true));
+                assertTrue(radioBtnLongLived.selectedProperty().get());
                 break;
             default:
                 interact(() -> radioBtnShortLived.setSelected(false));
                 interact(() -> radioBtnLongLived.setSelected(false));
+                assertFalse(radioBtnShortLived.selectedProperty().get());
+                assertFalse(radioBtnLongLived.selectedProperty().get());
+
         }
     }
 
@@ -242,21 +275,28 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
         switch (lungAbsorption) {
             case SLOW:
                 interact(() -> radioBtnSlowLungAbs.setSelected(true));
+                assertTrue(radioBtnSlowLungAbs.selectedProperty().get());
                 break;
             case MEDIUM:
                 interact(() -> radioBtnMediumLungAbs.setSelected(true));
+                assertTrue(radioBtnMediumLungAbs.selectedProperty().get());
                 break;
             case FAST:
                 interact(() -> radioBtnFastLungAbs.setSelected(true));
+                assertTrue(radioBtnFastLungAbs.selectedProperty().get());
                 break;
             default:
                 interact(() -> radioBtnSlowLungAbs.setSelected(false));
                 interact(() -> radioBtnMediumLungAbs.setSelected(false));
                 interact(() -> radioBtnFastLungAbs.setSelected(false));
+                assertFalse(radioBtnSlowLungAbs.selectedProperty().get());
+                assertFalse(radioBtnMediumLungAbs.selectedProperty().get());
+                assertFalse(radioBtnFastLungAbs.selectedProperty().get());
         }
     }
 
     protected void clearSecondPageForm() {
+        goToPage(2);
         setDate(null);
         setMass(null);
         setSIPrefix(2, null);
@@ -269,12 +309,11 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
     }
 
     protected void setDate(LocalDate localDate) {
-        interact(() -> datePicker.setValue(localDate));
+        setDate(localDate, datePicker);
     }
 
     protected void setMass(String str) {
-        interact(() ->txtFieldMass.setText(str));
-        verifyNumericalText(txtFieldMass, str);
+        setNumber(str, txtFieldMass);
     }
 
     protected void setMassUnit(Conversions.MassUnit massUnit) {
@@ -284,6 +323,7 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
 
         Conversions.MassUnit finalUnit = massUnit;
         interact(() -> choiceBoxMassUnit.setValue(finalUnit.getVal()));
+        assertEquals(finalUnit.getVal(), choiceBoxMassUnit.getValue());
     }
 
     protected void setNature(Nuclide.Nature nature) {
@@ -293,6 +333,7 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
 
         Nuclide.Nature finalNature = nature;
         interact(() -> choiceBoxNature.setValue(finalNature.getVal()));
+        assertEquals(finalNature.getVal(), choiceBoxNature.getValue());
     }
 
     protected void setState(LimitsModelId.State state) {
@@ -302,6 +343,7 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
 
         LimitsModelId.State finalState = state;
         interact(() -> choiceBoxState.setValue(finalState.getVal()));
+        assertEquals(finalState.getVal(), choiceBoxState.getValue());
     }
 
     protected void setForm(LimitsModelId.Form form) {
@@ -311,5 +353,6 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
 
         LimitsModelId.Form finalForm = form;
         interact(() -> choiceBoxForm.setValue(finalForm.getVal()));
+        assertEquals(finalForm.getVal(), choiceBoxForm.getValue());
     }
 }

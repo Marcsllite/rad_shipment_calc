@@ -30,12 +30,12 @@ import org.testfx.service.query.EmptyNodeQueryException;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
@@ -186,6 +186,32 @@ public abstract class GUITest extends FxRobot {
     protected void clearSelection(TableView<Nuclide> table) {
         interact(() -> table.getSelectionModel().clearSelection());
         assertNull(table.getSelectionModel().getSelectedItem());
+    }
+
+    protected void setDate(LocalDate localDate, DatePicker datePicker) {
+        interact(() -> datePicker.setValue(localDate));
+        assertEquals(localDate, datePicker.getValue());
+    }
+
+    protected void setString(String str, TextField field) {
+        interact(() -> field.setText(str));
+        assertEquals(str, field.textProperty().get());
+    }
+
+    protected void setNumber(String str, TextField field) {
+        interact(() -> field.setText(str));
+        verifyNumericalText(field, str);
+    }
+
+    private void verifyNumericalText(TextField field, String str) {
+        String replacedStr = StringUtils.isBlank(str)? null : str.replaceAll("[^\\d.]", "");
+        if (StringUtils.isBlank(replacedStr)) {
+            Assertions.assertNull(field.textProperty().get());
+        } else {
+            RadBigDecimal initialActivity = new RadBigDecimal(replacedStr);
+            assertEquals(replacedStr, field.textProperty().get());
+            assertEquals(initialActivity, new RadBigDecimal(field.textProperty().get()));
+        }
     }
 
     /**

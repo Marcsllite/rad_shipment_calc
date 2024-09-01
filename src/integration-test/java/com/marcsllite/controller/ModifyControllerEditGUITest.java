@@ -36,18 +36,18 @@ class ModifyControllerEditGUITest extends ModifyControllerBaseGUITest {
         switch (getEditingNuclide().getLifeSpan()) {
             case SHORT:
                 FxAssert.verifyThat(vBoxLifeSpan, NodeMatchers.isVisible());
-                assertTrue(radioBtnShortLived.isSelected());
-                assertFalse(radioBtnLongLived.isSelected());
+                assertTrue(radioBtnShortLived.selectedProperty().get());
+                assertFalse(radioBtnLongLived.selectedProperty().get());
                 break;
             case LONG:
                 FxAssert.verifyThat(vBoxLifeSpan, NodeMatchers.isVisible());
-                assertFalse(radioBtnShortLived.isSelected());
-                assertTrue(radioBtnLongLived.isSelected());
+                assertFalse(radioBtnShortLived.selectedProperty().get());
+                assertTrue(radioBtnLongLived.selectedProperty().get());
                 break;
             default:
                 FxAssert.verifyThat(vBoxLifeSpan, NodeMatchers.isInvisible());
-                assertFalse(radioBtnShortLived.isSelected());
-                assertFalse(radioBtnLongLived.isSelected());
+                assertFalse(radioBtnShortLived.selectedProperty().get());
+                assertFalse(radioBtnLongLived.selectedProperty().get());
         }
     }
 
@@ -55,56 +55,54 @@ class ModifyControllerEditGUITest extends ModifyControllerBaseGUITest {
         switch (getEditingNuclide().getLungAbsorption()) {
             case SLOW:
                 FxAssert.verifyThat(vBoxLungAbs, NodeMatchers.isVisible());
-                assertTrue(radioBtnSlowLungAbs.isSelected());
-                assertFalse(radioBtnMediumLungAbs.isSelected());
-                assertFalse(radioBtnFastLungAbs.isSelected());
+                assertTrue(radioBtnSlowLungAbs.selectedProperty().get());
+                assertFalse(radioBtnMediumLungAbs.selectedProperty().get());
+                assertFalse(radioBtnFastLungAbs.selectedProperty().get());
                 break;
             case MEDIUM:
                 FxAssert.verifyThat(vBoxLungAbs, NodeMatchers.isVisible());
-                assertFalse(radioBtnSlowLungAbs.isSelected());
-                assertTrue(radioBtnMediumLungAbs.isSelected());
-                assertFalse(radioBtnFastLungAbs.isSelected());
+                assertFalse(radioBtnSlowLungAbs.selectedProperty().get());
+                assertTrue(radioBtnMediumLungAbs.selectedProperty().get());
+                assertFalse(radioBtnFastLungAbs.selectedProperty().get());
                 break;
             case FAST:
                 FxAssert.verifyThat(vBoxLungAbs, NodeMatchers.isVisible());
-                assertFalse(radioBtnSlowLungAbs.isSelected());
-                assertFalse(radioBtnMediumLungAbs.isSelected());
-                assertTrue(radioBtnFastLungAbs.isSelected());
+                assertFalse(radioBtnSlowLungAbs.selectedProperty().get());
+                assertFalse(radioBtnMediumLungAbs.selectedProperty().get());
+                assertTrue(radioBtnFastLungAbs.selectedProperty().get());
                 break;
             default:
                 FxAssert.verifyThat(vBoxLungAbs, NodeMatchers.isInvisible());
-                assertFalse(radioBtnSlowLungAbs.isSelected());
-                assertFalse(radioBtnMediumLungAbs.isSelected());
-                assertFalse(radioBtnFastLungAbs.isSelected());
+                assertFalse(radioBtnSlowLungAbs.selectedProperty().get());
+                assertFalse(radioBtnMediumLungAbs.selectedProperty().get());
+                assertFalse(radioBtnFastLungAbs.selectedProperty().get());
         }
     }
 
     @Test
     void testEditInit() {
-        // First Page
-        assertEquals(getEditingNuclide().getDisplayNameNotation(), txtFieldNuclideName.getText());
-        if(getEditingNuclide().getInitActivity().isNegativeInfinity()) {
-            assertEquals("0", txtFieldA0.getText());
-        } else {
-            assertEquals(getEditingNuclide().getInitActivity().toDisplayString(), txtFieldA0.getText());
-        }
+        controller.initEditPage();
+
+        goToPage(1);
+        assertEquals(getEditingNuclide().getDisplayNameNotation(), txtFieldNuclideName.textProperty().get());
+        assertEquals(getEditingNuclide().getInitActivityStr(), txtFieldA0.textProperty().get());
         assertEquals(getEditingNuclide().getInitActivityPrefix().getVal(), comboBoxA0Prefix.getSelectionModel().getSelectedItem());
         assertEquals(getEditingNuclide().getInitActivityUnit().getVal(), choiceBoxA0RadUnit.getSelectionModel().getSelectedItem());
         assertInitLifeSpan();
         assertInitLungAbsorption();
-        assertEquals("", txtFirstPageStatus.getText());
+        assertEquals("", txtFirstPageStatus.textProperty().get());
         FxAssert.verifyThat(btnNext, NodeMatchers.isEnabled());
-        // Second Page
+        goToPage(2);
         assertEquals(getEditingNuclide().getRefDate(), datePicker.getValue());
-        assertEquals(getEditingNuclide().getMass().toString(), txtFieldMass.getText());
+        assertEquals(getEditingNuclide().getMassStr(), txtFieldMass.textProperty().get());
         assertEquals(getEditingNuclide().getMassPrefix().getVal(), comboBoxMassPrefix.getSelectionModel().getSelectedItem());
         assertEquals(getEditingNuclide().getMassUnit().getVal(), choiceBoxMassUnit.getSelectionModel().getSelectedItem());
         assertEquals(getEditingNuclide().getNature().getVal(), choiceBoxNature.getSelectionModel().getSelectedItem());
         assertEquals(getEditingNuclide().getLimitsId().getState().getVal(), choiceBoxState.getSelectionModel().getSelectedItem());
         assertEquals(getEditingNuclide().getLimitsId().getForm().getVal(), choiceBoxForm.getSelectionModel().getSelectedItem());
-        assertFalse(chckBoxSameMass.isSelected());
-        assertFalse(chckBoxSameNSF.isSelected());
-        assertEquals("", txtSecondPageStatus.getText());
+        assertFalse(chckBoxSameMass.selectedProperty().get());
+        assertFalse(chckBoxSameNSF.selectedProperty().get());
+        assertEquals("", txtSecondPageStatus.textProperty().get());
         FxAssert.verifyThat(btnBack, NodeMatchers.isEnabled());
         FxAssert.verifyThat(btnFinish, NodeMatchers.isEnabled());
     }

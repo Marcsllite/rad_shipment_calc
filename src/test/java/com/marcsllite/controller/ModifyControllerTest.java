@@ -5,6 +5,8 @@ import com.marcsllite.PropHandlerTestObj;
 import com.marcsllite.model.Nuclide;
 import com.marcsllite.model.Shipment;
 import com.marcsllite.util.handler.StageHandler;
+import javafx.collections.FXCollections;
+import javafx.collections.transformation.FilteredList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +17,7 @@ import java.io.IOException;
 import java.security.InvalidParameterException;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
@@ -43,6 +46,64 @@ class ModifyControllerTest {
         );
 
         assertTrue(ex.getMessage().contains("action event cannot be null"));
+    }
+
+    @Test
+    void testSetSearchFilteredNuclides_NullParam() {
+        controller.setSearchFilteredNuclides(null);
+        assertEquals(0, controller.getSearchFilteredNuclides().size());
+    }
+
+    @Test
+    void testSetFilteredLifeSpanNuclides_NullParam() {
+        controller.setFilteredLifeSpanNuclides(null);
+        assertEquals(0, controller.getFilteredLifeSpanNuclides().size());
+    }
+
+    @Test
+    void testSetFilteredLungAbsNuclides_NullParam() {
+        controller.setFilteredLungAbsNuclides(null);
+        assertEquals(0, controller.getFilteredLungAbsNuclides().size());
+    }
+
+    @Test
+    void testSetFirstPageValues_NullEditingNuclide() {
+        ModifyController controllerSpy = spy(controller);
+        when(controllerSpy.getEditingNuclide()).thenReturn(null);
+        doNothing().when(controllerSpy).resetFirstPage();
+        controllerSpy.setFirstPageValues();
+        verify(controllerSpy).resetFirstPage();
+    }
+
+    @Test
+    void testSetSecondPageValues_NullEditingNuclide() {
+        ModifyController controllerSpy = spy(controller);
+        when(controllerSpy.getEditingNuclide()).thenReturn(null);
+        doNothing().when(controllerSpy).resetSecondPage();
+        controllerSpy.setSecondPageValues();
+        verify(controllerSpy).resetSecondPage();
+    }
+
+    @Test
+    void testSetNuclides_Null() {
+        controller.setNuclides(null);
+        assertEquals(0, controller.getSearchFilteredNuclides().size());
+        assertEquals(0, controller.getFilteredLifeSpanNuclides().size());
+        assertEquals(0, controller.getFilteredLungAbsNuclides().size());
+    }
+
+    @Test
+    void testBuildNuclideFromFirstPage_Null() {
+        ModifyController controllerSpy = spy(controller);
+        when(controllerSpy.getSearchFilteredNuclides()).thenReturn(new FilteredList<>(FXCollections.observableArrayList()));
+        assertNull(controllerSpy.buildNuclideFromFirstPage());
+    }
+
+    @Test
+    void testBuildEditedNuclide_Null() {
+        ModifyController controllerSpy = spy(controller);
+        when(controllerSpy.getSearchFilteredNuclides()).thenReturn(new FilteredList<>(FXCollections.observableArrayList()));
+        assertNull(controllerSpy.buildEditedNuclide());
     }
 
     @Test
