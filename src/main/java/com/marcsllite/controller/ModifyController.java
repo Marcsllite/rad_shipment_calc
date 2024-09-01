@@ -7,6 +7,7 @@ import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.model.db.NuclideModel;
 import com.marcsllite.util.Conversions;
 import com.marcsllite.util.NuclideUtils;
+import com.marcsllite.util.controller.ModifyUtils;
 import com.marcsllite.util.handler.PropHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,19 +30,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.time.LocalDate;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import static com.marcsllite.util.NuclideUtils.LIFE_SPAN_PATTERN;
-import static com.marcsllite.util.NuclideUtils.LUNG_ABS_PATTERN;
 
 public class ModifyController extends BaseController {
     private static final Logger logr = LogManager.getLogger();
@@ -93,6 +87,14 @@ public class ModifyController extends BaseController {
 
     public ModifyController(BaseController.Page page, PropHandler propHandler) throws IOException {
         super(propHandler, page);
+    }
+
+    public Nuclide getEditingNuclide() {
+        return editingNuclide;
+    }
+
+    public void setEditingNuclide(Nuclide editingNuclide) {
+        this.editingNuclide = editingNuclide;
     }
 
     public ObservableList<NuclideModel> getNuclides() {
@@ -158,60 +160,49 @@ public class ModifyController extends BaseController {
             setNuclides(getDbService().getAllNuclideModels());
 
             reset();
-            setupDropDownItems();
-            setRadioBtnTxt();
-            setRadioBtnUserData();
-            setupListeners();
-            bindMassInputDisabledProp();
-            bindNSFInputDisableProp();
-            bindManagedPropToVisibility();
+            ModifyUtils.setupDropDownItems(comboBoxA0Prefix, Conversions.SIPrefix.getFxValues());
+            ModifyUtils.setupDropDownItems(choiceBoxA0RadUnit, Conversions.RadUnit.getFxValues());
+            ModifyUtils.setupDropDownItems(comboBoxMassPrefix, Conversions.SIPrefix.getFxValues());
+            ModifyUtils.setupDropDownItems(choiceBoxMassUnit, Conversions.MassUnit.getFxValues());
+            ModifyUtils.setupDropDownItems(choiceBoxNature, Nuclide.Nature.getFxValues());
+            ModifyUtils.setupDropDownItems(choiceBoxState, LimitsModelId.State.getFxValues());
+            ModifyUtils.setupDropDownItems(choiceBoxForm, LimitsModelId.Form.getFxValues());
+            ModifyUtils.setRadioBtnData(radioBtnShortLived, Nuclide.LifeSpan.SHORT.getAbbrVal());
+            ModifyUtils.setRadioBtnData(radioBtnLongLived, Nuclide.LifeSpan.LONG.getAbbrVal());
+            ModifyUtils.setRadioBtnData(radioBtnSlowLungAbs, Nuclide.LungAbsorption.SLOW.getAbbrVal());
+            ModifyUtils.setRadioBtnData(radioBtnMediumLungAbs, Nuclide.LungAbsorption.MEDIUM.getAbbrVal());
+            ModifyUtils.setRadioBtnData(radioBtnFastLungAbs, Nuclide.LungAbsorption.FAST.getAbbrVal());
+            ModifyUtils.setupTextListener(txtFieldNuclideName, ((obs, oldV, newV) -> nameListener(newV)));
+            ModifyUtils.setupTextListener(txtFieldA0, ((obs, oldV, newV) -> initialActivityListener(newV)));
+            ModifyUtils.setupTextListener(txtFieldMass, ((obs, oldV, newV) -> massListener(newV)));
+            ModifyUtils.setupToggleListener(toggleGrpLifeSpan, ((obs, oldV, newV) -> radioBtnListener(newV)));
+            ModifyUtils.setupToggleListener(toggleGrpLungAbs, ((obs, oldV, newV) -> radioBtnListener(newV)));
+            ModifyUtils.bindDisabledPropToCheckBox(txtFieldMass, chckBoxSameMass);
+            ModifyUtils.bindDisabledPropToCheckBox(comboBoxMassPrefix, chckBoxSameMass);
+            ModifyUtils.bindDisabledPropToCheckBox(choiceBoxMassUnit, chckBoxSameMass);
+            ModifyUtils.bindDisabledPropToCheckBox(choiceBoxNature, chckBoxSameNSF);
+            ModifyUtils.bindDisabledPropToCheckBox(choiceBoxState, chckBoxSameNSF);
+            ModifyUtils.bindDisabledPropToCheckBox(choiceBoxForm, chckBoxSameNSF);
+            ModifyUtils.bindManagedPropToVisibility(hBoxAddInfoTop);
+            ModifyUtils.bindManagedPropToVisibility(vBoxLifeSpan);
+            ModifyUtils.bindManagedPropToVisibility(vBoxLungAbs);
+            ModifyUtils.bindManagedPropToVisibility(separatorAddInfo);
+            ModifyUtils.bindManagedPropToVisibility(txtFirstPageStatus);
+            ModifyUtils.bindManagedPropToVisibility(txtSecondPageStatus);
 
-            if(Page.ADD.equals(getPage())) {
-                initAddPage();
-            } else if(Page.EDIT.equals(getPage())) {
-                initEditPage();
+            switch(getPage()){
+                case ADD:
+                    initAddPage();
+                    break;
+                case EDIT:
+                    initEditPage();
+                    break;
+                default:
             }
 
             showPage(1);
             setInit(true);
         }
-    }
-
-
-    private void bindManagedPropToVisibility() {
-        hBoxAddInfoTop.managedProperty().unbind();
-        vBoxLifeSpan.managedProperty().unbind();
-        vBoxLungAbs.managedProperty().unbind();
-        separatorAddInfo.managedProperty().unbind();
-        txtFirstPageStatus.managedProperty().unbind();
-        txtSecondPageStatus.managedProperty().unbind();
-
-        // visibility of the node will decide if it is rendered by the parent pane
-        hBoxAddInfoTop.managedProperty().bind(hBoxAddInfoTop.visibleProperty());
-        vBoxLifeSpan.managedProperty().bind(vBoxLifeSpan.visibleProperty());
-        vBoxLungAbs.managedProperty().bind(vBoxLungAbs.visibleProperty());
-        separatorAddInfo.managedProperty().bind(separatorAddInfo.visibleProperty());
-        txtFirstPageStatus.managedProperty().bind(txtFirstPageStatus.visibleProperty());
-        txtSecondPageStatus.managedProperty().bind(txtSecondPageStatus.visibleProperty());
-    }
-
-    private void massListener(String str) {
-        if(str == null || str.isBlank()) {
-            btnFinish.setDisable(true);
-        } else {
-            // if user inputs any non-numerical characters, remove them
-            String newTxt = str.replaceAll("[^\\d.]", "");
-            btnFinish.setDisable(Page.ADD.equals(getPage()) && newTxt.isBlank());
-            txtFieldMass.setText(newTxt);
-        }
-    }
-
-    public Nuclide getEditingNuclide() {
-        return editingNuclide;
-    }
-
-    public void setEditingNuclide(Nuclide editingNuclide) {
-        this.editingNuclide = editingNuclide;
     }
 
     @Override
@@ -226,247 +217,7 @@ public class ModifyController extends BaseController {
         modifyPane.toBack();
     }
 
-    protected void reset() {
-        resetFirstPage();
-        resetSecondPage();
-    }
-    
-    protected void resetFirstPage() {
-        txtFieldNuclideName.setText(null);
-        txtFieldA0.setText(null);
-        setLungAbsVisible(false);
-        setLifeSpanVisible(false);
-        txtFirstPageStatus.setVisible(false);
-        txtFirstPageStatus.setText(null);
-        selectDefaultFirstPageDropDownValues();
-    }
-    
-    protected void resetSecondPage() {
-        datePicker.setValue(null);
-        txtFieldMass.setText(null);
-        chckBoxSameMass.setSelected(false);
-        chckBoxSameNSF.setSelected(false);
-
-        btnFinish.setText("Finish");
-        txtSecondPageStatus.setVisible(false);
-        txtSecondPageStatus.setText(null);
-        selectDefaultSecondPageDropDownValues();
-    }
-
-    protected void setupListeners() {
-        txtFieldNuclideName.textProperty().removeListener((observable, oldV, newV) -> nameListener(newV));
-        txtFieldA0.textProperty().removeListener((observable, oldV, newV) -> initialActivityListener(newV));
-        txtFieldMass.textProperty().removeListener(((observable, oldV, newV) -> massListener(newV)));
-        toggleGrpLifeSpan.selectedToggleProperty().removeListener((observable, oldV, newV) -> radioBtnListener(newV));
-        toggleGrpLungAbs.selectedToggleProperty().removeListener((observable, oldV, newV) -> radioBtnListener(newV));
-
-        txtFieldNuclideName.textProperty().addListener((observable, oldV, newV) -> nameListener(newV));
-        txtFieldA0.textProperty().addListener((observable, oldV, newV) -> initialActivityListener(newV));
-        txtFieldMass.textProperty().addListener(((observable, oldV, newV) -> massListener(newV)));
-        toggleGrpLifeSpan.selectedToggleProperty().addListener((observable, oldV, newV) -> radioBtnListener(newV));
-        toggleGrpLungAbs.selectedToggleProperty().addListener((observable, oldV, newV) -> radioBtnListener(newV));
-    }
-    
-    protected void initAddPage() {
-        setEditingNuclide(null);
-        btnNext.setDisable(true);
-        btnFinish.setDisable(true);
-
-        selectDefaultDropDownValues();
-        datePicker.setValue(LocalDate.now());
-
-        btnFinish.setText("Add");
-        txtFirstPageStatus.setVisible(false);
-        txtSecondPageStatus.setVisible(false);
-        setLifeSpanVisible(false);
-        setLungAbsVisible(false);
-    }
-
-    protected void initEditPage() {
-        setEditingNuclide(getMain().getHomePaneController().getSelectedNuclides().get(0));
-        btnNext.setDisable(false);
-        btnFinish.setDisable(false);
-        
-        setFirstPageValues();
-        setSecondPageValues();
-    }
-
-    private void setFirstPageValues() {
-        if(getEditingNuclide() != null) {
-            txtFieldNuclideName.setText(getEditingNuclide().getDisplayNameNotation());
-            txtFieldA0.setText(getEditingNuclide().getDisplayInitActivity());
-            if(txtFieldA0.getText().isBlank()) {
-                txtFieldA0.setText("0");
-            }
-            comboBoxA0Prefix.getSelectionModel().select(getEditingNuclide().getInitActivityPrefix().getVal());
-            choiceBoxA0RadUnit.getSelectionModel().select(getEditingNuclide().getInitActivityUnit().getVal());
-    
-            txtFirstPageStatus.setVisible(false);
-            txtFirstPageStatus.setText(null);
-    
-            String massNumber = getEditingNuclide().getNuclideId().getMassNumber().toLowerCase();
-            Pattern lungAbsPattern = Pattern.compile(LUNG_ABS_PATTERN);
-            Matcher lungAbsMatch = lungAbsPattern.matcher(massNumber);
-            Pattern lifeSpanPattern = Pattern.compile(LIFE_SPAN_PATTERN);
-            Matcher lifeSpanMatch = lifeSpanPattern.matcher(massNumber);
-    
-            if(lifeSpanMatch.find()) {
-                setLifeSpanVisible(true);
-                Optional<Toggle> toggle = toggleGrpLifeSpan.getToggles()
-                    .stream()
-                    .filter(t ->
-                        Objects.equals(
-                            Nuclide.LifeSpan.toLifeSpan((String) t.getUserData()),
-                            Nuclide.LifeSpan.toLifeSpan(lifeSpanMatch.group(1)))
-                    ).findFirst();
-    
-                toggle.ifPresent(value -> toggleGrpLifeSpan.selectToggle(value));
-            }
-    
-            if(lungAbsMatch.find()) {
-                setLungAbsVisible(true);
-                Optional<Toggle> toggle = toggleGrpLungAbs.getToggles()
-                    .stream()
-                    .filter(t ->
-                        Objects.equals(
-                            Nuclide.LungAbsorption.toLungAbsorption((String) t.getUserData()),
-                            Nuclide.LungAbsorption.toLungAbsorption(lungAbsMatch.group(0)))
-                    ).findFirst();
-    
-                toggle.ifPresent(value -> toggleGrpLungAbs.selectToggle(value));
-            }
-        } else {
-            resetFirstPage();
-        }
-    }
-
-    private void setSecondPageValues() {
-        if(getEditingNuclide() != null) {
-            datePicker.setValue(getEditingNuclide().getRefDate());
-            txtFieldMass.setText(getEditingNuclide().getDisplayMass());
-            if(txtFieldMass.getText().isBlank()) {
-                txtFieldMass.setText("0");
-            }
-            comboBoxMassPrefix.getSelectionModel().select(getEditingNuclide().getMassPrefix().getVal());
-            choiceBoxMassUnit.getSelectionModel().select(getEditingNuclide().getMassUnit().getVal());
-            choiceBoxNature.getSelectionModel().select(getEditingNuclide().getNature().getVal());
-            choiceBoxState.getSelectionModel().select(getEditingNuclide().getLimitsId().getState().getVal());
-            choiceBoxForm.getSelectionModel().select(getEditingNuclide().getLimitsId().getForm().getVal());
-            chckBoxSameMass.setSelected(false);
-            chckBoxSameNSF.setSelected(false);
-
-            btnFinish.setText("Edit");
-            txtSecondPageStatus.setVisible(false);
-            txtSecondPageStatus.setText(null);
-        } else {
-            resetSecondPage();
-        }
-    }
-
-    protected boolean isAddInfoNotProvided() {
-        boolean isLifeSpan = vBoxLifeSpan.isVisible();
-        boolean isLungAbs = vBoxLungAbs.isVisible();
-        boolean ret = false;
-
-        if(isLifeSpan) {
-            ret = toggleGrpLifeSpan.getSelectedToggle() == null;
-        }
-
-        if(isLungAbs) {
-            ret = toggleGrpLungAbs.getSelectedToggle() == null;
-        }
-        return ret;
-    }
-
-    protected void setRadioBtnTxt() {
-        radioBtnSlowLungAbs.setText(Nuclide.LungAbsorption.SLOW.getVal());
-        radioBtnMediumLungAbs.setText(Nuclide.LungAbsorption.MEDIUM.getVal());
-        radioBtnFastLungAbs.setText(Nuclide.LungAbsorption.FAST.getVal());
-        radioBtnShortLived.setText(Nuclide.LifeSpan.SHORT.getVal());
-        radioBtnLongLived.setText(Nuclide.LifeSpan.LONG.getVal());
-    }
-    
-    protected void setRadioBtnUserData() {
-        radioBtnSlowLungAbs.setUserData(Nuclide.LungAbsorption.SLOW.getAbbrVal());
-        radioBtnMediumLungAbs.setUserData(Nuclide.LungAbsorption.MEDIUM.getAbbrVal());
-        radioBtnFastLungAbs.setUserData(Nuclide.LungAbsorption.FAST.getAbbrVal());
-        radioBtnShortLived.setUserData(Nuclide.LifeSpan.SHORT.getAbbrVal());
-        radioBtnLongLived.setUserData(Nuclide.LifeSpan.LONG.getAbbrVal());
-    }
-
-    protected void radioBtnListener(Toggle newV) {
-        if(newV != null) {
-            Nuclide nuclide = null;
-            if(Page.EDIT.equals(getPage())) {
-                nuclide = buildEditedNuclide();
-            } else if(getSearchFilteredNuclides().size() == 1) {
-                nuclide = new Nuclide(getSearchFilteredNuclides().get(0));
-            }
-            boolean isInTable = isNuclideInTable(nuclide);
-            String a0 = txtFieldA0.getText();
-            btnNext.setDisable(!Page.EDIT.equals(getPage()) &&
-                nuclide == null ||
-                a0 == null || a0.isBlank() ||
-                isInTable);
-        } else {
-            btnNext.setDisable(!Page.EDIT.equals(getPage()));
-        }
-    }
-
-    protected void initialActivityListener(String str) {
-        getFilteredLifeSpanNuclides().setPredicate(filteringPredicate(txtFieldNuclideName.getText()));
-        getFilteredLungAbsNuclides().setPredicate(filteringPredicate(txtFieldNuclideName.getText()));
-        getSearchFilteredNuclides().setPredicate(filteringPredicate(txtFieldNuclideName.getText()));
-
-        if(str == null || str.isBlank()) {
-            btnNext.setDisable(!Page.EDIT.equals(getPage()));
-        } else {
-            // if user inputs any non-numerical characters, remove them
-            String newTxt = str.replaceAll("[^\\d.]", "");
-            Nuclide nuclide = null;
-            if(Page.EDIT.equals(getPage())) {
-                nuclide = buildEditedNuclide();
-            } else if(getSearchFilteredNuclides().size() == 1) {
-                nuclide = new Nuclide(getSearchFilteredNuclides().get(0));
-            }
-            btnNext.setDisable(!Page.EDIT.equals(getPage()) &&
-                nuclide == null ||
-                newTxt.isBlank() ||
-                isAddInfoNotProvided() ||
-                isNuclideInTable(nuclide));
-            txtFieldA0.setText(newTxt);
-        }
-    }
-
-    protected void setupDropDownItems() {
-        comboBoxA0Prefix.setItems(Conversions.SIPrefix.getFxValues());
-        choiceBoxA0RadUnit.setItems(Conversions.RadUnit.getFxValues());
-        comboBoxMassPrefix.setItems(Conversions.SIPrefix.getFxValues());
-        choiceBoxMassUnit.setItems(Conversions.MassUnit.getFxValues());
-        choiceBoxNature.setItems(Nuclide.Nature.getFxValues());
-        choiceBoxState.setItems(LimitsModelId.State.getFxValues());
-        choiceBoxForm.setItems(LimitsModelId.Form.getFxValues());
-    }
-
-    protected void selectDefaultDropDownValues() {
-        selectDefaultFirstPageDropDownValues();
-        selectDefaultSecondPageDropDownValues();
-    }
-
-    private void selectDefaultSecondPageDropDownValues() {
-        comboBoxMassPrefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
-        choiceBoxMassUnit.getSelectionModel().select(Conversions.MassUnit.GRAMS.getVal());
-        choiceBoxNature.getSelectionModel().select(Nuclide.Nature.REGULAR.getVal());
-        choiceBoxState.getSelectionModel().select(LimitsModelId.State.SOLID.getVal());
-        choiceBoxForm.getSelectionModel().select(LimitsModelId.Form.NORMAL.getVal());
-    }
-
-    private void selectDefaultFirstPageDropDownValues() {
-        comboBoxA0Prefix.getSelectionModel().select(Conversions.SIPrefix.BASE.getVal());
-        choiceBoxA0RadUnit.getSelectionModel().select(Conversions.RadUnit.CURIE.getVal());
-    }
-
-    protected void showPage(int pageNum) {
+    public void showPage(int pageNum) {
         vBoxFirstPage.setVisible(pageNum == 1);
         vBoxSecondPage.setVisible(pageNum == 2);
 
@@ -477,7 +228,92 @@ public class ModifyController extends BaseController {
         }
     }
 
-    protected void setLifeSpanVisible(boolean isLifeSpan) {
+    public void initAddPage() {
+        setEditingNuclide(null);
+        selectDefaultDropDownFirstPage();
+        setLifeSpanVisible(false);
+        setLungAbsVisible(false);
+        txtFirstPageStatus.setVisible(false);
+        btnNext.setDisable(true);
+
+        datePicker.setValue(LocalDate.now());
+        selectDefaultDropDownSecondPage();
+        txtSecondPageStatus.setVisible(false);
+        btnFinish.setText("Add");
+        btnFinish.setDisable(true);
+    }
+
+    public void initEditPage() {
+        setEditingNuclide(getMain().getHomePaneController().getSelectedNuclides().get(0));
+        setFirstPageValues();
+        setSecondPageValues();
+
+        btnNext.setDisable(false);
+        btnFinish.setDisable(false);
+    }
+
+    public void setFirstPageValues() {
+        if (getEditingNuclide() == null) {
+            resetFirstPage();
+        } else {
+            txtFieldNuclideName.setText(getEditingNuclide().getDisplayNameNotation());
+            txtFieldA0.setText(getEditingNuclide().getInitActivityStr());
+            comboBoxA0Prefix.getSelectionModel().select(getEditingNuclide().getInitActivityPrefix().getVal());
+            choiceBoxA0RadUnit.getSelectionModel().select(getEditingNuclide().getInitActivityUnit().getVal());
+            setLifeSpanVisible(ModifyUtils.setLifeSpanToggle(toggleGrpLifeSpan, getEditingNuclide().getLifeSpan()));
+            setLungAbsVisible(ModifyUtils.setLungAbsToggle(toggleGrpLungAbs, getEditingNuclide().getLungAbsorption()));
+            txtFirstPageStatus.setText(null);
+            txtFirstPageStatus.setVisible(false);
+        }
+    }
+
+    public void setSecondPageValues() {
+        if (getEditingNuclide() == null) {
+            resetSecondPage();
+        } else {
+            datePicker.setValue(getEditingNuclide().getRefDate());
+            txtFieldMass.setText(getEditingNuclide().getMassStr());
+            comboBoxMassPrefix.getSelectionModel().select(getEditingNuclide().getMassPrefix().getVal());
+            choiceBoxMassUnit.getSelectionModel().select(getEditingNuclide().getMassUnit().getVal());
+            choiceBoxNature.getSelectionModel().select(getEditingNuclide().getNature().getVal());
+            choiceBoxState.getSelectionModel().select(getEditingNuclide().getLimitsId().getState().getVal());
+            choiceBoxForm.getSelectionModel().select(getEditingNuclide().getLimitsId().getForm().getVal());
+            chckBoxSameMass.setSelected(false);
+            chckBoxSameNSF.setSelected(false);
+            btnFinish.setText("Edit");
+            txtSecondPageStatus.setVisible(false);
+            txtSecondPageStatus.setText(null);
+        }
+    }
+
+    public void reset() {
+        resetFirstPage();
+        resetSecondPage();
+    }
+
+    public void resetFirstPage() {
+        txtFieldNuclideName.setText(null);
+        txtFieldA0.setText(null);
+        setLifeSpanVisible(false);
+        setLungAbsVisible(false);
+        txtFirstPageStatus.setVisible(false);
+        txtFirstPageStatus.setText(null);
+        selectDefaultDropDownFirstPage();
+    }
+
+    public void resetSecondPage() {
+        datePicker.setValue(null);
+        txtFieldMass.setText(null);
+        chckBoxSameMass.setSelected(false);
+        chckBoxSameNSF.setSelected(false);
+
+        btnFinish.setText("Finish");
+        txtSecondPageStatus.setVisible(false);
+        txtSecondPageStatus.setText(null);
+        selectDefaultDropDownSecondPage();
+    }
+
+    public void setLifeSpanVisible(boolean isLifeSpan) {
         hBoxAddInfoTop.setVisible(isLifeSpan || vBoxLungAbs.isVisible());
         vBoxLifeSpan.setVisible(isLifeSpan);
         if(!isLifeSpan) {
@@ -486,7 +322,7 @@ public class ModifyController extends BaseController {
         separatorAddInfo.setVisible(isLifeSpan || vBoxLungAbs.isVisible());
     }
 
-    protected void setLungAbsVisible(boolean isLungAbs) {
+    public void setLungAbsVisible(boolean isLungAbs) {
         hBoxAddInfoTop.setVisible(isLungAbs || vBoxLifeSpan.isVisible());
         vBoxLungAbs.setVisible(isLungAbs);
         if(!isLungAbs) {
@@ -495,174 +331,20 @@ public class ModifyController extends BaseController {
         separatorAddInfo.setVisible(isLungAbs || vBoxLifeSpan.isVisible());
     }
 
-    protected void nameListener(String newV) {
-        if (newV == null || newV.isBlank()) {
-            getSearchFilteredNuclides().setPredicate(nuclide -> false);
-            getFilteredLifeSpanNuclides().setPredicate(nuclide -> false);
-            getFilteredLungAbsNuclides().setPredicate(nuclide -> false);
-            setLifeSpanVisible(false);
-            setLungAbsVisible(false);
-            btnNext.setDisable(!Page.EDIT.equals(getPage()));
-            setDuplicateNuclide(false);
-        } else {
-            getFilteredLifeSpanNuclides().setPredicate(filteringPredicate(newV));
-            getFilteredLungAbsNuclides().setPredicate(filteringPredicate(newV));
-            getSearchFilteredNuclides().setPredicate(filteringPredicate(newV));
-            Nuclide nuclide = null;
-            if(Page.EDIT.equals(getPage())) {
-                nuclide = buildEditedNuclide();
-            } else if(getSearchFilteredNuclides().size() == 1) {
-                nuclide = new Nuclide(getSearchFilteredNuclides().get(0));
-            }
-            setLifeSpanVisible(!getFilteredLifeSpanNuclides().isEmpty());
-            setLungAbsVisible(!vBoxLifeSpan.isVisible() && !getFilteredLungAbsNuclides().isEmpty());
-            String a0 = txtFieldA0.getText();
-            btnNext.setDisable(!Page.EDIT.equals(getPage()) &&
-                nuclide == null ||
-                a0 == null || a0.isBlank() ||
-                isAddInfoNotProvided() ||
-                isNuclideInTable(nuclide));
-        }
+    private void selectDefaultDropDownFirstPage() {
+        ModifyUtils.selectDropDownOption(comboBoxA0Prefix, Conversions.SIPrefix.BASE.getVal());
+        ModifyUtils.selectDropDownOption(choiceBoxA0RadUnit, Conversions.RadUnit.CURIE.getVal());
     }
 
-    private boolean isEditingNuclide(Nuclide nuclide) {
-        if(getEditingNuclide() == null || nuclide == null) {
-            return false;
-        }
-        return getEditingNuclide().getNuclideId().equals(nuclide.getNuclideId()) &&
-            getEditingNuclide().getLifeSpan().equals(nuclide.getLifeSpan()) &&
-            getEditingNuclide().getLungAbsorption().equals(nuclide.getLungAbsorption());
+    private void selectDefaultDropDownSecondPage() {
+        ModifyUtils.selectDropDownOption(comboBoxMassPrefix, Conversions.SIPrefix.BASE.getVal());
+        ModifyUtils.selectDropDownOption(choiceBoxMassUnit, Conversions.MassUnit.GRAMS.getVal());
+        ModifyUtils.selectDropDownOption(choiceBoxNature, Nuclide.Nature.REGULAR.getVal());
+        ModifyUtils.selectDropDownOption(choiceBoxState, LimitsModelId.State.SOLID.getVal());
+        ModifyUtils.selectDropDownOption(choiceBoxForm, LimitsModelId.Form.NORMAL.getVal());
     }
 
-    private boolean isNuclideInTable(Nuclide nuclide) throws InvalidParameterException {
-        boolean ret = !isEditingNuclide(nuclide) &&
-            getMain().getHomePaneController().isNuclideInTable(nuclide);
-        setDuplicateNuclide(ret);
-        return ret;
-    }
-
-    protected void setDuplicateNuclide(boolean isInvalid) {
-        txtFieldNuclideName.getStyleClass().removeAll("validRegion", "invalidRegion");
-        txtFieldNuclideName.getStyleClass().add(isInvalid ? "invalidRegion" : "validRegion");
-        txtFirstPageStatus.setVisible(isInvalid);
-        if(isInvalid){
-            txtFirstPageStatus.setText("Nuclide already in the table.");
-        }
-    }
-
-    protected void bindMassInputDisabledProp() {
-        txtFieldMass.disableProperty().unbind();
-        comboBoxMassPrefix.disableProperty().unbind();
-        choiceBoxMassUnit.disableProperty().unbind();
-
-        txtFieldMass.disableProperty().bind(chckBoxSameMass.selectedProperty());
-        comboBoxMassPrefix.disableProperty().bind(chckBoxSameMass.selectedProperty());
-        choiceBoxMassUnit.disableProperty().bind(chckBoxSameMass.selectedProperty());
-    }
-
-    protected void bindNSFInputDisableProp() {
-        choiceBoxNature.disableProperty().unbind();
-        choiceBoxState.disableProperty().unbind();
-        choiceBoxForm.disableProperty().unbind();
-
-        choiceBoxNature.disableProperty().bind(chckBoxSameNSF.selectedProperty());
-        choiceBoxState.disableProperty().bind(chckBoxSameNSF.selectedProperty());
-        choiceBoxForm.disableProperty().bind(chckBoxSameNSF.selectedProperty());
-    }
-
-    protected Predicate<NuclideModel> filteringPredicate(String str) {
-        if (str == null || str.isBlank()) {
-            return nuclide -> false;
-        }
-        return nuclide -> doesNuclideMatchSearch(nuclide, str);
-    }
-
-    protected boolean doesNuclideMatchSearch(NuclideModel nuclide, String str) {
-        if(nuclide == null || str == null || str.isBlank()) {
-            return false;
-        }
-        String searchStr = str.trim()
-            .replaceAll(LIFE_SPAN_PATTERN, "")
-            .replaceAll(LUNG_ABS_PATTERN, "");
-        String symbol = nuclide.getSymbolNotation();
-        String name = nuclide.getNameNotation();
-
-        return symbol.equalsIgnoreCase(searchStr) || name.equalsIgnoreCase(searchStr);
-    }
-
-    protected Nuclide buildNuclideFromFirstPage() {
-        Nuclide nuclide = null;
-        if(getSearchFilteredNuclides().size() == 1 && !btnNext.isDisabled()) {
-            nuclide = new Nuclide(getSearchFilteredNuclides().get(0));
-            nuclide.setInitActivityStr(txtFieldA0.getText());
-            nuclide.setInitActivityPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxA0Prefix.getValue()));
-            nuclide.setInitActivityUnit(Conversions.RadUnit.toRadUnit(choiceBoxA0RadUnit.getValue()));
-            setNuclideLifeSpan(nuclide);
-            setNuclideLungAbs(nuclide);
-        }
-        return nuclide;
-    }
-
-    protected Nuclide buildEditedNuclide() {
-        Nuclide nuclide = null;
-        if(getSearchFilteredNuclides().size() == 1 && getSearchFilteredNuclides().get(0) != null) {
-            nuclide = new Nuclide(getSearchFilteredNuclides().get(0));
-            setNuclideLifeSpan(nuclide);
-            setNuclideLungAbs(nuclide);
-        }
-        return nuclide;
-    }
-
-    private void setNuclideLifeSpan(Nuclide nuclide) {
-        if(toggleGrpLifeSpan.getSelectedToggle() != null) {
-            RadioButton radioBtn = (RadioButton) toggleGrpLifeSpan.getSelectedToggle();
-            nuclide.getNuclideId().setMassNumber(nuclide.getNuclideId().getMassNumber() + radioBtn.getUserData());
-            nuclide.setLifeSpan(Nuclide.LifeSpan.toLifeSpan((String) radioBtn.getUserData()));
-        } else {
-            nuclide.setLifeSpan(Nuclide.LifeSpan.REGULAR);
-        }
-    }
-
-    protected void setNuclideLungAbs(Nuclide nuclide) {
-        if(toggleGrpLungAbs.getSelectedToggle() != null) {
-            RadioButton radioBtn = (RadioButton) toggleGrpLungAbs.getSelectedToggle();
-            nuclide.getNuclideId().setMassNumber(nuclide.getNuclideId().getMassNumber() + radioBtn.getUserData());
-            nuclide.setLungAbsorption(Nuclide.LungAbsorption.toLungAbsorption((String) radioBtn.getUserData()));
-        } else {
-            nuclide.setLungAbsorption(Nuclide.LungAbsorption.NONE);
-        }
-    }
-
-    protected Nuclide buildNuclide() {
-        Nuclide nuclide = buildNuclideFromFirstPage();
-        if(nuclide != null && !btnFinish.isDisabled()) {
-            nuclide.setRefDate(datePicker.getValue());
-            if(chckBoxSameMass.isDisabled()) {
-                Shipment shipment = getMain().getHomePaneController().getShipment();
-                nuclide.setMassStr(shipment.getMassStr());
-                nuclide.setMassPrefix(shipment.getMassPrefix());
-                nuclide.setMassUnit(shipment.getMassUnit());
-            } else {
-                nuclide.setMassStr(txtFieldMass.getText());
-                nuclide.setMassPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxMassPrefix.getValue()));
-                nuclide.setMassUnit(Conversions.MassUnit.toMass(choiceBoxMassUnit.getValue()));
-            }
-
-            if(chckBoxSameNSF.isDisabled()) {
-                Shipment shipment = getMain().getHomePaneController().getShipment();
-                nuclide.setNature(shipment.getNature());
-                nuclide.setLimitsId(shipment.getLimitsId());
-            } else {
-                nuclide.setNature(Nuclide.Nature.toNature(choiceBoxNature.getValue()));
-                nuclide.getLimitsId().setState(LimitsModelId.State.toState(choiceBoxState.getValue()));
-                nuclide.getLimitsId().setForm(LimitsModelId.Form.toForm(choiceBoxForm.getValue()));
-            }
-            nuclide.getConstants().dbInit(nuclide.getNuclideId(), nuclide.getLimitsId());
-        }
-        return nuclide;
-    }
-
-    /*///////////////////////////////////////////// HOME PANE CONTROLLER /////////////////////////////////////////////*/
+    /*///////////////////////////////////////////// MODIFY PANE CONTROLLER /////////////////////////////////////////////*/
 
     /**
      * FXML function to handle any menu button pressed
@@ -684,8 +366,6 @@ public class ModifyController extends BaseController {
             finishBtnHandler();
         }
     }
-
-    /*/////////////////////////////////////////////////// HELPERS ////////////////////////////////////////////////////*/
 
     /**
      * Helper function to handle the next button being pressed
@@ -716,5 +396,152 @@ public class ModifyController extends BaseController {
             getMain().getHomePaneController().updateNuclide(buildNuclide());
         }
         App.getStageHandler().closeSecondary();
+    }
+
+    /*/////////////////////////////////////////////////// HELPERS ////////////////////////////////////////////////////*/
+
+    public void nameListener(String str) {
+        ModifyUtils.setPredicate(getFilteredLifeSpanNuclides(), ModifyUtils.filteringPredicate(str));
+        ModifyUtils.setPredicate(getFilteredLungAbsNuclides(), ModifyUtils.filteringPredicate(str));
+        ModifyUtils.setPredicate(getSearchFilteredNuclides(), ModifyUtils.filteringPredicate(str));
+        setLifeSpanVisible(!getFilteredLifeSpanNuclides().isEmpty());
+        setLungAbsVisible(!vBoxLifeSpan.isVisible() && !getFilteredLungAbsNuclides().isEmpty());
+        setDuplicateNuclide(isNuclideInTable());
+        btnNext.setDisable(
+                getNuclide() == null ||
+                StringUtils.isBlank(txtFieldA0.getText()) ||
+                isAddInfoNotProvided() ||
+                StringUtils.isNotBlank(txtFirstPageStatus.getText())
+            );
+    }
+
+    public void initialActivityListener(String str) {
+        // if user inputs any non-numerical characters, remove them
+        String newTxt = StringUtils.isBlank(str)? null : str.replaceAll("[^\\d.]", "");
+        txtFieldA0.setText(newTxt);
+        btnNext.setDisable(
+            StringUtils.isBlank(newTxt) ||
+            getNuclide() == null ||
+            isAddInfoNotProvided() ||
+            StringUtils.isNotBlank(txtFirstPageStatus.getText())
+        );
+    }
+
+    public void massListener(String str) {
+        // if user inputs any non-numerical characters, remove them
+        String newTxt = StringUtils.isBlank(str)? null : str.replaceAll("[^\\d.]", "");
+        btnFinish.setDisable(
+            StringUtils.isBlank(newTxt) ||
+            datePicker.getValue() == null ||
+            StringUtils.isNotBlank(txtFirstPageStatus.getText())
+        );
+        txtFieldMass.setText(newTxt);
+    }
+
+    public void radioBtnListener(Toggle newV) {
+        btnNext.setDisable(
+            getNuclide() == null ||
+            StringUtils.isBlank(txtFieldA0.getText()) ||
+            newV == null ||
+            StringUtils.isNotBlank(txtFirstPageStatus.getText())
+        );
+    }
+
+    public void setDuplicateNuclide(boolean isInvalid) {
+        txtFieldNuclideName.getStyleClass().removeAll("validRegion", "invalidRegion");
+        txtFieldNuclideName.getStyleClass().add(isInvalid ? "invalidRegion" : "validRegion");
+        txtFirstPageStatus.setVisible(isInvalid);
+        if(isInvalid){
+            txtFirstPageStatus.setText("Nuclide already in the table.");
+        }
+    }
+
+    public Nuclide getNuclide() {
+        Nuclide nuclide = null;
+        Nuclide searchFilteredNuclide = ModifyUtils.getFilteredNuclide(getSearchFilteredNuclides());
+
+        switch (getPage()) {
+            case EDIT:
+                if(searchFilteredNuclide != null &&
+                    getEditingNuclide().getNuclideId().minimumEquals(searchFilteredNuclide.getNuclideId())) {
+                    nuclide = getEditingNuclide();
+                } else if(searchFilteredNuclide != null &&
+                    !getEditingNuclide().getNuclideId().equals(searchFilteredNuclide.getNuclideId())) {
+                    // user changed the name of the edited nuclide to a different nuclide
+                    nuclide = searchFilteredNuclide;
+                }
+                break;
+            case ADD:
+                nuclide = searchFilteredNuclide;
+                break;
+            default:
+        }
+        return nuclide;
+    }
+
+    public Nuclide buildEditedNuclide() {
+        Nuclide nuclide = null;
+        if(getSearchFilteredNuclides().size() == 1 && getSearchFilteredNuclides().get(0) != null) {
+            nuclide = new Nuclide(getSearchFilteredNuclides().get(0));
+            ModifyUtils.setNuclideLifeSpan(nuclide, toggleGrpLifeSpan);
+            ModifyUtils.setNuclideLungAbs(nuclide, toggleGrpLungAbs);
+        }
+        return nuclide;
+    }
+
+    public boolean isAddInfoNotProvided() {
+        boolean isFilteredLifeSpanEmpty = getFilteredLifeSpanNuclides().isEmpty();
+        boolean isFilteredLungAbsEmpty = getFilteredLungAbsNuclides().isEmpty();
+        boolean isLifeSpanSelectionEmpty = toggleGrpLifeSpan.getSelectedToggle() == null;
+        boolean isLungAbsSelectionEmpty = toggleGrpLungAbs.getSelectedToggle() == null;
+
+        return (!isFilteredLifeSpanEmpty || !isFilteredLungAbsEmpty) &&
+            (!isFilteredLifeSpanEmpty || isLungAbsSelectionEmpty) &&
+            (isFilteredLifeSpanEmpty || isLifeSpanSelectionEmpty);
+    }
+
+    public boolean isNuclideInTable() throws InvalidParameterException {
+        return getMain().getHomePaneController().isNuclideInTable(buildNuclideFromFirstPage());
+    }
+
+    public Nuclide buildNuclideFromFirstPage() {
+        Nuclide nuclide = getNuclide();
+        if(nuclide != null) {
+            nuclide.setInitActivityStr(txtFieldA0.getText());
+            nuclide.setInitActivityPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxA0Prefix.getValue()));
+            nuclide.setInitActivityUnit(Conversions.RadUnit.toRadUnit(choiceBoxA0RadUnit.getValue()));
+            ModifyUtils.setNuclideLifeSpan(nuclide, toggleGrpLifeSpan);
+            ModifyUtils.setNuclideLungAbs(nuclide, toggleGrpLungAbs);
+        }
+        return nuclide;
+    }
+
+    public Nuclide buildNuclide() {
+        Nuclide nuclide = buildNuclideFromFirstPage();
+        if(nuclide != null) {
+            nuclide.setRefDate(datePicker.getValue());
+            if(chckBoxSameMass.isSelected()) {
+                Shipment shipment = getMain().getHomePaneController().getShipment();
+                nuclide.setMassStr(shipment.getMassStr());
+                nuclide.setMassPrefix(shipment.getMassPrefix());
+                nuclide.setMassUnit(shipment.getMassUnit());
+            } else {
+                nuclide.setMassStr(txtFieldMass.getText());
+                nuclide.setMassPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxMassPrefix.getValue()));
+                nuclide.setMassUnit(Conversions.MassUnit.toMass(choiceBoxMassUnit.getValue()));
+            }
+
+            if(chckBoxSameNSF.isSelected()) {
+                Shipment shipment = getMain().getHomePaneController().getShipment();
+                nuclide.setNature(shipment.getNature());
+                nuclide.setLimitsId(shipment.getLimitsId());
+            } else {
+                nuclide.setNature(Nuclide.Nature.toNature(choiceBoxNature.getValue()));
+                nuclide.getLimitsId().setState(LimitsModelId.State.toState(choiceBoxState.getValue()));
+                nuclide.getLimitsId().setForm(LimitsModelId.Form.toForm(choiceBoxForm.getValue()));
+            }
+            nuclide.getConstants().dbInit(nuclide.getNuclideId(), nuclide.getLimitsId());
+        }
+        return nuclide;
     }
 }
