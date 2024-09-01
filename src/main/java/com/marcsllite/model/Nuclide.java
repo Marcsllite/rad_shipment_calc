@@ -13,6 +13,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -154,7 +155,7 @@ public class Nuclide {
     }
 
     public void setName(String name) {
-        nameProperty().set(name == null? "" : name);
+        nameProperty().set(StringUtils.isBlank(name)? "" : name);
         setFullName();
         setNameNotation();
         setDisplayNameNotation();
@@ -358,7 +359,7 @@ public class Nuclide {
     }
 
     public void setMassStr(String massStr) {
-        massProperty().set(massStr == null?
+        massProperty().set(StringUtils.isBlank(massStr)?
             RadBigDecimal.NEG_INFINITY_DISPLAY_STRING : massStr);
         setDisplayMass();
     }
@@ -417,7 +418,7 @@ public class Nuclide {
     }
 
     public void setInitActivityStr(String initActivityStr) {
-        initActivityProperty().set(initActivityStr == null?
+        initActivityProperty().set(StringUtils.isBlank(initActivityStr)?
             RadBigDecimal.NEG_INFINITY_DISPLAY_STRING : initActivityStr);
         setDisplayInitActivity();
     }

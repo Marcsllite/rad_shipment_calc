@@ -18,6 +18,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
 
@@ -208,7 +209,7 @@ public class ReferencePaneController extends BaseController {
     }
 
     protected void searchFilteringListener(FilteredList<Nuclide> filteredData, String newV) {
-        if (newV != null && !newV.isBlank()) {
+        if (StringUtils.isBlank(newV)) {
             tableViewSearch.getSelectionModel().clearSelection();
         }
 
@@ -219,7 +220,7 @@ public class ReferencePaneController extends BaseController {
         if(nuclide == null) {
             return false;
         }
-        if (str == null || str.isBlank()) {
+        if (StringUtils.isBlank(str)) {
             return true;
         }
         String searchStr = str.toLowerCase();

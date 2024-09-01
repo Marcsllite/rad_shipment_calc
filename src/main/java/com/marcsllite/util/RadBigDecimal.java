@@ -1,5 +1,7 @@
 package com.marcsllite.util;
 
+import org.codehaus.plexus.util.StringUtils;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
@@ -50,7 +52,7 @@ public class RadBigDecimal extends BigDecimal {
     }
 
     protected static String parseString(String str) {
-        if(str == null) {
+        if(StringUtils.isBlank(str)) {
             return "0";
         } else if (INFINITY_STRING.equalsIgnoreCase(str) ||
             INFINITY_DISPLAY_STRING.equalsIgnoreCase(str)) {
