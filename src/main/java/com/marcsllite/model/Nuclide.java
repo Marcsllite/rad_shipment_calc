@@ -27,10 +27,10 @@ public class Nuclide {
     private final SimpleStringProperty name;
     private NuclideModelId nuclideId;
     private final SimpleStringProperty massNumber;
-    private final SimpleStringProperty fullName;
-    private final SimpleStringProperty nameNotation;
+    private final SimpleStringProperty nameSymbol;
+    private final SimpleStringProperty fullNameNotation;
     private final SimpleStringProperty displayNameNotation;
-    private final SimpleStringProperty symbolNotation;
+    private final SimpleStringProperty fullSymbolNotation;
     private final SimpleStringProperty displaySymbolNotation;
 
     private Nature nature;
@@ -59,10 +59,10 @@ public class Nuclide {
         name = new SimpleStringProperty("XX");
         nuclideId = new NuclideModelId();
         massNumber = new SimpleStringProperty(nuclideId.getMassNumber());
-        fullName = new SimpleStringProperty(name.getValue() + " (" + nuclideId.getSymbol() + ")");
-        nameNotation = new SimpleStringProperty(name.getValue() + "-" + massNumber.getValue());
+        nameSymbol = new SimpleStringProperty(name.getValue() + " (" + nuclideId.getSymbol() + ")");
+        fullNameNotation = new SimpleStringProperty(name.getValue() + "-" + massNumber.getValue());
         displayNameNotation = new SimpleStringProperty(name.getValue() + "-" + nuclideId.getDisplayMassNumber());
-        symbolNotation = new SimpleStringProperty(nuclideId.getSymbolNotation());
+        fullSymbolNotation = new SimpleStringProperty(nuclideId.getFullSymbolNotation());
         displaySymbolNotation = new SimpleStringProperty(nuclideId.getDisplaySymbolNotation());
 
         nature = Nature.REGULAR;
@@ -158,7 +158,7 @@ public class Nuclide {
         setFullName();
         setNameNotation();
         setDisplayNameNotation();
-        setSymbolNotation();
+        setFullSymbolNotation();
         setDisplaySymbolNotation();
     }
 
@@ -172,7 +172,7 @@ public class Nuclide {
         setFullName();
         setNameNotation();
         setDisplayNameNotation();
-        setSymbolNotation();
+        setFullSymbolNotation();
         setDisplaySymbolNotation();
     }
 
@@ -192,12 +192,12 @@ public class Nuclide {
         }
     }
 
-    public SimpleStringProperty fullNameProperty() {
-        return fullName;
+    public SimpleStringProperty nameSymbolProperty() {
+        return nameSymbol;
     }
 
-    public String getFullName() {
-        return fullNameProperty().get();
+    public String getNameSymbol() {
+        return nameSymbolProperty().get();
     }
 
     public void setFullName() {
@@ -208,15 +208,15 @@ public class Nuclide {
         if(getNuclideId() != null) {
             str += " (" + getNuclideId().getSymbol() + ")";
         }
-        fullNameProperty().set(str);
+        nameSymbolProperty().set(str);
     }
 
-    public SimpleStringProperty nameNotationProperty() {
-        return nameNotation;
+    public SimpleStringProperty fullNameNotationProperty() {
+        return fullNameNotation;
     }
 
-    public String getNameNotation() {
-        return nameNotationProperty().get();
+    public String getFullNameNotation() {
+        return fullNameNotationProperty().get();
     }
 
     public void setNameNotation() {
@@ -224,7 +224,7 @@ public class Nuclide {
         if(getNuclideId() != null) {
             str += "-" + getNuclideId().getMassNumber();
         }
-        nameNotationProperty().set(str);
+        fullNameNotationProperty().set(str);
     }
 
     public SimpleStringProperty displayNameNotationProperty() {
@@ -243,20 +243,20 @@ public class Nuclide {
         displayNameNotationProperty().set(str);
     }
 
-    public SimpleStringProperty symbolNotationProperty() {
-        return symbolNotation;
+    public SimpleStringProperty fullSymbolNotationProperty() {
+        return fullSymbolNotation;
     }
 
-    public String getSymbolNotation() {
-        return symbolNotationProperty().get();
+    public String getFullSymbolNotation() {
+        return fullSymbolNotationProperty().get();
     }
 
-    public void setSymbolNotation() {
+    public void setFullSymbolNotation() {
         String str = "";
         if(getNuclideId() != null) {
-            str = getNuclideId().getSymbolNotation();
+            str = getNuclideId().getFullSymbolNotation();
         }
-        symbolNotationProperty().set(str);
+        fullSymbolNotationProperty().set(str);
     }
 
     public SimpleStringProperty displaySymbolNotationProperty() {

@@ -138,7 +138,7 @@ public class HomePaneController extends BaseController {
     /*/////////////////////////////////////////////////// HELPERS ////////////////////////////////////////////////////*/
 
     protected void initTable() {
-        tableColNuclide.setCellValueFactory(new PropertyValueFactory<>("nameNotation"));
+        tableColNuclide.setCellValueFactory(new PropertyValueFactory<>("displayNameNotation"));
         tableColHalfLife.setCellValueFactory(i -> i.getValue().getConstants().displayHalfLifeProperty());
         tableColActivity.setCellValueFactory(new PropertyValueFactory<>("displayInitActivity"));
         tableColRefDate.setCellValueFactory(new PropertyValueFactory<>("refDate"));

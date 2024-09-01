@@ -16,11 +16,11 @@ public class NuclideDaoImpl extends AbstractDao<NuclideModel, NuclideModelId> {
 
     public String getNuclideNameNotation(NuclideModelId nuclideId) {
         NuclideModel model = getNuclide(nuclideId);
-        return model == null? "" : model.getNameNotation();
+        return model == null? "" : model.getDisplayNameNotation();
     }
 
     public String getNuclideAbbrNotation(NuclideModelId nuclideId) {
         NuclideModel model = getNuclide(nuclideId);
-        return model == null? "" : model.getSymbolNotation();
+        return model == null? "" : model.getDisplaySymbolNotation();
     }
 }

@@ -94,10 +94,10 @@ class NuclideDaoImplTest extends DBTest {
 
         when(em.find(any(), any())).thenReturn(model1, model2, model3, model4);
 
-        assertEquals(model1.getNameNotation(), daoSpy.getNuclideNameNotation(isoId1));
-        assertEquals(model2.getNameNotation(), daoSpy.getNuclideNameNotation(isoId2));
-        assertEquals(model3.getNameNotation(), daoSpy.getNuclideNameNotation(isoId3));
-        assertEquals(model4.getNameNotation(), daoSpy.getNuclideNameNotation(isoId4));
+        assertEquals(model1.getDisplayNameNotation(), daoSpy.getNuclideNameNotation(isoId1));
+        assertEquals(model2.getDisplayNameNotation(), daoSpy.getNuclideNameNotation(isoId2));
+        assertEquals(model3.getDisplayNameNotation(), daoSpy.getNuclideNameNotation(isoId3));
+        assertEquals(model4.getDisplayNameNotation(), daoSpy.getNuclideNameNotation(isoId4));
 
         verify(daoSpy).getNuclide(isoId1);
         verify(daoSpy).getNuclide(isoId2);
@@ -131,10 +131,10 @@ class NuclideDaoImplTest extends DBTest {
 
         when(em.find(any(), any())).thenReturn(model1, model2, model3, model4);
 
-        assertEquals(model1.getSymbolNotation(), daoSpy.getNuclideAbbrNotation(isoId1));
-        assertEquals(model2.getSymbolNotation(), daoSpy.getNuclideAbbrNotation(isoId2));
-        assertEquals(model3.getSymbolNotation(), daoSpy.getNuclideAbbrNotation(isoId3));
-        assertEquals(model4.getSymbolNotation(), daoSpy.getNuclideAbbrNotation(isoId4));
+        assertEquals(model1.getDisplaySymbolNotation(), daoSpy.getNuclideAbbrNotation(isoId1));
+        assertEquals(model2.getDisplaySymbolNotation(), daoSpy.getNuclideAbbrNotation(isoId2));
+        assertEquals(model3.getDisplaySymbolNotation(), daoSpy.getNuclideAbbrNotation(isoId3));
+        assertEquals(model4.getDisplaySymbolNotation(), daoSpy.getNuclideAbbrNotation(isoId4));
 
         verify(daoSpy).getNuclide(isoId1);
         verify(daoSpy).getNuclide(isoId2);

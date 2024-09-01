@@ -93,7 +93,7 @@ public class NuclideModel extends BaseModel {
         this.lungAbsorption = lungAbsorption;
     }
 
-    public String getNameNotation() {
+    public String getDisplayNameNotation() {
         return getName() + "-" + getNuclideId().getDisplayMassNumber();
     }
 
@@ -101,8 +101,8 @@ public class NuclideModel extends BaseModel {
         return getName() + "-" + getNuclideId().getMassNumber();
     }
 
-    public String getSymbolNotation() {
-        return getNuclideId().getSymbolNotation();
+    public String getDisplaySymbolNotation() {
+        return getNuclideId().getDisplaySymbolNotation();
     }
 
     public String getFullSymbolNotation() {

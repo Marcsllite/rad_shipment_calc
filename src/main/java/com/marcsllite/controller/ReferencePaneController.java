@@ -83,7 +83,7 @@ public class ReferencePaneController extends BaseController {
     }
 
     protected void initTable() {
-        tableColRefFullName.setCellValueFactory(new PropertyValueFactory<>("fullName"));
+        tableColRefFullName.setCellValueFactory(new PropertyValueFactory<>("nameSymbol"));
         tableColRefMassNumber.setCellValueFactory(new PropertyValueFactory<>("massNumber"));
 
         tableViewSearch.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -224,8 +224,8 @@ public class ReferencePaneController extends BaseController {
         }
         String searchStr = str.toLowerCase();
 
-        return nuclide.getNameNotation().toLowerCase().contains(searchStr) ||
-            nuclide.getSymbolNotation().toLowerCase().contains(searchStr);
+        return nuclide.getDisplayNameNotation().toLowerCase().contains(searchStr) ||
+            nuclide.getDisplaySymbolNotation().toLowerCase().contains(searchStr);
     }
 
     protected void setupTableDataLinking(Nuclide nuclide) {

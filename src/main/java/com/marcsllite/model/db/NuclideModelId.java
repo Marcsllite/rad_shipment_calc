@@ -46,8 +46,7 @@ public class NuclideModelId implements Serializable {
         this.massNumber = massNumber == null? null : massNumber.trim();
     }
 
-    public String getSymbolNotation() {
-        return getSymbol() + "-" + getDisplayMassNumber(); }
+    public String getDisplaySymbolNotation() { return getSymbol() + "-" + getDisplayMassNumber(); }
 
     public String getFullSymbolNotation() { return getSymbol() + "-" + getMassNumber(); }
 
