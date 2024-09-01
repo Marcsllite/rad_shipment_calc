@@ -42,6 +42,15 @@ insert into EXEMPT_LIMIT(Symbol, Mass_Number, Val, version) values('An', '1', 2.
 insert into HALF_LIFE(Symbol, Mass_Number, Val, version) values('An', '1', 2.0, -1);
 insert into REPORTABLE_QUANTITY(Symbol, Mass_Number, Ci, TBq, version) values('An', '1', 1, 0.037, -1);
 
+insert into NUCLIDE(Atomic_Number, Name, Symbol, Mass_Number, version) values(3, 'Bofuri', 'Bf', '1', -1);
+insert into A_ONE(Symbol, Mass_Number, Val, version) values('Bf', '1', 3.0, -1);
+insert into A_TWO(Symbol, Mass_Number, Val, version) values('Bf', '1', 3.0, -1);
+insert into DECAY_CONSTANT(Symbol, Mass_Number, Val, version) values('Bf', '1', 3.0, -1);
+insert into EXEMPT_CONCENTRATION(Symbol, Mass_Number, Val, version) values('Bf', '1', 3.0, -1);
+insert into EXEMPT_LIMIT(Symbol, Mass_Number, Val, version) values('Bf', '1', 3.0, -1);
+insert into HALF_LIFE(Symbol, Mass_Number, Val, version) values('Bf', '1', 3.0, -1);
+insert into REPORTABLE_QUANTITY(Symbol, Mass_Number, Ci, TBq, version) values('Bf', '1', 3, 0.074, -1);
+
 insert into NUCLIDE(Atomic_Number, Name, Symbol, Mass_Number, version) values(3, 'Bofuri', 'Bf', '1(short)', -1);
 insert into A_ONE(Symbol, Mass_Number, Val, version) values('Bf', '1(short)', 3.0, -1);
 insert into A_TWO(Symbol, Mass_Number, Val, version) values('Bf', '1(short)', 3.0, -1);
@@ -49,7 +58,16 @@ insert into DECAY_CONSTANT(Symbol, Mass_Number, Val, version) values('Bf', '1(sh
 insert into EXEMPT_CONCENTRATION(Symbol, Mass_Number, Val, version) values('Bf', '1(short)', 3.0, -1);
 insert into EXEMPT_LIMIT(Symbol, Mass_Number, Val, version) values('Bf', '1(short)', 3.0, -1);
 insert into HALF_LIFE(Symbol, Mass_Number, Val, version) values('Bf', '1(short)', 3.0, -1);
-insert into REPORTABLE_QUANTITY(Symbol, Mass_Number, Ci, TBq, version) values('Bf', 1, 3, 0.074, -1);
+insert into REPORTABLE_QUANTITY(Symbol, Mass_Number, Ci, TBq, version) values('Bf', '1(short)', 3, 0.074, -1);
+
+insert into NUCLIDE(Atomic_Number, Name, Symbol, Mass_Number, version) values(3, 'Bofuri', 'Bf', '1(long)', -1);
+insert into A_ONE(Symbol, Mass_Number, Val, version) values('Bf', '1(long)', 3.0, -1);
+insert into A_TWO(Symbol, Mass_Number, Val, version) values('Bf', '1(long)', 3.0, -1);
+insert into DECAY_CONSTANT(Symbol, Mass_Number, Val, version) values('Bf', '1(long)', 3.0, -1);
+insert into EXEMPT_CONCENTRATION(Symbol, Mass_Number, Val, version) values('Bf', '1(long)', 3.0, -1);
+insert into EXEMPT_LIMIT(Symbol, Mass_Number, Val, version) values('Bf', '1(long)', 3.0, -1);
+insert into HALF_LIFE(Symbol, Mass_Number, Val, version) values('Bf', '1(long)', 3.0, -1);
+insert into REPORTABLE_QUANTITY(Symbol, Mass_Number, Ci, TBq, version) values('Bf', '1(long)', 3, 0.074, -1);
 
 insert into NUCLIDE(Atomic_Number, Name, Symbol, Mass_Number, version) values(4, 'Best', 'Bs', '1fast', -1);
 insert into A_ONE(Symbol, Mass_Number, Val, version) values('Bs', '1fast', 4.0, -1);
