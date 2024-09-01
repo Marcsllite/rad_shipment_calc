@@ -5,6 +5,8 @@ import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.model.db.NuclideModelId;
 import com.marcsllite.util.Conversions;
 import com.marcsllite.util.RadBigDecimal;
+import javafx.scene.control.TableView;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -32,26 +34,54 @@ public class TestUtils {
             this.lungAbsorption = lungAbsorption;
         }
 
-        public String getSymbol() {
-            return symbol;
+        public String getName() {
+            return StringUtils.isNotBlank(name) ? name : name.trim();
         }
 
-        public String getSymbolNotation() {
-            return symbol + "-" + massNumber.trim()
+        public String getSymbol() {
+            return StringUtils.isNotBlank(symbol) ? symbol : symbol.trim();
+        }
+
+        public String getMassNumber() {
+            return StringUtils.isBlank(massNumber)? massNumber : massNumber.trim();
+        }
+
+        public String getDisplayMassNumber() {
+            return getMassNumber()
                 .replaceAll(LIFE_SPAN_PATTERN, "")
                 .replaceAll(LUNG_ABS_PATTERN, "");
         }
 
+        public Nuclide.LifeSpan getLifeSpan() {
+            return lifeSpan;
+        }
+
+        public Nuclide.LungAbsorption getLungAbsorption() {
+            return lungAbsorption;
+        }
+
+        public String getDisplayNameNotation() {
+            return getName() + "-" + getDisplayMassNumber();
+        }
+
+        public String getFullNameNotation() {
+            return getName() + "-" + getMassNumber();
+        }
+
+        public String getDisplaySymbolNotation() {
+            return getSymbol() + "-" + getDisplayMassNumber();
+        }
+
         public String getFullSymbolNotation() {
-            return symbol + "-" + massNumber;
+            return getSymbol() + "-" + getMassNumber();
         }
 
         @Override
         public String toString() {
             return "TestNuclide{" +
-                "name='" + name + '\'' +
-                ", symbol='" + symbol + '\'' +
-                ", massNumber='" + massNumber + '\'' +
+                "name='" + getName() + '\'' +
+                ", symbol='" + getSymbol() + '\'' +
+                ", massNumber='" + getMassNumber() + '\'' +
                 '}';
         }
     }
@@ -59,11 +89,36 @@ public class TestUtils {
     public static final List<TestNuclide> testNuclides = Arrays.asList(
         new TestNuclide("Abbreviation", "Ab", "1", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.NONE),
         new TestNuclide("Annual", "An", "1", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.NONE),
+        new TestNuclide("Bofuri", "Bf", "1", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.NONE),
         new TestNuclide("Bofuri", "Bf", "1(short)", Nuclide.LifeSpan.SHORT, Nuclide.LungAbsorption.NONE),
+        new TestNuclide("Bofuri", "Bf", "1(long)", Nuclide.LifeSpan.LONG, Nuclide.LungAbsorption.NONE),
         new TestNuclide("Best", "Bs", "1fast", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.FAST)
     );
 
     private TestUtils() {}
+
+    public static int getTestNuclideSize() {
+        return testNuclides.size();
+    }
+
+    public static int subStringTestNuclide(String str) {
+        return (int) testNuclides.stream()
+            .filter(nuclide ->
+                nuclide.getDisplayNameNotation().toLowerCase().contains(str.toLowerCase()) ||
+                nuclide.getDisplaySymbolNotation().toLowerCase().contains(str.toLowerCase()))
+            .count();
+    }
+
+    public static int equalsTestNuclide(String str) {
+        String searchStr = str.trim()
+            .replaceAll(LIFE_SPAN_PATTERN, "")
+            .replaceAll(LUNG_ABS_PATTERN, "");
+        return (int) testNuclides.stream()
+            .filter(nuclide ->
+                nuclide.getDisplayNameNotation().equalsIgnoreCase(searchStr) ||
+                    nuclide.getDisplaySymbolNotation().equalsIgnoreCase(searchStr))
+            .count();
+    }
 
     public static TestNuclide getRegularNuclide() {
         return testNuclides.stream()
@@ -113,6 +168,10 @@ public class TestUtils {
 
     public static double getRandomNumber(double min, double max) {
         return ((Math.random() * (max - min)) + min);
+    }
+
+    public static int getRandomRow(TableView<?> tableView) {
+        return (int) TestUtils.getRandomNumber(0, tableView.getItems().size()-1);
     }
 
     public static TestNuclide getRandomTestNuclide() {
