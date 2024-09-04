@@ -16,9 +16,12 @@ import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.base.NodeMatchers;
 
 import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.spy;
 
@@ -79,6 +82,15 @@ class MenuPaneControllerGUITest extends GUITest {
         interact(() ->controller.show());
 
         FxAssert.verifyThat(gridPaneMenu, NodeMatchers.isVisible());
+    }
+
+    @Test
+    void testSetButtonColor_ProperBtn_NullColor() {
+        InvalidParameterException ex = assertThrows(
+            InvalidParameterException.class,
+            () -> controller.setButtonColor(btnReference, null)
+        );
+        assertTrue(ex.getMessage().contains("The color cannot be null"));
     }
 
     @Test

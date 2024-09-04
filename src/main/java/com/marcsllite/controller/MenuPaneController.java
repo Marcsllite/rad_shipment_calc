@@ -174,32 +174,24 @@ public class MenuPaneController extends BaseController {
      * @param btnMenu the menu button to set the color for
      * @param color the color to set the menu button and icon
      */
-    @SuppressWarnings("DataFlowIssue")
     protected void setButtonColor(Button btnMenu, ImageHandler.Colors color) throws InvalidParameterException {
-        var errMsg = "";
-        
-        // making sure user is giving valid values
         if(btnMenu == null) {
-            errMsg = "The menu button cannot be null;";
-        }
-        if(color == null) {
-            errMsg = errMsg.concat("The color cannot be null;");
-        }
-
-        if(!errMsg.isBlank()) {
-            var e = new InvalidParameterException(errMsg);
+            var e = new InvalidParameterException("The menu button cannot be null");
             logr.throwing(e);
             throw e;
-        } else {
-            if(btnShipment.equals(btnMenu)) {
-                btnShipment.setTextFill(Color.web(color.getVal()));  // changing Shipment button text color
-                imgViewShipment.setImage(ImageHandler.getShipmentImage(color));  // changing icon color
-            } else if(btnReference.equals(btnMenu)) {
-                btnReference.setTextFill(Color.web(color.getVal()));  // changing Reference button text color
-                imgViewReference.setImage(ImageHandler.getReferenceImage(color));  // changing icon color
-            }
+        } else if(color == null) {
+            var e = new InvalidParameterException("The color cannot be null");
+            logr.throwing(e);
+            throw e;
         }
-            
+
+        if(btnShipment.equals(btnMenu)) {
+            btnShipment.setTextFill(Color.web(color.getVal()));  // changing Shipment button text color
+            imgViewShipment.setImage(ImageHandler.getShipmentImage(color));  // changing icon color
+        } else if(btnReference.equals(btnMenu)) {
+            btnReference.setTextFill(Color.web(color.getVal()));  // changing Reference button text color
+            imgViewReference.setImage(ImageHandler.getReferenceImage(color));  // changing icon color
+        }
     }
 
     /**

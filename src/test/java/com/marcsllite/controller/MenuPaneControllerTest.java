@@ -28,7 +28,6 @@ class MenuPaneControllerTest {
             () -> controller.setButtonColor(null, null)
         );
         assertTrue(ex.getMessage().contains("The menu button cannot be null"));
-        assertTrue(ex.getMessage().contains("The color cannot be null"));
     }
 
     @Test
