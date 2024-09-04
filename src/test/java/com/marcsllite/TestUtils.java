@@ -92,6 +92,9 @@ public class TestUtils {
         new TestNuclide("Bofuri", "Bf", "1", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.NONE),
         new TestNuclide("Bofuri", "Bf", "1(short)", Nuclide.LifeSpan.SHORT, Nuclide.LungAbsorption.NONE),
         new TestNuclide("Bofuri", "Bf", "1(long)", Nuclide.LifeSpan.LONG, Nuclide.LungAbsorption.NONE),
+        new TestNuclide("Best", "Bs", "1", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.NONE),
+        new TestNuclide("Best", "Bs", "1slow", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.SLOW),
+        new TestNuclide("Best", "Bs", "1medium", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.MEDIUM),
         new TestNuclide("Best", "Bs", "1fast", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.FAST)
     );
 

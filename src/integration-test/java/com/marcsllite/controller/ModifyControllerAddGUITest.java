@@ -186,9 +186,7 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
     @MethodSource("radioLungAbsorption_data")
     void testBtnNext_EnabledDisabled_RadioLungAbsorption_Checker(String name, String a0, Nuclide.LungAbsorption lungAbs, Matcher<Node> matcher, int filteredIsoSize, boolean visibleRadio) {
         VBox additionalInfo;
-        if(visibleRadio && filteredIsoSize == 0) {
-            additionalInfo = vBoxLifeSpan;
-        } else if(filteredIsoSize == 1) {
+        if(visibleRadio) {
             additionalInfo = vBoxLungAbs;
         } else {
             additionalInfo = null;
@@ -200,11 +198,11 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
         setInitialActivity(a0);
         assertSettingField(filteredIsoSize, additionalInfo, NodeMatchers.isDisabled());
 
-        if(filteredIsoSize == 1) {
+        if(visibleRadio) {
             setLungAbsorption(lungAbs);
+            assertSettingField(filteredIsoSize, additionalInfo, matcher);
         }
-        assertSettingField(filteredIsoSize, additionalInfo, matcher);
-        
+
         clearFirstPageForm();
         setInitialActivity(a0);
         assertSettingField(0, null, NodeMatchers.isDisabled());
@@ -212,10 +210,10 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
         setNuclideName(name);
         assertSettingField(filteredIsoSize, additionalInfo, NodeMatchers.isDisabled());
 
-        if(filteredIsoSize == 1) {
+        if(visibleRadio) {
             setLungAbsorption(lungAbs);
+            assertSettingField(filteredIsoSize, additionalInfo, matcher);
         }
-        assertSettingField(filteredIsoSize, additionalInfo, matcher);
     }
 
     private static Object[] radioLungAbsorption_data() {
@@ -256,14 +254,15 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
         setInitialActivity("123");
         assertSettingField(0, null, NodeMatchers.isDisabled());
 
+        int filteredIsoSize = TestUtils.equalsTestNuclide(lungAbsorptionNuclide.getDisplaySymbolNotation());
         setNuclideName(lungAbsorptionNuclide.getDisplaySymbolNotation());
-        assertSettingField(1, vBoxLungAbs, NodeMatchers.isDisabled());
+        assertSettingField(filteredIsoSize, vBoxLungAbs, NodeMatchers.isDisabled());
 
         setNuclideName(lungAbsorptionNuclide.getFullSymbolNotation());
-        assertSettingField(1, vBoxLungAbs, NodeMatchers.isDisabled());
+        assertSettingField(filteredIsoSize, vBoxLungAbs, NodeMatchers.isDisabled());
 
         setLungAbsorption(Nuclide.LungAbsorption.FAST);
-        assertSettingField(1, vBoxLungAbs, NodeMatchers.isEnabled());
+        assertSettingField(filteredIsoSize, vBoxLungAbs, NodeMatchers.isEnabled());
 
         clickOn(btnNext);
         FxAssert.verifyThat(vBoxFirstPage, NodeMatchers.isInvisible());
