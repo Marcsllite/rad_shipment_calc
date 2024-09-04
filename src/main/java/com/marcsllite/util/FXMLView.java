@@ -66,8 +66,8 @@ public enum FXMLView {
     public String getFxmlLoc() { return "/test.fxml"; }
   };
 
-  public final double SIDE_550 = 550.0;
-  public final double SIDE_650 = 650.0;
+  public static final double SIDE_550 = 550.0;
+  public static final double SIDE_650 = 650.0;
 
   public abstract String getName();
   
