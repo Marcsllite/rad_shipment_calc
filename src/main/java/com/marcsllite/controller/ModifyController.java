@@ -406,14 +406,12 @@ public class ModifyController extends BaseController {
         ModifyUtils.setPredicate(getSearchFilteredNuclides(), ModifyUtils.filteringPredicate(str));
         setLifeSpanVisible(!getFilteredLifeSpanNuclides().isEmpty());
         setLungAbsVisible(!vBoxLifeSpan.isVisible() && !getFilteredLungAbsNuclides().isEmpty());
-        boolean isEditingNuclide;
-        if(getEditingNuclide() != null) {
-            Nuclide modifedNuclide = buildNuclideFromFirstPage();
-            isEditingNuclide = modifedNuclide.getNuclideId().equals(getEditingNuclide().getNuclideId()) &&
-                modifedNuclide.getLifeSpan().equals(getEditingNuclide().getLifeSpan()) &&
-                modifedNuclide.getLungAbsorption().equals(getEditingNuclide().getLungAbsorption());
-        } else {
-            isEditingNuclide = false;
+        boolean isEditingNuclide = false;
+        Nuclide modifiedNuclide = buildNuclideFromFirstPage();
+        if(modifiedNuclide != null && getEditingNuclide() != null) {
+            isEditingNuclide = modifiedNuclide.getNuclideId().equals(getEditingNuclide().getNuclideId()) &&
+                modifiedNuclide.getLifeSpan().equals(getEditingNuclide().getLifeSpan()) &&
+                modifiedNuclide.getLungAbsorption().equals(getEditingNuclide().getLungAbsorption());
         }
         setDuplicateNuclide(StringUtils.isNotBlank(str) && !isEditingNuclide && isNuclideInTable());
         btnNext.setDisable(

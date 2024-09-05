@@ -155,8 +155,8 @@ for:
 #---------------------------------#
 
 artifacts:
-  - path: '**\rad_shipment_calc-*.jar'
-  - path: '**\jacoco-merged'
+  - path: 'target\rad_shipment_calc-*.jar'
+  - path: 'target\site\jacoco-merged'
 
 #---------------------------------#
 #     deployment configuration    #
