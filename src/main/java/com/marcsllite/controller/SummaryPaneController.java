@@ -69,6 +69,5 @@ public class SummaryPaneController extends BaseController {
      */
     @FXML protected void addBtnHandler(){
         logr.debug("User clicked the Add button on the summary pane");
-        // TODO: implement clicking on add button
     }
 }

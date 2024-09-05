@@ -74,6 +74,5 @@ public class ShipmentDetailsController extends BaseController {
      */
     @FXML protected void saveBtnHandler(){
         logr.debug("User clicked the Save button on the shipment details pane");
-        // TODO: implement clicking on save button
     }
 }
