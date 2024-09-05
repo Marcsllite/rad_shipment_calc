@@ -406,7 +406,16 @@ public class ModifyController extends BaseController {
         ModifyUtils.setPredicate(getSearchFilteredNuclides(), ModifyUtils.filteringPredicate(str));
         setLifeSpanVisible(!getFilteredLifeSpanNuclides().isEmpty());
         setLungAbsVisible(!vBoxLifeSpan.isVisible() && !getFilteredLungAbsNuclides().isEmpty());
-        setDuplicateNuclide(isNuclideInTable());
+        boolean isEditingNuclide;
+        if(getEditingNuclide() != null) {
+            Nuclide modifedNuclide = buildNuclideFromFirstPage();
+            isEditingNuclide = modifedNuclide.getNuclideId().equals(getEditingNuclide().getNuclideId()) &&
+                modifedNuclide.getLifeSpan().equals(getEditingNuclide().getLifeSpan()) &&
+                modifedNuclide.getLungAbsorption().equals(getEditingNuclide().getLungAbsorption());
+        } else {
+            isEditingNuclide = false;
+        }
+        setDuplicateNuclide(StringUtils.isNotBlank(str) && !isEditingNuclide && isNuclideInTable());
         btnNext.setDisable(
                 getNuclide() == null ||
                 StringUtils.isBlank(txtFieldA0.getText()) ||
@@ -449,10 +458,14 @@ public class ModifyController extends BaseController {
 
     public void setDuplicateNuclide(boolean isInvalid) {
         txtFieldNuclideName.getStyleClass().removeAll("validRegion", "invalidRegion");
-        txtFieldNuclideName.getStyleClass().add(isInvalid ? "invalidRegion" : "validRegion");
-        txtFirstPageStatus.setVisible(isInvalid);
-        if(isInvalid){
+        if(isInvalid) {
+            txtFieldNuclideName.getStyleClass().add("invalidRegion");
+            txtFirstPageStatus.setVisible(true);
             txtFirstPageStatus.setText("Nuclide already in the table.");
+        } else {
+            txtFieldNuclideName.getStyleClass().add("validRegion");
+            txtFirstPageStatus.setVisible(false);
+            txtFirstPageStatus.setText(null);
         }
     }
 

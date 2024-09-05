@@ -209,6 +209,7 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
         setRadUnit(null);
         setLifeSpan(null);
         setLungAbsorption(null);
+
     }
 
     protected void setNuclideName(String name) {

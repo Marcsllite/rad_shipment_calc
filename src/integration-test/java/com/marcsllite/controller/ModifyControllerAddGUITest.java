@@ -91,8 +91,7 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
             new Object[] { regularNuclide.getSymbol(), "1sdf23", NodeMatchers.isDisabled(), TestUtils.equalsTestNuclide(regularNuclide.getSymbol()) },
             new Object[] { " ", "1sdf23", NodeMatchers.isDisabled(), 0 },
             new Object[] { " ", " ", NodeMatchers.isDisabled(), 0 },
-            // TODO: fix test doesn't work when running entire class
-            //new Object[] { symbolNotation, "123", NodeMatchers.isEnabled(), TestUtils.equalsTestNuclide(symbolNotation) }
+            new Object[] { symbolNotation, "123", NodeMatchers.isEnabled(), TestUtils.equalsTestNuclide(symbolNotation) }
         };
     }
     
