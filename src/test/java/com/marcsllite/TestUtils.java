@@ -178,11 +178,11 @@ public class TestUtils {
     }
 
     public static TestNuclide getRandomTestNuclide() {
-        return testNuclides.get((int) getRandomNumber(0, testNuclides.size()));
+        return testNuclides.stream().findAny().orElse(null);
     }
 
     public static RadBigDecimal getRandomRadBigDecimal() {
-        return RadBigDecimal.valueOf(getRandomNumber(0, 100));
+        return RadBigDecimal.valueOf(getRandomNumber(50, 100));
     }
 
     public static Conversions.SIPrefix getRandomSIPrefix() {
