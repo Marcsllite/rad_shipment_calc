@@ -407,11 +407,11 @@ public class ModifyController extends BaseController {
         setLifeSpanVisible(!getFilteredLifeSpanNuclides().isEmpty());
         setLungAbsVisible(!vBoxLifeSpan.isVisible() && !getFilteredLungAbsNuclides().isEmpty());
         boolean isEditingNuclide = false;
-        Nuclide modifiedNuclide = buildNuclideFromFirstPage();
-        if(modifiedNuclide != null && getEditingNuclide() != null) {
-            isEditingNuclide = modifiedNuclide.getNuclideId().equals(getEditingNuclide().getNuclideId()) &&
-                modifiedNuclide.getLifeSpan().equals(getEditingNuclide().getLifeSpan()) &&
-                modifiedNuclide.getLungAbsorption().equals(getEditingNuclide().getLungAbsorption());
+        Nuclide nuclide = getNuclide();
+        if(nuclide != null && getEditingNuclide() != null) {
+            isEditingNuclide = nuclide.getNuclideId().equals(getEditingNuclide().getNuclideId()) &&
+                nuclide.getLifeSpan().equals(getEditingNuclide().getLifeSpan()) &&
+                nuclide.getLungAbsorption().equals(getEditingNuclide().getLungAbsorption());
         }
         setDuplicateNuclide(StringUtils.isNotBlank(str) && !isEditingNuclide && isNuclideInTable());
         btnNext.setDisable(
@@ -475,7 +475,7 @@ public class ModifyController extends BaseController {
             case EDIT:
                 if(searchFilteredNuclide != null &&
                     getEditingNuclide().getNuclideId().minimumEquals(searchFilteredNuclide.getNuclideId())) {
-                    nuclide = getEditingNuclide();
+                    nuclide = new Nuclide(getEditingNuclide());
                 } else if(searchFilteredNuclide != null &&
                     !getEditingNuclide().getNuclideId().equals(searchFilteredNuclide.getNuclideId())) {
                     // user changed the name of the edited nuclide to a different nuclide
