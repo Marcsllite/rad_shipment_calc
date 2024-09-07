@@ -156,8 +156,8 @@ public class Nuclide {
 
     public void setName(String name) {
         nameProperty().set(StringUtils.isBlank(name)? "" : name);
-        setFullName();
-        setNameNotation();
+        setNameSymbol();
+        setFullNameNotation();
         setDisplayNameNotation();
         setFullSymbolNotation();
         setDisplaySymbolNotation();
@@ -170,8 +170,8 @@ public class Nuclide {
     public void setNuclideId(NuclideModelId nuclideId) {
         this.nuclideId = nuclideId == null ? new NuclideModelId() : nuclideId;
         setMassNumber();
-        setFullName();
-        setNameNotation();
+        setNameSymbol();
+        setFullNameNotation();
         setDisplayNameNotation();
         setFullSymbolNotation();
         setDisplaySymbolNotation();
@@ -201,7 +201,7 @@ public class Nuclide {
         return nameSymbolProperty().get();
     }
 
-    public void setFullName() {
+    public void setNameSymbol() {
         String str = "";
         if(nameProperty() != null) {
             str += getName();
@@ -220,7 +220,7 @@ public class Nuclide {
         return fullNameNotationProperty().get();
     }
 
-    public void setNameNotation() {
+    public void setFullNameNotation() {
         String str = getName();
         if(getNuclideId() != null) {
             str += "-" + getNuclideId().getMassNumber();
