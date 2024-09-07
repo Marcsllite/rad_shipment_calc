@@ -104,6 +104,9 @@ public class App extends Application {
             EntityManagerHandler.getInstance().getFactory().isOpen()) {
             EntityManagerHandler.getInstance().getFactory().close();
         }
+        if(getStageHandler() != null) {
+            getStageHandler().close();
+        }
     }
 
     /**

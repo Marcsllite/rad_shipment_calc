@@ -235,6 +235,11 @@ public class StageHandler {
         }
     }
 
+    public void close() {
+        closePrimary();
+        closeSecondary();
+    }
+
     public void closePrimary() {
         if(getPrimaryStage() != null) {
             getPrimaryStage().close();
