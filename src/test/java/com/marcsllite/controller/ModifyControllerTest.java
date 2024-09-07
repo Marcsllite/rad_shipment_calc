@@ -93,13 +93,6 @@ class ModifyControllerTest {
     }
 
     @Test
-    void testBuildNuclideFromFirstPage_Null() {
-        ModifyController controllerSpy = spy(controller);
-        when(controllerSpy.getSearchFilteredNuclides()).thenReturn(new FilteredList<>(FXCollections.observableArrayList()));
-        assertNull(controllerSpy.buildNuclideFromFirstPage());
-    }
-
-    @Test
     void testBuildEditedNuclide_Null() {
         ModifyController controllerSpy = spy(controller);
         when(controllerSpy.getSearchFilteredNuclides()).thenReturn(new FilteredList<>(FXCollections.observableArrayList()));

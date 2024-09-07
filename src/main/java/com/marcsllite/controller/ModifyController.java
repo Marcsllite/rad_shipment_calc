@@ -516,43 +516,39 @@ public class ModifyController extends BaseController {
     }
 
     public Nuclide buildNuclideFromFirstPage() {
-        Nuclide nuclide = getNuclide();
-        if(nuclide != null) {
-            nuclide.setInitActivityStr(txtFieldA0.getText());
-            nuclide.setInitActivityPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxA0Prefix.getValue()));
-            nuclide.setInitActivityUnit(Conversions.RadUnit.toRadUnit(choiceBoxA0RadUnit.getValue()));
-            ModifyUtils.setNuclideLifeSpan(nuclide, toggleGrpLifeSpan);
-            ModifyUtils.setNuclideLungAbs(nuclide, toggleGrpLungAbs);
-        }
+        Nuclide nuclide = new Nuclide();
+        nuclide.setInitActivityStr(txtFieldA0.getText());
+        nuclide.setInitActivityPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxA0Prefix.getValue()));
+        nuclide.setInitActivityUnit(Conversions.RadUnit.toRadUnit(choiceBoxA0RadUnit.getValue()));
+        ModifyUtils.setNuclideLifeSpan(nuclide, toggleGrpLifeSpan);
+        ModifyUtils.setNuclideLungAbs(nuclide, toggleGrpLungAbs);
         return nuclide;
     }
 
     public Nuclide buildNuclide() {
         Nuclide nuclide = buildNuclideFromFirstPage();
-        if(nuclide != null) {
-            nuclide.setRefDate(datePicker.getValue());
-            if(chckBoxSameMass.isSelected()) {
-                Shipment shipment = getMain().getHomePaneController().getShipment();
-                nuclide.setMassStr(shipment.getMassStr());
-                nuclide.setMassPrefix(shipment.getMassPrefix());
-                nuclide.setMassUnit(shipment.getMassUnit());
-            } else {
-                nuclide.setMassStr(txtFieldMass.getText());
-                nuclide.setMassPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxMassPrefix.getValue()));
-                nuclide.setMassUnit(Conversions.MassUnit.toMass(choiceBoxMassUnit.getValue()));
-            }
-
-            if(chckBoxSameNSF.isSelected()) {
-                Shipment shipment = getMain().getHomePaneController().getShipment();
-                nuclide.setNature(shipment.getNature());
-                nuclide.setLimitsId(shipment.getLimitsId());
-            } else {
-                nuclide.setNature(Nuclide.Nature.toNature(choiceBoxNature.getValue()));
-                nuclide.getLimitsId().setState(LimitsModelId.State.toState(choiceBoxState.getValue()));
-                nuclide.getLimitsId().setForm(LimitsModelId.Form.toForm(choiceBoxForm.getValue()));
-            }
-            nuclide.getConstants().dbInit(nuclide.getNuclideId(), nuclide.getLimitsId());
+        nuclide.setRefDate(datePicker.getValue());
+        if(chckBoxSameMass.isSelected()) {
+            Shipment shipment = getMain().getHomePaneController().getShipment();
+            nuclide.setMassStr(shipment.getMassStr());
+            nuclide.setMassPrefix(shipment.getMassPrefix());
+            nuclide.setMassUnit(shipment.getMassUnit());
+        } else {
+            nuclide.setMassStr(txtFieldMass.getText());
+            nuclide.setMassPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxMassPrefix.getValue()));
+            nuclide.setMassUnit(Conversions.MassUnit.toMass(choiceBoxMassUnit.getValue()));
         }
+
+        if(chckBoxSameNSF.isSelected()) {
+            Shipment shipment = getMain().getHomePaneController().getShipment();
+            nuclide.setNature(shipment.getNature());
+            nuclide.setLimitsId(shipment.getLimitsId());
+        } else {
+            nuclide.setNature(Nuclide.Nature.toNature(choiceBoxNature.getValue()));
+            nuclide.getLimitsId().setState(LimitsModelId.State.toState(choiceBoxState.getValue()));
+            nuclide.getLimitsId().setForm(LimitsModelId.Form.toForm(choiceBoxForm.getValue()));
+        }
+        nuclide.getConstants().dbInit(nuclide.getNuclideId(), nuclide.getLimitsId());
         return nuclide;
     }
 }
