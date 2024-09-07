@@ -53,35 +53,60 @@ public class Nuclide {
     private final SimpleStringProperty displayInitActivity;
     
     public Nuclide() {
+        this((Nuclide) null);
+    }
+
+    public Nuclide(Nuclide nuclide) {
         dbService = new DBServiceImpl();
         constants = new NuclideConstants();
-
-        atomicNumber = new SimpleIntegerProperty(0);
-        name = new SimpleStringProperty("XX");
         nuclideId = new NuclideModelId();
+        limitsId = new LimitsModelId();
+
+        if(nuclide == null) {
+            atomicNumber = new SimpleIntegerProperty(0);
+            name = new SimpleStringProperty("XX");
+            nature = Nature.REGULAR;
+            refDate = new SimpleObjectProperty<>(LocalDate.now());
+            nuclideClass = NuclideClass.TBD;
+            lifeSpan = LifeSpan.REGULAR;
+            lungAbsorption = LungAbsorption.NONE;
+            massPrefix = Conversions.SIPrefix.BASE;
+            massUnit = Conversions.MassUnit.GRAMS;
+            mass = new SimpleStringProperty(RadBigDecimal.NEG_INFINITY_DISPLAY_STRING);
+            initActivityPrefix = Conversions.SIPrefix.BASE;
+            initActivityUnit = Conversions.RadUnit.CURIE;
+            initActivity = new SimpleStringProperty(RadBigDecimal.NEG_INFINITY_DISPLAY_STRING);
+        } else {
+            atomicNumber = new SimpleIntegerProperty(nuclide.getAtomicNumber());
+            name = new SimpleStringProperty(nuclide.getName());
+            if (nuclide.getNuclideId() != null) {
+                nuclideId.setSymbol(nuclide.getNuclideId().getSymbol());
+                nuclideId.setMassNumber(nuclide.getNuclideId().getMassNumber());
+            }
+            nature = nuclide.getNature();
+            if (nuclide.getLimitsId() != null) {
+                limitsId.setState(nuclide.getLimitsId().getState());
+                limitsId.setForm(nuclide.getLimitsId().getForm());
+            }
+            refDate = new SimpleObjectProperty<>(nuclide.getRefDate());
+            nuclideClass = nuclide.getNuclideClass();
+            lifeSpan = nuclide.getLifeSpan();
+            lungAbsorption = nuclide.getLungAbsorption();
+            massPrefix = nuclide.getMassPrefix();
+            massUnit = nuclide.getMassUnit();
+            mass = new SimpleStringProperty(nuclide.getMassStr());
+            initActivityPrefix = nuclide.getInitActivityPrefix();
+            initActivityUnit = nuclide.getInitActivityUnit();
+            initActivity = new SimpleStringProperty(nuclide.getInitActivityStr());
+        }
+
         massNumber = new SimpleStringProperty(nuclideId.getMassNumber());
         nameSymbol = new SimpleStringProperty(name.getValue() + " (" + nuclideId.getSymbol() + ")");
         fullNameNotation = new SimpleStringProperty(name.getValue() + "-" + massNumber.getValue());
         displayNameNotation = new SimpleStringProperty(name.getValue() + "-" + nuclideId.getDisplayMassNumber());
         fullSymbolNotation = new SimpleStringProperty(nuclideId.getFullSymbolNotation());
         displaySymbolNotation = new SimpleStringProperty(nuclideId.getDisplaySymbolNotation());
-
-        nature = Nature.REGULAR;
-        limitsId = new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL);
-        refDate = new SimpleObjectProperty<>(LocalDate.now());
-
-        nuclideClass = NuclideClass.TBD;
-        lifeSpan = LifeSpan.REGULAR;
-        lungAbsorption = LungAbsorption.NONE;
-
-        massPrefix = Conversions.SIPrefix.BASE;
-        massUnit = Conversions.MassUnit.GRAMS;
-        mass = new SimpleStringProperty(RadBigDecimal.NEG_INFINITY_DISPLAY_STRING);
         displayMass = new SimpleStringProperty(mass.getValue());
-
-        initActivityPrefix = Conversions.SIPrefix.BASE;
-        initActivityUnit = Conversions.RadUnit.CURIE;
-        initActivity = new SimpleStringProperty(RadBigDecimal.NEG_INFINITY_DISPLAY_STRING);
         displayInitActivity = new SimpleStringProperty(initActivity.getValue());
     }
 
