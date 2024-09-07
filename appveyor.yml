@@ -32,7 +32,7 @@ environment:
   # APPVEYOR_RDP_PASSWORD:
   #   secure: Jrjywnv+EXOkMCVKLVB+lA==
   MAVEN_VERSION: 3.6.3
-  WIN_JDK: C:\Program Files\Java\jdk11
+  WIN_JDK: C:\Program Files\Java\jdk17
   GITHUB_TOKEN:
     secure: SikYTKBlWZ9T6Ep9yw85sLN3+5ryqKyc8YzjTZgnK5adhMWMPvme0gMrLTgtG8ah
   CODECOV_TOKEN:
@@ -40,7 +40,7 @@ environment:
   matrix:
     # https://www.appveyor.com/docs/windows-images-software/
     - job_name: Windows build
-      appveyor_build_worker_image: Visual Studio 2019
+      appveyor_build_worker_image: Visual Studio 2022
 
     # https://www.appveyor.com/docs/macos-images-software/
     - job_name: Mac build
@@ -50,7 +50,7 @@ environment:
     - job_name: Linux build
       appveyor_build_worker_image: Ubuntu2204
 
-stack: jdk 11
+stack: jdk 17
 
 for:
   # WINDOWS BUILD #
@@ -98,9 +98,9 @@ for:
       #       export MAVEN_OPTS="--module-path /Users/appveyor/javafx-sdk-17.0.10/lib --add-modules=javafx.base,javafx.controls,javafx.fxml,javafx.graphics"
       - sh: export HOMEBREW_NO_INSTALL_CLEANUP=1 &&
             export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
-      # mvnvm depends on JDK 21.0.2, need to revert default java back to jdk 11
+      # mvnvm depends on JDK 21.0.2, need to revert default java to jdk 17
       - sh: brew install mvnvm
-      - sh: export JAVA_HOME=`/usr/libexec/java_home -v11.0.22`
+      - sh: export JAVA_HOME=`/usr/libexec/java_home -v17.0.12`
 
     build_script:
       # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-vnc.sh' | bash -e -
