@@ -67,7 +67,7 @@ for:
 
     build_script:
       # - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-      - cmd: mvn clean verify -Dbuild.version=$APPVEYOR_BUILD_VERSION
+      - cmd: mvn clean verify -Dbuild.version=%APPVEYOR_BUILD_VERSION%
       
     test_script:
       - ps: $wc = New-Object 'System.Net.WebClient';

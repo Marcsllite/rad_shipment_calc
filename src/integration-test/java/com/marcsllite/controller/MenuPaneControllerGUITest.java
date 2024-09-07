@@ -70,6 +70,8 @@ class MenuPaneControllerGUITest extends GUITest {
 
     @Test
     void testInit() {
+        interact(() -> controller.initialize());
+        assertTrue(controller.isInit());
         FxAssert.verifyThat(gridPaneMenu, NodeMatchers.isVisible());
     }
 
