@@ -24,8 +24,8 @@ only_commits:
 # environment variables
 environment:
   # Linux/Mac SSH Debugging
-  APPVEYOR_SSH_KEY: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDGx6AiZps++og4I04DyhDXp6ExBV68jkrGzqvWw9mqu03vHW4KIglXjiTm+WXb0wkpisiQCmnQLXYh6QgMzgA24QZ8PZS8KTzqqb/5xlAl4HoIu4yTXzi/cxfc0+WqjpSRRfC1GPD2OXsXvfufzl3RDKV6YeYaetVpYuc+OZpCsuDm01c6mKmwuzK0+QaaQKL3MLLwYdLNm0XIRatvXuEwiDl4IlEAwLMJqVCs/+JFxThSSt95VuLG2HrGdwQ4jCi2mK28Udw1u/ae5SPDSz1KhfoBZqv03kfAJmzjYZ9Ro4NMPQVCz26jYHYWHOKcP0CfQre6VaZBDF6CeM3sR2vcrb+oDmL+UYDHyVVMQlhuklU5CJhd9BQKqYonJPCWynVNVgN6vght8gTERRSL956ywSj/RKQNPISTf2zRTCfR0uK6AT33ZEQXDkJ0B8F0tIkz4V672KjJaQT6fDS/grOV4/SxaEKrKHauOcDAOHhLXDKRcpM2Ne1yAh7kiP7BgG0= marcsllite@marcsllte-linux
-  APPVEYOR_SSH_BLOCK: true
+  # APPVEYOR_SSH_KEY: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDGx6AiZps++og4I04DyhDXp6ExBV68jkrGzqvWw9mqu03vHW4KIglXjiTm+WXb0wkpisiQCmnQLXYh6QgMzgA24QZ8PZS8KTzqqb/5xlAl4HoIu4yTXzi/cxfc0+WqjpSRRfC1GPD2OXsXvfufzl3RDKV6YeYaetVpYuc+OZpCsuDm01c6mKmwuzK0+QaaQKL3MLLwYdLNm0XIRatvXuEwiDl4IlEAwLMJqVCs/+JFxThSSt95VuLG2HrGdwQ4jCi2mK28Udw1u/ae5SPDSz1KhfoBZqv03kfAJmzjYZ9Ro4NMPQVCz26jYHYWHOKcP0CfQre6VaZBDF6CeM3sR2vcrb+oDmL+UYDHyVVMQlhuklU5CJhd9BQKqYonJPCWynVNVgN6vght8gTERRSL956ywSj/RKQNPISTf2zRTCfR0uK6AT33ZEQXDkJ0B8F0tIkz4V672KjJaQT6fDS/grOV4/SxaEKrKHauOcDAOHhLXDKRcpM2Ne1yAh7kiP7BgG0= marcsllite@marcsllte-linux
+  # APPVEYOR_SSH_BLOCK: true
   # Mac VNC Debugging
   # APPVEYOR_VNC_BLOCK: true
   # Windows RDP Debugging
@@ -38,14 +38,17 @@ environment:
   CODECOV_TOKEN:
     secure: zQd1mZd+Bl9Ev/rUgtx5eozOVW79Hcpp2+a8U01ij4hESsUrYJIuK29ZPmlmS3ql
   matrix:
+    # https://www.appveyor.com/docs/windows-images-software/
     - job_name: Windows build
       appveyor_build_worker_image: Visual Studio 2019
 
-    # - job_name: Mac build
-    #   appveyor_build_worker_image: macos-monterey
+    # https://www.appveyor.com/docs/macos-images-software/
+    - job_name: Mac build
+      appveyor_build_worker_image: macos-monterey
 
+    # https://www.appveyor.com/docs/linux-images-software/
     - job_name: Linux build
-      appveyor_build_worker_image: Ubuntu2004
+      appveyor_build_worker_image: Ubuntu2204
 
 stack: jdk 11
 
@@ -64,7 +67,7 @@ for:
 
     build_script:
       # - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-      - cmd: mvn clean verify
+      - cmd: mvn clean verify -Dbuild.version=$APPVEYOR_BUILD_VERSION
       
     test_script:
       - ps: $wc = New-Object 'System.Net.WebClient';
@@ -102,7 +105,7 @@ for:
     build_script:
       # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-vnc.sh' | bash -e -
       # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
-      - sh: mvn clean verify
+      - sh: mvn clean verify -Dbuild.version=$APPVEYOR_BUILD_VERSION
 
     test_script:
       - sh: |
@@ -133,8 +136,8 @@ for:
             export DISPLAY=:99
 
     build_script:
-      - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
-      # - sh: mvn clean verify
+      # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
+      - sh: mvn clean verify -Dbuild.version=$APPVEYOR_BUILD_VERSION
 
     test_script:
       - sh: |

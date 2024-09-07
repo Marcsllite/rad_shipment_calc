@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.marcsllite</groupId>
     <artifactId>rad_shipment_calc</artifactId>
-    <version>1.0.0</version>
+    <version>${build.version}</version>
     <properties>
         <argLine>
         -Djdk.gtk.version=2
@@ -19,6 +19,7 @@
         -Dprism.order=sw
         -Dprism.debug=true <!-- Reports what config has been detected. -->
         </argLine>
+        <build.version>1.0.0</build.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>11</maven.compiler.release>
         <maven.compiler.version>3.8.0</maven.compiler.version>
@@ -46,14 +47,14 @@
         <sonar.junit.reportPaths>${basedir}/target/surefire-reports/TEST-*</sonar.junit.reportPaths>
 
         <!-- Test Coverage -->
-        <jacoco.percentages.min.instruct>0.92</jacoco.percentages.min.instruct>
-        <jacoco.percentages.max.instruct>0.94</jacoco.percentages.max.instruct>
-        <jacoco.percentages.min.line>0.91</jacoco.percentages.min.line>
-        <jacoco.percentages.max.line>0.93</jacoco.percentages.max.line>
+        <jacoco.percentages.min.instruct>0.94</jacoco.percentages.min.instruct>
+        <jacoco.percentages.max.instruct>0.96</jacoco.percentages.max.instruct>
+        <jacoco.percentages.min.line>0.93</jacoco.percentages.min.line>
+        <jacoco.percentages.max.line>0.95</jacoco.percentages.max.line>
         <jacoco.percentages.min.branch>0.85</jacoco.percentages.min.branch>
         <jacoco.percentages.max.branch>0.87</jacoco.percentages.max.branch>
-        <jacoco.percentages.min.complex>0.84</jacoco.percentages.min.complex>
-        <jacoco.percentages.max.complex>0.86</jacoco.percentages.max.complex>
+        <jacoco.percentages.min.complex>0.86</jacoco.percentages.min.complex>
+        <jacoco.percentages.max.complex>0.88</jacoco.percentages.max.complex>
         <jacoco.percentages.min.method>0.91</jacoco.percentages.min.method>
         <jacoco.percentages.max.method>0.93</jacoco.percentages.max.method>
         <jacoco.missed.count.class>1</jacoco.missed.count.class>
