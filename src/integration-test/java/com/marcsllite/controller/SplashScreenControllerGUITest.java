@@ -23,6 +23,7 @@ import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
+import org.testfx.framework.junit5.Stop;
 
 import java.io.IOException;
 
@@ -59,6 +60,11 @@ class SplashScreenControllerGUITest extends FxRobot {
         gridPaneSplash = GUITest.getNode(FXIds.GRID_PANE_SPLASH);
         labelSplash = GUITest.getNode(FXIds.LABEL_SPLASH);
         progressSplash = GUITest.getNode(FXIds.PROGRESS_SPLASH);
+    }
+
+    @Stop
+    public void stop() {
+        stageHandler.close();
     }
 
     @BeforeEach

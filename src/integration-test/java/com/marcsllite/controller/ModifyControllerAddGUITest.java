@@ -26,8 +26,7 @@ import static org.mockito.Mockito.when;
 
 class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
     public ModifyControllerAddGUITest() {
-        super();
-        setPage(BaseController.Page.ADD);
+        super(BaseController.Page.ADD);
     }
 
     @Start
@@ -49,7 +48,7 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
 
     @Test
     void testAddInit() {
-        controller.initAddPage();
+        interact(() -> controller.initAddPage());
 
         assertEquals(Conversions.SIPrefix.BASE.getVal(), comboBoxA0Prefix.getSelectionModel().getSelectedItem());
         assertEquals(Conversions.RadUnit.CURIE.getVal(), choiceBoxA0RadUnit.getSelectionModel().getSelectedItem());

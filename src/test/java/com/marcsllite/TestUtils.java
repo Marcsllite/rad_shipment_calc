@@ -20,18 +20,24 @@ import static junit.framework.Assert.assertTrue;
 
 public class TestUtils {
     public static class TestNuclide {
+        int atomicNumber;
         String name;
         String symbol;
         String massNumber;
         Nuclide.LifeSpan lifeSpan;
         Nuclide.LungAbsorption lungAbsorption;
 
-        public TestNuclide(String name, String symbol, String massNumber, Nuclide.LifeSpan lifeSpan, Nuclide.LungAbsorption lungAbsorption) {
+        public TestNuclide(int atomicNumber, String name, String symbol, String massNumber, Nuclide.LifeSpan lifeSpan, Nuclide.LungAbsorption lungAbsorption) {
+            this.atomicNumber = atomicNumber;
             this.name = name;
             this.symbol = symbol;
             this.massNumber = massNumber;
             this.lifeSpan = lifeSpan;
             this.lungAbsorption = lungAbsorption;
+        }
+
+        public int getAtomicNumber() {
+            return atomicNumber;
         }
 
         public String getName() {
@@ -79,23 +85,26 @@ public class TestUtils {
         @Override
         public String toString() {
             return "TestNuclide{" +
-                "name='" + getName() + '\'' +
+                "atomicNumber='" + getAtomicNumber() + '\'' +
+                ", name='" + getName() + '\'' +
                 ", symbol='" + getSymbol() + '\'' +
                 ", massNumber='" + getMassNumber() + '\'' +
+                ", lifeSpan='" + getLifeSpan() + '\'' +
+                ", lungAbsorption='" + getLungAbsorption() + '\'' +
                 '}';
         }
     }
 
     public static final List<TestNuclide> testNuclides = Arrays.asList(
-        new TestNuclide("Abbreviation", "Ab", "1", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.NONE),
-        new TestNuclide("Annual", "An", "1", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.NONE),
-        new TestNuclide("Bofuri", "Bf", "1", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.NONE),
-        new TestNuclide("Bofuri", "Bf", "1(short)", Nuclide.LifeSpan.SHORT, Nuclide.LungAbsorption.NONE),
-        new TestNuclide("Bofuri", "Bf", "1(long)", Nuclide.LifeSpan.LONG, Nuclide.LungAbsorption.NONE),
-        new TestNuclide("Best", "Bs", "1", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.NONE),
-        new TestNuclide("Best", "Bs", "1slow", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.SLOW),
-        new TestNuclide("Best", "Bs", "1medium", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.MEDIUM),
-        new TestNuclide("Best", "Bs", "1fast", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.FAST)
+        new TestNuclide(1, "Abbreviation", "Ab", "1", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.NONE),
+        new TestNuclide(2, "Annual", "An", "1", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.NONE),
+        new TestNuclide(3, "Bofuri", "Bf", "1", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.NONE),
+        new TestNuclide(3, "Bofuri", "Bf", "1(short)", Nuclide.LifeSpan.SHORT, Nuclide.LungAbsorption.NONE),
+        new TestNuclide(3, "Bofuri", "Bf", "1(long)", Nuclide.LifeSpan.LONG, Nuclide.LungAbsorption.NONE),
+        new TestNuclide(4, "Best", "Bs", "1", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.NONE),
+        new TestNuclide(4, "Best", "Bs", "1slow", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.SLOW),
+        new TestNuclide(4, "Best", "Bs", "1medium", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.MEDIUM),
+        new TestNuclide(4, "Best", "Bs", "1fast", Nuclide.LifeSpan.REGULAR, Nuclide.LungAbsorption.FAST)
     );
 
     private TestUtils() {}
@@ -145,8 +154,8 @@ public class TestUtils {
             .orElse(null);
     }
 
-    public static Nuclide createNuclide(String name, String symbol, String massNum) {
-        Nuclide nuclide = new Nuclide(-1, name, new NuclideModelId(symbol, massNum));
+    public static Nuclide createNuclide(int atomicNumber, String name, String symbol, String massNum) {
+        Nuclide nuclide = new Nuclide(atomicNumber, name, new NuclideModelId(symbol, massNum));
         nuclide.setInitActivityStr(getRandomRadBigDecimal().toDisplayString());
         nuclide.setInitActivityPrefix(getRandomSIPrefix());
         nuclide.setInitActivityUnit(getRandomRadUnit());
@@ -158,11 +167,13 @@ public class TestUtils {
         nuclide.getLimitsId().setState(getRandomState());
         nuclide.getLimitsId().setForm(getRandomForm());
         nuclide.initConstants();
+        System.out.println("Created nuclide: " + nuclide);
+        System.out.flush();
         return nuclide;
     }
 
     public static Nuclide createNuclide(TestNuclide nuclide) {
-        return createNuclide(nuclide.name, nuclide.symbol, nuclide.massNumber);
+        return createNuclide(nuclide.getAtomicNumber(), nuclide.getName(), nuclide.getSymbol(), nuclide.getMassNumber());
     }
 
     public static Nuclide createNuclide() {

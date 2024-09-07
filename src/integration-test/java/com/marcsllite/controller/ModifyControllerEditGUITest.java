@@ -18,8 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 class ModifyControllerEditGUITest extends ModifyControllerBaseGUITest {
     public ModifyControllerEditGUITest() {
-        super();
-        setPage(BaseController.Page.EDIT);
+        super(BaseController.Page.EDIT);
     }
 
     @Start
@@ -81,7 +80,7 @@ class ModifyControllerEditGUITest extends ModifyControllerBaseGUITest {
 
     @Test
     void testEditInit() {
-        controller.initEditPage();
+        interact(() -> controller.initEditPage());
 
         goToPage(1);
         assertEquals(getEditingNuclide().getDisplayNameNotation(), txtFieldNuclideName.textProperty().get());
