@@ -505,7 +505,7 @@ public class Nuclide {
 
     @Override
     public String toString() {
-        return "Nuclide: { " + getNuclideId() +
+        return "Nuclide: {\n" + getNuclideId() +
             "\n Class: " + getNuclideClass() +
             "\n Ref Date: " + getRefDate() +
             "\n Mass: " + getDisplayMass() +

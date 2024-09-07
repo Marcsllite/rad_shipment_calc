@@ -311,7 +311,7 @@ public class NuclideConstants {
             "\n\tDecay Constant: " + getDecayConstant().toDisplayString() +
             "\n\tExempt Concentration: " + getExemptConcentration().toDisplayString() + " Bq/g" +
             "\n\tExempt Limit: " + getExemptLimit().toDisplayString() + " Bq" +
-            "\n\tHalfLife: " + displayHalfLifeProperty() +
+            "\n\tHalfLife: " + displayHalfLifeProperty().toString() +
             "\n\tInstruments/Articles Limited Limit: " + getIaLimitedLimit().toDisplayString() +
             "\n\tInstruments/Articles Package Limit: " + getIaPackageLimit().toDisplayString() +
             "\n\tNormal Limited Limit: " + getLimitedLimit().toDisplayString() +
