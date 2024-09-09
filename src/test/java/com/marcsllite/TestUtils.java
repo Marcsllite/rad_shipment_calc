@@ -167,8 +167,6 @@ public class TestUtils {
         nuclide.getLimitsId().setState(getRandomState());
         nuclide.getLimitsId().setForm(getRandomForm());
         nuclide.initConstants();
-        System.out.println("Created " + nuclide);
-        System.out.flush();
         return nuclide;
     }
 

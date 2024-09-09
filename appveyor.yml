@@ -105,7 +105,7 @@ for:
     build_script:
       # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-vnc.sh' | bash -e -
       # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
-      - sh: mvn clean verify -Dbuild.version=$APPVEYOR_BUILD_VERSION
+      - sh: cd ~/projects/rad-shipment-calc && mvn clean verify -Dbuild.version=$APPVEYOR_BUILD_VERSION
 
     test_script:
       - sh: |
