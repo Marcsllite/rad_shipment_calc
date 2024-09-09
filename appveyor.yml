@@ -92,10 +92,6 @@ for:
         - job_name: Mac build
 
     install:
-      - sh: cd /tmp &&
-             curl -O https://download2.gluonhq.com/openjfx/17.0.12/openjfx-17.0.12_osx-x64_bin-sdk.zip &&
-             unzip /tmp/openjfx-17*.zip -d ~ &&
-             export MAVEN_OPTS="--module-path /Users/appveyor/javafx-sdk-17.0.12/lib --add-modules=javafx.base,javafx.controls,javafx.fxml,javafx.graphics"
       - sh: export HOMEBREW_NO_INSTALL_CLEANUP=1 &&
             export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
       # mvnvm depends on JDK 21.0.2, need to revert default java to jdk 17
@@ -105,7 +101,7 @@ for:
     build_script:
       # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-vnc.sh' | bash -e -
       # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
-      - sh: cd ~/projects/rad-shipment-calc && mvn clean verify -Dbuild.version=$APPVEYOR_BUILD_VERSION
+      - sh: mvn clean verify -Dbuild.version=$APPVEYOR_BUILD_VERSION
 
     test_script:
       - sh: |

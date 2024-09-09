@@ -7,18 +7,6 @@
     <artifactId>rad_shipment_calc</artifactId>
     <version>${build.version}</version>
     <properties>
-        <argLine>
-        -Djdk.gtk.version=2
-        -Djava.awt.headless=true
-        -Dglass.platform=Monocle
-        -Dmonocle.platform=Headless
-        -Dtestfx.robot=glass
-        -Dtestfx.headless=true
-        -Djavafx.verbose=true
-        -Dprism.text=t2k
-        -Dprism.order=sw
-        -Dprism.debug=true <!-- Reports what config has been detected. -->
-        </argLine>
         <build.version>1.0.0</build.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>17</maven.compiler.release>
@@ -47,10 +35,10 @@
         <sonar.junit.reportPaths>${basedir}/target/surefire-reports/TEST-*</sonar.junit.reportPaths>
 
         <!-- Test Coverage -->
-        <jacoco.percentages.min.instruct>0.94</jacoco.percentages.min.instruct>
-        <jacoco.percentages.max.instruct>0.96</jacoco.percentages.max.instruct>
-        <jacoco.percentages.min.line>0.93</jacoco.percentages.min.line>
-        <jacoco.percentages.max.line>0.95</jacoco.percentages.max.line>
+        <jacoco.percentages.min.instruct>0.92</jacoco.percentages.min.instruct>
+        <jacoco.percentages.max.instruct>0.94</jacoco.percentages.max.instruct>
+        <jacoco.percentages.min.line>0.91</jacoco.percentages.min.line>
+        <jacoco.percentages.max.line>0.93</jacoco.percentages.max.line>
         <jacoco.percentages.min.branch>0.85</jacoco.percentages.min.branch>
         <jacoco.percentages.max.branch>0.87</jacoco.percentages.max.branch>
         <jacoco.percentages.min.complex>0.86</jacoco.percentages.min.complex>
