@@ -1,5 +1,6 @@
 package com.marcsllite.util;
 
+import com.marcsllite.TestUtils;
 import junit.framework.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class ConversionsTest {
-    final static RadBigDecimal toBeConverted = RadBigDecimal.valueOf(7.5d);
+    final static RadBigDecimal toBeConverted = TestUtils.getRandomRadBigDecimalWithDecimalPrecision(RadBigDecimal.DEFAULT_DEC_PRECISION);
     MockedStatic<Conversions> mockedConversions;
 
     @BeforeEach
@@ -55,7 +56,7 @@ class ConversionsTest {
     @ParameterizedTest(name = "Convert {0} {1} to base = {3}")
     @MethodSource("convertToBase_data")
     void testConvertToBase(RadBigDecimal value, Conversions.SIPrefix prefix, RadBigDecimal expected) {
-        assertEquals(expected, Conversions.convertToBase(value, prefix));
+        assertEquals(0, expected.compareTo(Conversions.convertToBase(value, prefix)));
     }
 
     private static Object[] convertToBase_data() {
@@ -105,7 +106,7 @@ class ConversionsTest {
     @ParameterizedTest(name = "Convert {0} {1} to base = {3}")
     @MethodSource("convertToPrefix_data")
     void testConvertToPrefix(RadBigDecimal value, Conversions.SIPrefix start, Conversions.SIPrefix end, RadBigDecimal expected) {
-        assertEquals(expected, Conversions.convertToPrefix(value, start, end));
+        assertEquals(0, expected.compareTo(Conversions.convertToPrefix(value, start, end)));
         mockedConversions.verify(() -> Conversions.convertToBase(value, start));
     }
 
@@ -149,7 +150,7 @@ class ConversionsTest {
         RadBigDecimal expected = RadBigDecimal.valueOf(2.7).multiply(new RadBigDecimal(BigDecimal.TEN).pow(-11));
         RadBigDecimal actual = Conversions.bqToCi(new RadBigDecimal(BigDecimal.ONE));
 
-        assertEquals(expected, actual);
+        assertEquals(0, expected.compareTo(actual));
     }
 
     @Test
@@ -166,7 +167,7 @@ class ConversionsTest {
         RadBigDecimal expected = RadBigDecimal.valueOf(3.7).multiply(new RadBigDecimal(BigDecimal.TEN).pow(10));
         RadBigDecimal actual = Conversions.ciToBq(new RadBigDecimal(BigDecimal.ONE));
 
-        assertEquals(expected, actual);
+        assertEquals(0, expected.compareTo(actual));
     }
 
     @Test
@@ -181,9 +182,9 @@ class ConversionsTest {
     @Test
     void testGyToRad() {
         RadBigDecimal expected = new RadBigDecimal(BigDecimal.TEN).pow(2);
-        BigDecimal actual = Conversions.gyToRad(new RadBigDecimal(BigDecimal.ONE));
+        RadBigDecimal actual = Conversions.gyToRad(new RadBigDecimal(BigDecimal.ONE));
 
-        assertEquals(expected, actual);
+        assertEquals(0, expected.compareTo(actual));
     }
 
     @Test
@@ -197,10 +198,10 @@ class ConversionsTest {
 
     @Test
     void testRadToGy() {
-        BigDecimal expected = new RadBigDecimal(BigDecimal.TEN).pow(-2);
-        BigDecimal actual = Conversions.radToGy(new RadBigDecimal(BigDecimal.ONE));
+        RadBigDecimal expected = new RadBigDecimal(BigDecimal.TEN).pow(-2);
+        RadBigDecimal actual = Conversions.radToGy(new RadBigDecimal(BigDecimal.ONE));
 
-        assertEquals(expected, actual);
+        assertEquals(0, expected.compareTo(actual));
     }
 
     @Test
@@ -214,10 +215,10 @@ class ConversionsTest {
 
     @Test
     void testSvToRem() {
-        BigDecimal expected = new RadBigDecimal(BigDecimal.TEN).pow(2);
-        BigDecimal actual = Conversions.svToRem(new RadBigDecimal(BigDecimal.ONE));
+        RadBigDecimal expected = new RadBigDecimal(BigDecimal.TEN).pow(2);
+        RadBigDecimal actual = Conversions.svToRem(new RadBigDecimal(BigDecimal.ONE));
 
-        assertEquals(expected, actual);
+        assertEquals(0, expected.compareTo(actual));
     }
 
     @Test
@@ -231,10 +232,10 @@ class ConversionsTest {
 
     @Test
     void testRemToSv() {
-        BigDecimal expected = new RadBigDecimal(BigDecimal.TEN).pow(-2);
-        BigDecimal actual = Conversions.remToSv(new RadBigDecimal(BigDecimal.ONE));
+        RadBigDecimal expected = new RadBigDecimal(BigDecimal.TEN).pow(-2);
+        RadBigDecimal actual = Conversions.remToSv(new RadBigDecimal(BigDecimal.ONE));
 
-        assertEquals(expected, actual);
+        assertEquals(0, expected.compareTo(actual));
     }
 
     @Test
@@ -251,7 +252,7 @@ class ConversionsTest {
         RadBigDecimal expected = RadBigDecimal.valueOf(3.88).multiply(new RadBigDecimal(BigDecimal.TEN).pow(3));
         RadBigDecimal actual = Conversions.ckgToR(new RadBigDecimal(BigDecimal.ONE));
 
-        assertEquals(expected, actual);
+        assertEquals(0, expected.compareTo(actual));
     }
 
     @Test
@@ -268,7 +269,7 @@ class ConversionsTest {
         RadBigDecimal expected = RadBigDecimal.valueOf(2.58).multiply(new RadBigDecimal(BigDecimal.TEN).pow(-4));
         RadBigDecimal actual = Conversions.rToCkg(new RadBigDecimal(BigDecimal.ONE));
 
-        assertEquals(expected, actual);
+        assertEquals(0, expected.compareTo(actual));
     }
 
     @Test

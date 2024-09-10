@@ -1,5 +1,6 @@
 package com.marcsllite.util;
 
+import com.marcsllite.TestUtils;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -38,14 +39,16 @@ class RadBigDecimalTest {
 
     @Test
     void testConstructor_BigDecimal() {
-        BigDecimal exp = new BigDecimal(124, RadBigDecimal.DEFAULT_CONTEXT);
+        String randNum = Double.toString(TestUtils.getRandomNumberWithDecimalPrecision(50, 100, RadBigDecimal.DEFAULT_DEC_PRECISION));
+        BigDecimal exp = new BigDecimal(randNum, RadBigDecimal.DEFAULT_CONTEXT);
         RadBigDecimal actual = new RadBigDecimal(exp);
         assertEquals(exp.toString(), actual.toString());
     }
 
     @Test
     void testConstructor_BigInteger() {
-        BigInteger val = new BigInteger("13546");
+        String randNum = Integer.toString((int) TestUtils.getRandomNumberWithDecimalPrecision(50, 100, RadBigDecimal.DEFAULT_DEC_PRECISION));
+        BigInteger val = new BigInteger(randNum);
         BigDecimal exp = new BigDecimal(val, RadBigDecimal.DEFAULT_CONTEXT);
         RadBigDecimal actual = new RadBigDecimal(val);
         assertEquals(exp.toString(), actual.toString());
@@ -53,7 +56,7 @@ class RadBigDecimalTest {
 
     @Test
     void testConstructor_String() {
-        int exp = 45;
+        int exp = (int) TestUtils.getRandomNumberWithDecimalPrecision(50, 100, RadBigDecimal.DEFAULT_DEC_PRECISION);
         RadBigDecimal actual = new RadBigDecimal(Integer.toString(exp));
         assertEquals(exp, actual.intValue());
     }
@@ -95,7 +98,7 @@ class RadBigDecimalTest {
         expStr = RadBigDecimal.NEG_INFINITY_DISPLAY_STRING;
         assertEquals(new RadBigDecimal(expStr), RadBigDecimal.valueOf(exp));
 
-        exp = 5D;
+        exp = TestUtils.getRandomNumberWithDecimalPrecision(50, 100, RadBigDecimal.DEFAULT_DEC_PRECISION);
         expStr = Double.toString(exp);
         assertEquals(new RadBigDecimal(expStr), RadBigDecimal.valueOf(exp));
     }
@@ -108,7 +111,8 @@ class RadBigDecimalTest {
         exp = BigInteger.valueOf((long) RadBigDecimal.NEG_INFINITY_DOUBLE);
         assertEquals(exp, RadBigDecimal.NEG_INFINITY_OBJ.toBigInteger());
 
-        BigDecimal expBD = new BigDecimal("746", RadBigDecimal.DEFAULT_CONTEXT);
+        String randNum = Double.toString(TestUtils.getRandomNumberWithDecimalPrecision(100, 500, RadBigDecimal.DEFAULT_DEC_PRECISION));
+        BigDecimal expBD = new BigDecimal(randNum, RadBigDecimal.DEFAULT_CONTEXT);
         assertEquals(expBD.toBigInteger(), new RadBigDecimal(expBD).toBigInteger());
     }
 
@@ -120,13 +124,23 @@ class RadBigDecimalTest {
         exp = BigInteger.valueOf((long) RadBigDecimal.NEG_INFINITY_DOUBLE);
         assertEquals(exp, RadBigDecimal.NEG_INFINITY_OBJ.toBigIntegerExact());
 
-        BigDecimal expBD = new BigDecimal("746", RadBigDecimal.DEFAULT_CONTEXT);
+        String randNum = Integer.toString((int) TestUtils.getRandomNumberWithDecimalPrecision(25, 50, RadBigDecimal.DEFAULT_DEC_PRECISION));
+        BigDecimal expBD = new BigDecimal(randNum, RadBigDecimal.DEFAULT_CONTEXT);
         assertEquals(expBD.toBigIntegerExact(), new RadBigDecimal(expBD).toBigIntegerExact());
     }
 
     @Test
+    void testToBigIntegerExact_Exception() {
+        String randNum = Double.toString(TestUtils.getRandomNumberWithDecimalPrecision(25, 50, RadBigDecimal.DEFAULT_DEC_PRECISION));
+        BigDecimal bd = new BigDecimal(randNum, RadBigDecimal.DEFAULT_CONTEXT);
+        RadBigDecimal rbd = new RadBigDecimal(bd);
+        assertThrows(ArithmeticException.class, bd::toBigIntegerExact);
+        assertThrows(ArithmeticException.class, rbd::toBigIntegerExact);
+    }
+
+    @Test
     void testLongValue() {
-        long exp = 5L;
+        long exp = (long) TestUtils.getRandomNumberWithDecimalPrecision(100, 500, RadBigDecimal.DEFAULT_DEC_PRECISION);
         RadBigDecimal rbd = new RadBigDecimal(Long.toString(exp));
         assertEquals((long) RadBigDecimal.INFINITY_DOUBLE, RadBigDecimal.INFINITY_OBJ.longValue());
         assertEquals((long) RadBigDecimal.NEG_INFINITY_DOUBLE, RadBigDecimal.NEG_INFINITY_OBJ.longValue());
@@ -139,7 +153,7 @@ class RadBigDecimalTest {
 
     @Test
     void testIntValue() {
-        int exp = 5;
+        int exp = (int) TestUtils.getRandomNumberWithDecimalPrecision(100, 500, RadBigDecimal.DEFAULT_DEC_PRECISION);
         RadBigDecimal rbd = new RadBigDecimal(Integer.toString(exp));
         assertEquals((int) RadBigDecimal.INFINITY_DOUBLE, RadBigDecimal.INFINITY_OBJ.intValue());
         assertEquals((int) RadBigDecimal.NEG_INFINITY_DOUBLE, RadBigDecimal.NEG_INFINITY_OBJ.intValue());
@@ -152,7 +166,7 @@ class RadBigDecimalTest {
 
     @Test
     void testShortValue() {
-        short exp = 5;
+        short exp = (short) TestUtils.getRandomNumberWithDecimalPrecision(100, 500, RadBigDecimal.DEFAULT_DEC_PRECISION);
         RadBigDecimal rbd = new RadBigDecimal(Short.toString(exp));
         assertEquals((short) RadBigDecimal.INFINITY_DOUBLE, RadBigDecimal.INFINITY_OBJ.shortValue());
         assertEquals((short) RadBigDecimal.NEG_INFINITY_DOUBLE, RadBigDecimal.NEG_INFINITY_OBJ.shortValue());
@@ -165,7 +179,8 @@ class RadBigDecimalTest {
 
     @Test
     void testByteValue() {
-        BigDecimal bd = new BigDecimal("10", RadBigDecimal.DEFAULT_CONTEXT);
+        String randNum = Integer.toString((int)TestUtils.getRandomNumberWithDecimalPrecision(25, 50, RadBigDecimal.DEFAULT_DEC_PRECISION));
+        BigDecimal bd = new BigDecimal(randNum, RadBigDecimal.DEFAULT_CONTEXT);
         assertEquals((byte) RadBigDecimal.INFINITY_DOUBLE, RadBigDecimal.INFINITY_OBJ.byteValue());
         assertEquals((byte) RadBigDecimal.NEG_INFINITY_DOUBLE, RadBigDecimal.NEG_INFINITY_OBJ.byteValue());
         assertEquals(bd.byteValue(), new RadBigDecimal(bd).byteValue());
@@ -176,8 +191,17 @@ class RadBigDecimalTest {
     }
 
     @Test
+    void testByteValue_Exception() {
+        String randNum = Double.toString(TestUtils.getRandomNumberWithDecimalPrecision(25, 50, RadBigDecimal.DEFAULT_DEC_PRECISION));
+        BigDecimal bd = new BigDecimal(randNum, RadBigDecimal.DEFAULT_CONTEXT);
+        RadBigDecimal rbd = new RadBigDecimal(bd);
+        assertThrows(ArithmeticException.class, bd::byteValueExact);
+        assertThrows(ArithmeticException.class, rbd::byteValueExact);
+    }
+
+    @Test
     void testFloatValue() {
-        float exp = 5;
+        float exp = (float) TestUtils.getRandomNumberWithDecimalPrecision(100, 500, RadBigDecimal.DEFAULT_DEC_PRECISION);
         RadBigDecimal rbd = new RadBigDecimal(Float.toString(exp));
         assertEquals((float) RadBigDecimal.INFINITY_DOUBLE, RadBigDecimal.INFINITY_OBJ.floatValue());
         assertEquals((float) RadBigDecimal.NEG_INFINITY_DOUBLE, RadBigDecimal.NEG_INFINITY_OBJ.floatValue());
@@ -186,7 +210,7 @@ class RadBigDecimalTest {
 
     @Test
     void testDoubleValue() {
-        double exp = 5L;
+        double exp = TestUtils.getRandomNumberWithDecimalPrecision(100, 500, RadBigDecimal.DEFAULT_DEC_PRECISION);
         RadBigDecimal rbd = new RadBigDecimal(Double.toString(exp));
         assertEquals(RadBigDecimal.INFINITY_DOUBLE, RadBigDecimal.INFINITY_OBJ.doubleValue());
         assertEquals(RadBigDecimal.NEG_INFINITY_DOUBLE, RadBigDecimal.NEG_INFINITY_OBJ.doubleValue());
@@ -195,7 +219,7 @@ class RadBigDecimalTest {
 
     @Test
     void testToString() {
-        String exp = "5";
+        String exp = Double.toString(TestUtils.getRandomNumberWithDecimalPrecision(100, 500, RadBigDecimal.DEFAULT_DEC_PRECISION));
         RadBigDecimal rbd = new RadBigDecimal(exp);
         assertEquals(RadBigDecimal.INFINITY_STRING, RadBigDecimal.INFINITY_OBJ.toString());
         assertEquals(RadBigDecimal.NEG_INFINITY_STRING, RadBigDecimal.NEG_INFINITY_OBJ.toString());
@@ -204,7 +228,7 @@ class RadBigDecimalTest {
 
     @Test
     void testToDisplayString() {
-        String exp = "5";
+        String exp = Double.toString(TestUtils.getRandomNumberWithDecimalPrecision(100, 500, RadBigDecimal.DEFAULT_DEC_PRECISION));
         RadBigDecimal rbd = new RadBigDecimal(exp);
         assertEquals(RadBigDecimal.INFINITY_DISPLAY_STRING, RadBigDecimal.INFINITY_OBJ.toDisplayString());
         assertEquals(RadBigDecimal.NEG_INFINITY_DISPLAY_STRING, RadBigDecimal.NEG_INFINITY_OBJ.toDisplayString());
@@ -357,8 +381,11 @@ class RadBigDecimalTest {
 
     @Test
     void testPlus() {
-        RadBigDecimal rbd1 = new RadBigDecimal("12.448435");
-        RadBigDecimal exp = new RadBigDecimal("12");
+        double randomDouble = TestUtils.getRandomNumberWithDecimalPrecision(5, 20, RadBigDecimal.DEFAULT_DEC_PRECISION);
+        String val = Double.toString(randomDouble);
+        String expStr = String.format("%."+RadBigDecimal.DEFAULT_DEC_PRECISION +"f", randomDouble);
+        RadBigDecimal rbd1 = new RadBigDecimal(val);
+        RadBigDecimal exp = new RadBigDecimal(expStr);
 
         assertEquals(RadBigDecimal.INFINITY_OBJ, RadBigDecimal.INFINITY_OBJ.plus());
         assertEquals(RadBigDecimal.NEG_INFINITY_OBJ, RadBigDecimal.NEG_INFINITY_OBJ.plus());
@@ -367,8 +394,11 @@ class RadBigDecimalTest {
 
     @Test
     void testRound() {
-        RadBigDecimal rbd1 = new RadBigDecimal("12.448435");
-        RadBigDecimal exp = new RadBigDecimal("12");
+        double randomDouble = TestUtils.getRandomNumberWithDecimalPrecision(5, 20, RadBigDecimal.DEFAULT_DEC_PRECISION);
+        String val = Double.toString(randomDouble);
+        String expStr = String.format("%."+RadBigDecimal.DEFAULT_DEC_PRECISION +"f", randomDouble);
+        RadBigDecimal rbd1 = new RadBigDecimal(val);
+        RadBigDecimal exp = new RadBigDecimal(expStr);
 
         assertEquals(RadBigDecimal.INFINITY_OBJ, RadBigDecimal.INFINITY_OBJ.round());
         assertEquals(RadBigDecimal.NEG_INFINITY_OBJ, RadBigDecimal.NEG_INFINITY_OBJ.round());
@@ -410,11 +440,13 @@ class RadBigDecimalTest {
 
     @Test
     void testEquals() {
-        RadBigDecimal rbd = new RadBigDecimal("21");
+        String randNum = Double.toString(TestUtils.getRandomNumberWithDecimalPrecision(100, 500, RadBigDecimal.DEFAULT_DEC_PRECISION));
+        RadBigDecimal rbd = new RadBigDecimal(randNum);
         assertNotEquals(1L, rbd);
 
-        RadBigDecimal rbd2 = new RadBigDecimal("21");
-        RadBigDecimal rbd3 = new RadBigDecimal("5");
+        RadBigDecimal rbd2 = new RadBigDecimal(randNum);
+        String randNum2 = Double.toString(TestUtils.getRandomNumberWithDecimalPrecision(100, 500, RadBigDecimal.DEFAULT_DEC_PRECISION));
+        RadBigDecimal rbd3 = new RadBigDecimal(randNum2);
         assertEquals(rbd2, rbd2);
         assertEquals(rbd2.hashCode(), rbd2.hashCode());
         assertNotEquals(rbd2, rbd3);

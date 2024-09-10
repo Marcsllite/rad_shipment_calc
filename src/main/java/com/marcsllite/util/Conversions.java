@@ -9,26 +9,6 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public final class Conversions {
-    private static final RadBigDecimal YOTTA = new RadBigDecimal(BigDecimal.TEN).pow(24);   // Y
-    private static final RadBigDecimal ZETTA = new RadBigDecimal(BigDecimal.TEN).pow(21);   // Z
-    private static final RadBigDecimal EXA = new RadBigDecimal(BigDecimal.TEN).pow(18);   // E
-    private static final RadBigDecimal PETA = new RadBigDecimal(BigDecimal.TEN).pow(15);   // P
-    private static final RadBigDecimal TERA = new RadBigDecimal(BigDecimal.TEN).pow(12);   // T
-    private static final RadBigDecimal GIGA = new RadBigDecimal(BigDecimal.TEN).pow(9);    // G
-    private static final RadBigDecimal MEGA = new RadBigDecimal(BigDecimal.TEN).pow(6);    // M
-    private static final RadBigDecimal KILO = new RadBigDecimal(BigDecimal.TEN).pow(3);    // k
-    private static final RadBigDecimal HECTO = new RadBigDecimal(BigDecimal.TEN).pow(2);    // h
-    private static final RadBigDecimal DEKA = new RadBigDecimal(BigDecimal.TEN).pow(1);    // da
-    private static final RadBigDecimal DECI = new RadBigDecimal(BigDecimal.TEN).pow(-1);   // d
-    private static final RadBigDecimal CENTI = new RadBigDecimal(BigDecimal.TEN).pow(-2);   // c
-    private static final RadBigDecimal MILLI = new RadBigDecimal(BigDecimal.TEN).pow(-3);   // m
-    private static final RadBigDecimal MICRO = new RadBigDecimal(BigDecimal.TEN).pow(-6);   // MICRO
-    private static final RadBigDecimal NANO = new RadBigDecimal(BigDecimal.TEN).pow(-9);   // n
-    private static final RadBigDecimal PICO = new RadBigDecimal(BigDecimal.TEN).pow(-12);  // p
-    private static final RadBigDecimal FEMTO = new RadBigDecimal(BigDecimal.TEN).pow(-15);  // f
-    private static final RadBigDecimal ATTO = new RadBigDecimal(BigDecimal.TEN).pow(-18);  // a
-    private static final RadBigDecimal ZEPTO = new RadBigDecimal(BigDecimal.TEN).pow(-21);  // z
-    private static final RadBigDecimal YOCTO = new RadBigDecimal(BigDecimal.TEN).pow(-24);  // y
     private static final String INVALID_VALUE = "Invalid Value";
     private static final String ENUM_FIRST_PART_REGEX = "^.*\\(";
     private static final String ENUM_LAST_PART_REGEX = "\\)$";
@@ -47,33 +27,24 @@ public final class Conversions {
         if(value == null) throw new InvalidParameterException(INVALID_VALUE);
         if(prefix == null) throw new InvalidParameterException("Invalid SI Prefix");
 
-        if(value.isInfinity() || value.isNegativeInfinity()) {
+        if(prefix == SIPrefix.BASE || value.isInfinity() || value.isNegativeInfinity()) {
             return value;
         }
-        
-        switch(prefix) {
-            case YOTTA: return value.multiply(YOTTA);
-            case ZETTA: return value.multiply(ZETTA);
-            case EXA: return value.multiply(EXA);
-            case PETA: return value.multiply(PETA);
-            case TERA: return value.multiply(TERA);
-            case GIGA: return value.multiply(GIGA);
-            case MEGA: return value.multiply(MEGA);
-            case KILO: return value.multiply(KILO);
-            case HECTO: return value.multiply(HECTO);
-            case DEKA: return value.multiply(DEKA);
-            case DECI: return value.multiply(DECI);
-            case CENTI: return value.multiply(CENTI);
-            case MILLI: return value.multiply(MILLI);
-            case MICRO: return value.multiply(MICRO);
-            case NANO: return value.multiply(NANO);
-            case PICO: return value.multiply(PICO);
-            case FEMTO: return value.multiply(FEMTO);
-            case ATTO: return value.multiply(ATTO);
-            case ZEPTO: return value.multiply(ZEPTO);
-            case YOCTO: return value.multiply(YOCTO);
-            default: return value;
-        }
+
+        return value.multiply(getSIMultiplyingFactor(prefix, false));
+    }
+
+    /**
+     * Helper function to get the multiplying factor for the given prefix,
+     * or the multiplying factor for the inverse of the provided prefix
+     * @param prefix    the prefix to get the multiplying factor for
+     * @param negate    if true, gets the multiplying factor for the inverse of the prefix provided
+     * @return a RadBigDecimal with the multiplying factor of the provided prefix, or it's inverse
+     * @throws InvalidParameterException if prefix is null
+     */
+    public static RadBigDecimal getSIMultiplyingFactor(SIPrefix prefix, boolean negate) throws InvalidParameterException {
+        if(prefix == null) throw new InvalidParameterException(INVALID_VALUE);
+        return new RadBigDecimal(BigDecimal.TEN).pow(negate? -prefix.getSiVal() : prefix.getSiVal());
     }
 
     /**
@@ -86,38 +57,21 @@ public final class Conversions {
      * @return the value converted from the start prefix to the end prefix
      */
     public static RadBigDecimal convertToPrefix(RadBigDecimal value, SIPrefix start, SIPrefix end) throws InvalidParameterException {
-        if(isNotValidValue(value)) throw new InvalidParameterException(INVALID_VALUE);
+        verifyRadBigDecimal(value);
         if(start == null) throw new InvalidParameterException("Invalid starting SI Prefix");
         if(end == null) throw new InvalidParameterException("Invalid ending SI Prefix");
-        
+
         RadBigDecimal baseValue = convertToBase(value, start);
-        switch(end) {
-            case YOTTA: return baseValue.multiply(YOCTO);
-            case ZETTA: return baseValue.multiply(ZEPTO);
-            case EXA: return baseValue.multiply(ATTO);
-            case PETA: return baseValue.multiply(FEMTO);
-            case TERA: return baseValue.multiply(PICO);
-            case GIGA: return baseValue.multiply(NANO);
-            case MEGA: return baseValue.multiply(MICRO);
-            case KILO: return baseValue.multiply(MILLI);
-            case HECTO: return baseValue.multiply(CENTI);
-            case DEKA: return baseValue.multiply(DECI);
-            case DECI: return baseValue.multiply(DEKA);
-            case CENTI: return baseValue.multiply(HECTO);
-            case MILLI: return baseValue.multiply(KILO);
-            case MICRO: return baseValue.multiply(MEGA);
-            case NANO: return baseValue.multiply(GIGA);
-            case PICO: return baseValue.multiply(TERA);
-            case FEMTO: return baseValue.multiply(PETA);
-            case ATTO: return baseValue.multiply(EXA);
-            case ZEPTO: return baseValue.multiply(ZETTA);
-            case YOCTO: return baseValue.multiply(YOTTA);
-            default: return baseValue;
+
+        if(end == SIPrefix.BASE) {
+            return baseValue;
         }
+
+        return baseValue.multiply(getSIMultiplyingFactor(end, true));
     }
 
-    private static boolean isNotValidValue(RadBigDecimal value) {
-        return value == null;
+    private static void verifyRadBigDecimal(RadBigDecimal value) {
+        if(value == null) throw new InvalidParameterException(INVALID_VALUE);
     }
 
     /*//////////////////////////////////////////////// CONVERSIONS ///////////////////////////////////////////////////*/
@@ -128,9 +82,7 @@ public final class Conversions {
      * @return the converted curie value
      */
     public static RadBigDecimal bqToCi(RadBigDecimal bq) throws InvalidParameterException {
-        if(isNotValidValue(bq)) {
-            throw new InvalidParameterException(INVALID_VALUE);
-        }
+        verifyRadBigDecimal(bq);
         
         return bq.multiply(RadBigDecimal.valueOf(2.7d).multiply(new RadBigDecimal(BigDecimal.TEN).pow(-11)));
     }
@@ -142,9 +94,7 @@ public final class Conversions {
      * @return the converted becquerel value
      */
     public static RadBigDecimal ciToBq(RadBigDecimal ci) throws InvalidParameterException {
-        if(isNotValidValue(ci)) {
-            throw new InvalidParameterException(INVALID_VALUE);
-        }
+        verifyRadBigDecimal(ci);
 
         return ci.multiply(RadBigDecimal.valueOf(3.7d).multiply(new RadBigDecimal(BigDecimal.TEN).pow(10)));
     }
@@ -156,11 +106,8 @@ public final class Conversions {
      * @return the converted rad value
      */
     public static RadBigDecimal gyToRad(RadBigDecimal gy) throws InvalidParameterException {
-        if(isNotValidValue(gy)) {
-            throw new InvalidParameterException(INVALID_VALUE);
-        }
-        
-        return gy.multiply(new RadBigDecimal(BigDecimal.TEN).pow(2));
+        verifyRadBigDecimal(gy);
+        return gy.multiply(getSIMultiplyingFactor(SIPrefix.HECTO, false));
     }
 
     /**
@@ -170,11 +117,8 @@ public final class Conversions {
      * @return the converted gray value
      */
     public static RadBigDecimal radToGy(RadBigDecimal rad) throws InvalidParameterException {
-        if(isNotValidValue(rad)) {
-            throw new InvalidParameterException(INVALID_VALUE);
-        }
-        
-        return rad.multiply(new RadBigDecimal(BigDecimal.TEN).pow(-2));
+        verifyRadBigDecimal(rad);
+        return rad.multiply(getSIMultiplyingFactor(SIPrefix.CENTI, false));
     }
 
     /**
@@ -183,13 +127,8 @@ public final class Conversions {
      * @param sv the sievert value to be converted
      * @return the converted rem value
      */
-    @SuppressWarnings("JavaExistingMethodCanBeUsed")
     public static RadBigDecimal svToRem(RadBigDecimal sv) throws InvalidParameterException {
-        if(isNotValidValue(sv)) {
-            throw new InvalidParameterException(INVALID_VALUE);
-        }
-        
-        return sv.multiply(new RadBigDecimal(BigDecimal.TEN).pow(2));
+        return gyToRad(sv);
     }
 
     /**
@@ -198,13 +137,8 @@ public final class Conversions {
      * @param rem the rem value to be converted
      * @return the converted sievert value
      */
-    @SuppressWarnings("JavaExistingMethodCanBeUsed")
     public static RadBigDecimal remToSv(RadBigDecimal rem) throws InvalidParameterException {
-        if(isNotValidValue(rem)) {
-            throw new InvalidParameterException(INVALID_VALUE);
-        }
-        
-        return rem.multiply(new RadBigDecimal(BigDecimal.TEN).pow(-2));
+        return radToGy(rem);
     }
 
     /**
@@ -214,11 +148,9 @@ public final class Conversions {
      * @return the converted roentgen value
      */
     public static RadBigDecimal ckgToR(RadBigDecimal ckg) throws InvalidParameterException {
-        if(isNotValidValue(ckg)) {
-            throw new InvalidParameterException(INVALID_VALUE);
-        }
+        verifyRadBigDecimal(ckg);
 
-        return ckg.multiply(RadBigDecimal.valueOf(3.88d).multiply(new RadBigDecimal(BigDecimal.TEN).pow(3)));
+        return ckg.multiply(RadBigDecimal.valueOf(3.88d).multiply(getSIMultiplyingFactor(SIPrefix.KILO, false)));
     }
 
     /**
@@ -228,9 +160,7 @@ public final class Conversions {
      * @return the converted coulomb/kilogram value
      */
     public static RadBigDecimal rToCkg(RadBigDecimal r) throws InvalidParameterException {
-        if(isNotValidValue(r)) {
-            throw new InvalidParameterException(INVALID_VALUE);
-        }
+        verifyRadBigDecimal(r);
         
         return r.multiply(RadBigDecimal.valueOf(2.58d).multiply(new RadBigDecimal(BigDecimal.TEN).pow(-4)));
     }
@@ -420,37 +350,39 @@ public final class Conversions {
     }
 
     public enum SIPrefix {
-        YOTTA("Yotta (Y)"),
-        ZETTA("Zetta (Z)"),
-        EXA("Exa (E)"),
-        PETA("Peta (P)"),
-        TERA("Tera (T)"),
-        GIGA("Giga (G)"),
-        MEGA("Mega (M)"),
-        KILO("Kilo (k)"),
-        HECTO("Hecto (h)"),
-        DEKA("Deka (da)"),
-        BASE("----"),
-        DECI("Deci (d)"),
-        CENTI("Centi (c)"),
-        MILLI("Milli (m)"),
-        MICRO("Micro (µ)"),
-        NANO("Nano (n)"),
-        PICO("Pico (p)"),
-        FEMTO("Femto (f)"),
-        ATTO("Atto (a)"),
-        ZEPTO("Zepto (z)"),
-        YOCTO("Yocto (y)");
+        YOTTA("Yotta (Y)", 24),
+        ZETTA("Zetta (Z)", 21),
+        EXA("Exa (E)", 18),
+        PETA("Peta (P)", 15),
+        TERA("Tera (T)", 12),
+        GIGA("Giga (G)", 9),
+        MEGA("Mega (M)", 6),
+        KILO("Kilo (k)", 3),
+        HECTO("Hecto (h)", 2),
+        DEKA("Deka (da)", 1),
+        BASE("----", 0),
+        DECI("Deci (d)", -1),
+        CENTI("Centi (c)", -2),
+        MILLI("Milli (m)", -3),
+        MICRO("Micro (µ)", -6),
+        NANO("Nano (n)", -9),
+        PICO("Pico (p)", -12),
+        FEMTO("Femto (f)", -15),
+        ATTO("Atto (a)", -18),
+        ZEPTO("Zepto (z)", -21),
+        YOCTO("Yocto (y)", -24);
 
         private final String val;
+        private final int siVal;
 
-        SIPrefix(String val) {
+        SIPrefix(String val, int siVal) {
             this.val = val;
+            this.siVal = siVal;
         }
 
-        public String getVal() {
-            return val;
-        }
+        public String getVal() { return val; }
+
+        public int getSiVal() { return siVal; }
 
         public String getAbbrVal() {
             return val.equals("----")? "" :

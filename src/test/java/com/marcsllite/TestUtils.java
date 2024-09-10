@@ -8,6 +8,7 @@ import com.marcsllite.util.RadBigDecimal;
 import javafx.scene.control.TableView;
 import org.codehaus.plexus.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -156,11 +157,11 @@ public class TestUtils {
 
     public static Nuclide createNuclide(int atomicNumber, String name, String symbol, String massNum) {
         Nuclide nuclide = new Nuclide(atomicNumber, name, new NuclideModelId(symbol, massNum));
-        nuclide.setInitActivityStr(getRandomRadBigDecimal().toDisplayString());
+        nuclide.setInitActivityStr(getRandomRadBigDecimalWithDecimalPrecision(RadBigDecimal.DEFAULT_DEC_PRECISION).toDisplayString());
         nuclide.setInitActivityPrefix(getRandomSIPrefix());
         nuclide.setInitActivityUnit(getRandomRadUnit());
         nuclide.setRefDate(getRandomDate());
-        nuclide.setMassStr(getRandomRadBigDecimal().toDisplayString());
+        nuclide.setMassStr(getRandomRadBigDecimalWithDecimalPrecision(RadBigDecimal.DEFAULT_DEC_PRECISION).toDisplayString());
         nuclide.setMassPrefix(getRandomSIPrefix());
         nuclide.setMassUnit(getRandomMassUnit());
         nuclide.setNature(getRandomNature());
@@ -179,7 +180,14 @@ public class TestUtils {
     }
 
     public static double getRandomNumber(double min, double max) {
-        return ((Math.random() * (max - min)) + min);
+        return max > min?
+            ((Math.random() * (max - min)) + min) :
+            ((Math.random() * (min - max)) + max) ;
+    }
+    
+    public static double getRandomNumberWithDecimalPrecision(double min, double max, int precision) {
+        String truncated = String.format("%."+precision+"f", getRandomNumber(min, max));
+        return Double.parseDouble(truncated);
     }
 
     public static int getRandomRow(TableView<?> tableView) {
@@ -190,8 +198,10 @@ public class TestUtils {
         return testNuclides.stream().findAny().orElse(null);
     }
 
-    public static RadBigDecimal getRandomRadBigDecimal() {
-        return RadBigDecimal.valueOf(getRandomNumber(50, 100));
+    public static RadBigDecimal getRandomRadBigDecimalWithDecimalPrecision(int precision) {
+        double randomNumWithPrecision = getRandomNumberWithDecimalPrecision(50, 100, precision);
+        BigDecimal bd = new BigDecimal(Double.toString(randomNumWithPrecision), RadBigDecimal.DEFAULT_CONTEXT);
+        return new RadBigDecimal(bd);
     }
 
     public static Conversions.SIPrefix getRandomSIPrefix() {

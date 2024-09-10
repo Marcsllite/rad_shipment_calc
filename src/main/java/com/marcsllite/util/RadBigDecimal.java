@@ -14,9 +14,10 @@ public class RadBigDecimal extends BigDecimal {
     public static final String NEG_INFINITY_DISPLAY_STRING = "No data";
     public static final double INFINITY_DOUBLE = Double.MAX_VALUE;
     public static final double NEG_INFINITY_DOUBLE = -2.0D;
-    public static final int DEFAULT_PRECISION = 2;
+    public static final int DEFAULT_DEC_PRECISION = 2;
+    public static final int DEFAULT_SIG_DIGITS = 5;
     public static final RoundingMode DEFAULT_ROUNDING_MODE = RoundingMode.HALF_EVEN;
-    public static final MathContext DEFAULT_CONTEXT = new MathContext(DEFAULT_PRECISION, DEFAULT_ROUNDING_MODE);
+    public static final MathContext DEFAULT_CONTEXT = new MathContext(DEFAULT_SIG_DIGITS, DEFAULT_ROUNDING_MODE);
     public static final RadBigDecimal INFINITY_OBJ = RadBigDecimal.valueOf(INFINITY_DOUBLE);
     public static final RadBigDecimal NEG_INFINITY_OBJ = RadBigDecimal.valueOf(NEG_INFINITY_DOUBLE);
     private boolean infinity;
@@ -25,12 +26,12 @@ public class RadBigDecimal extends BigDecimal {
     public RadBigDecimal(String val) {
         super(parseString(val), DEFAULT_CONTEXT);
         String str = parseString(val);
-        setInfinity(INFINITY_STRING.equalsIgnoreCase(str) ||
+        infinity = INFINITY_STRING.equalsIgnoreCase(str) ||
             INFINITY_DISPLAY_STRING.equalsIgnoreCase(str) ||
-            Double.parseDouble(str) == INFINITY_DOUBLE);
-        setNegativeInfinity(NEG_INFINITY_STRING.equalsIgnoreCase(str) ||
+            Double.parseDouble(str) == INFINITY_DOUBLE;
+        negativeInfinity = NEG_INFINITY_STRING.equalsIgnoreCase(str) ||
             NEG_INFINITY_DISPLAY_STRING.equalsIgnoreCase(str) ||
-            Double.parseDouble(str) == NEG_INFINITY_DOUBLE);
+            Double.parseDouble(str) == NEG_INFINITY_DOUBLE;
     }
 
     public RadBigDecimal(BigDecimal val) { this(val.toString()); }
@@ -211,7 +212,10 @@ public class RadBigDecimal extends BigDecimal {
             return NEG_INFINITY_OBJ;
         }
 
-        return new RadBigDecimal(super.plus(DEFAULT_CONTEXT));
+        BigDecimal bd = super.plus(DEFAULT_CONTEXT)
+            .setScale(DEFAULT_DEC_PRECISION +1, RoundingMode.HALF_UP)
+            .setScale(DEFAULT_DEC_PRECISION, RoundingMode.HALF_UP);
+        return new RadBigDecimal(bd);
     }
 
     public RadBigDecimal round() {
@@ -223,7 +227,10 @@ public class RadBigDecimal extends BigDecimal {
             return NEG_INFINITY_OBJ;
         }
 
-        return new RadBigDecimal(super.round(DEFAULT_CONTEXT));
+        BigDecimal bd = super.round(DEFAULT_CONTEXT)
+            .setScale(DEFAULT_DEC_PRECISION +1, RoundingMode.HALF_UP)
+            .setScale(DEFAULT_DEC_PRECISION, RoundingMode.HALF_UP);
+        return new RadBigDecimal(bd);
     }
 
 
@@ -241,10 +248,9 @@ public class RadBigDecimal extends BigDecimal {
 
     @Override
     public boolean equals(Object x) {
-        if (!(x instanceof RadBigDecimal)) {
+        if (!(x instanceof RadBigDecimal obj)) {
             return false;
         }
-        RadBigDecimal obj = (RadBigDecimal) x;
 
         if(this.isInfinity()) {
             return obj.isInfinity();
@@ -273,7 +279,7 @@ public class RadBigDecimal extends BigDecimal {
         if(this.isNegativeInfinity()) {
             return NEG_INFINITY_STRING;
         }
-        return super.toString();
+        return super.toPlainString();
     }
 
     public String toDisplayString() {
@@ -284,7 +290,7 @@ public class RadBigDecimal extends BigDecimal {
         if(this.isNegativeInfinity()) {
             return NEG_INFINITY_DISPLAY_STRING;
         }
-        return super.toString();
+        return super.toPlainString();
     }
 
     @Override
