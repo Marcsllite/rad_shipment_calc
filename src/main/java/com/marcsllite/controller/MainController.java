@@ -48,12 +48,12 @@ public class MainController {
             throw e;
         }
 
-        if(c instanceof MenuPaneController) {
-            menuPaneController = (MenuPaneController) c;
-        } else if(c instanceof HomePaneController) {
-            homePaneController = (HomePaneController) c;
-        } else if(c instanceof ReferencePaneController) {
-            referencePaneController = (ReferencePaneController) c;
+        if(c instanceof MenuPaneController controller) {
+            menuPaneController = controller;
+        } else if(c instanceof HomePaneController controller) {
+            homePaneController = controller;
+        } else if(c instanceof ReferencePaneController controller) {
+            referencePaneController = controller;
         }
     }
 

@@ -49,7 +49,7 @@ public class Shipment {
         setNuclides(model.getNuclides()
                 .stream()
                 .map(Nuclide::new)
-                .collect(Collectors.toList()));
+                .toList());
     }
 
     public Shipment(long id, LocalDate refDate,

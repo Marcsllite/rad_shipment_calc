@@ -260,13 +260,11 @@ public class ReferencePaneController extends BaseController {
     }
 
     protected void unbindControl(Control control) {
-        if (control instanceof TextField) {
-            TextField field = (TextField) control;
+        if (control instanceof TextField field) {
             field.textProperty().unbind();
             field.textProperty().set("");
         }
-        if (control instanceof Label) {
-            Label lbl = (Label) control;
+        if (control instanceof Label lbl) {
             lbl.textProperty().unbind();
             lbl.textProperty().set("");
         }
