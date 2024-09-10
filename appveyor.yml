@@ -69,7 +69,7 @@ for:
       # - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
       - cmd: mvn clean verify -Dbuild.version=%APPVEYOR_BUILD_VERSION%
       
-    test_script:
+    on_finish:
       - ps: $wc = New-Object 'System.Net.WebClient';
             foreach($file in get-childItem $env:APPVEYOR_BUILD_FOLDER/target/surefire-reports -include TEST-*.xml -name) { `
               $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path .\target\surefire-reports\$file)); }
@@ -103,7 +103,7 @@ for:
       # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
       - sh: mvn clean verify -Dbuild.version=$APPVEYOR_BUILD_VERSION
 
-    test_script:
+    on_finish:
       - sh: |
           find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
       - sh: |
@@ -135,7 +135,7 @@ for:
       # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
       - sh: mvn clean verify -Dbuild.version=$APPVEYOR_BUILD_VERSION
 
-    test_script:
+    on_finish:
       - sh: |
           find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
       - sh: |
@@ -155,7 +155,6 @@ for:
 
 artifacts:
   - path: 'target\rad_shipment_calc-*.jar'
-  - path: 'target\site\jacoco-merged'
 
 #---------------------------------#
 #     deployment configuration    #
