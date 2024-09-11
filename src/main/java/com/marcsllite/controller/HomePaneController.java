@@ -167,10 +167,16 @@ public class HomePaneController extends BaseController {
 
     /**
      * Helper function to handle the remove button being pressed
+     * @throws RuntimeException if removal failed
      */
-    @FXML protected void removeBtnHandler() {
+    @SuppressWarnings("java:S112")
+    @FXML protected void removeBtnHandler() throws RuntimeException {
         logr.debug("User clicked the Remove button on the home pane");
-        getShipment().remove(tableViewHome.getSelectionModel().getSelectedItems());
+        if(!getShipment().remove(tableViewHome.getSelectionModel().getSelectedItems())) {
+            RuntimeException rte = new RuntimeException("Failed to remove the selection");
+            logr.throwing(rte);
+            throw rte;
+        }
     }
 
     /**

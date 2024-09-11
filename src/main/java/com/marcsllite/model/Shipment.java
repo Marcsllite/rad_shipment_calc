@@ -154,8 +154,8 @@ public class Shipment {
         nuclidesProperty().add(isotope);
     }
 
-    public void remove(List<Nuclide> isotopes) {
-        nuclidesProperty().removeAll(isotopes);
+    public boolean remove(List<Nuclide> isotopes) {
+        return isotopes != null && nuclidesProperty().removeAll(isotopes);
     }
 
     @Override

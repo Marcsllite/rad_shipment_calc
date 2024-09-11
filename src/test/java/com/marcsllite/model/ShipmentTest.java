@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.mock;
@@ -109,6 +110,11 @@ class ShipmentTest {
         exp.add(isotope);
         shipment.setNuclides(exp);
         assertEquals(exp, shipment.getNuclides());
+    }
+
+    @Test
+    void testRemove_NullParam() {
+        assertFalse(shipment.remove(null));
     }
 
     @Test

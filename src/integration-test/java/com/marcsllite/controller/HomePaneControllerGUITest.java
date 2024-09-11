@@ -18,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -36,6 +37,10 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 class HomePaneControllerGUITest extends GUITest {
     @Spy HomePaneController controller;
@@ -258,6 +263,22 @@ class HomePaneControllerGUITest extends GUITest {
     }
 
     @Test
+    void testRemoveBtnHandler_FailedToRemove() {
+        controller = (HomePaneController) getController();
+        Shipment shipmentSpy = spy(controller.getShipment());
+        controller.setShipment(shipmentSpy);
+
+        when(shipmentSpy.remove(any())).thenReturn(false);
+
+        RuntimeException ex = assertThrows(
+            RuntimeException.class,
+            () -> controller.removeBtnHandler()
+        );
+
+        Assertions.assertEquals("Failed to remove the selection", ex.getMessage());
+    }
+
+    @Test
     void testCalculateBtnHandler() {
         clearNuclideTable();
         assertTrue(btnCalculate.isDisabled());
@@ -268,7 +289,7 @@ class HomePaneControllerGUITest extends GUITest {
 
         clickOn(btnCalculate);
 
-        assertNull(tableViewHome.getSelectionModel().getSelectedItem());
+        assertEquals(0, tableViewHome.getSelectionModel().getSelectedItems().size());
     }
 
     @Test
