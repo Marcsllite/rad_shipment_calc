@@ -1,8 +1,6 @@
 package com.marcsllite.util.handler;
 
 import com.marcsllite.PropHandlerTestObj;
-import com.marcsllite.util.OS;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,31 +53,7 @@ class PropHandlerTest {
         assertNull(handler.getOS());
     }
 
-    @Test
-    void testParseOS() {
-        String osName = "win";
-        Assertions.assertEquals(OS.WINDOWS, handler.parseOS(osName));
 
-        osName = "mac";
-        assertEquals(OS.MAC, handler.parseOS(osName));
-
-        osName = "nix";
-        assertEquals(OS.UNIX, handler.parseOS(osName));
-
-        osName = "nux";
-        assertEquals(OS.UNIX, handler.parseOS(osName));
-
-        osName = "aix";
-        assertEquals(OS.UNIX, handler.parseOS(osName));
-
-        osName = "sunos";
-        assertEquals(OS.SOLARIS, handler.parseOS(osName));
-
-        osName = "fake";
-        assertEquals(OS.NOT_SUPPORTED, handler.parseOS(osName));
-
-        assertEquals(OS.NOT_SUPPORTED, handler.parseOS(null));
-    }
   
     @ParameterizedTest
     @MethodSource("replacePropString_data")

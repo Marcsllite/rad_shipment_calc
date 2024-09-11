@@ -1,7 +1,6 @@
 package com.marcsllite.util.handler;
 
 import com.marcsllite.App;
-import com.marcsllite.util.OS;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -108,23 +107,7 @@ public class PropHandler extends ResourceBundle {
      */
     public String getOS() { return os; }
 
-    /**
-     * @author Mkyong.com <a href="https://www.mkyong.com/java/how-to-detect-os-in-java-systemgetpropertyosname/">...</a>
-     * Convenience function to figure out the current operating system
-     *
-     * @return the current operating system
-     */
-    public OS parseOS(String os) {
-        if(os == null) {
-            return OS.NOT_SUPPORTED;
-        }
 
-        if (os.contains("win")) return OS.WINDOWS;
-        else if (os.contains("mac")) return OS.MAC;
-        else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) return OS.UNIX;
-        else if (os.contains("sunos")) return OS.SOLARIS;
-        else return OS.NOT_SUPPORTED;
-    }
 
     /**
      * @author Alvin Alexander <a href="https://alvinalexander.com/blog/post/java/read-text-file-from-jar-file">...</a>
