@@ -66,7 +66,7 @@ class ImageHandlerTest {
     @ParameterizedTest
     @MethodSource("getShipmentImage_data")
     void testGetShipmentImage(String color, String url) {
-        ImageHandler.Colors c = ImageHandler.Colors.valueOf(color);
+        ImageHandler.AppColor c = ImageHandler.AppColor.valueOf(color);
 
         Image actual = ImageHandler.getShipmentImage(c);
         assertNotNull(actual);
@@ -75,9 +75,9 @@ class ImageHandlerTest {
 
     private static Object[] getShipmentImage_data() {
         return new Object[] {
-            new Object[] {ImageHandler.Colors.UML_BLUE.name(), "/images/color_single_box.png"},
-            new Object[] {ImageHandler.Colors.DEFAULT_WHITE.name(), "/images/white_single_box.png"},
-            new Object[] {ImageHandler.Colors.DEFAULT_GREY.name(), "/images/grey_single_box.png"}
+            new Object[] {ImageHandler.AppColor.UML_BLUE.name(), "/images/color_single_box.png"},
+            new Object[] {ImageHandler.AppColor.DEFAULT_WHITE.name(), "/images/white_single_box.png"},
+            new Object[] {ImageHandler.AppColor.DEFAULT_GREY.name(), "/images/grey_single_box.png"}
         };
     }
   
@@ -91,7 +91,7 @@ class ImageHandlerTest {
     @ParameterizedTest
     @MethodSource("getReferenceImage_data")
     void testGetReferenceImage(String color, String url) {
-        ImageHandler.Colors c = ImageHandler.Colors.valueOf(color);
+        ImageHandler.AppColor c = ImageHandler.AppColor.valueOf(color);
         
         Image actual = ImageHandler.getReferenceImage(c);
         assertNotNull(actual);
@@ -100,9 +100,9 @@ class ImageHandlerTest {
 
     private static Object[] getReferenceImage_data() {
         return new Object[] {
-            new Object[] {ImageHandler.Colors.UML_BLUE.name(), "/images/color_paper.png"},
-            new Object[] {ImageHandler.Colors.DEFAULT_WHITE.name(), "/images/white_paper.png"},
-            new Object[] {ImageHandler.Colors.DEFAULT_GREY.name(), "/images/grey_paper.png"}
+            new Object[] {ImageHandler.AppColor.UML_BLUE.name(), "/images/color_paper.png"},
+            new Object[] {ImageHandler.AppColor.DEFAULT_WHITE.name(), "/images/white_paper.png"},
+            new Object[] {ImageHandler.AppColor.DEFAULT_GREY.name(), "/images/grey_paper.png"}
         };
     }
 }

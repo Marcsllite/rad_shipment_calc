@@ -28,11 +28,11 @@ public class MenuPaneController extends BaseController {
 
     private static final Logger logr = LogManager.getLogger();
     // color to make the button corresponding to the current page
-    private static final ImageHandler.Colors CURRENT_COLOR = ImageHandler.Colors.UML_BLUE;
+    private static final ImageHandler.AppColor CURRENT_COLOR = ImageHandler.AppColor.UML_BLUE;
     // color to make idle buttons
-    private static final ImageHandler.Colors IDLE_COLOR = ImageHandler.Colors.DEFAULT_GREY;
+    private static final ImageHandler.AppColor IDLE_COLOR = ImageHandler.AppColor.DEFAULT_GREY;
     // color to make buttons when mouse is hovering over
-    private static final ImageHandler.Colors HOVER_COLOR = ImageHandler.Colors.DEFAULT_WHITE;
+    private static final ImageHandler.AppColor HOVER_COLOR = ImageHandler.AppColor.DEFAULT_WHITE;
     private Page currentPage;
 
     public enum Page {
@@ -174,7 +174,7 @@ public class MenuPaneController extends BaseController {
      * @param btnMenu the menu button to set the color for
      * @param color the color to set the menu button and icon
      */
-    protected void setButtonColor(Button btnMenu, ImageHandler.Colors color) throws InvalidParameterException {
+    protected void setButtonColor(Button btnMenu, ImageHandler.AppColor color) throws InvalidParameterException {
         if(btnMenu == null) {
             var e = new InvalidParameterException("The menu button cannot be null");
             logr.throwing(e);
@@ -253,15 +253,15 @@ public class MenuPaneController extends BaseController {
      */
     public Page getCurrentPage() { return currentPage; }
 
-    public ImageHandler.Colors getCurrentColor() {
+    public ImageHandler.AppColor getCurrentColor() {
         return CURRENT_COLOR;
     }
 
-    public ImageHandler.Colors getIdleColor() {
+    public ImageHandler.AppColor getIdleColor() {
         return IDLE_COLOR;
     }
 
-    public ImageHandler.Colors getHoverColor() {
+    public ImageHandler.AppColor getHoverColor() {
         return HOVER_COLOR;
     }
 }

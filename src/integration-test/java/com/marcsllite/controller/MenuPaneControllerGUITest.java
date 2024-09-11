@@ -36,9 +36,9 @@ class MenuPaneControllerGUITest extends GUITest {
     ImageView imgViewShipment;
     Button btnReference;
     ImageView imgViewReference;
-    ImageHandler.Colors CURRENT_COLOR;
-    ImageHandler.Colors IDLE_COLOR;
-    ImageHandler.Colors HOVER_COLOR;
+    ImageHandler.AppColor CURRENT_COLOR;
+    ImageHandler.AppColor IDLE_COLOR;
+    ImageHandler.AppColor HOVER_COLOR;
 
     public MenuPaneControllerGUITest() {
         super(FXMLView.MENU, BaseController.Page.MENU);

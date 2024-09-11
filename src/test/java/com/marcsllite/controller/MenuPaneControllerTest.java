@@ -34,7 +34,7 @@ class MenuPaneControllerTest {
     void testSetButtonColor_NullBtn_ProperColor() {
         InvalidParameterException ex = assertThrows(
             InvalidParameterException.class, 
-            () -> controller.setButtonColor(null, ImageHandler.Colors.UML_BLUE)
+            () -> controller.setButtonColor(null, ImageHandler.AppColor.UML_BLUE)
         );
         assertTrue(ex.getMessage().contains("The menu button cannot be null"));
     }
