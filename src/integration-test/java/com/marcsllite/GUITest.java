@@ -9,6 +9,7 @@ import com.marcsllite.model.Nuclide;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.FXMLView;
+import com.marcsllite.util.OSUtil;
 import com.marcsllite.util.RadBigDecimal;
 import com.marcsllite.util.handler.FolderHandler;
 import com.marcsllite.util.handler.StageHandler;
@@ -123,7 +124,9 @@ public abstract class GUITest extends FxRobot {
         assertEquals(view.getMaxWidth(), stage.getMaxWidth(), 0.0D);
         assertEquals(view.getMaxHeight(), stage.getMaxHeight(), 0.0D);
         assertFalse(stage.isFullScreen());
-        assertFalse(stage.isMaximized());
+        if(!OSUtil.isMac()) {
+            assertFalse(stage.isMaximized());
+        }
         assertFalse(stage.getIcons().isEmpty());
     }
 

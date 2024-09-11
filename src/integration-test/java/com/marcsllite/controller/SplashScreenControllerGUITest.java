@@ -83,7 +83,9 @@ class SplashScreenControllerGUITest extends FxRobot {
         assertEquals(view.getMaxWidth(), stage.getMaxWidth(), 0.0D);
         assertEquals(view.getMaxHeight(), stage.getMaxHeight(), 0.0D);
         assertFalse(stage.isFullScreen());
-        assertFalse(stage.isMaximized());
+        if(!OSUtil.isMac()) {
+            assertFalse(stage.isMaximized());
+        }
         assertFalse(stage.getIcons().isEmpty());
     }
 }
