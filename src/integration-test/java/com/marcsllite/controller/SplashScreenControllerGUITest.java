@@ -7,6 +7,7 @@ import com.marcsllite.PropHandlerTestObj;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.FXMLView;
+import com.marcsllite.util.OSUtil;
 import com.marcsllite.util.handler.StageHandler;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -29,7 +30,6 @@ import java.io.IOException;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
-import static org.mockito.Mockito.spy;
 
 @ExtendWith(ApplicationExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -46,7 +46,7 @@ class SplashScreenControllerGUITest extends FxRobot {
 
     @BeforeAll
     public void beforeAll() {
-        dbService = spy(new DBServiceImpl(testPropHandler));
+        dbService = new DBServiceImpl(testPropHandler);
     }
 
     @Start
@@ -54,7 +54,7 @@ class SplashScreenControllerGUITest extends FxRobot {
         stageHandler = new StageHandler(stage, testPropHandler, new ControllerFactoryTestObj(dbService));
 
         stageHandler.showSplashScreen();
-        controller = spy((SplashScreenController) stageHandler.getController());
+        controller = (SplashScreenController) stageHandler.getController();
         controller.setDbService(dbService);
 
         gridPaneSplash = GUITest.getNode(FXIds.GRID_PANE_SPLASH);

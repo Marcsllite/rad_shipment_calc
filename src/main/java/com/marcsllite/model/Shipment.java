@@ -222,7 +222,7 @@ public class Shipment {
 
         public String getInfo() { return info; }
 
-        public static Shipment.Label toIsoClass(String value) {
+        public static Shipment.Label toLabel(String value) {
             for (Shipment.Label enumValue : values()) {
                 if (enumValue.getVal().equalsIgnoreCase(value)) {
                     return enumValue;
