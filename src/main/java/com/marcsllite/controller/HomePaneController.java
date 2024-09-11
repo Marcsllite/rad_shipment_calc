@@ -153,7 +153,9 @@ public class HomePaneController extends BaseController {
      */
     @FXML protected void addBtnHandler() {
         logr.debug("User clicked the Add button on the home pane");
-        tableViewHome.getSelectionModel().select(-1);
+        if(!tableViewHome.getSelectionModel().isEmpty()) {
+            tableViewHome.getSelectionModel().clearSelection();
+        }
         App.getStageHandler().showModal(FXMLView.MODIFY, Page.ADD);
     }
 
@@ -184,6 +186,8 @@ public class HomePaneController extends BaseController {
      */
     @FXML protected void calculateBtnHandler() {
         logr.debug("User clicked the Calculate button on the home pane");
-        tableViewHome.getSelectionModel().select(-1);
+        if(!tableViewHome.getSelectionModel().isEmpty()) {
+            tableViewHome.getSelectionModel().clearSelection();
+        }
     }
 }
