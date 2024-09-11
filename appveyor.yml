@@ -28,6 +28,8 @@ environment:
   # APPVEYOR_SSH_BLOCK: true
   # Mac VNC Debugging
   APPVEYOR_VNC_BLOCK: true
+  APPVEYOR_VNC_PASSWORD:
+    secure: aKkTdpvVR2UQkHyLAoM15w==
   # Windows RDP Debugging
   # APPVEYOR_RDP_PASSWORD:
   #   secure: Jrjywnv+EXOkMCVKLVB+lA==
