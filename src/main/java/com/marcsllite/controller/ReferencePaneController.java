@@ -88,7 +88,7 @@ public class ReferencePaneController extends BaseController {
         tableColRefMassNumber.setCellValueFactory(new PropertyValueFactory<>("massNumber"));
 
         tableViewSearch.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        tableViewSearch.getSelectionModel().clearSelection();
+        tableViewSearch.getSelectionModel().select(-1);
 
         setupSearchFiltering(getDbService().getAllNuclides());
     }
@@ -210,7 +210,7 @@ public class ReferencePaneController extends BaseController {
 
     protected void searchFilteringListener(FilteredList<Nuclide> filteredData, String newV) {
         if (StringUtils.isBlank(newV)) {
-            tableViewSearch.getSelectionModel().clearSelection();
+            tableViewSearch.getSelectionModel().select(-1);
         }
 
         filteredData.setPredicate(nuclide -> doesNuclideNameMatch(nuclide, newV));

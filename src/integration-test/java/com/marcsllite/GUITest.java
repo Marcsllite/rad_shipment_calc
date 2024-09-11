@@ -200,7 +200,7 @@ public abstract class GUITest extends FxRobot {
     }
 
     protected void clearSelection(TableView<Nuclide> table) {
-        interact(() -> table.getSelectionModel().clearSelection());
+        interact(() -> table.getSelectionModel().select(-1));
         assertNull(table.getSelectionModel().getSelectedItem());
     }
 
