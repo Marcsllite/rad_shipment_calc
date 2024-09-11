@@ -98,7 +98,7 @@ for:
             export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
       # mvnvm depends on JDK 21.0.2, need to revert default java to jdk 17
       - sh: brew install mvnvm
-      - sh: export JAVA_HOME=`/usr/libexec/java_home -v17.0.12`
+      - sh: export JAVA_HOME=`/usr/libexec/java_home -v17`
 
     build_script:
       - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-vnc.sh' | bash -e -
