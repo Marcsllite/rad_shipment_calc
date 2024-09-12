@@ -17,14 +17,14 @@ import java.security.InvalidParameterException;
 
 public class MenuPaneController extends BaseController {
     // Declaring FXML objects
-    @FXML protected GridPane menuPane;
-    @FXML protected StackPane stackPaneLogo;
-    @FXML protected ImageView imgViewColorLogo;
-    @FXML protected ImageView imgViewGreyLogo;
-    @FXML protected Button btnShipment;
-    @FXML protected ImageView imgViewShipment;
-    @FXML protected Button btnReference;
-    @FXML protected ImageView imgViewReference;
+    @FXML GridPane menuPane;
+    @FXML StackPane stackPaneLogo;
+    @FXML ImageView imgViewColorLogo;
+    @FXML ImageView imgViewGreyLogo;
+    @FXML Button btnShipment;
+    @FXML ImageView imgViewShipment;
+    @FXML Button btnReference;
+    @FXML ImageView imgViewReference;
 
     private static final Logger logr = LogManager.getLogger();
     // color to make the button corresponding to the current page

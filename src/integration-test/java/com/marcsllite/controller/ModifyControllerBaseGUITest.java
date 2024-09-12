@@ -1,6 +1,5 @@
 package com.marcsllite.controller;
 
-import com.marcsllite.FXIds;
 import com.marcsllite.GUITest;
 import com.marcsllite.model.Nuclide;
 import com.marcsllite.model.db.LimitsModelId;
@@ -79,43 +78,43 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
         super.start(stage);
         controller = (ModifyController) getController();
 
-        stackPaneModify = GUITest.getNode(FXIds.STACK_PANE_MODIFY);
+        stackPaneModify = controller.modifyPane;
         // First Page
-        vBoxFirstPage = GUITest.getNode(FXIds.VBOX_FIRST_PAGE);
-        txtFieldNuclideName = GUITest.getNode(FXIds.TXT_FIELD_ISO_NAME);
-        txtFieldA0 = GUITest.getNode(FXIds.TXT_FIELD_A0);
-        comboBoxA0Prefix = GUITest.getNode(FXIds.COMBO_BOX_A0_PREFIX);
-        choiceBoxA0RadUnit = GUITest.getNode(FXIds.CHOICE_BOX_AO_RAD_UNIT);
-        vBoxMoreInfo = GUITest.getNode(FXIds.VBOX_MORE_INFO);
-        hBoxAddInfoTop = GUITest.getNode(FXIds.HBOX_ADD_INFO_TOP);
-        vBoxLifeSpan = GUITest.getNode(FXIds.VBOX_LIFE_SPAN);
-        radioBtnShortLived = GUITest.getNode(FXIds.RADIO_SHORT_LIVED);
-        radioBtnLongLived = GUITest.getNode(FXIds.RADIO_LONG_LIVED);
-        vBoxLungAbs = GUITest.getNode(FXIds.VBOX_LUNG_ABS);
-        radioBtnSlowLungAbs = GUITest.getNode(FXIds.RADIO_SLOW_LUNG);
-        radioBtnMediumLungAbs = GUITest.getNode(FXIds.RADIO_MEDIUM_LUNG);
-        radioBtnFastLungAbs = GUITest.getNode(FXIds.RADIO_FAST_LUNG);
-        txtFirstPageStatus = GUITest.getNode(FXIds.TXT_FIRST_PAGE_STATUS);
-        btnNext = GUITest.getNode(FXIds.BTN_NEXT);
+        vBoxFirstPage = controller.vBoxFirstPage;
+        txtFieldNuclideName = controller.txtFieldNuclideName;
+        txtFieldA0 = controller.txtFieldA0;
+        comboBoxA0Prefix = controller.comboBoxA0Prefix;
+        choiceBoxA0RadUnit = controller.choiceBoxA0RadUnit;
+        vBoxMoreInfo = controller.vBoxMoreInfo;
+        hBoxAddInfoTop = controller.hBoxAddInfoTop;
+        vBoxLifeSpan = controller.vBoxLifeSpan;
+        radioBtnShortLived = controller.radioBtnShortLived;
+        radioBtnLongLived = controller.radioBtnLongLived;
+        vBoxLungAbs = controller.vBoxLungAbs;
+        radioBtnSlowLungAbs = controller.radioBtnSlowLungAbs;
+        radioBtnMediumLungAbs = controller.radioBtnMediumLungAbs;
+        radioBtnFastLungAbs = controller.radioBtnFastLungAbs;
+        txtFirstPageStatus = controller.txtFirstPageStatus;
+        btnNext = controller.btnNext;
         // Second Page
-        vBoxSecondPage = GUITest.getNode(FXIds.VBOX_SECOND_PAGE);
-        datePicker = GUITest.getNode(FXIds.DATE_PICKER);
-        txtFieldMass = GUITest.getNode(FXIds.TXT_FIELD_MASS);
-        comboBoxMassPrefix = GUITest.getNode(FXIds.COMBO_BOX_MASS_PREFIX);
-        choiceBoxMassUnit = GUITest.getNode(FXIds.CHOICE_BOX_MASS_UNIT);
-        choiceBoxNature = GUITest.getNode(FXIds.CHOICE_BOX_NATURE);
-        choiceBoxState = GUITest.getNode(FXIds.CHOICE_BOX_STATE);
-        choiceBoxForm = GUITest.getNode(FXIds.CHOICE_BOX_FORM);
-        chckBoxSameMass = GUITest.getNode(FXIds.CHCK_BOX_SAME_MASS);
-        chckBoxSameNSF = GUITest.getNode(FXIds.CHCK_BOX_SAME_NSF);
-        btnBack = GUITest.getNode(FXIds.BTN_BACK);
-        btnFinish = GUITest.getNode(FXIds.BTN_FINISH);
-        txtSecondPageStatus = GUITest.getNode(FXIds.TXT_SECOND_PAGE_STATUS);
+        vBoxSecondPage = controller.vBoxSecondPage;
+        datePicker = controller.datePicker;
+        txtFieldMass = controller.txtFieldMass;
+        comboBoxMassPrefix = controller.comboBoxMassPrefix;
+        choiceBoxMassUnit = controller.choiceBoxMassUnit;
+        choiceBoxNature = controller.choiceBoxNature;
+        choiceBoxState = controller.choiceBoxState;
+        choiceBoxForm = controller.choiceBoxForm;
+        chckBoxSameMass = controller.chckBoxSameMass;
+        chckBoxSameNSF = controller.chckBoxSameNSF;
+        btnBack = controller.btnBack;
+        btnFinish = controller.btnFinish;
+        txtSecondPageStatus = controller.txtSecondPageStatus;
     }
 
     @Test
     void testInit() {
-        FxAssert.verifyThat(FXIds.STACK_PANE_MODIFY, NodeMatchers.isVisible());
+        FxAssert.verifyThat(stackPaneModify, NodeMatchers.isVisible());
         //Assertions.assertEquals(getPage(), controller.getPage());
 
         goToPage(1);

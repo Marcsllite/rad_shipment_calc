@@ -1,6 +1,5 @@
 package com.marcsllite.controller;
 
-import com.marcsllite.FXIds;
 import com.marcsllite.GUITest;
 import com.marcsllite.util.FXMLView;
 import javafx.scene.control.Button;
@@ -41,16 +40,16 @@ class ShipmentDetailsControllerGUITest extends GUITest {
     public void start(Stage stage) throws IOException, TimeoutException {
         super.start(stage);
         controller = (ShipmentDetailsController) getController();
-        stackPaneShipmentDetails = GUITest.getNode(FXIds.STACK_PANE_SHIPMENT_DETAILS);
-        vBoxShipDetails = GUITest.getNode(FXIds.VBOX_SHIP_DETAILS);
-        datePickerShipDetails = GUITest.getNode(FXIds.DATE_PICKER_SHIP_DETAILS);
-        txtFieldMassShipDetails = GUITest.getNode(FXIds.TXT_FIELD_MASS_SHIP_DETAILS);
-        comboBoxMassPrefixShipDetails = GUITest.getNode(FXIds.COMBO_BOX_MASS_PREFIX_SHIP_DETAILS);
-        choiceBoxMassNameShipDetails = GUITest.getNode(FXIds.CHOICE_BOX_MASS_NAME_SHIP_DETAILS);
-        choiceBoxNatureShipDetails = GUITest.getNode(FXIds.CHOICE_BOX_NATURE_SHIP_DETAILS);
-        choiceBoxStateShipDetails = GUITest.getNode(FXIds.CHOICE_BOX_STATE_SHIP_DETAILS);
-        choiceBoxFormShipDetails = GUITest.getNode(FXIds.CHOICE_BOX_FORM_SHIP_DETAILS);
-        btnSaveShipDetails = GUITest.getNode(FXIds.BTN_SAVE_SHIP_DETAILS);
+        stackPaneShipmentDetails = controller.shipmentDetails;
+        vBoxShipDetails = controller.vBoxShipDetails;
+        datePickerShipDetails = controller.datePickerShipDetails;
+        txtFieldMassShipDetails = controller.txtFieldMassShipDetails;
+        comboBoxMassPrefixShipDetails = controller.comboBoxMassPrefixShipDetails;
+        choiceBoxMassNameShipDetails = controller.choiceBoxMassNameShipDetails;
+        choiceBoxNatureShipDetails = controller.choiceBoxNatureShipDetails;
+        choiceBoxStateShipDetails = controller.choiceBoxStateShipDetails;
+        choiceBoxFormShipDetails = controller.choiceBoxFormShipDetails;
+        btnSaveShipDetails = controller.btnSaveShipDetails;
     }
 
     @Test

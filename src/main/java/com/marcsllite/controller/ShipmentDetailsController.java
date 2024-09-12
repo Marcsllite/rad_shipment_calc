@@ -17,16 +17,16 @@ import java.io.IOException;
 import java.security.InvalidParameterException;
 
 public class ShipmentDetailsController extends BaseController {
-    @FXML private StackPane shipmentDetails;
-    @FXML private VBox vBoxShipDetails;
-    @FXML private DatePicker datePickerShipDetails;
-    @FXML private TextField txtFieldMassShipDetails;
-    @FXML private ComboBox<String> comboBoxMassPrefixShipDetails;
-    @FXML private ChoiceBox<String> choiceBoxMassNameShipDetails;
-    @FXML private ChoiceBox<String> choiceBoxNatureShipDetails;
-    @FXML private ChoiceBox<String> choiceBoxStateShipDetails;
-    @FXML private ChoiceBox<String> choiceBoxFormShipDetails;
-    @FXML private Button btnSaveShipDetails;
+    @FXML StackPane shipmentDetails;
+    @FXML VBox vBoxShipDetails;
+    @FXML DatePicker datePickerShipDetails;
+    @FXML TextField txtFieldMassShipDetails;
+    @FXML ComboBox<String> comboBoxMassPrefixShipDetails;
+    @FXML ChoiceBox<String> choiceBoxMassNameShipDetails;
+    @FXML ChoiceBox<String> choiceBoxNatureShipDetails;
+    @FXML ChoiceBox<String> choiceBoxStateShipDetails;
+    @FXML ChoiceBox<String> choiceBoxFormShipDetails;
+    @FXML Button btnSaveShipDetails;
 
     private static final Logger logr = LogManager.getLogger();
 

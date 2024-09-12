@@ -1,6 +1,5 @@
 package com.marcsllite.controller;
 
-import com.marcsllite.FXIds;
 import com.marcsllite.GUITest;
 import com.marcsllite.TestUtils;
 import com.marcsllite.model.Nuclide;
@@ -64,26 +63,26 @@ class ReferencePaneControllerGUITest extends GUITest {
     public void start(Stage stage) throws IOException, TimeoutException {
         super.start(stage);
         controller = (ReferencePaneController) getController();
-        gridPaneReference = GUITest.getNode(FXIds.GRID_PANE_REFERENCE);
-        txtFieldSearch = GUITest.getNode(FXIds.TXT_FIELD_SEARCH);
-        tableViewSearch = GUITest.getNode(FXIds.TABLE_VIEW_SEARCH);
-        txtFieldA1 = GUITest.getNode(FXIds.TXT_FIELD_A1);
-        comboBoxRefA1Prefix = GUITest.getNode(FXIds.COMBO_BOX_REF_A1_PREFIX);
-        choiceBoxRefA1RadUnit = GUITest.getNode(FXIds.CHOICE_BOX_REF_A1_RAD_UNIT);
-        txtFieldA2 = GUITest.getNode(FXIds.TXT_FIELD_A2);
-        comboBoxRefA2Prefix = GUITest.getNode(FXIds.COMBO_BOX_REF_A2_PREFIX);
-        choiceBoxRefA2RadUnit = GUITest.getNode(FXIds.CHOICE_BOX_REF_A2_RAD_UNIT);
-        txtFieldDecayConst = GUITest.getNode(FXIds.TXT_FIELD_DECAY_CONSTANT);
-        txtFieldExemptCon = GUITest.getNode(FXIds.TXT_FIELD_EXEMPT_CON);
-        comboBoxRefExemptConPrefix = GUITest.getNode(FXIds.COMBO_BOX_REF_EXEMPT_CON_PREFIX);
-        choiceBoxRefExemptConRadUnit = GUITest.getNode(FXIds.CHOICE_BOX_REF_EXEMPT_CON_RAD_UNIT);
-        txtFieldExemptLim = GUITest.getNode(FXIds.TXT_FIELD_EXEMPT_LIMIT);
-        comboBoxRefExemptLimPrefix = GUITest.getNode(FXIds.COMBO_BOX_REF_EXEMPT_LIM_PREFIX);
-        choiceBoxRefExemptLimRadUnit = GUITest.getNode(FXIds.CHOICE_BOX_REF_EXEMPT_LIM_RAD_UNIT);
-        txtFieldHalfLife = GUITest.getNode(FXIds.TXT_FIELD_HALF_LIFE);
-        txtFieldReportQuan = GUITest.getNode(FXIds.TXT_FIELD_REPORTABLE_QUANTITY);
-        comboBoxRefReportQuanPrefix = GUITest.getNode(FXIds.COMBO_BOX_REF_REPORT_QUAN_PREFIX);
-        choiceBoxRefReportQuanRadUnit = GUITest.getNode(FXIds.CHOICE_BOX_REF_REPORT_QUAN_RAD_UNIT);
+        gridPaneReference = controller.referencePane;
+        txtFieldSearch = controller.txtFieldSearch;
+        tableViewSearch = controller.tableViewSearch;
+        txtFieldA1 = controller.txtFieldA1;
+        comboBoxRefA1Prefix = controller.comboBoxRefA1Prefix;
+        choiceBoxRefA1RadUnit = controller.choiceBoxRefA1RadUnit;
+        txtFieldA2 = controller.txtFieldA2;
+        comboBoxRefA2Prefix = controller.comboBoxRefA2Prefix;
+        choiceBoxRefA2RadUnit = controller.choiceBoxRefA2RadUnit;
+        txtFieldDecayConst = controller.txtFieldDecayConst;
+        txtFieldExemptCon = controller.txtFieldExemptCon;
+        comboBoxRefExemptConPrefix = controller.comboBoxRefExemptConPrefix;
+        choiceBoxRefExemptConRadUnit = controller.choiceBoxRefExemptConRadUnit;
+        txtFieldExemptLim = controller.txtFieldExemptLim;
+        comboBoxRefExemptLimPrefix = controller.comboBoxRefExemptLimPrefix;
+        choiceBoxRefExemptLimRadUnit = controller.choiceBoxRefExemptLimRadUnit;
+        txtFieldHalfLife = controller.txtFieldHalfLife;
+        txtFieldReportQuan = controller.txtFieldReportQuan;
+        comboBoxRefReportQuanPrefix = controller.comboBoxRefReportQuanPrefix;
+        choiceBoxRefReportQuanRadUnit = controller.choiceBoxRefReportQuanRadUnit;
     }
 
     @BeforeEach

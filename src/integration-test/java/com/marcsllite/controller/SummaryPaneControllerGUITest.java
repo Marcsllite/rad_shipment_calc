@@ -1,6 +1,5 @@
 package com.marcsllite.controller;
 
-import com.marcsllite.FXIds;
 import com.marcsllite.GUITest;
 import com.marcsllite.util.FXMLView;
 import javafx.scene.control.Button;
@@ -30,9 +29,9 @@ class SummaryPaneControllerGUITest extends GUITest {
     public void start(Stage stage) throws IOException, TimeoutException {
         super.start(stage);
         controller = (SummaryPaneController) getController();
-        anchorPaneSummary = GUITest.getNode(FXIds.ANCHOR_PANE_SUMMARY);
-        txtAreaSummary = GUITest.getNode(FXIds.TXT_AREA_SUMMARY);
-        btnSaveSummary = GUITest.getNode(FXIds.BTN_SAVE_SUMMARY);
+        anchorPaneSummary = controller.summaryPane;
+        txtAreaSummary = controller.txtAreaSummary;
+        btnSaveSummary = controller.btnSaveSummary;
     }
 
     @Test

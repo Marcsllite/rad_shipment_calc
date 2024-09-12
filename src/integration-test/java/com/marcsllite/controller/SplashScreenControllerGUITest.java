@@ -1,8 +1,6 @@
 package com.marcsllite.controller;
 
 import com.marcsllite.ControllerFactoryTestObj;
-import com.marcsllite.FXIds;
-import com.marcsllite.GUITest;
 import com.marcsllite.PropHandlerTestObj;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
@@ -57,9 +55,9 @@ class SplashScreenControllerGUITest extends FxRobot {
         controller = (SplashScreenController) stageHandler.getController();
         controller.setDbService(dbService);
 
-        gridPaneSplash = GUITest.getNode(FXIds.GRID_PANE_SPLASH);
-        labelSplash = GUITest.getNode(FXIds.LABEL_SPLASH);
-        progressSplash = GUITest.getNode(FXIds.PROGRESS_SPLASH);
+        gridPaneSplash = controller.gridPaneSplash;
+        labelSplash = controller.labelSplash;
+        progressSplash = controller.progressSplash;
     }
 
     @Stop

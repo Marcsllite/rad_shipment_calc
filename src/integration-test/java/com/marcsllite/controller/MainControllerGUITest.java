@@ -1,6 +1,5 @@
 package com.marcsllite.controller;
 
-import com.marcsllite.FXIds;
 import com.marcsllite.GUITest;
 import com.marcsllite.util.FXMLView;
 import javafx.scene.layout.GridPane;
@@ -27,9 +26,9 @@ class MainControllerGUITest extends GUITest {
     public void start(Stage stage) throws IOException, TimeoutException {
         super.start(stage);
         controller = (MainController) getController();
-        gridPaneMenu = GUITest.getNode(FXIds.GRID_PANE_MENU);
-        gridPaneHome = GUITest.getNode(FXIds.GRID_PANE_HOME);
-        gridPaneRef = GUITest.getNode(FXIds.GRID_PANE_REFERENCE);
+        gridPaneMenu = controller.getMenuPaneController().menuPane;
+        gridPaneHome = controller.getHomePaneController().homePane;
+        gridPaneRef = controller.getReferencePaneController().referencePane;
     }
 
     @Test

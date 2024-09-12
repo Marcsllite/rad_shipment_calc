@@ -7,9 +7,9 @@ import org.apache.logging.log4j.Logger;
 
 public class MainController {
     // DECLARING FXML CONTROLLERS
-    @FXML private MenuPaneController menuPaneController;
-    @FXML private HomePaneController homePaneController;
-    @FXML private ReferencePaneController referencePaneController;
+    @FXML MenuPaneController menuPaneController;
+    @FXML HomePaneController homePaneController;
+    @FXML ReferencePaneController referencePaneController;
 
     private static final Logger logr = LogManager.getLogger();
 

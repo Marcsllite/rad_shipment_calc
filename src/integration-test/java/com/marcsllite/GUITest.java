@@ -14,7 +14,6 @@ import com.marcsllite.util.RadBigDecimal;
 import com.marcsllite.util.handler.FolderHandler;
 import com.marcsllite.util.handler.StageHandler;
 import javafx.application.Platform;
-import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -31,8 +30,6 @@ import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.framework.junit5.Stop;
-import org.testfx.service.finder.NodeFinder;
-import org.testfx.service.query.EmptyNodeQueryException;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.IOException;
@@ -47,7 +44,6 @@ import static junit.framework.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.testfx.api.FxAssert.assertContext;
 
 
 /**
@@ -230,19 +226,5 @@ public abstract class GUITest extends FxRobot {
             assertEquals(replacedStr, field.textProperty().get());
             assertEquals(initialActivity, new RadBigDecimal(field.textProperty().get()));
         }
-    }
-
-    /**
-     * org.testfx.api.FxAssert#toNode(String) function to look up the JavaFX node
-     * from the gui using the node's id. Original function is private
-     * @param nodeId the id of the fxml node
-     * @return the first node found with the given id
-     * @param <T> javafx.scene.Node object
-     * @throws EmptyNodeQueryException if no node is found
-     */
-    public static <T extends Node> T getNode(String nodeId) throws EmptyNodeQueryException {
-        NodeFinder nodeFinder = assertContext().getNodeFinder();
-
-        return nodeFinder.lookup(nodeId).query();
     }
 }

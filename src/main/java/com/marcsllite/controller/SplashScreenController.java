@@ -15,9 +15,9 @@ import javafx.scene.layout.GridPane;
 import java.io.IOException;
 
 public class SplashScreenController {
-    @FXML public GridPane gridPaneSplash;
-    @FXML public Label labelSplash;
-    @FXML public ProgressBar progressSplash;
+    @FXML GridPane gridPaneSplash;
+    @FXML Label labelSplash;
+    @FXML ProgressBar progressSplash;
     private PropHandler propHandler;
     private DBService dbService;
     SplashScreenTask splashScreenTask = null;

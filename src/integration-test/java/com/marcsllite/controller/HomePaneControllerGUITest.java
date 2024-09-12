@@ -1,6 +1,5 @@
 package com.marcsllite.controller;
 
-import com.marcsllite.FXIds;
 import com.marcsllite.GUITest;
 import com.marcsllite.TestUtils;
 import com.marcsllite.model.Nuclide;
@@ -79,13 +78,13 @@ class HomePaneControllerGUITest extends GUITest {
     @Start
     public void start(Stage stage) throws IOException, TimeoutException {
         super.start(stage);
-
-        gridPaneHome = GUITest.getNode(FXIds.GRID_PANE_HOME);
-        btnAdd = GUITest.getNode(FXIds.BTN_ADD);
-        btnEdit = GUITest.getNode(FXIds.BTN_EDIT);
-        btnRemove = GUITest.getNode(FXIds.BTN_REMOVE);
-        tableViewHome = GUITest.getNode(FXIds.TABLE_VIEW_HOME);
-        btnCalculate = GUITest.getNode(FXIds.BTN_CALCULATE);
+        controller = (HomePaneController) getController();
+        gridPaneHome = controller.homePane;
+        btnAdd = controller.btnAdd;
+        btnEdit = controller.btnEdit;
+        btnRemove = controller.btnRemove;
+        tableViewHome = controller.tableViewHome;
+        btnCalculate = controller.btnCalculate;
     }
 
     @BeforeEach
@@ -117,26 +116,27 @@ class HomePaneControllerGUITest extends GUITest {
     }
 
     protected void setModifyPaneNodes() {
-        stackPaneModify = GUITest.getNode(FXIds.STACK_PANE_MODIFY);
-        txtFieldNuclideName = GUITest.getNode(FXIds.TXT_FIELD_ISO_NAME);
-        txtFieldA0 = GUITest.getNode(FXIds.TXT_FIELD_A0);
-        comboBoxA0Prefix = GUITest.getNode(FXIds.COMBO_BOX_A0_PREFIX);
-        choiceBoxA0RadUnit = GUITest.getNode(FXIds.CHOICE_BOX_AO_RAD_UNIT);
-        radioBtnShortLived = GUITest.getNode(FXIds.RADIO_SHORT_LIVED);
-        radioBtnLongLived = GUITest.getNode(FXIds.RADIO_LONG_LIVED);
-        radioBtnSlowLungAbs = GUITest.getNode(FXIds.RADIO_SLOW_LUNG);
-        radioBtnMediumLungAbs = GUITest.getNode(FXIds.RADIO_MEDIUM_LUNG);
-        radioBtnFastLungAbs = GUITest.getNode(FXIds.RADIO_FAST_LUNG);
-        btnNext = GUITest.getNode(FXIds.BTN_NEXT);
-        datePicker = GUITest.getNode(FXIds.DATE_PICKER);
-        txtFieldMass = GUITest.getNode(FXIds.TXT_FIELD_MASS);
-        comboBoxMassPrefix = GUITest.getNode(FXIds.COMBO_BOX_MASS_PREFIX);
-        choiceBoxMassUnit = GUITest.getNode(FXIds.CHOICE_BOX_MASS_UNIT);
-        choiceBoxNature = GUITest.getNode(FXIds.CHOICE_BOX_NATURE);
-        choiceBoxState = GUITest.getNode(FXIds.CHOICE_BOX_STATE);
-        choiceBoxForm = GUITest.getNode(FXIds.CHOICE_BOX_FORM);
-        btnBack = GUITest.getNode(FXIds.BTN_BACK);
-        btnFinish = GUITest.getNode(FXIds.BTN_FINISH);
+        ModifyController modifyController = (ModifyController) getController();
+        stackPaneModify = modifyController.modifyPane;
+        txtFieldNuclideName = modifyController.txtFieldNuclideName;
+        txtFieldA0 = modifyController.txtFieldA0;
+        comboBoxA0Prefix = modifyController.comboBoxA0Prefix;
+        choiceBoxA0RadUnit = modifyController.choiceBoxA0RadUnit;
+        radioBtnShortLived = modifyController.radioBtnShortLived;
+        radioBtnLongLived = modifyController.radioBtnLongLived;
+        radioBtnSlowLungAbs = modifyController.radioBtnSlowLungAbs;
+        radioBtnMediumLungAbs = modifyController.radioBtnMediumLungAbs;
+        radioBtnFastLungAbs = modifyController.radioBtnFastLungAbs;
+        btnNext = modifyController.btnNext;
+        datePicker = modifyController.datePicker;
+        txtFieldMass = modifyController.txtFieldMass;
+        comboBoxMassPrefix = modifyController.comboBoxMassPrefix;
+        choiceBoxMassUnit = modifyController.choiceBoxMassUnit;
+        choiceBoxNature = modifyController.choiceBoxNature;
+        choiceBoxState = modifyController.choiceBoxState;
+        choiceBoxForm = modifyController.choiceBoxForm;
+        btnBack = modifyController.btnBack;
+        btnFinish = modifyController.btnFinish;
     }
     
     @Test
