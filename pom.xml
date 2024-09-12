@@ -32,7 +32,7 @@
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco-merged/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.language>java</sonar.language>
-        <sonar.junit.reportPaths>${basedir}/target/surefire-reports/TEST-*</sonar.junit.reportPaths>
+        <sonar.junit.reportPaths>target/surefire-reports,target/failsafe-reports</sonar.junit.reportPaths>
 
         <!-- Test Coverage -->
         <jacoco.percentages.min.instruct>0.92</jacoco.percentages.min.instruct>
