@@ -23,10 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.FieldSource;
 import org.mockito.Spy;
-import org.testfx.api.FxAssert;
 import org.testfx.framework.junit5.Start;
-import org.testfx.matcher.base.NodeMatchers;
-import org.testfx.matcher.base.WindowMatchers;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -94,11 +91,11 @@ class HomePaneControllerGUITest extends GUITest {
 
     @Test
     void testInit() {
-        FxAssert.verifyThat(gridPaneHome, NodeMatchers.isVisible());
-        FxAssert.verifyThat(btnAdd, NodeMatchers.isEnabled());
-        FxAssert.verifyThat(btnEdit, NodeMatchers.isDisabled());
-        FxAssert.verifyThat(btnRemove, NodeMatchers.isDisabled());
-        FxAssert.verifyThat(btnCalculate, NodeMatchers.isDisabled());
+        assertTrue(gridPaneHome.isVisible());
+        assertFalse(btnAdd.isDisabled());
+        assertTrue(btnEdit.isDisabled());
+        assertTrue(btnRemove.isDisabled());
+        assertTrue(btnCalculate.isDisabled());
         assertTrue(tableViewHome.getItems().isEmpty());
     }
 
@@ -108,11 +105,11 @@ class HomePaneControllerGUITest extends GUITest {
 
         interact(() ->controller.hide());
 
-        FxAssert.verifyThat(gridPaneHome, NodeMatchers.isInvisible());
+        assertFalse(gridPaneHome.isVisible());
 
         interact(() ->controller.show());
 
-        FxAssert.verifyThat(gridPaneHome, NodeMatchers.isVisible());
+        assertTrue(gridPaneHome.isVisible());
     }
 
     protected void setModifyPaneNodes() {
@@ -146,15 +143,15 @@ class HomePaneControllerGUITest extends GUITest {
         clickOn(btnAdd);
         setModifyPaneNodes();
         
-        FxAssert.verifyThat(window(stackPaneModify), WindowMatchers.isShowing());
+        assertTrue(stackPaneModify.getScene().getWindow().isShowing());
         assertTrue(getController() instanceof ModifyController);
         ModifyController c = (ModifyController) getController();
         assertEquals(BaseController.Page.ADD, c.getPage());
         verifyModifyPane(null);
 
         interact(() -> window(stackPaneModify).hide());
-        FxAssert.verifyThat(window(gridPaneHome), WindowMatchers.isShowing());
-        FxAssert.verifyThat(window(stackPaneModify), WindowMatchers.isNotShowing());
+        assertTrue(gridPaneHome.getScene().getWindow().isShowing());
+        assertFalse(stackPaneModify.getScene().getWindow().isShowing());
     }
 
     @ParameterizedTest(name = "testEditNuclide-{0}")
@@ -170,8 +167,8 @@ class HomePaneControllerGUITest extends GUITest {
 
         clickOn(btnEdit);
         setModifyPaneNodes();
-        
-        FxAssert.verifyThat(window(stackPaneModify), WindowMatchers.isShowing());
+
+        assertTrue(stackPaneModify.getScene().getWindow().isShowing());
         assertTrue(getController() instanceof ModifyController);
         ModifyController c = (ModifyController) getController();
         assertEquals(BaseController.Page.EDIT, c.getPage());
@@ -179,8 +176,8 @@ class HomePaneControllerGUITest extends GUITest {
 
         clickOn(btnNext);
         clickOn(btnFinish);
-        FxAssert.verifyThat(window(gridPaneHome), WindowMatchers.isShowing());
-        FxAssert.verifyThat(window(stackPaneModify), WindowMatchers.isNotShowing());
+        assertTrue(gridPaneHome.getScene().getWindow().isShowing());
+        assertFalse(stackPaneModify.getScene().getWindow().isShowing());
     }
     
     protected void verifyModifyPane(Nuclide nuclide) {

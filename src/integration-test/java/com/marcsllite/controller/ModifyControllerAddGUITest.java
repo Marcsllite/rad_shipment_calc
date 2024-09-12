@@ -3,17 +3,13 @@ package com.marcsllite.controller;
 import com.marcsllite.TestUtils;
 import com.marcsllite.model.Nuclide;
 import com.marcsllite.util.Conversions;
-import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.hamcrest.Matcher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.testfx.api.FxAssert;
 import org.testfx.framework.junit5.Start;
-import org.testfx.matcher.base.NodeMatchers;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -54,7 +50,7 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
         assertEquals(Conversions.RadUnit.CURIE.getVal(), choiceBoxA0RadUnit.getSelectionModel().getSelectedItem());
         assertEquals(Conversions.SIPrefix.BASE.getVal(), comboBoxMassPrefix.getSelectionModel().getSelectedItem());
         assertEquals(Conversions.MassUnit.GRAMS.getVal(), choiceBoxMassUnit.getSelectionModel().getSelectedItem());
-        FxAssert.verifyThat(btnNext, NodeMatchers.isDisabled());
+        assertTrue(btnNext.isDisabled());
     }
 
     @Test
@@ -66,31 +62,31 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
 
     @ParameterizedTest
     @MethodSource("noRadio_data")
-    void testBtnNext_EnabledDisabled_NoRadio_Checker(String name, String a0, Matcher<Node> matcher, int filteredIsoSize) {
+    void testBtnNext_EnabledDisabled_NoRadio_Checker(String name, String a0, boolean isBtnNextDisabled, int filteredIsoSize) {
         setNuclidesInTable(false);
 
         setNuclideName(name);
-        assertSettingField(filteredIsoSize, null, NodeMatchers.isDisabled());
+        assertSettingField(filteredIsoSize, null, true);
 
         setInitialActivity(a0);
-        assertSettingField(filteredIsoSize, null, matcher);
+        assertSettingField(filteredIsoSize, null, isBtnNextDisabled);
 
         clearFirstPageForm();
         setInitialActivity(a0);
-        assertSettingField(0, null, NodeMatchers.isDisabled());
+        assertSettingField(0, null, true);
 
         setNuclideName(name);
-        assertSettingField(filteredIsoSize, null, matcher);
+        assertSettingField(filteredIsoSize, null, isBtnNextDisabled);
     }
 
     private static Object[] noRadio_data() {
         TestUtils.TestNuclide regularNuclide = TestUtils.getRegularNuclide();
         String symbolNotation = regularNuclide.getDisplaySymbolNotation();
         return new Object[] {
-            new Object[] { regularNuclide.getSymbol(), "1sdf23", NodeMatchers.isDisabled(), TestUtils.equalsTestNuclide(regularNuclide.getSymbol()) },
-            new Object[] { " ", "1sdf23", NodeMatchers.isDisabled(), 0 },
-            new Object[] { " ", " ", NodeMatchers.isDisabled(), 0 },
-            new Object[] { symbolNotation, "123", NodeMatchers.isEnabled(), TestUtils.equalsTestNuclide(symbolNotation) }
+            new Object[] { regularNuclide.getSymbol(), "1sdf23", true, TestUtils.equalsTestNuclide(regularNuclide.getSymbol()) },
+            new Object[] { " ", "1sdf23", true, 0 },
+            new Object[] { " ", " ", true, 0 },
+            new Object[] { symbolNotation, "123", false, TestUtils.equalsTestNuclide(symbolNotation) }
         };
     }
     
@@ -98,39 +94,39 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
     @Test
     void testBtnNextHandler_NoRadio() {
         setInitialActivity("123");
-        assertSettingField(0, null, NodeMatchers.isDisabled());
+        assertSettingField(0, null, true);
 
         setNuclideName(TestUtils.getRegularNuclide().getDisplaySymbolNotation());
-        assertSettingField(1, null, NodeMatchers.isEnabled());
+        assertSettingField(1, null, false);
 
         clickOn(btnNext);
-        FxAssert.verifyThat(vBoxFirstPage, NodeMatchers.isInvisible());
-        FxAssert.verifyThat(vBoxSecondPage, NodeMatchers.isVisible());
+        assertFalse(vBoxFirstPage.isVisible());
+        assertTrue(vBoxSecondPage.isVisible());
     }
 
     @ParameterizedTest
     @MethodSource("radioLifeSpan_data")
-    void testBtnNext_EnabledDisabled_RadioLifeSpan_Checker(String name, String a0, Nuclide.LifeSpan lifeSpan, Matcher<Node> matcher, int filteredIsoSize, boolean visibleRadio) {
+    void testBtnNext_EnabledDisabled_RadioLifeSpan_Checker(String name, String a0, Nuclide.LifeSpan lifeSpan, boolean isBtnNextDisabled, int filteredIsoSize, boolean visibleRadio) {
         VBox additionalInfo = visibleRadio? vBoxLifeSpan : null;
 
         setNuclideName(name);
-        assertSettingField(filteredIsoSize, additionalInfo, NodeMatchers.isDisabled());
+        assertSettingField(filteredIsoSize, additionalInfo, true);
 
         setInitialActivity(a0);
-        assertSettingField(filteredIsoSize, additionalInfo, NodeMatchers.isDisabled());
+        assertSettingField(filteredIsoSize, additionalInfo, true);
 
         setLifeSpan(lifeSpan);
-        assertSettingField(filteredIsoSize, additionalInfo, matcher);
+        assertSettingField(filteredIsoSize, additionalInfo, isBtnNextDisabled);
 
         clearFirstPageForm();
         setInitialActivity(a0);
-        assertSettingField(0, null, NodeMatchers.isDisabled());
+        assertSettingField(0, null, true);
 
         setNuclideName(name);
-        assertSettingField(filteredIsoSize, additionalInfo, NodeMatchers.isDisabled());
+        assertSettingField(filteredIsoSize, additionalInfo, true);
 
         setLifeSpan(lifeSpan);
-        assertSettingField(filteredIsoSize, additionalInfo, matcher);
+        assertSettingField(filteredIsoSize, additionalInfo, isBtnNextDisabled);
     }
 
     private static Object[] radioLifeSpan_data() {
@@ -138,23 +134,23 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
         String shortSymbol = lifeSpanNuclide.getDisplaySymbolNotation();
         String fullSymbol = lifeSpanNuclide.getFullSymbolNotation();
         return new Object[] {
-            new Object[] { " ", " ", Nuclide.LifeSpan.SHORT, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LifeSpan.SHORT, NodeMatchers.isDisabled(), TestUtils.equalsTestNuclide(shortSymbol.substring(0,1)), false },
-            new Object[] { " ", "1sdf23", Nuclide.LifeSpan.SHORT, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol, "123", Nuclide.LifeSpan.SHORT, NodeMatchers.isEnabled(), TestUtils.equalsTestNuclide(shortSymbol), true },
-            new Object[] { fullSymbol, "123", Nuclide.LifeSpan.SHORT, NodeMatchers.isEnabled(), TestUtils.equalsTestNuclide(fullSymbol), true },
+            new Object[] { " ", " ", Nuclide.LifeSpan.SHORT, true, 0, false },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LifeSpan.SHORT, true, TestUtils.equalsTestNuclide(shortSymbol.substring(0,1)), false },
+            new Object[] { " ", "1sdf23", Nuclide.LifeSpan.SHORT, true, 0, false },
+            new Object[] { shortSymbol, "123", Nuclide.LifeSpan.SHORT, false, TestUtils.equalsTestNuclide(shortSymbol), true },
+            new Object[] { fullSymbol, "123", Nuclide.LifeSpan.SHORT, false, TestUtils.equalsTestNuclide(fullSymbol), true },
 
-            new Object[] { " ", " ", Nuclide.LifeSpan.LONG, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LifeSpan.LONG, NodeMatchers.isDisabled(), TestUtils.equalsTestNuclide(shortSymbol.substring(0,1)), false },
-            new Object[] { " ", "1sdf23", Nuclide.LifeSpan.LONG, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol, "123", Nuclide.LifeSpan.LONG, NodeMatchers.isEnabled(), TestUtils.equalsTestNuclide(shortSymbol), true },
-            new Object[] { fullSymbol, "123", Nuclide.LifeSpan.LONG, NodeMatchers.isEnabled(), TestUtils.equalsTestNuclide(fullSymbol), true },
+            new Object[] { " ", " ", Nuclide.LifeSpan.LONG, true, 0, false },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LifeSpan.LONG, true, TestUtils.equalsTestNuclide(shortSymbol.substring(0,1)), false },
+            new Object[] { " ", "1sdf23", Nuclide.LifeSpan.LONG, true, 0, false },
+            new Object[] { shortSymbol, "123", Nuclide.LifeSpan.LONG, false, TestUtils.equalsTestNuclide(shortSymbol), true },
+            new Object[] { fullSymbol, "123", Nuclide.LifeSpan.LONG, false, TestUtils.equalsTestNuclide(fullSymbol), true },
 
-            new Object[] { " ", " ", Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), TestUtils.equalsTestNuclide(shortSymbol.substring(0,1)), false },
-            new Object[] { " ", "1sdf23", Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol, "123", Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), TestUtils.equalsTestNuclide(shortSymbol), true },
-            new Object[] { fullSymbol, "123", Nuclide.LifeSpan.REGULAR, NodeMatchers.isDisabled(), TestUtils.equalsTestNuclide(fullSymbol), true }
+            new Object[] { " ", " ", Nuclide.LifeSpan.REGULAR, true, 0, false },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LifeSpan.REGULAR, true, TestUtils.equalsTestNuclide(shortSymbol.substring(0,1)), false },
+            new Object[] { " ", "1sdf23", Nuclide.LifeSpan.REGULAR, true, 0, false },
+            new Object[] { shortSymbol, "123", Nuclide.LifeSpan.REGULAR, true, TestUtils.equalsTestNuclide(shortSymbol), true },
+            new Object[] { fullSymbol, "123", Nuclide.LifeSpan.REGULAR, true, TestUtils.equalsTestNuclide(fullSymbol), true }
         };
     }
 
@@ -163,26 +159,26 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
         TestUtils.TestNuclide lifeSpanNuclide = TestUtils.getLifeSpanNuclide();
 
         setInitialActivity("123");
-        assertSettingField(TestUtils.getTestNuclideSize(), null, NodeMatchers.isDisabled());
+        assertSettingField(TestUtils.getTestNuclideSize(), null, true);
 
         setNuclideName(lifeSpanNuclide.getDisplaySymbolNotation());
-        assertSettingField(TestUtils.equalsTestNuclide(lifeSpanNuclide.getDisplaySymbolNotation()), vBoxLifeSpan, NodeMatchers.isDisabled());
+        assertSettingField(TestUtils.equalsTestNuclide(lifeSpanNuclide.getDisplaySymbolNotation()), vBoxLifeSpan, true);
 
         setNuclideName(lifeSpanNuclide.getFullSymbolNotation());
         int filteredIsoSize = TestUtils.equalsTestNuclide(lifeSpanNuclide.getFullSymbolNotation());
-        assertSettingField(filteredIsoSize, vBoxLifeSpan, NodeMatchers.isDisabled());
+        assertSettingField(filteredIsoSize, vBoxLifeSpan, true);
 
         setLifeSpan(Nuclide.LifeSpan.SHORT);
-        assertSettingField(filteredIsoSize, vBoxLifeSpan, NodeMatchers.isEnabled());
+        assertSettingField(filteredIsoSize, vBoxLifeSpan, false);
 
         clickOn(btnNext);
-        FxAssert.verifyThat(vBoxFirstPage, NodeMatchers.isInvisible());
-        FxAssert.verifyThat(vBoxSecondPage, NodeMatchers.isVisible());
+        assertFalse(vBoxFirstPage.isVisible());
+        assertTrue(vBoxSecondPage.isVisible());
     }
     
     @ParameterizedTest
     @MethodSource("radioLungAbsorption_data")
-    void testBtnNext_EnabledDisabled_RadioLungAbsorption_Checker(String name, String a0, Nuclide.LungAbsorption lungAbs, Matcher<Node> matcher, int filteredIsoSize, boolean visibleRadio) {
+    void testBtnNext_EnabledDisabled_RadioLungAbsorption_Checker(String name, String a0, Nuclide.LungAbsorption lungAbs, boolean isBtnNextDisabled, int filteredIsoSize, boolean visibleRadio) {
         VBox additionalInfo;
         if(visibleRadio) {
             additionalInfo = vBoxLungAbs;
@@ -191,26 +187,26 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
         }
 
         setNuclideName(name);
-        assertSettingField(filteredIsoSize, additionalInfo, NodeMatchers.isDisabled());
+        assertSettingField(filteredIsoSize, additionalInfo, true);
 
         setInitialActivity(a0);
-        assertSettingField(filteredIsoSize, additionalInfo, NodeMatchers.isDisabled());
+        assertSettingField(filteredIsoSize, additionalInfo, true);
 
         if(visibleRadio) {
             setLungAbsorption(lungAbs);
-            assertSettingField(filteredIsoSize, additionalInfo, matcher);
+            assertSettingField(filteredIsoSize, additionalInfo, isBtnNextDisabled);
         }
 
         clearFirstPageForm();
         setInitialActivity(a0);
-        assertSettingField(0, null, NodeMatchers.isDisabled());
+        assertSettingField(0, null, true);
 
         setNuclideName(name);
-        assertSettingField(filteredIsoSize, additionalInfo, NodeMatchers.isDisabled());
+        assertSettingField(filteredIsoSize, additionalInfo, true);
 
         if(visibleRadio) {
             setLungAbsorption(lungAbs);
-            assertSettingField(filteredIsoSize, additionalInfo, matcher);
+            assertSettingField(filteredIsoSize, additionalInfo, isBtnNextDisabled);
         }
     }
 
@@ -219,29 +215,29 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
         String shortSymbol = lungAbsNuclide.getDisplaySymbolNotation();
         String fullSymbol = lungAbsNuclide.getFullSymbolNotation();
         return new Object[] {
-            new Object[] { " ", " ", Nuclide.LungAbsorption.SLOW, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.SLOW, NodeMatchers.isDisabled(), TestUtils.equalsTestNuclide(shortSymbol.substring(0,1)), false },
-            new Object[] { " ", "1sdf23", Nuclide.LungAbsorption.SLOW, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol, "123", Nuclide.LungAbsorption.SLOW, NodeMatchers.isEnabled(), TestUtils.equalsTestNuclide(shortSymbol), true },
-            new Object[] { fullSymbol, "123", Nuclide.LungAbsorption.SLOW, NodeMatchers.isEnabled(), TestUtils.equalsTestNuclide(fullSymbol), true },
+            new Object[] { " ", " ", Nuclide.LungAbsorption.SLOW, true, 0, false },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.SLOW, true, TestUtils.equalsTestNuclide(shortSymbol.substring(0,1)), false },
+            new Object[] { " ", "1sdf23", Nuclide.LungAbsorption.SLOW, true, 0, false },
+            new Object[] { shortSymbol, "123", Nuclide.LungAbsorption.SLOW, false, TestUtils.equalsTestNuclide(shortSymbol), true },
+            new Object[] { fullSymbol, "123", Nuclide.LungAbsorption.SLOW, false, TestUtils.equalsTestNuclide(fullSymbol), true },
             
-            new Object[] { " ", " ", Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isDisabled(), TestUtils.equalsTestNuclide(shortSymbol.substring(0,1)), false },
-            new Object[] { " ", "1sdf23", Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol, "123", Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isEnabled(), TestUtils.equalsTestNuclide(shortSymbol), true },
-            new Object[] { fullSymbol, "123", Nuclide.LungAbsorption.MEDIUM, NodeMatchers.isEnabled(), TestUtils.equalsTestNuclide(fullSymbol), true },
+            new Object[] { " ", " ", Nuclide.LungAbsorption.MEDIUM, true, 0, false },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.MEDIUM, true, TestUtils.equalsTestNuclide(shortSymbol.substring(0,1)), false },
+            new Object[] { " ", "1sdf23", Nuclide.LungAbsorption.MEDIUM, true, 0, false },
+            new Object[] { shortSymbol, "123", Nuclide.LungAbsorption.MEDIUM, false, TestUtils.equalsTestNuclide(shortSymbol), true },
+            new Object[] { fullSymbol, "123", Nuclide.LungAbsorption.MEDIUM, false, TestUtils.equalsTestNuclide(fullSymbol), true },
 
-            new Object[] { " ", " ", Nuclide.LungAbsorption.FAST, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.FAST, NodeMatchers.isDisabled(), TestUtils.equalsTestNuclide(shortSymbol.substring(0,1)), false },
-            new Object[] { " ", "1sdf23", Nuclide.LungAbsorption.FAST, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol, "123", Nuclide.LungAbsorption.FAST, NodeMatchers.isEnabled(), TestUtils.equalsTestNuclide(shortSymbol), true },
-            new Object[] { fullSymbol, "123", Nuclide.LungAbsorption.FAST, NodeMatchers.isEnabled(), TestUtils.equalsTestNuclide(fullSymbol), true },
+            new Object[] { " ", " ", Nuclide.LungAbsorption.FAST, true, 0, false },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.FAST, true, TestUtils.equalsTestNuclide(shortSymbol.substring(0,1)), false },
+            new Object[] { " ", "1sdf23", Nuclide.LungAbsorption.FAST, true, 0, false },
+            new Object[] { shortSymbol, "123", Nuclide.LungAbsorption.FAST, false, TestUtils.equalsTestNuclide(shortSymbol), true },
+            new Object[] { fullSymbol, "123", Nuclide.LungAbsorption.FAST, false, TestUtils.equalsTestNuclide(fullSymbol), true },
 
-            new Object[] { " ", " ", Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), TestUtils.equalsTestNuclide(shortSymbol.substring(0,1)), false },
-            new Object[] { " ", "1sdf23", Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), 0, false },
-            new Object[] { shortSymbol, "123", Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), TestUtils.equalsTestNuclide(shortSymbol), true },
-            new Object[] { fullSymbol, "123", Nuclide.LungAbsorption.NONE, NodeMatchers.isDisabled(), TestUtils.equalsTestNuclide(fullSymbol), true }
+            new Object[] { " ", " ", Nuclide.LungAbsorption.NONE, true, 0, false },
+            new Object[] { shortSymbol.substring(0,1), "1sdf23", Nuclide.LungAbsorption.NONE, true, TestUtils.equalsTestNuclide(shortSymbol.substring(0,1)), false },
+            new Object[] { " ", "1sdf23", Nuclide.LungAbsorption.NONE, true, 0, false },
+            new Object[] { shortSymbol, "123", Nuclide.LungAbsorption.NONE, true, TestUtils.equalsTestNuclide(shortSymbol), true },
+            new Object[] { fullSymbol, "123", Nuclide.LungAbsorption.NONE, true, TestUtils.equalsTestNuclide(fullSymbol), true }
         };
     }
 
@@ -250,21 +246,21 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
         TestUtils.TestNuclide lungAbsorptionNuclide = TestUtils.getLungAbsNuclide();
 
         setInitialActivity("123");
-        assertSettingField(0, null, NodeMatchers.isDisabled());
+        assertSettingField(0, null, true);
 
         int filteredIsoSize = TestUtils.equalsTestNuclide(lungAbsorptionNuclide.getDisplaySymbolNotation());
         setNuclideName(lungAbsorptionNuclide.getDisplaySymbolNotation());
-        assertSettingField(filteredIsoSize, vBoxLungAbs, NodeMatchers.isDisabled());
+        assertSettingField(filteredIsoSize, vBoxLungAbs, true);
 
         setNuclideName(lungAbsorptionNuclide.getFullSymbolNotation());
-        assertSettingField(filteredIsoSize, vBoxLungAbs, NodeMatchers.isDisabled());
+        assertSettingField(filteredIsoSize, vBoxLungAbs, true);
 
         setLungAbsorption(Nuclide.LungAbsorption.FAST);
-        assertSettingField(filteredIsoSize, vBoxLungAbs, NodeMatchers.isEnabled());
+        assertSettingField(filteredIsoSize, vBoxLungAbs, false);
 
         clickOn(btnNext);
-        FxAssert.verifyThat(vBoxFirstPage, NodeMatchers.isInvisible());
-        FxAssert.verifyThat(vBoxSecondPage, NodeMatchers.isVisible());
+        assertFalse(vBoxFirstPage.isVisible());
+        assertTrue(vBoxSecondPage.isVisible());
     }
 
     @Test
@@ -274,16 +270,16 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
         clickOn(chckBoxSameMass);
         assertTrue(chckBoxSameMass.isSelected());
         
-        FxAssert.verifyThat(txtFieldMass, NodeMatchers.isDisabled());
-        FxAssert.verifyThat(comboBoxMassPrefix, NodeMatchers.isDisabled());
-        FxAssert.verifyThat(choiceBoxMassUnit, NodeMatchers.isDisabled());
+        assertTrue(txtFieldMass.isDisabled());
+        assertTrue(comboBoxMassPrefix.isDisabled());
+        assertTrue(choiceBoxMassUnit.isDisabled());
 
         clickOn(chckBoxSameMass);
         assertFalse(chckBoxSameMass.isSelected());
 
-        FxAssert.verifyThat(txtFieldMass, NodeMatchers.isEnabled());
-        FxAssert.verifyThat(comboBoxMassPrefix, NodeMatchers.isEnabled());
-        FxAssert.verifyThat(choiceBoxMassUnit, NodeMatchers.isEnabled());
+        assertFalse(txtFieldMass.isDisabled());
+        assertFalse(comboBoxMassPrefix.isDisabled());
+        assertFalse(choiceBoxMassUnit.isDisabled());
     }
 
     @Test
@@ -293,16 +289,16 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
         clickOn(chckBoxSameNSF);
         assertTrue(chckBoxSameNSF.isSelected());
 
-        FxAssert.verifyThat(choiceBoxNature, NodeMatchers.isDisabled());
-        FxAssert.verifyThat(choiceBoxState, NodeMatchers.isDisabled());
-        FxAssert.verifyThat(choiceBoxForm, NodeMatchers.isDisabled());
+        assertTrue(choiceBoxNature.isDisabled());
+        assertTrue(choiceBoxState.isDisabled());
+        assertTrue(choiceBoxForm.isDisabled());
 
         clickOn(chckBoxSameNSF);
         assertFalse(chckBoxSameNSF.isSelected());
 
-        FxAssert.verifyThat(choiceBoxNature, NodeMatchers.isEnabled());
-        FxAssert.verifyThat(choiceBoxState, NodeMatchers.isEnabled());
-        FxAssert.verifyThat(choiceBoxForm, NodeMatchers.isEnabled());
+        assertFalse(choiceBoxNature.isDisabled());
+        assertFalse(choiceBoxState.isDisabled());
+        assertFalse(choiceBoxForm.isDisabled());
     }
 
     @Test
@@ -311,7 +307,7 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
 
         clickOn(btnBack);
 
-        FxAssert.verifyThat(vBoxFirstPage, NodeMatchers.isVisible());
-        FxAssert.verifyThat(vBoxSecondPage, NodeMatchers.isInvisible());
+        assertTrue(vBoxFirstPage.isVisible());
+        assertFalse(vBoxSecondPage.isVisible());
     }
 }

@@ -10,15 +10,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
-import org.testfx.api.FxAssert;
 import org.testfx.framework.junit5.Start;
-import org.testfx.matcher.base.NodeMatchers;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
@@ -71,18 +70,18 @@ class MenuPaneControllerGUITest extends GUITest {
     void testInit() {
         interact(() -> controller.initialize());
         assertTrue(controller.isInit());
-        FxAssert.verifyThat(gridPaneMenu, NodeMatchers.isVisible());
+        assertTrue(gridPaneMenu.isVisible());
     }
 
     @Test
     void testHideShow() {
         interact(() ->controller.hide());
 
-        FxAssert.verifyThat(gridPaneMenu, NodeMatchers.isInvisible());
+        assertFalse(gridPaneMenu.isVisible());
 
         interact(() ->controller.show());
 
-        FxAssert.verifyThat(gridPaneMenu, NodeMatchers.isVisible());
+        assertTrue(gridPaneMenu.isVisible());
     }
 
     @Test
@@ -97,14 +96,14 @@ class MenuPaneControllerGUITest extends GUITest {
     @Test
     void testMouseHover() {
         moveTo(stackPaneLogo);
-        FxAssert.verifyThat(imgViewColorLogo, NodeMatchers.isInvisible());
-        FxAssert.verifyThat(imgViewGreyLogo, NodeMatchers.isVisible());
+        assertFalse(imgViewColorLogo.isVisible());
+        assertTrue(imgViewGreyLogo.isVisible());
         assertEquals(Paint.valueOf(CURRENT_COLOR.getVal()), btnShipment.getTextFill());
         assertEquals(Paint.valueOf(IDLE_COLOR.getVal()), btnReference.getTextFill());
 
         moveTo(btnReference);
-        FxAssert.verifyThat(imgViewColorLogo, NodeMatchers.isVisible());
-        FxAssert.verifyThat(imgViewGreyLogo, NodeMatchers.isInvisible());
+        assertTrue(imgViewColorLogo.isVisible());
+        assertFalse(imgViewGreyLogo.isVisible());
         assertEquals(Paint.valueOf(CURRENT_COLOR.getVal()), btnShipment.getTextFill());
         assertEquals(Paint.valueOf(HOVER_COLOR.getVal()), btnReference.getTextFill());
 
@@ -113,8 +112,8 @@ class MenuPaneControllerGUITest extends GUITest {
         assertEquals(Paint.valueOf(CURRENT_COLOR.getVal()), btnReference.getTextFill());
 
         moveTo(btnShipment);
-        FxAssert.verifyThat(imgViewColorLogo, NodeMatchers.isVisible());
-        FxAssert.verifyThat(imgViewGreyLogo, NodeMatchers.isInvisible());
+        assertTrue(imgViewColorLogo.isVisible());
+        assertFalse(imgViewGreyLogo.isVisible());
         assertEquals(Paint.valueOf(HOVER_COLOR.getVal()), btnShipment.getTextFill());
         assertEquals(Paint.valueOf(CURRENT_COLOR.getVal()), btnReference.getTextFill());
     }

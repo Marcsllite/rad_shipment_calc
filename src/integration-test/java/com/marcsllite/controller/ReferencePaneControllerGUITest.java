@@ -92,7 +92,7 @@ class ReferencePaneControllerGUITest extends GUITest {
 
     @Test
     void testInit() {
-        FxAssert.verifyThat(gridPaneReference, NodeMatchers.isVisible());
+        assertTrue(gridPaneReference.isVisible());
 
         verifySetupDropDownItems();
         verifyInitTable();
@@ -137,11 +137,11 @@ class ReferencePaneControllerGUITest extends GUITest {
     void testHideShow() {
         interact(() -> controller.hide());
 
-        FxAssert.verifyThat(gridPaneReference, NodeMatchers.isInvisible());
+        assertFalse(gridPaneReference.isVisible());
 
         interact(() -> controller.show());
 
-        FxAssert.verifyThat(gridPaneReference, NodeMatchers.isVisible());
+        assertTrue(gridPaneReference.isVisible());
     }
 
     @Test

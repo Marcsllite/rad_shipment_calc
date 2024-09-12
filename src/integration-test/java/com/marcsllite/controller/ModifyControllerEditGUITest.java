@@ -34,17 +34,17 @@ class ModifyControllerEditGUITest extends ModifyControllerBaseGUITest {
     private void assertInitLifeSpan() {
         switch (getEditingNuclide().getLifeSpan()) {
             case SHORT:
-                FxAssert.verifyThat(vBoxLifeSpan, NodeMatchers.isVisible());
+                assertTrue(vBoxLifeSpan.isVisible());
                 assertTrue(radioBtnShortLived.selectedProperty().get());
                 assertFalse(radioBtnLongLived.selectedProperty().get());
                 break;
             case LONG:
-                FxAssert.verifyThat(vBoxLifeSpan, NodeMatchers.isVisible());
+                assertTrue(vBoxLifeSpan.isVisible());
                 assertFalse(radioBtnShortLived.selectedProperty().get());
                 assertTrue(radioBtnLongLived.selectedProperty().get());
                 break;
             default:
-                FxAssert.verifyThat(vBoxLifeSpan, NodeMatchers.isInvisible());
+                assertFalse(vBoxLifeSpan.isVisible());
                 assertFalse(radioBtnShortLived.selectedProperty().get());
                 assertFalse(radioBtnLongLived.selectedProperty().get());
         }
@@ -53,25 +53,25 @@ class ModifyControllerEditGUITest extends ModifyControllerBaseGUITest {
     private void assertInitLungAbsorption() {
         switch (getEditingNuclide().getLungAbsorption()) {
             case SLOW:
-                FxAssert.verifyThat(vBoxLungAbs, NodeMatchers.isVisible());
+                assertTrue(vBoxLungAbs.isVisible());
                 assertTrue(radioBtnSlowLungAbs.selectedProperty().get());
                 assertFalse(radioBtnMediumLungAbs.selectedProperty().get());
                 assertFalse(radioBtnFastLungAbs.selectedProperty().get());
                 break;
             case MEDIUM:
-                FxAssert.verifyThat(vBoxLungAbs, NodeMatchers.isVisible());
+                assertTrue(vBoxLungAbs.isVisible());
                 assertFalse(radioBtnSlowLungAbs.selectedProperty().get());
                 assertTrue(radioBtnMediumLungAbs.selectedProperty().get());
                 assertFalse(radioBtnFastLungAbs.selectedProperty().get());
                 break;
             case FAST:
-                FxAssert.verifyThat(vBoxLungAbs, NodeMatchers.isVisible());
+                assertTrue(vBoxLungAbs.isVisible());
                 assertFalse(radioBtnSlowLungAbs.selectedProperty().get());
                 assertFalse(radioBtnMediumLungAbs.selectedProperty().get());
                 assertTrue(radioBtnFastLungAbs.selectedProperty().get());
                 break;
             default:
-                FxAssert.verifyThat(vBoxLungAbs, NodeMatchers.isInvisible());
+                assertFalse(vBoxLungAbs.isVisible());
                 assertFalse(radioBtnSlowLungAbs.selectedProperty().get());
                 assertFalse(radioBtnMediumLungAbs.selectedProperty().get());
                 assertFalse(radioBtnFastLungAbs.selectedProperty().get());
@@ -94,7 +94,7 @@ class ModifyControllerEditGUITest extends ModifyControllerBaseGUITest {
         assertInitLifeSpan();
         assertInitLungAbsorption();
         assertEquals("", txtFirstPageStatus.textProperty().get());
-        FxAssert.verifyThat(btnNext, NodeMatchers.isEnabled());
+        assertFalse(btnNext.isDisabled());
         goToPage(2);
         assertEquals(getEditingNuclide().getRefDate(), datePicker.getValue());
         if(RadBigDecimal.NEG_INFINITY_DISPLAY_STRING.equals(getEditingNuclide().getMassStr())) {
@@ -110,7 +110,7 @@ class ModifyControllerEditGUITest extends ModifyControllerBaseGUITest {
         assertFalse(chckBoxSameMass.selectedProperty().get());
         assertFalse(chckBoxSameNSF.selectedProperty().get());
         assertEquals("", txtSecondPageStatus.textProperty().get());
-        FxAssert.verifyThat(btnBack, NodeMatchers.isEnabled());
-        FxAssert.verifyThat(btnFinish, NodeMatchers.isEnabled());
+        assertFalse(btnBack.isDisabled());
+        assertFalse(btnFinish.isDisabled());
     }
 }

@@ -5,12 +5,13 @@ import com.marcsllite.util.FXMLView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
-import org.testfx.api.FxAssert;
 import org.testfx.framework.junit5.Start;
-import org.testfx.matcher.base.NodeMatchers;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MainControllerGUITest extends GUITest {
     MainController controller;
@@ -33,24 +34,24 @@ class MainControllerGUITest extends GUITest {
 
     @Test
     void testInit() {
-        FxAssert.verifyThat(gridPaneMenu, NodeMatchers.isVisible());
-        FxAssert.verifyThat(gridPaneHome, NodeMatchers.isVisible());
-        FxAssert.verifyThat(gridPaneRef, NodeMatchers.isInvisible());
+        assertTrue(gridPaneMenu.isVisible());
+        assertTrue(gridPaneHome.isVisible());
+        assertFalse(gridPaneRef.isVisible());
     }
 
     @Test
     void testShowHomePane() {
         interact(() ->controller.showHomePane());
 
-        FxAssert.verifyThat(gridPaneHome, NodeMatchers.isVisible());
-        FxAssert.verifyThat(gridPaneRef, NodeMatchers.isInvisible());
+        assertTrue(gridPaneHome.isVisible());
+        assertFalse(gridPaneRef.isVisible());
     }
 
     @Test
     void testShowReferencePane() {
         interact(() ->controller.showReferencePane());
 
-        FxAssert.verifyThat(gridPaneHome, NodeMatchers.isInvisible());
-        FxAssert.verifyThat(gridPaneRef, NodeMatchers.isVisible());
+        assertFalse(gridPaneHome.isVisible());
+        assertTrue(gridPaneRef.isVisible());
     }
 }

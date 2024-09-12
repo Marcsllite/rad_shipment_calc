@@ -5,7 +5,6 @@ import com.marcsllite.model.Nuclide;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.Conversions;
 import com.marcsllite.util.FXMLView;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -18,11 +17,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.hamcrest.Matcher;
 import org.junit.jupiter.api.Test;
-import org.testfx.api.FxAssert;
 import org.testfx.framework.junit5.Start;
-import org.testfx.matcher.base.NodeMatchers;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -114,7 +110,7 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
 
     @Test
     void testInit() {
-        FxAssert.verifyThat(stackPaneModify, NodeMatchers.isVisible());
+        assertTrue(stackPaneModify.isVisible());
         //Assertions.assertEquals(getPage(), controller.getPage());
 
         goToPage(1);
@@ -132,11 +128,11 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
     void testHideShow() {
         interact(() ->controller.hide());
 
-        FxAssert.verifyThat(stackPaneModify, NodeMatchers.isInvisible());
+        assertFalse(stackPaneModify.isVisible());
 
         interact(() ->controller.show());
 
-        FxAssert.verifyThat(stackPaneModify, NodeMatchers.isVisible());
+        assertTrue(stackPaneModify.isVisible());
     }
 
     @Test
@@ -146,19 +142,19 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
 
         setDate(LocalDate.now());
         setMass("  ");
-        FxAssert.verifyThat(btnFinish, NodeMatchers.isDisabled());
+        assertTrue(btnFinish.isDisabled());
 
         setMass(goodMass);
-        FxAssert.verifyThat(btnFinish, NodeMatchers.isEnabled());
+        assertFalse(btnFinish.isDisabled());
 
         setMass(null);
-        FxAssert.verifyThat(btnFinish, NodeMatchers.isDisabled());
+        assertTrue(btnFinish.isDisabled());
 
         setMass(goodMass);
-        FxAssert.verifyThat(btnFinish, NodeMatchers.isEnabled());
+        assertFalse(btnFinish.isDisabled());
 
         setMass("NAN");
-        FxAssert.verifyThat(btnFinish, NodeMatchers.isDisabled());
+        assertTrue(btnFinish.isDisabled());
     }
 
     protected void goToPage(int pageNum) {
@@ -170,32 +166,22 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
         assertEquals(pageNum == 2, vBoxSecondPage.isVisible());
     }
 
-    protected void assertSettingField(int filteredIsoSize, VBox vbox, Matcher<Node> nodeMatcher) {
+    protected void assertSettingField(int filteredIsoSize, VBox vbox, boolean isBtnNextDisabled) {
         assertEquals("Incorrect number of filtered Isotopes based off search.",filteredIsoSize, controller.getSearchFilteredNuclides().size());
         assertAdditionalInfoShowing(vbox);
-        FxAssert.verifyThat(btnNext, nodeMatcher);
+        assertEquals(isBtnNextDisabled, btnNext.isDisabled());
     }
 
     protected void assertAdditionalInfoShowing(VBox vbox) {
-        String lifeSpanVisible = "Life Span additional info is visible. Error: ";
-        String lifeSpanInvisible = "Life Span additional info is invisible. Error: ";
-        String lungAbsVisible = "Lung Absorption additional info is visible. Error: ";
-        String lungAbsInvisible = "Lung Absorption additional info is invisible. Error: ";
         if(vbox == null) {
-            FxAssert.verifyThat(vBoxLifeSpan, NodeMatchers.isInvisible(),
-                stringBuilder -> new StringBuilder(lifeSpanVisible + stringBuilder.toString()));
-            FxAssert.verifyThat(vBoxLungAbs, NodeMatchers.isInvisible(),
-                stringBuilder -> new StringBuilder(lungAbsVisible + stringBuilder.toString()));
+            assertFalse(vBoxLifeSpan.isVisible());
+            assertFalse(vBoxLungAbs.isVisible());
         } else if(vbox == vBoxLifeSpan){
-            FxAssert.verifyThat(vBoxLifeSpan, NodeMatchers.isVisible(),
-                stringBuilder -> new StringBuilder(lifeSpanInvisible + stringBuilder.toString()));
-            FxAssert.verifyThat(vBoxLungAbs, NodeMatchers.isInvisible(),
-                stringBuilder -> new StringBuilder(lungAbsVisible + stringBuilder.toString()));
+            assertTrue(vBoxLifeSpan.isVisible());
+            assertFalse(vBoxLungAbs.isVisible());
         } else if(vbox == vBoxLungAbs) {
-            FxAssert.verifyThat(vBoxLifeSpan, NodeMatchers.isInvisible(),
-                stringBuilder -> new StringBuilder(lifeSpanVisible + stringBuilder.toString()));
-            FxAssert.verifyThat(vBoxLungAbs, NodeMatchers.isVisible(),
-                stringBuilder -> new StringBuilder(lungAbsInvisible + stringBuilder.toString()));
+            assertFalse(vBoxLifeSpan.isVisible());
+            assertTrue(vBoxLungAbs.isVisible());
         }
     }
 

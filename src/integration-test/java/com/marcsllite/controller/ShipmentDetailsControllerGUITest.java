@@ -12,12 +12,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.testfx.api.FxAssert;
 import org.testfx.framework.junit5.Start;
-import org.testfx.matcher.base.NodeMatchers;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ShipmentDetailsControllerGUITest extends GUITest {
     ShipmentDetailsController controller;
@@ -54,18 +55,18 @@ class ShipmentDetailsControllerGUITest extends GUITest {
 
     @Test
     void testStart() {
-        FxAssert.verifyThat(stackPaneShipmentDetails, NodeMatchers.isVisible());
+        assertTrue(stackPaneShipmentDetails.isVisible());
     }
 
     @Test
     void testHideShow() {
         interact(() ->controller.hide());
 
-        FxAssert.verifyThat(stackPaneShipmentDetails, NodeMatchers.isInvisible());
+        assertFalse(stackPaneShipmentDetails.isVisible());
 
         interact(() ->controller.show());
 
-        FxAssert.verifyThat(stackPaneShipmentDetails, NodeMatchers.isVisible());
+        assertTrue(stackPaneShipmentDetails.isVisible());
     }
 
     @Disabled("FXML method it tests has not yet been implemented")

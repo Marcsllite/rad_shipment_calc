@@ -8,12 +8,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.testfx.api.FxAssert;
 import org.testfx.framework.junit5.Start;
-import org.testfx.matcher.base.NodeMatchers;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SummaryPaneControllerGUITest extends GUITest {
     SummaryPaneController controller;
@@ -36,18 +37,18 @@ class SummaryPaneControllerGUITest extends GUITest {
 
     @Test
     void testStart() {
-        FxAssert.verifyThat(anchorPaneSummary, NodeMatchers.isVisible());
+        assertTrue(anchorPaneSummary.isVisible());
     }
 
     @Test
     void testHideShow() {
         interact(() ->controller.hide());
 
-        FxAssert.verifyThat(anchorPaneSummary, NodeMatchers.isInvisible());
+        assertFalse(anchorPaneSummary.isVisible());
 
         interact(() ->controller.show());
 
-        FxAssert.verifyThat(anchorPaneSummary, NodeMatchers.isVisible());
+        assertTrue(anchorPaneSummary.isVisible());
     }
 
     @Disabled("FXML method it tests has not yet been implemented")
