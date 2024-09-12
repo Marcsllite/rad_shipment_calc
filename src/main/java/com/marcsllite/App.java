@@ -85,7 +85,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        setStageHandler(new StageHandler(stage, getPropHandler(), getControllerFactory()));
+        App.setStageHandler(new StageHandler(stage, getPropHandler(), getControllerFactory()));
         if(isShowSplash()) {
             App.getStageHandler().showSplashScreen();
         } else {
@@ -127,9 +127,7 @@ public class App extends Application {
     }
 
     public static void setStageHandler(StageHandler stageHandler) {
-        if(App.stageHandler == null) {
-            App.stageHandler = stageHandler;
-        }
+        App.stageHandler = stageHandler;
     }
 
     public FolderHandler getFolderHandler() {

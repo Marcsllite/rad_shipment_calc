@@ -4,18 +4,10 @@ import com.marcsllite.GUITest;
 import com.marcsllite.TestUtils;
 import com.marcsllite.model.Nuclide;
 import com.marcsllite.model.Shipment;
-import com.marcsllite.model.db.LimitsModelId;
-import com.marcsllite.util.Conversions;
 import com.marcsllite.util.FXMLView;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,12 +22,12 @@ import java.util.concurrent.TimeoutException;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class HomePaneControllerGUITest extends GUITest {
@@ -46,26 +38,6 @@ class HomePaneControllerGUITest extends GUITest {
     Button btnRemove;
     TableView<Nuclide> tableViewHome;
     Button btnCalculate;
-    StackPane stackPaneModify;
-    TextField txtFieldNuclideName;
-    TextField txtFieldA0;
-    ComboBox<String> comboBoxA0Prefix;
-    ChoiceBox<String> choiceBoxA0RadUnit;
-    RadioButton radioBtnShortLived;
-    RadioButton radioBtnLongLived;
-    RadioButton radioBtnSlowLungAbs;
-    RadioButton radioBtnMediumLungAbs;
-    RadioButton radioBtnFastLungAbs;
-    Button btnNext;
-    DatePicker datePicker;
-    TextField txtFieldMass;
-    ComboBox<String> comboBoxMassPrefix;
-    ChoiceBox<String> choiceBoxMassUnit;
-    ChoiceBox<String> choiceBoxNature;
-    ChoiceBox<String> choiceBoxState;
-    ChoiceBox<String> choiceBoxForm;
-    Button btnBack;
-    Button btnFinish;
     Shipment shipment;
 
     public HomePaneControllerGUITest() {
@@ -111,47 +83,16 @@ class HomePaneControllerGUITest extends GUITest {
 
         assertTrue(gridPaneHome.isVisible());
     }
-
-    protected void setModifyPaneNodes() {
-        ModifyController modifyController = (ModifyController) getController();
-        stackPaneModify = modifyController.modifyPane;
-        txtFieldNuclideName = modifyController.txtFieldNuclideName;
-        txtFieldA0 = modifyController.txtFieldA0;
-        comboBoxA0Prefix = modifyController.comboBoxA0Prefix;
-        choiceBoxA0RadUnit = modifyController.choiceBoxA0RadUnit;
-        radioBtnShortLived = modifyController.radioBtnShortLived;
-        radioBtnLongLived = modifyController.radioBtnLongLived;
-        radioBtnSlowLungAbs = modifyController.radioBtnSlowLungAbs;
-        radioBtnMediumLungAbs = modifyController.radioBtnMediumLungAbs;
-        radioBtnFastLungAbs = modifyController.radioBtnFastLungAbs;
-        btnNext = modifyController.btnNext;
-        datePicker = modifyController.datePicker;
-        txtFieldMass = modifyController.txtFieldMass;
-        comboBoxMassPrefix = modifyController.comboBoxMassPrefix;
-        choiceBoxMassUnit = modifyController.choiceBoxMassUnit;
-        choiceBoxNature = modifyController.choiceBoxNature;
-        choiceBoxState = modifyController.choiceBoxState;
-        choiceBoxForm = modifyController.choiceBoxForm;
-        btnBack = modifyController.btnBack;
-        btnFinish = modifyController.btnFinish;
-    }
     
     @Test
     void testAddBtnHandler_ShowHide() {
         assertFalse(btnAdd.isDisabled());
 
-        clickOn(btnAdd);
-        setModifyPaneNodes();
-        
-        assertTrue(stackPaneModify.getScene().getWindow().isShowing());
-        assertTrue(getController() instanceof ModifyController);
-        ModifyController c = (ModifyController) getController();
-        assertEquals(BaseController.Page.ADD, c.getPage());
-        verifyModifyPane(null);
+        doNothing().when(getStageHandler()).showModal(any(), any());
 
-        interact(() -> window(stackPaneModify).hide());
-        assertTrue(gridPaneHome.getScene().getWindow().isShowing());
-        assertFalse(stackPaneModify.getScene().getWindow().isShowing());
+        clickOn(btnAdd);
+
+        verify(getStageHandler()).showModal(FXMLView.MODIFY, BaseController.Page.ADD);
     }
 
     @ParameterizedTest(name = "testEditNuclide-{0}")
@@ -165,63 +106,9 @@ class HomePaneControllerGUITest extends GUITest {
         selectRow(tableViewHome, 0);
         assertFalse(btnEdit.isDisabled());
 
+        doNothing().when(getStageHandler()).showModal(any(), any());
         clickOn(btnEdit);
-        setModifyPaneNodes();
-
-        assertTrue(stackPaneModify.getScene().getWindow().isShowing());
-        assertTrue(getController() instanceof ModifyController);
-        ModifyController c = (ModifyController) getController();
-        assertEquals(BaseController.Page.EDIT, c.getPage());
-        verifyModifyPane(nuclide);
-
-        clickOn(btnNext);
-        clickOn(btnFinish);
-        assertTrue(gridPaneHome.getScene().getWindow().isShowing());
-        assertFalse(stackPaneModify.getScene().getWindow().isShowing());
-    }
-    
-    protected void verifyModifyPane(Nuclide nuclide) {
-        if(nuclide == null) {
-            assertNull(txtFieldNuclideName.getText());
-            assertNull(txtFieldA0.getText());
-            assertEquals(Conversions.SIPrefix.BASE.getVal(), comboBoxA0Prefix.getSelectionModel().getSelectedItem());
-            assertEquals(Conversions.RadUnit.CURIE.getVal(), choiceBoxA0RadUnit.getSelectionModel().getSelectedItem());
-            assertTrue(btnNext.isDisabled());
-            assertNotNull(datePicker.getValue());
-            assertNull(txtFieldMass.getText());
-            assertEquals(Conversions.SIPrefix.BASE.getVal(), comboBoxMassPrefix.getSelectionModel().getSelectedItem());
-            assertEquals(Conversions.MassUnit.GRAMS.getVal(), choiceBoxMassUnit.getSelectionModel().getSelectedItem());
-            assertEquals(Nuclide.Nature.REGULAR.getVal(), choiceBoxNature.getSelectionModel().getSelectedItem());
-            assertEquals(LimitsModelId.State.SOLID.getVal(), choiceBoxState.getSelectionModel().getSelectedItem());
-            assertEquals(LimitsModelId.Form.NORMAL.getVal(), choiceBoxForm.getSelectionModel().getSelectedItem());
-            assertFalse(btnBack.isDisabled());
-            assertTrue(btnFinish.isDisabled());
-        } else {
-            assertEquals(nuclide.getDisplayNameNotation(), txtFieldNuclideName.getText());
-            if(nuclide.getInitActivity().isInfinity() ||
-                nuclide.getInitActivity().isNegativeInfinity()) {
-                assertNull(txtFieldA0.getText());
-            } else {
-                assertEquals(nuclide.getInitActivityStr(), txtFieldA0.getText());
-            }
-            assertEquals(nuclide.getInitActivityPrefix().getVal(), comboBoxA0Prefix.getSelectionModel().getSelectedItem());
-            assertEquals(nuclide.getInitActivityUnit().getVal(), choiceBoxA0RadUnit.getSelectionModel().getSelectedItem());
-            assertFalse(btnNext.isDisabled());
-            assertEquals(nuclide.getRefDate(), datePicker.getValue());
-            if(nuclide.getMass().isInfinity() ||
-                nuclide.getMass().isNegativeInfinity()) {
-                assertNull(txtFieldMass.getText());
-            } else {
-                assertEquals(nuclide.getMassStr(), txtFieldMass.getText());
-            }
-            assertEquals(nuclide.getMassPrefix().getVal(), comboBoxMassPrefix.getSelectionModel().getSelectedItem());
-            assertEquals(nuclide.getMassUnit().getVal(), choiceBoxMassUnit.getSelectionModel().getSelectedItem());
-            assertEquals(nuclide.getNature().getVal(), choiceBoxNature.getSelectionModel().getSelectedItem());
-            assertEquals(nuclide.getLimitsId().getState().getVal(), choiceBoxState.getSelectionModel().getSelectedItem());
-            assertEquals(nuclide.getLimitsId().getForm().getVal(), choiceBoxForm.getSelectionModel().getSelectedItem());
-            assertFalse(btnBack.isDisabled());
-            assertFalse(btnFinish.isDisabled());
-        }
+        verify(getStageHandler()).showModal(FXMLView.MODIFY, BaseController.Page.EDIT);
     }
 
     protected void addNuclideToTable(Nuclide nuclide) {

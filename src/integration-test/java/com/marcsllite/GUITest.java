@@ -43,6 +43,7 @@ import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 
@@ -89,6 +90,7 @@ public abstract class GUITest extends FxRobot {
 
         app.start(stage);
         setStageHandler(App.getStageHandler());
+        App.setStageHandler(getStageHandler()); // replacing with spy of same StageHandler
     }
 
     @Stop
@@ -103,13 +105,10 @@ public abstract class GUITest extends FxRobot {
     }
 
     private ControllerFactoryTestObj getControllerFactory() {
-        switch (getPage()) {
-            case ADD:
-            case EDIT:
-                return new ControllerFactoryTestObj(getDbService(), mainController);
-            default:
-                return new ControllerFactoryTestObj(getDbService());
-        }
+        return switch (getPage()) {
+            case ADD, EDIT -> new ControllerFactoryTestObj(getDbService(), mainController);
+            default -> new ControllerFactoryTestObj(getDbService());
+        };
     }
 
     protected void baseStageAssertions(Stage stage) {
@@ -145,7 +144,7 @@ public abstract class GUITest extends FxRobot {
     }
 
     public void setStageHandler(StageHandler stageHandler) {
-        this.stageHandler = stageHandler;
+        this.stageHandler = spy(stageHandler);
     }
 
     private void setupMainController() {
