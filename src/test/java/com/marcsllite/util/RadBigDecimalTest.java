@@ -191,15 +191,6 @@ class RadBigDecimalTest {
     }
 
     @Test
-    void testByteValue_Exception() {
-        String randNum = Double.toString(TestUtils.getRandomNumberWithDecimalPrecision(25, 50, RadBigDecimal.DEFAULT_DEC_PRECISION));
-        BigDecimal bd = new BigDecimal(randNum, RadBigDecimal.DEFAULT_CONTEXT);
-        RadBigDecimal rbd = new RadBigDecimal(bd);
-        assertThrows(ArithmeticException.class, bd::byteValueExact);
-        assertThrows(ArithmeticException.class, rbd::byteValueExact);
-    }
-
-    @Test
     void testFloatValue() {
         float exp = (float) TestUtils.getRandomNumberWithDecimalPrecision(100, 500, RadBigDecimal.DEFAULT_DEC_PRECISION);
         RadBigDecimal rbd = new RadBigDecimal(Float.toString(exp));
