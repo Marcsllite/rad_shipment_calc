@@ -94,7 +94,7 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
     @Test
     void testBtnNextHandler_NoRadio() {
         setInitialActivity("123");
-        assertSettingField(0, null, true);
+        assertSettingField(TestUtils.getTestNuclideSize(), null, true);
 
         setNuclideName(TestUtils.getRegularNuclide().getDisplaySymbolNotation());
         assertSettingField(1, null, false);
@@ -246,7 +246,7 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
         TestUtils.TestNuclide lungAbsorptionNuclide = TestUtils.getLungAbsNuclide();
 
         setInitialActivity("123");
-        assertSettingField(0, null, true);
+        assertSettingField(TestUtils.getTestNuclideSize(), null, true);
 
         int filteredIsoSize = TestUtils.equalsTestNuclide(lungAbsorptionNuclide.getDisplaySymbolNotation());
         setNuclideName(lungAbsorptionNuclide.getDisplaySymbolNotation());
