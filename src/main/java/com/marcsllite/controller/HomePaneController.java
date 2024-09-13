@@ -14,6 +14,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -156,6 +157,7 @@ public class HomePaneController extends BaseController {
         if(!tableViewHome.getSelectionModel().isEmpty()) {
             tableViewHome.getSelectionModel().clearSelection();
         }
+        App.getStageHandler().setSecondaryStage(new Stage());
         App.getStageHandler().showModal(FXMLView.MODIFY, Page.ADD);
     }
 
@@ -164,6 +166,7 @@ public class HomePaneController extends BaseController {
      */
     @FXML protected void editBtnHandler() {
         logr.debug("User clicked the Edit button on the home pane");
+        App.getStageHandler().setSecondaryStage(new Stage());
         App.getStageHandler().showModal(FXMLView.MODIFY, Page.EDIT);
     }
 

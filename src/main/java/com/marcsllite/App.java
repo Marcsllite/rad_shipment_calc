@@ -88,6 +88,7 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         getStageHandler().setPrimaryStage(stage);
         if(isShowSplash()) {
+            App.getStageHandler().setSecondaryStage(new Stage());
             App.getStageHandler().showSplashScreen();
         } else {
             App.showPrimaryStage();
@@ -96,7 +97,7 @@ public class App extends Application {
 
     public static void showPrimaryStage() throws RuntimeException {
         if(App.getStageHandler() == null) {
-            RuntimeException rte = new RuntimeException("Primary stage not initialized");
+            RuntimeException rte = new RuntimeException("StageHandler not initialized");
             logr.throwing(rte);
             throw rte;
         }

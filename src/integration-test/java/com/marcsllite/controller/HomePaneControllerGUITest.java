@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.FieldSource;
 import org.mockito.Spy;
+import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.Start;
 
 import java.io.IOException;
@@ -85,9 +86,11 @@ class HomePaneControllerGUITest extends GUITest {
     }
     
     @Test
-    void testAddBtnHandler_ShowHide() {
+    void testAddBtnHandler_ShowHide() throws TimeoutException {
         assertFalse(btnAdd.isDisabled());
 
+        Stage secondaryStage = FxToolkit.registerStage(Stage::new);
+        when(getStageHandler().getSecondaryStage()).thenReturn(secondaryStage);
         doNothing().when(getStageHandler()).showModal(any(), any());
 
         clickOn(btnAdd);
@@ -97,7 +100,7 @@ class HomePaneControllerGUITest extends GUITest {
 
     @ParameterizedTest(name = "testEditNuclide-{0}")
     @FieldSource("com.marcsllite.TestUtils#testNuclides")
-    void testEditBtnHandler_ShowHide(TestUtils.TestNuclide testNuclide) {
+    void testEditBtnHandler_ShowHide(TestUtils.TestNuclide testNuclide) throws TimeoutException {
         Nuclide nuclide = TestUtils.createNuclide(testNuclide);
         clearNuclideTable();
         assertTrue(btnEdit.isDisabled());
@@ -106,6 +109,8 @@ class HomePaneControllerGUITest extends GUITest {
         selectRow(tableViewHome, 0);
         assertFalse(btnEdit.isDisabled());
 
+        Stage secondaryStage = FxToolkit.registerStage(Stage::new);
+        when(getStageHandler().getSecondaryStage()).thenReturn(secondaryStage);
         doNothing().when(getStageHandler()).showModal(any(), any());
         clickOn(btnEdit);
         verify(getStageHandler()).showModal(FXMLView.MODIFY, BaseController.Page.EDIT);
