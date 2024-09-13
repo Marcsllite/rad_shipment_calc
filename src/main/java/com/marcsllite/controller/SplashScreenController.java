@@ -94,7 +94,7 @@ public class SplashScreenController {
             updateProgress(2, 2);
 
             Platform.runLater(() -> {
-                App.loadPrimaryStage();
+                App.showPrimaryStage();
                 App.getStageHandler().closeSecondary();
             });
 

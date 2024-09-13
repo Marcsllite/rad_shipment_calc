@@ -45,7 +45,7 @@ public class App extends Application {
         setShowSplash(showSplash);
         if(doInit) {
             try {
-                init(null, null, null, null, null);
+                init(null, null, null, null, null, null);
             } catch (IOException e) {
                 logr.catching(Level.FATAL, e);
                 logr.fatal("Failed to start application");
@@ -59,41 +59,47 @@ public class App extends Application {
         }
     }
 
-    protected void init(FXMLView view, PropHandler propHandler, FolderHandler folderHandler, DBService dbService, ControllerFactory controllerFactory) throws IOException {
+    protected void init(StageHandler stageHandler, FXMLView view, PropHandler propHandler, FolderHandler folderHandler, DBService dbService, ControllerFactory controllerFactory) throws IOException {
         setControllerFactory(controllerFactory);
 
         setView(view == null?
             FXMLView.MAIN:
             view);
 
-        // setup properties
         setPropHandler(propHandler == null?
             new PropHandlerFactory().getPropHandler(null):
             propHandler);
 
-        // setup folder structure
         setFolderHandler(folderHandler == null?
             new FolderHandler(getPropHandler()):
             folderHandler);
         System.setProperty("h2.baseDir", getFolderHandler().getDataFolderPath());
 
-        // init DB
         setDbService(dbService == null?
             new DBServiceImpl():
             dbService);
+
+        setStageHandler(stageHandler == null?
+            new StageHandler(null, getPropHandler(), getControllerFactory()) :
+            stageHandler);
     }
 
     @Override
     public void start(Stage stage) throws IOException {
-        App.setStageHandler(new StageHandler(stage, getPropHandler(), getControllerFactory()));
+        getStageHandler().setPrimaryStage(stage);
         if(isShowSplash()) {
             App.getStageHandler().showSplashScreen();
         } else {
-            App.getStageHandler().show(App.getView(), App.getPage());
+            App.showPrimaryStage();
         }
     }
 
-    public static void loadPrimaryStage() {
+    public static void showPrimaryStage() throws RuntimeException {
+        if(App.getStageHandler() == null) {
+            RuntimeException rte = new RuntimeException("Primary stage not initialized");
+            logr.throwing(rte);
+            throw rte;
+        }
         App.getStageHandler().show(App.getView(), App.getPage());
     }
 
@@ -123,7 +129,7 @@ public class App extends Application {
      * @return the StageHandler
      */
     public static StageHandler getStageHandler() {
-        return stageHandler;
+        return App.stageHandler;
     }
 
     public static void setStageHandler(StageHandler stageHandler) {

@@ -73,10 +73,9 @@ public abstract class GUITest extends FxRobot {
         app = new App(false, false);
         setupMainController();
 
-        PropHandlerTestObj testPropHandler = new PropHandlerTestObj();
         folderHandler = mock(FolderHandler.class);
-        folderHandler.setPropHandler(testPropHandler);
-        dbService = new DBServiceImpl(testPropHandler);
+        folderHandler.setPropHandler(new PropHandlerTestObj());
+        dbService = new DBServiceImpl(new PropHandlerTestObj());
         assertEquals(1, getDbService().validateDb());
     }
 
@@ -85,12 +84,11 @@ public abstract class GUITest extends FxRobot {
         Platform.setImplicitExit(false);
         when(folderHandler.getDataFolderPath()).thenReturn(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
 
-        app.init(view, new PropHandlerTestObj(), folderHandler, getDbService(), getControllerFactory());
+        stageHandler = spy(new StageHandler(stage, new PropHandlerTestObj(), getControllerFactory()));
+        app.init(stageHandler, view, new PropHandlerTestObj(), folderHandler, getDbService(), getControllerFactory());
         App.setPage(getPage());
 
         app.start(stage);
-        setStageHandler(App.getStageHandler());
-        App.setStageHandler(getStageHandler()); // replacing with spy of same StageHandler
     }
 
     @Stop
@@ -141,10 +139,6 @@ public abstract class GUITest extends FxRobot {
 
     protected StageHandler getStageHandler() {
         return stageHandler;
-    }
-
-    public void setStageHandler(StageHandler stageHandler) {
-        this.stageHandler = spy(stageHandler);
     }
 
     private void setupMainController() {

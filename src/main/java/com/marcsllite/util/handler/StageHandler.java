@@ -21,7 +21,7 @@ import java.util.Objects;
 
 public class StageHandler {
     private static final Logger logr = LogManager.getLogger();
-    private final Stage primaryStage;
+    private Stage primaryStage;
     private Stage secondaryStage;
     private FXMLLoader loader;
     private ControllerFactory factory;
@@ -42,6 +42,10 @@ public class StageHandler {
         setPropHandler(propHandler == null? new PropHandlerFactory().getPropHandler(null) : propHandler);
         setFactory(factory == null? new ControllerFactory() : factory);
         setCurView(null);
+    }
+
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
     }
 
     public Stage getPrimaryStage() {
@@ -101,18 +105,22 @@ public class StageHandler {
 
         getFactory().setPage(page);
         Parent root = loadViewNodeHierarchy(view);
-        getPrimaryStage().setScene(new Scene(root, view.getWidth(), view.getHeight()));
-        getPrimaryStage().setMinWidth(view.getWidth());
-        getPrimaryStage().setMinHeight(view.getHeight());
-        getPrimaryStage().setMaxWidth(view.getMaxWidth());
-        getPrimaryStage().setMaxHeight(view.getMaxHeight());
-        getPrimaryStage().setFullScreen(false);
-        getPrimaryStage().setMaximized(false);
-        getPrimaryStage().setTitle(view.getTitle());
-        getPrimaryStage().getIcons().add(view.getIconImage());
-        getPrimaryStage().centerOnScreen();
+        if(getPrimaryStage() == null) {
+            throw logAndThrowException("Primary stage is null", new RuntimeException());
+        } else {
+            getPrimaryStage().setScene(new Scene(root, view.getWidth(), view.getHeight()));
+            getPrimaryStage().setMinWidth(view.getWidth());
+            getPrimaryStage().setMinHeight(view.getHeight());
+            getPrimaryStage().setMaxWidth(view.getMaxWidth());
+            getPrimaryStage().setMaxHeight(view.getMaxHeight());
+            getPrimaryStage().setFullScreen(false);
+            getPrimaryStage().setMaximized(false);
+            getPrimaryStage().setTitle(view.getTitle());
+            getPrimaryStage().getIcons().add(view.getIconImage());
+            getPrimaryStage().centerOnScreen();
 
-        setCurView(view);
+            setCurView(view);
+        }
     }
 
     public void switchSceneModal(FXMLView view, BaseController.Page page) throws RuntimeException {
@@ -182,7 +190,11 @@ public class StageHandler {
 
         try {
             switchScene(view, page);
-            getPrimaryStage().show();
+            if(getPrimaryStage() == null) {
+                throw logAndThrowException("Primary stage is null", new RuntimeException());
+            } else {
+                getPrimaryStage().show();
+            }
         } catch (Exception exception) {
             logr.catching(Level.FATAL, exception);
             logr.atLevel(Level.FATAL)
