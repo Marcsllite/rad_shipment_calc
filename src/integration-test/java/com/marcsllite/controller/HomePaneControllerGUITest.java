@@ -93,9 +93,9 @@ class HomePaneControllerGUITest extends GUITest {
         when(getStageHandler().getSecondaryStage()).thenReturn(secondaryStage);
         doNothing().when(getStageHandler()).showModal(any(), any());
 
-        clickOn(btnAdd);
-
+        interact(() -> clickOn(btnAdd));
         verify(getStageHandler()).showModal(FXMLView.MODIFY, BaseController.Page.ADD);
+        //secondaryStage.close();
     }
 
     @ParameterizedTest(name = "testEditNuclide-{0}")
@@ -112,8 +112,9 @@ class HomePaneControllerGUITest extends GUITest {
         Stage secondaryStage = FxToolkit.registerStage(Stage::new);
         when(getStageHandler().getSecondaryStage()).thenReturn(secondaryStage);
         doNothing().when(getStageHandler()).showModal(any(), any());
-        clickOn(btnEdit);
+        interact(() -> clickOn(btnEdit));
         verify(getStageHandler()).showModal(FXMLView.MODIFY, BaseController.Page.EDIT);
+        //secondaryStage.close();
     }
 
     protected void addNuclideToTable(Nuclide nuclide) {
