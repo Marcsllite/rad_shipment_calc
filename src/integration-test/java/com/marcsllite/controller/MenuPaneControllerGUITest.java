@@ -95,6 +95,9 @@ class MenuPaneControllerGUITest extends GUITest {
 
     @Test
     void testMouseHover() {
+        clickOn(btnShipment);
+        assertEquals(MenuPaneController.Page.SHIPMENT, controller.getCurrentPage());
+
         moveTo(stackPaneLogo);
         assertFalse(imgViewColorLogo.isVisible());
         assertTrue(imgViewGreyLogo.isVisible());
@@ -108,6 +111,7 @@ class MenuPaneControllerGUITest extends GUITest {
         assertEquals(Paint.valueOf(HOVER_COLOR.getVal()), btnReference.getTextFill());
 
         clickOn(btnReference);
+        assertEquals(MenuPaneController.Page.REFERENCE, controller.getCurrentPage());
         assertEquals(Paint.valueOf(IDLE_COLOR.getVal()), btnShipment.getTextFill());
         assertEquals(Paint.valueOf(CURRENT_COLOR.getVal()), btnReference.getTextFill());
 
