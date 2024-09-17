@@ -46,7 +46,7 @@ environment:
 
     # https://www.appveyor.com/docs/macos-images-software/
     - job_name: Mac build
-      appveyor_build_worker_image: macos-monterey
+      appveyor_build_worker_image: macos-sonoma
 
     # https://www.appveyor.com/docs/linux-images-software/
     - job_name: Linux build
