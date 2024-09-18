@@ -116,8 +116,8 @@ for:
           find "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
 
     on_failure:
-      - sh: appveyor PushArtifact 'target\surefire-reports\*.txt'
-      - sh: appveyor PushArtifact 'target\failsafe-reports\*.txt'
+      - sh: appveyor PushArtifact 'target/surefire-reports/*.txt'
+      - sh: appveyor PushArtifact 'target/failsafe-reports/*.txt'
 
     on_success:
       - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov &&
@@ -152,8 +152,8 @@ for:
           find "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
 
     on_failure:
-      - sh: appveyor PushArtifact 'target\surefire-reports\*.txt'
-      - sh: appveyor PushArtifact 'target\failsafe-reports\*.txt'
+      - sh: appveyor PushArtifact 'target/surefire-reports/*.txt'
+      - sh: appveyor PushArtifact 'target/failsafe-reports/*.txt'
 
     on_success:
       - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov &&
