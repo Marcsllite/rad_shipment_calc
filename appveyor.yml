@@ -44,13 +44,13 @@ environment:
     - job_name: Windows build
       appveyor_build_worker_image: Visual Studio 2022
 
-    # https://www.appveyor.com/docs/macos-images-software/
-    - job_name: Mac build
-      appveyor_build_worker_image: macos-sonoma
-
     # https://www.appveyor.com/docs/linux-images-software/
     - job_name: Linux build
       appveyor_build_worker_image: Ubuntu2204
+
+    # https://www.appveyor.com/docs/macos-images-software/
+    - job_name: Mac build
+      appveyor_build_worker_image: macos-sonoma
 
 stack: jdk 17
 
@@ -78,7 +78,11 @@ for:
       - ps: $wc = New-Object 'System.Net.WebClient';
             foreach($file in get-childItem $env:APPVEYOR_BUILD_FOLDER/target/failsafe-reports -include TEST-*.xml -name) { `
               $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path .\target\failsafe-reports\$file)); }
-  
+
+    on_failure:
+      - ps: Push-AppveyorArtifact 'target\surefire-reports\*.txt'
+      - ps: Push-AppveyorArtifact 'target\failsafe-reports\*.txt'
+
     on_success:
       - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
             .\codecov.exe -t $CODECOV_TOKEN -f $APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged/jacoco.xml
@@ -86,6 +90,42 @@ for:
     cache:
       - '%MAVEN_HOME% -> pom.xml'
       - '%UserProfile%\.m2 -> pom.xml'
+
+  # LINUX BUILD #
+  -
+    matrix:
+      only:
+        - job_name: Linux build
+
+    install:
+      - sh: sudo apt-get -y install libcanberra-gtk-module
+      - sh: wget https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.6.3/apache-maven-3.6.3-bin.tar.gz -P /tmp &&
+          sudo tar xf /tmp/apache-maven-*.tar.gz -C /opt &&
+          sudo update-alternatives --install /usr/bin/mvn mvn /opt/apache-maven-3.6.3/bin/mvn 363
+      - sh: Xvfb :99 &>/dev/null &
+          export DISPLAY=:99
+
+    build_script:
+      # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
+      - sh: mvn clean verify -Dbuild.version=$APPVEYOR_BUILD_VERSION
+
+    on_finish:
+      - sh: |
+          find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
+      - sh: |
+          find "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
+
+    on_failure:
+      - sh: appveyor PushArtifact 'target\surefire-reports\*.txt'
+      - sh: appveyor PushArtifact 'target\failsafe-reports\*.txt'
+
+    on_success:
+      - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov &&
+          chmod +x codecov &&
+          ./codecov -t $CODECOV_TOKEN -f $APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged/jacoco.xml
+
+    cache:
+      - $HOME/.m2 -> pom.xml
 
   # MAC BUILD #
   -
@@ -110,41 +150,13 @@ for:
           find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
       - sh: |
           find "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
-    
+
+    on_failure:
+      - sh: appveyor PushArtifact 'target\surefire-reports\*.txt'
+      - sh: appveyor PushArtifact 'target\failsafe-reports\*.txt'
+
     on_success:
       - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov &&
-            chmod +x codecov &&
-            ./codecov -t $CODECOV_TOKEN -f $APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged/jacoco.xml
-
-    cache:
-      - $HOME/.m2 -> pom.xml
-      
-  # LINUX BUILD #
-  -
-    matrix:
-      only:
-        - job_name: Linux build
-
-    install:
-      - sh: sudo apt-get -y install libcanberra-gtk-module
-      - sh: wget https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.6.3/apache-maven-3.6.3-bin.tar.gz -P /tmp &&
-            sudo tar xf /tmp/apache-maven-*.tar.gz -C /opt && 
-            sudo update-alternatives --install /usr/bin/mvn mvn /opt/apache-maven-3.6.3/bin/mvn 363
-      - sh: Xvfb :99 &>/dev/null &
-            export DISPLAY=:99
-
-    build_script:
-      # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
-      - sh: mvn clean verify -Dbuild.version=$APPVEYOR_BUILD_VERSION
-
-    on_finish:
-      - sh: |
-          find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
-      - sh: |
-          find "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
-    
-    on_success:
-      - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov &&
             chmod +x codecov &&
             ./codecov -t $CODECOV_TOKEN -f $APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged/jacoco.xml
 
@@ -157,8 +169,6 @@ for:
 
 artifacts:
   - path: 'target\rad_shipment_calc-*.jar'
-  - path: 'target\surefire-reports\*.txt'
-  - path: 'target\failsafe-reports\*.txt'
 
 #---------------------------------#
 #     deployment configuration    #
