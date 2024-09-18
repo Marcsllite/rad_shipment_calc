@@ -135,7 +135,8 @@ public class StageHandler {
         if(getSecondaryStage() == null) {
             throw logAndThrowException("Secondary stage is null", new RuntimeException());
         } else {
-            getSecondaryStage().initModality(Modality.APPLICATION_MODAL);
+            getSecondaryStage().initModality(Modality.WINDOW_MODAL);
+            getSecondaryStage().initOwner(getPrimaryStage());
             getSecondaryStage().setScene(new Scene(root, view.getWidth(), view.getHeight()));
             getSecondaryStage().setMinWidth(view.getWidth());
             getSecondaryStage().setMinHeight(view.getHeight());
