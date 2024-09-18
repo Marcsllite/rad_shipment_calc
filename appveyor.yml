@@ -80,8 +80,12 @@ for:
               $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path .\target\failsafe-reports\$file)); }
 
     on_failure:
-      - ps: Push-AppveyorArtifact .\target\surefire-reports\*.txt
-      - ps: Push-AppveyorArtifact .\target\failsafe-reports\*.txt
+      - ps: $wc = New-Object 'System.Net.WebClient';
+          foreach($file in get-childItem $env:APPVEYOR_BUILD_FOLDER/target/surefire-reports -include *.txt -name) { `
+            Push-AppveyorArtifact (Resolve-Path .\target\surefire-reports\$file); }
+      - ps: $wc = New-Object 'System.Net.WebClient';
+          foreach($file in get-childItem $env:APPVEYOR_BUILD_FOLDER/target/failsafe-reports -include *.txt -name) { `
+            Push-AppveyorArtifact (Resolve-Path .\target\failsafe-reports\$file); }
 
     on_success:
       - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
@@ -116,8 +120,10 @@ for:
           find "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
 
     on_failure:
-      - sh: appveyor PushArtifact target/surefire-reports/*.txt
-      - sh: appveyor PushArtifact target/failsafe-reports/*.txt
+      - sh: |
+          find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name '*.txt' -print0 | xargs -0 -I '{}' appveyor PushArtifact -FileName '{}'
+      - sh: |
+          find "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" -type f -name '*.txt' -print0 | xargs -0 -I '{}' appveyor PushArtifact -FileName '{}'
 
     on_success:
       - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov &&
@@ -152,8 +158,10 @@ for:
           find "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
 
     on_failure:
-      - sh: appveyor PushArtifact target/surefire-reports/*.txt
-      - sh: appveyor PushArtifact target/failsafe-reports/*.txt
+      - sh: |
+          find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name '*.txt' -print0 | xargs -0 -I '{}' appveyor PushArtifact -FileName '{}'
+      - sh: |
+          find "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" -type f -name '*.txt' -print0 | xargs -0 -I '{}' appveyor PushArtifact -FileName '{}'
 
     on_success:
       - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov &&
