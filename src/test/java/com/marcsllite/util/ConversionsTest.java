@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.security.InvalidParameterException;
 
 import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -40,6 +41,7 @@ class ConversionsTest {
     @ParameterizedTest(name = "Convert 7.5 {0} to base = {1}")
     @MethodSource("convertToBaseException_data")
     void testConvertToBaseException(RadBigDecimal value, Conversions.SIPrefix prefix, String message) {
+        fail("testing appveyor on-failure script");
         InvalidParameterException exception = assertThrows(
             InvalidParameterException.class, () -> Conversions.convertToBase(value, prefix)
         );
