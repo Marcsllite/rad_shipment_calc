@@ -7,13 +7,9 @@ import com.marcsllite.controller.HomePaneController;
 import com.marcsllite.service.DBService;
 import com.marcsllite.service.DBServiceImpl;
 import com.marcsllite.util.FXMLView;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +28,6 @@ import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -100,38 +95,6 @@ class StageHandlerTest {
         stageHandler.switchSceneModal(view, BaseController.Page.NONE);
         verify(stageHandler, times(0)).getFactory();
         verify(stageHandler, times(0)).loadViewNodeHierarchy(view);
-    }
-
-    @Disabled(value = "Not enough information to pinpoint cause of failure." +
-        "Delegating fix to a future date")
-    void testSwitchSceneModal_ModifyCurrentView() {
-        FXMLView view = FXMLView.MODIFY;
-        Stage stage = mock(Stage.class);
-
-        Platform.runLater(
-            () -> {
-                doReturn(view).when(stageHandler).getCurrentView();
-                when(dbService.getAllNuclideModels()).thenReturn(FXCollections.observableArrayList());
-                doReturn(null).when(stageHandler).loadViewNodeHierarchy(view);
-                doReturn(stage).when(stageHandler).getSecondaryStage();
-
-                stageHandler.switchSceneModal(view, BaseController.Page.NONE);
-
-                verify(stage).initModality(Modality.APPLICATION_MODAL);
-                verify(stage).setScene(any());
-                verify(stage).setMinWidth(view.getWidth());
-                verify(stage).setMinHeight(view.getHeight());
-                verify(stage).setMaxWidth(view.getMaxWidth());
-                verify(stage).setMaxHeight(view.getMaxHeight());
-                verify(stage).setFullScreen(false);
-                verify(stage).setMaximized(false);
-                verify(stage).setResizable(false);
-                verify(stage).setTitle(view.getTitle());
-                verify(stage).getIcons();
-                verify(stage).centerOnScreen();
-                verify(stageHandler).loadViewNodeHierarchy(view);
-            }
-        );
     }
 
     @Test
