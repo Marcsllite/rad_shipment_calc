@@ -157,6 +157,8 @@ for:
 
 artifacts:
   - path: 'target\rad_shipment_calc-*.jar'
+  - path: 'target\surefire-reports\*.txt'
+  - path: 'target\failsafe-reports\*.txt'
 
 #---------------------------------#
 #     deployment configuration    #
