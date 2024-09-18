@@ -151,7 +151,7 @@ class StageHandlerTest {
     }
   
     @Test
-    @ClearSystemProperty(key = "keepPlatformOpen")
+    @ClearSystemProperty(key = StageHandler.KEEP_PLATFORM_OPEN_PROPERTY)
     void testShow_EmptyView() {
         FXMLView view = FXMLView.TEST;
 
@@ -178,7 +178,7 @@ class StageHandlerTest {
     }
 
     @Test
-    @ClearSystemProperty(key = "keepPlatformOpen")
+    @ClearSystemProperty(key = StageHandler.KEEP_PLATFORM_OPEN_PROPERTY)
     void testShowModal_NotInit() {
         FXMLView view = FXMLView.HOME;
         BaseController.Page page = BaseController.Page.NONE;
@@ -220,7 +220,7 @@ class StageHandlerTest {
     }
 
     @Test
-    @ClearSystemProperty(key = "keepPlatformOpen")
+    @ClearSystemProperty(key = StageHandler.KEEP_PLATFORM_OPEN_PROPERTY)
     void testLoadViewNodeHierarchy_EmptyView() {
         FXMLView view = FXMLView.TEST;
 
@@ -254,7 +254,7 @@ class StageHandlerTest {
     }
 
     @Test
-    @ClearSystemProperty(key = "keepPlatformOpen")
+    @ClearSystemProperty(key = StageHandler.KEEP_PLATFORM_OPEN_PROPERTY)
     void testLoadViewNodeHierarchy_LoadExceptionSecondary() throws IOException {
         FXMLView view = FXMLView.TEST;
         FXMLLoader loader = mock(FXMLLoader.class);

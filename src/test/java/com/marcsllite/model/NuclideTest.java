@@ -5,6 +5,7 @@ import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.model.db.NuclideModelId;
 import com.marcsllite.util.Conversions;
 import com.marcsllite.util.RadBigDecimal;
+import com.marcsllite.util.handler.StageHandler;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,7 +40,7 @@ class NuclideTest extends DBTest {
 
     @BeforeAll
     public void beforeAll() {
-        System.setProperty("keepPlatformOpen", "true");
+        System.setProperty(StageHandler.KEEP_PLATFORM_OPEN_PROPERTY, "true");
     }
 
     @Override

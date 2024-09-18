@@ -30,7 +30,7 @@ public class StageHandler {
     private static final String NULL_ERROR = "FXML View is null";
     private static final String FATAL_ERROR = "Unable to show {} scene";
     protected static final String DEFAULT_MSG = "No Message";
-    private static final String KEEP_PLATFORM_OPEN_PROPERTY = "keepPlatformOpen";
+    public static final String KEEP_PLATFORM_OPEN_PROPERTY = "keepPlatformOpen";
 
     public StageHandler(Stage stage) throws IOException {
         this(stage, null, null);

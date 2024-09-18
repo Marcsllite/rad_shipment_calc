@@ -23,6 +23,7 @@ import com.marcsllite.model.db.NuclideModelId;
 import com.marcsllite.model.db.ReportableQuantityModel;
 import com.marcsllite.model.db.ShipmentModel;
 import com.marcsllite.util.RadBigDecimal;
+import com.marcsllite.util.handler.StageHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -152,7 +153,7 @@ class DBServiceImplTest extends DBTest {
     }
 
     @Test
-    @SetSystemProperty(key = "keepPlatformOpen",value = "true")
+    @SetSystemProperty(key = StageHandler.KEEP_PLATFORM_OPEN_PROPERTY,value = "true")
     void testGetAllNuclideModels() {
         NuclideModel model = new NuclideModel();
         List<NuclideModel> exp = new ArrayList<>();
@@ -181,7 +182,7 @@ class DBServiceImplTest extends DBTest {
     }
 
     @Test
-    @SetSystemProperty(key = "keepPlatformOpen",value = "true")
+    @SetSystemProperty(key = StageHandler.KEEP_PLATFORM_OPEN_PROPERTY,value = "true")
     void testGetNuclide_Null() {
         String symbol = "symbol";
         String massNumber = "massNumber";

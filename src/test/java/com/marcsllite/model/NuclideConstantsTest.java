@@ -6,6 +6,7 @@ import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.model.db.NuclideModelId;
 import com.marcsllite.service.DBService;
 import com.marcsllite.util.RadBigDecimal;
+import com.marcsllite.util.handler.StageHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetSystemProperty;
@@ -58,7 +59,7 @@ class NuclideConstantsTest extends DBTest {
     }
 
     @Test
-    @SetSystemProperty(key = "keepPlatformOpen",value = "true")
+    @SetSystemProperty(key = StageHandler.KEEP_PLATFORM_OPEN_PROPERTY,value = "true")
     void testDbInit() {
         NuclideModelId nuclideId = DEFAULT_ID;
         LimitsModelId limitsId = new LimitsModelId(DEFAULT_STATE, DEFAULT_FORM);

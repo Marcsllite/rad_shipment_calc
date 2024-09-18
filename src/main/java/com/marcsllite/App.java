@@ -52,7 +52,7 @@ public class App extends Application {
                 // Can only initialize one FX Thread per JVM
                 // Do not call Platform.exit when testing because other tests that
                 // require the FX Thread will fail or be ignored
-                if(System.getProperty("keepPlatformOpen") == null) {
+                if(System.getProperty(StageHandler.KEEP_PLATFORM_OPEN_PROPERTY) == null) {
                     getStageHandler().closePrimary();
                 }
             }
