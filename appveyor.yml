@@ -119,17 +119,13 @@ for:
       - sh: |
           find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
       - sh: |
-          if [ -d "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" ]; then\ 
-            find "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"\
-          fi
+          if [ -d "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" ]; then find "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" -type f -name 'TEST-*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"; fi
 
     on_failure:
       - sh: |
           find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name '*.txt' -print0 | xargs -0 -I '{}' appveyor PushArtifact -Path '{}'
       - sh: |
-          if [ -d "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" ]; then\
-            find "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" -type f -name '*.txt' -print0 | xargs -0 -I '{}' appveyor PushArtifact -Path '{}'\
-          fi
+          if [ -d "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" ]; then find "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" -type f -name '*.txt' -print0 | xargs -0 -I '{}' appveyor PushArtifact -Path '{}'; fi
 
     on_success:
       - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov &&
