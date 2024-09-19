@@ -1,14 +1,18 @@
 package com.marcsllite.controller;
 
+import com.marcsllite.App;
 import com.marcsllite.PropHandlerTestObj;
 import com.marcsllite.TestUtils;
 import com.marcsllite.model.Nuclide;
 import com.marcsllite.model.Shipment;
 import com.marcsllite.model.db.NuclideModelId;
+import com.marcsllite.util.FXMLView;
+import com.marcsllite.util.handler.StageHandler;
 import javafx.collections.FXCollections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
@@ -18,6 +22,9 @@ import static junit.framework.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -30,6 +37,29 @@ class HomePaneControllerTest {
     public void setUp() throws IOException {
         controller = spy(new HomePaneController(new PropHandlerTestObj()));
         assertEquals(BaseController.Page.HOME, controller.getPage());
+    }
+
+    @Test
+    void testAddBtnHandler_ShowHide()  {
+        try(MockedStatic<App> appStaticMock = mockStatic(App.class)) {
+            doNothing().when(controller).clearTable();
+            StageHandler stageHandler = mock(StageHandler.class);
+            appStaticMock.when(App::getStageHandler).thenReturn(stageHandler);
+            doNothing().when(stageHandler).showModal(FXMLView.MODIFY, BaseController.Page.ADD);
+            controller.addBtnHandler();
+            verify(stageHandler).showModal(FXMLView.MODIFY, BaseController.Page.ADD);
+        }
+    }
+
+    @Test
+    void testEditBtnHandler_ShowHide()  {
+        try(MockedStatic<App> appStaticMock = mockStatic(App.class)) {
+            StageHandler stageHandler = mock(StageHandler.class);
+            appStaticMock.when(App::getStageHandler).thenReturn(stageHandler);
+            doNothing().when(stageHandler).showModal(FXMLView.MODIFY, BaseController.Page.EDIT);
+            controller.editBtnHandler();
+            verify(stageHandler).showModal(FXMLView.MODIFY, BaseController.Page.EDIT);
+        }
     }
 
     @Test

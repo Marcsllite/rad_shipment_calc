@@ -23,9 +23,7 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class HomePaneControllerGUITest extends GUITest {
@@ -80,31 +78,6 @@ class HomePaneControllerGUITest extends GUITest {
         interact(() ->controller.show());
 
         assertTrue(gridPaneHome.isVisible());
-    }
-    
-    @Test
-    void testAddBtnHandler_ShowHide() throws TimeoutException {
-        assertFalse(btnAdd.isDisabled());
-
-        doNothing().when(getStageHandler()).showModal(FXMLView.MODIFY, BaseController.Page.ADD);
-
-        interact(() -> clickOn(btnAdd));
-        verify(getStageHandler()).showModal(FXMLView.MODIFY, BaseController.Page.ADD);
-    }
-
-    @Test()
-    void testEditBtnHandler_ShowHide() throws TimeoutException {
-        clearNuclideTable();
-        assertTrue(btnEdit.isDisabled());
-
-        addNuclideToTable(TestUtils.createNuclide());
-        selectRow(tableViewHome, 0);
-        assertFalse(btnEdit.isDisabled());
-
-        doNothing().when(getStageHandler()).showModal(FXMLView.MODIFY, BaseController.Page.EDIT);
-
-        interact(() -> clickOn(btnEdit));
-        verify(getStageHandler()).showModal(FXMLView.MODIFY, BaseController.Page.EDIT);
     }
 
     protected void addNuclideToTable(Nuclide nuclide) {

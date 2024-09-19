@@ -88,7 +88,6 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         getStageHandler().setPrimaryStage(stage);
         if(isShowSplash()) {
-            App.getStageHandler().setSecondaryStage(new Stage());
             App.getStageHandler().showSplashScreen();
         } else {
             App.showPrimaryStage();
