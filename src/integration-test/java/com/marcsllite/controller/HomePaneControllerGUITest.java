@@ -95,7 +95,6 @@ class HomePaneControllerGUITest extends GUITest {
 
         interact(() -> clickOn(btnAdd));
         verify(getStageHandler()).showModal(FXMLView.MODIFY, BaseController.Page.ADD);
-        //secondaryStage.close();
     }
 
     @ParameterizedTest(name = "testEditNuclide-{0}")
