@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<StackPane fx:id="modifyPane" prefHeight="250.0" prefWidth="450.0" styleClass="root" stylesheets="@../css/modify.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcsllite.controller.ModifyController">
+<StackPane fx:id="modifyPane" prefHeight="250.0" prefWidth="450.0" styleClass="root" stylesheets="@../css/modify.css" xmlns="http://javafx.com/fxml" xmlns:fx="http://javafx.com/fxml" fx:controller="com.marcsllite.controller.ModifyController">
    <VBox fx:id="vBoxFirstPage" alignment="CENTER" spacing="15.0" styleClass="vBoxFirstPage" visible="false">
       <StackPane.margin>
          <Insets />

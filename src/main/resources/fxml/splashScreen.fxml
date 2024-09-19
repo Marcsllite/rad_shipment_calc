@@ -4,7 +4,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane fx:id="gridPaneSplash" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="350" prefWidth="450" stylesheets="@../css/splash.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcsllite.controller.SplashScreenController">
+<GridPane fx:id="gridPaneSplash" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="350" prefWidth="450" stylesheets="@../css/splash.css" xmlns="http://javafx.com/fxml" xmlns:fx="http://javafx.com/fxml" fx:controller="com.marcsllite.controller.SplashScreenController">
     <VBox alignment="CENTER" spacing="10.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../images/color_UMass_logo.png" />

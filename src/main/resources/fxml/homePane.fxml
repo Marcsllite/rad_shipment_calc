@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane fx:id="homePane" prefHeight="500.0" prefWidth="600.0" styleClass="root" stylesheets="@../css/homePane.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcsllite.controller.HomePaneController">
+<GridPane fx:id="homePane" prefHeight="500.0" prefWidth="600.0" styleClass="root" stylesheets="@../css/homePane.css" xmlns="http://javafx.com/fxml" xmlns:fx="http://javafx.com/fxml" fx:controller="com.marcsllite.controller.HomePaneController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />

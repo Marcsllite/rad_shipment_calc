@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane fx:id="referencePane" prefHeight="500.0" prefWidth="600.0" styleClass="root" stylesheets="@../css/referencePane.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcsllite.controller.ReferencePaneController">
+<GridPane fx:id="referencePane" prefHeight="500.0" prefWidth="600.0" styleClass="root" stylesheets="@../css/referencePane.css" xmlns="http://javafx.com/fxml" xmlns:fx="http://javafx.com/fxml" fx:controller="com.marcsllite.controller.ReferencePaneController">
   <HBox alignment="CENTER" spacing="5.0">
     <Label alignment="CENTER" text="Search" textAlignment="RIGHT" textFill="#8a8a8a" wrapText="true">
       <font>
