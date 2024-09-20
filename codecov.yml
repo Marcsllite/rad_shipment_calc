@@ -19,6 +19,7 @@ component_management:
       name: integration
       paths:
         - src/integration-test/java/com/marcsllite/**
+        - src/main/java/com/marcsllite/**
     - component_id: controller_comp
       name: unit_controller
       paths:
@@ -45,50 +46,101 @@ component_management:
         - src/main/java/com/marcsllite/util/**
         - src/test/java/com/marcsllite/util/**
 
+#flags:
+#  integration-test:
+#      paths:
+#        - src/integration-test/java/com/marcsllite/
+#  unit-test:
+#      paths:
+#        - src/test/java/com/marcsllite/
+#  unit-test_controller:
+#      paths:
+#        - src/main/java/com/marcsllite/controller/
+#        - src/test/java/com/marcsllite/controller/
+#  unit-test_dao:
+#      paths:
+#        - src/main/java/com/marcsllite/dao/
+#        - src/test/java/com/marcsllite/dao/
+#  unit-test_model:
+#      paths:
+#        - src/main/java/com/marcsllite/model/
+#        - src/test/java/com/marcsllite/model/
+#  unit-test_db:
+#      paths:
+#        - src/main/java/com/marcsllite/model/db/
+#        - src/test/java/com/marcsllite/model/db/
+#  unit-test_service:
+#      paths:
+#        - src/main/java/com/marcsllite/service/
+#        - src/test/java/com/marcsllite/service/
+#  unit-test_util:
+#      paths:
+#        - src/main/java/com/marcsllite/util/
+#        - src/test/java/com/marcsllite/util/
+#  unit-test_util_controller:
+#      paths:
+#        - src/main/java/com/marcsllite/util/controller/
+#        - src/test/java/com/marcsllite/util/controller/
+#  unit-test_util_factory:
+#      paths:
+#        - src/main/java/com/marcsllite/util/factory/
+#        - src/test/java/com/marcsllite/util/factory/
+#  unit-test_util_handler:
+#      paths:
+#        - src/main/java/com/marcsllite/util/handler/
+#        - src/test/java/com/marcsllite/util/handler/
+
 flag_management:
+  default_rules:
+    statuses:
+      - name_prefix: proj-
+        type: project
+        target: 80%
   individual_flags:
-    - name: integration-test
+    - name: default_flags
+#  integration-test:
       paths:
-        - src/integration-test/java/com/marcsllite/
-    - name: unit-test
-      paths:
-        - src/test/java/com/marcsllite/
-    - name: unit-test_controller
-      paths:
-        - src/main/java/com/marcsllite/controller/
-        - src/test/java/com/marcsllite/controller/
-    - name: unit-test_dao
-      paths:
-        - src/main/java/com/marcsllite/dao/
-        - src/test/java/com/marcsllite/dao/
-    - name: unit-test_model
-      paths:
-        - src/main/java/com/marcsllite/model/
-        - src/test/java/com/marcsllite/model/
-    - name: unit-test_db
-      paths:
-        - src/main/java/com/marcsllite/model/db/
-        - src/test/java/com/marcsllite/model/db/
-    - name: unit-test_service
-      paths:
-        - src/main/java/com/marcsllite/service/
-        - src/test/java/com/marcsllite/service/
-    - name: unit-test_util
-      paths:
-        - src/main/java/com/marcsllite/util/
-        - src/test/java/com/marcsllite/util/
-    - name: unit-test_util_controller
-      paths:
-        - src/main/java/com/marcsllite/util/controller/
-        - src/test/java/com/marcsllite/util/controller/
-    - name: unit-test_util_factory
-      paths:
-        - src/main/java/com/marcsllite/util/factory/
-        - src/test/java/com/marcsllite/util/factory/
-    - name: unit-test_util_handler
-      paths:
-        - src/main/java/com/marcsllite/util/handler/
-        - src/test/java/com/marcsllite/util/handler/
+      - src/integration-test/java/com/marcsllite/
+#  unit-test:
+#    paths:
+      - src/test/java/com/marcsllite/
+#  unit-test_controller:
+#    paths:
+      - src/main/java/com/marcsllite/controller/
+      - src/test/java/com/marcsllite/controller/
+#  unit-test_dao:
+#    paths:
+      - src/main/java/com/marcsllite/dao/
+      - src/test/java/com/marcsllite/dao/
+#  unit-test_model:
+#    paths:
+      - src/main/java/com/marcsllite/model/
+      - src/test/java/com/marcsllite/model/
+#  unit-test_db:
+#    paths:
+      - src/main/java/com/marcsllite/model/db/
+      - src/test/java/com/marcsllite/model/db/
+#  unit-test_service:
+#    paths:
+      - src/main/java/com/marcsllite/service/
+      - src/test/java/com/marcsllite/service/
+#  unit-test_util:
+#    paths:
+      - src/main/java/com/marcsllite/util/
+      - src/test/java/com/marcsllite/util/
+#  unit-test_util_controller:
+#    paths:
+      - src/main/java/com/marcsllite/util/controller/
+      - src/test/java/com/marcsllite/util/controller/
+#  unit-test_util_factory:
+#    paths:
+      - src/main/java/com/marcsllite/util/factory/
+      - src/test/java/com/marcsllite/util/factory/
+#  unit-test_util_handler:
+#    paths:
+      - src/main/java/com/marcsllite/util/handler/
+      - src/test/java/com/marcsllite/util/handler/
+
 
 parsers:
   gcov:
