@@ -4,6 +4,8 @@ import com.marcsllite.util.Conversions;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+import java.io.Serial;
+
 
 /**
  * The maximum activity of special form Class 7 (radioactive) material
@@ -12,6 +14,7 @@ import jakarta.persistence.Table;
 @Entity(name = "A1")
 @Table(name = "A_ONE")
 public class A1Model extends BaseDataModel {
+    @Serial
     private static final long serialVersionUID = 1600283366978070629L;
 
     public A1Model() {

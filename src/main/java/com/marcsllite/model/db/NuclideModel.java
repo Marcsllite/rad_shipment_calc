@@ -9,12 +9,14 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "Nuclide")
 @Table(name = "NUCLIDE")
 public class NuclideModel extends BaseModel {
+    @Serial
     private static final long serialVersionUID = -6610061947707574223L;
 
     @Column(name = "Atomic_Number", nullable = false)

@@ -4,11 +4,13 @@ import com.marcsllite.util.NuclideUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
 public class NuclideModelId implements Serializable {
+    @Serial
     private static final long serialVersionUID = 6598716598717598732L;
 
     @Column(name = "Symbol", length = 2, nullable = false)

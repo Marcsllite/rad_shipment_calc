@@ -6,9 +6,12 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+import java.io.Serial;
+
 @Entity(name = "Limits")
 @Table(name = "LIMITS")
 public class LimitsModel extends BaseModel {
+    @Serial
     private static final long serialVersionUID = -5280835757871497233L;
 
     @EmbeddedId

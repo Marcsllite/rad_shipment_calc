@@ -14,6 +14,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
+import java.io.Serial;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.List;
 @Entity(name = "Shipment")
 @Table(name = "SHIPMENT")
 public class ShipmentModel extends BaseModel {
+    @Serial
     private static final long serialVersionUID = 1895641912158690468L;
 
     public ShipmentModel() {

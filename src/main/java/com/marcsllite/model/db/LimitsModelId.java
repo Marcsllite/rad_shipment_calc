@@ -6,6 +6,7 @@ import jakarta.persistence.Embeddable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Embeddable
 public class LimitsModelId implements Serializable {
+    @Serial
     private static final long serialVersionUID = 7009442724876176627L;
 
     public enum State {

@@ -6,9 +6,12 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+import java.io.Serial;
+
 @Entity(name = "Reportable Quantity")
 @Table(name = "REPORTABLE_QUANTITY")
 public class ReportableQuantityModel extends BaseModel {
+    @Serial
     private static final long serialVersionUID = 1479886818838786038L;
 
     @EmbeddedId

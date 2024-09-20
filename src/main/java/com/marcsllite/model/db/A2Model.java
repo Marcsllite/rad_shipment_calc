@@ -4,6 +4,8 @@ import com.marcsllite.util.Conversions;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+import java.io.Serial;
+
 /**
  * The maximum activity of Class 7 (radioactive) material
  * permitted in a Type A package other than:
@@ -16,6 +18,7 @@ import jakarta.persistence.Table;
 @Entity(name = "A2")
 @Table(name = "A_TWO")
 public class A2Model extends BaseDataModel {
+    @Serial
     private static final long serialVersionUID = -5895460983437367212L;
 
     public A2Model() {

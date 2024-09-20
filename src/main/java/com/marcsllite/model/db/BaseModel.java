@@ -6,10 +6,12 @@ import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @MappedSuperclass
 public abstract class BaseModel implements Serializable {
+    @Serial
     private static final long serialVersionUID = -7070688536494118785L;
 
     @Version

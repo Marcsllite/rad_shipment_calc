@@ -6,8 +6,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.MappedSuperclass;
 
+import java.io.Serial;
+
 @MappedSuperclass
 public abstract class BaseDataModel extends BaseModel {
+    @Serial
     private static final long serialVersionUID = 6194462219788554210L;
 
     @EmbeddedId
