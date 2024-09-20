@@ -93,7 +93,7 @@ for:
 
     on_success:
       - ps: try { `
-          Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; '
+          Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe;
           .\codecov.exe -t $CODECOV_TOKEN -f $APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged/jacoco.xml `
           } catch { Write-Host "Failed to post Windows codecov" }
 
