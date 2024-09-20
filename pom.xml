@@ -13,9 +13,9 @@
         <maven.compiler.version>3.8.0</maven.compiler.version>
         <javafx.maven.plugin.version>0.0.6</javafx.maven.plugin.version>
         <javafx.version>17.0.12</javafx.version>
-        <mockito.version>3.11.2</mockito.version>
-        <log4j.version>2.17.1</log4j.version>
-        <jacoco.version>0.8.10</jacoco.version>
+        <mockito.version>3.12.4</mockito.version>
+        <log4j.version>2.19.0</log4j.version>
+        <jacoco.version>0.8.11</jacoco.version>
         <junit.version>5.11.0</junit.version>
         <assertj.version>3.20.2</assertj.version>
         <testfx.version>4.0.18</testfx.version>
