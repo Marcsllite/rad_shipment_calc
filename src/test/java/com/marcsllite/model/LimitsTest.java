@@ -5,8 +5,8 @@ import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.RadBigDecimal;
 import org.junit.jupiter.api.Test;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LimitsTest {
     Limits limits = new Limits();

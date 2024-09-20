@@ -6,7 +6,7 @@ import com.marcsllite.util.RadBigDecimal;
 import com.marcsllite.util.handler.PropHandler;
 import org.junit.jupiter.api.Test;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ReportableQuantityTest {

@@ -24,9 +24,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.concurrent.TimeoutException;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 abstract class ModifyControllerBaseGUITest extends GUITest {
     ModifyController controller;
@@ -167,7 +167,7 @@ abstract class ModifyControllerBaseGUITest extends GUITest {
     }
 
     protected void assertSettingField(int filteredIsoSize, VBox vbox, boolean isBtnNextDisabled) {
-        assertEquals("Incorrect number of filtered Isotopes based off search.",filteredIsoSize, controller.getSearchFilteredNuclides().size());
+        assertEquals(filteredIsoSize, controller.getSearchFilteredNuclides().size(), "Incorrect number of filtered Isotopes based off search.");
         assertAdditionalInfoShowing(vbox);
         assertEquals(isBtnNextDisabled, btnNext.isDisabled());
     }

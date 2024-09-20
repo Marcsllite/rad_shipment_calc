@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static com.marcsllite.util.NuclideUtils.LIFE_SPAN_PATTERN;
 import static com.marcsllite.util.NuclideUtils.LUNG_ABS_PATTERN;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestUtils {
     public static class TestNuclide {

@@ -3,8 +3,8 @@ package com.marcsllite.model.db;
 import com.marcsllite.util.RadBigDecimal;
 import org.junit.jupiter.api.Test;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class HalfLifeModelTest {
     private final String DEFAULT_SYMBOL = "Sy";

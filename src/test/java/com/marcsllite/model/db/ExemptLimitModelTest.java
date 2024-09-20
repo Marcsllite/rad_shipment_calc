@@ -4,7 +4,7 @@ import com.marcsllite.util.Conversions;
 import com.marcsllite.util.RadBigDecimal;
 import org.junit.jupiter.api.Test;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ExemptLimitModelTest {
     private final String DEFAULT_SYMBOL = "Sy";

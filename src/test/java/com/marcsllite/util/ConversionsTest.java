@@ -1,7 +1,6 @@
 package com.marcsllite.util;
 
 import com.marcsllite.TestUtils;
-import junit.framework.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,8 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.security.InvalidParameterException;
 
-import static junit.framework.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mockStatic;
@@ -280,11 +279,11 @@ class ConversionsTest {
 
         str = "g";
         actual = Conversions.MassUnit.toMass(str);
-        Assert.assertEquals(Conversions.MassUnit.GRAMS, actual);
+        assertEquals(Conversions.MassUnit.GRAMS, actual);
 
         str = "GRAMS (g)";
         actual = Conversions.MassUnit.toMass(str);
-        Assert.assertEquals(Conversions.MassUnit.GRAMS, actual);
+        assertEquals(Conversions.MassUnit.GRAMS, actual);
 
         str = "fake";
         actual = Conversions.MassUnit.toMass(str);
@@ -295,23 +294,23 @@ class ConversionsTest {
     void testToDoseUnit() {
         String str = "";
         Conversions.DoseUnit actual = Conversions.DoseUnit.toDoseUnit(str);
-        Assert.assertNull(actual);
+        assertNull(actual);
 
         str = "g";
         actual = Conversions.DoseUnit.toDoseUnit(str);
-        Assert.assertNull(actual);
+        assertNull(actual);
 
         str = "gy";
         actual = Conversions.DoseUnit.toDoseUnit(str);
-        Assert.assertEquals(Conversions.DoseUnit.GRAY, actual);
+        assertEquals(Conversions.DoseUnit.GRAY, actual);
 
         str = "roentgen equivalent, man (rem)";
         actual = Conversions.DoseUnit.toDoseUnit(str);
-        Assert.assertEquals(Conversions.DoseUnit.REM, actual);
+        assertEquals(Conversions.DoseUnit.REM, actual);
 
         str = "roentgen Equivalent, MaN (rem)";
         actual = Conversions.DoseUnit.toDoseUnit(str);
-        Assert.assertEquals(Conversions.DoseUnit.REM, actual);
+        assertEquals(Conversions.DoseUnit.REM, actual);
 
         str = "fake";
         actual = Conversions.DoseUnit.toDoseUnit(str);
@@ -322,23 +321,23 @@ class ConversionsTest {
     void testToExposureUnit() {
         String str = "";
         Conversions.ExposureUnit actual = Conversions.ExposureUnit.toExposureUnit(str);
-        Assert.assertNull(actual);
+        assertNull(actual);
 
         str = "r";
         actual = Conversions.ExposureUnit.toExposureUnit(str);
-        Assert.assertEquals(Conversions.ExposureUnit.ROENTGEN, actual);
+        assertEquals(Conversions.ExposureUnit.ROENTGEN, actual);
 
         str = "C/kg";
         actual = Conversions.ExposureUnit.toExposureUnit(str);
-        Assert.assertEquals(Conversions.ExposureUnit.COULOMB_KILOGRAM, actual);
+        assertEquals(Conversions.ExposureUnit.COULOMB_KILOGRAM, actual);
 
         str = "roentgen (R)";
         actual = Conversions.ExposureUnit.toExposureUnit(str);
-        Assert.assertEquals(Conversions.ExposureUnit.ROENTGEN, actual);
+        assertEquals(Conversions.ExposureUnit.ROENTGEN, actual);
 
         str = "coulomb/kilogram (C/kg)";
         actual = Conversions.ExposureUnit.toExposureUnit(str);
-        Assert.assertEquals(Conversions.ExposureUnit.COULOMB_KILOGRAM, actual);
+        assertEquals(Conversions.ExposureUnit.COULOMB_KILOGRAM, actual);
 
         str = "fake";
         actual = Conversions.ExposureUnit.toExposureUnit(str);
@@ -353,11 +352,11 @@ class ConversionsTest {
 
         str = "Curie (Ci)";
         actual = Conversions.RadUnit.toRadUnit(str);
-        Assert.assertEquals(Conversions.RadUnit.CURIE, actual);
+        assertEquals(Conversions.RadUnit.CURIE, actual);
 
         str = "CI";
         actual = Conversions.RadUnit.toRadUnit(str);
-        Assert.assertEquals(Conversions.RadUnit.CURIE, actual);
+        assertEquals(Conversions.RadUnit.CURIE, actual);
 
         str = "fake";
         actual = Conversions.RadUnit.toRadUnit(str);
@@ -368,23 +367,23 @@ class ConversionsTest {
     void testToSIPrefix() {
         String str = "";
         Conversions.SIPrefix actual = Conversions.SIPrefix.toSIPrefix(str);
-        Assert.assertEquals(Conversions.SIPrefix.BASE, actual);
+        assertEquals(Conversions.SIPrefix.BASE, actual);
     
         str = "m";
         actual = Conversions.SIPrefix.toSIPrefix(str);
-        Assert.assertEquals(Conversions.SIPrefix.MILLI, actual);
+        assertEquals(Conversions.SIPrefix.MILLI, actual);
     
         str = "M";
         actual = Conversions.SIPrefix.toSIPrefix(str);
-        Assert.assertEquals(Conversions.SIPrefix.MEGA, actual);
+        assertEquals(Conversions.SIPrefix.MEGA, actual);
     
         str = "Mega (M)";
         actual = Conversions.SIPrefix.toSIPrefix(str);
-        Assert.assertEquals(Conversions.SIPrefix.MEGA, actual);
+        assertEquals(Conversions.SIPrefix.MEGA, actual);
     
         str = "mEGA (M)";
         actual = Conversions.SIPrefix.toSIPrefix(str);
-        Assert.assertEquals(Conversions.SIPrefix.MEGA, actual);
+        assertEquals(Conversions.SIPrefix.MEGA, actual);
     
         str = "fake";
         actual = Conversions.SIPrefix.toSIPrefix(str);

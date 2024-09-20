@@ -3,8 +3,8 @@ package com.marcsllite.model.db;
 import com.marcsllite.util.Conversions;
 import org.junit.jupiter.api.Test;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class MassUnitAttrConverterTest {
     final MassUnitAttrConverter converter = new MassUnitAttrConverter();

@@ -19,7 +19,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.codehaus.plexus.util.StringUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,10 +36,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -185,7 +184,7 @@ public abstract class GUITest extends FxRobot {
                 table.getSelectionModel().select(i);
             }
         });
-        assertEquals("Unable to select rows: {"+start+", "+(end-1)+"} from the table",end-start, table.getSelectionModel().getSelectedItems().size());
+        assertEquals(end-start, table.getSelectionModel().getSelectedItems().size(), "Unable to select rows: {"+start+", "+(end-1)+"} from the table");
     }
 
     protected void clearSelection(TableView<Nuclide> table) {
@@ -213,7 +212,7 @@ public abstract class GUITest extends FxRobot {
     private void verifyNumericalText(TextField field, String str) {
         String replacedStr = StringUtils.isBlank(str)? null : str.replaceAll("[^\\d.]", "");
         if (StringUtils.isBlank(replacedStr)) {
-            Assertions.assertNull(field.textProperty().get());
+            assertNull(field.textProperty().get());
         } else {
             RadBigDecimal initialActivity = new RadBigDecimal(replacedStr);
             assertEquals(replacedStr, field.textProperty().get());

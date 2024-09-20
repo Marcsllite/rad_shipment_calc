@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.concurrent.TimeoutException;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;

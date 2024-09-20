@@ -26,11 +26,11 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.TimeoutException;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ReferencePaneControllerGUITest extends GUITest {
     ReferencePaneController controller;
@@ -277,9 +277,7 @@ class ReferencePaneControllerGUITest extends GUITest {
 
         for (int i = 1; i < notationSize; i++) {
             setString(symbolNotation.substring(0, i), txtFieldSearch);
-            assertEquals("Incorrect search results for substring length "+i+", ("+symbolNotation.substring(0, i)+")",
-                TestUtils.subStringTestNuclide(symbolNotation.substring(0, i)),
-                tableViewSearch.getItems().size());
+            assertEquals(TestUtils.subStringTestNuclide(symbolNotation.substring(0, i)), tableViewSearch.getItems().size(), "Incorrect search results for substring length "+i+", ("+symbolNotation.substring(0, i)+")");
         }
     }
 }
