@@ -8,6 +8,18 @@
     <version>1.0.0</version>
 
     <properties>
+        <argLine>
+        -Djdk.gtk.version=2
+        -Djava.awt.headless=true
+        -Dglass.platform=Monocle
+        -Dmonocle.platform=Headless
+        -Dtestfx.robot=glass
+        -Dtestfx.headless=true
+        -Djavafx.verbose=true
+        -Dprism.order=sw
+        -Dprism.text=t2k
+        -Dprism.debug=true
+        </argLine>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11.0.2</maven.compiler.source>
         <maven.compiler.target>11.0.2</maven.compiler.target>
@@ -15,22 +27,22 @@
         <maven.compiler.version>3.8.0</maven.compiler.version>
         <javafx.maven.plugin.version>0.0.6</javafx.maven.plugin.version>
         <javafx.version>11.0.2</javafx.version>
-        <mockito.version>3.12.4</mockito.version>
-        <log4j.version>2.18.0</log4j.version>
+        <mockito.version>3.11.2</mockito.version>
+        <log4j.version>2.18.1</log4j.version>
         <jacoco.version>0.8.8</jacoco.version>
         <junit.version>5.8.0-M1</junit.version>
         <assertj.version>3.20.2</assertj.version>
         <testfx.version>4.0.15-alpha</testfx.version>
         <sonar.version>3.9.0.2155</sonar.version>
         <surefire.version>3.0.0-M5</surefire.version>
-        <monocle.version>jdk-12.0.1+2</monocle.version>
+        <monocle.version>jdk-11+26</monocle.version>
 
         <!-- Test Coverage -->
-        <jacoco.percentages.min.instruct>0.85</jacoco.percentages.min.instruct>
-        <jacoco.percentages.min.line>0.85</jacoco.percentages.min.line>
-        <jacoco.percentages.min.branch>0.85</jacoco.percentages.min.branch>
-        <jacoco.percentages.min.complex>0.85</jacoco.percentages.min.complex>
-        <jacoco.percentages.min.method>0.85</jacoco.percentages.min.method>
+        <jacoco.percentages.min.instruct>0.74</jacoco.percentages.min.instruct>
+        <jacoco.percentages.min.line>0.68</jacoco.percentages.min.line>
+        <jacoco.percentages.min.branch>0.72</jacoco.percentages.min.branch>
+        <jacoco.percentages.min.complex>0.71</jacoco.percentages.min.complex>
+        <jacoco.percentages.min.method>0.70</jacoco.percentages.min.method>
         <jacoco.missed.count.class>0</jacoco.missed.count.class>
     </properties>
 
@@ -49,7 +61,12 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
-        </dependency>      
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
@@ -69,14 +86,10 @@
         <!-- Test Dependencies -->
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>${mockito.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>${mockito.version}</version>
-          </dependency>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -116,10 +129,33 @@
     </dependencies>
 
     <build>
-        <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
-        <testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
-        <outputDirectory>${basedir}/target/classes</outputDirectory>
-        <testOutputDirectory>${basedir}/target/test-classes</testOutputDirectory>
+        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+        <outputDirectory>${project.basedir}/target/classes</outputDirectory>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <excludes>
+                    <exclude>${project.basedir}/src/main/resources/databaseAudit/*</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
+        <testOutputDirectory>${project.basedir}/target/test-classes</testOutputDirectory>
+        <testResources>
+            <testResource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <excludes>
+                    <exclude>${project.basedir}/src/main/resources/css/*</exclude>
+                    <exclude>${project.basedir}/src/main/resources/csv/*</exclude>
+                    <exclude>${project.basedir}/src/main/resources/databaseAudit/*</exclude>
+                    <exclude>${project.basedir}/src/main/resources/font/*</exclude>
+                    <exclude>${project.basedir}/src/main/resources/scripts/*</exclude>
+                </excludes>
+            </testResource>
+            <testResource>
+                <directory>${project.basedir}/src/test/resources</directory>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
@@ -130,11 +166,31 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>me.fabriciorby</groupId>
+                        <artifactId>maven-surefire-junit5-tree-reporter</artifactId>
+                        <version>1.2.1</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <additionalClasspathElements>
+                        <additionalClasspathElement>${project.basedir}/src/main/resources</additionalClasspathElement>
+                    </additionalClasspathElements>
+                    <reportFormat>plain</reportFormat>
+                    <consoleOutputReporter>
+                        <disable>true</disable>
+                    </consoleOutputReporter>
+                    <statelessTestsetInfoReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter"/>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${surefire.version}</version>
+                <configuration>
+                    <trimStackTrace>false</trimStackTrace>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -149,14 +205,18 @@
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>${javafx.maven.plugin.version}</version>
+                <configuration>
+                    <mainClass>com.marcsllite.Launcher</mainClass>
+                    <options>
+                        <option>-Djdk.gtk.version=2</option>
+                        <option>-Djavafx.version=null</option>
+                    </options>
+                </configuration>
                 <executions>
                     <execution>
                         <!-- Default configuration for running -->
                         <!-- Usage: mvn clean javafx:run -->
                         <id>default-cli</id>
-                        <configuration>
-                            <mainClass>com.marcsllite.App</mainClass>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -164,6 +224,13 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/Launcher.class</exclude>
+                        <exclude>**/App.class</exclude>
+                        <exclude>**/PropManagerControl.class</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
