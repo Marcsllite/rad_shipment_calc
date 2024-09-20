@@ -92,8 +92,10 @@ for:
               Push-AppveyorArtifact (Resolve-Path .\target\failsafe-reports\$file); }}
 
     on_success:
-      - ps: Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; 
-            .\codecov.exe -t $CODECOV_TOKEN -f $APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged/jacoco.xml || Write-Host "Failed to post Windows codecov"
+      - ps: try { `
+          Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe; '
+          .\codecov.exe -t $CODECOV_TOKEN -f $APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged/jacoco.xml `
+          } catch { Write-Host "Failed to post Windows codecov" }
 
     cache:
       - '%MAVEN_HOME% -> pom.xml'
