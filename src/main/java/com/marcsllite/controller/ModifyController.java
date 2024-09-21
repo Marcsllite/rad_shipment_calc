@@ -289,6 +289,7 @@ public class ModifyController extends BaseController {
         resetSecondPage();
     }
 
+    @SuppressWarnings("java:S112")
     public void resetFirstPage() throws RuntimeException {
         txtFieldNuclideName.setText(null);
         txtFieldA0.setText(null);
