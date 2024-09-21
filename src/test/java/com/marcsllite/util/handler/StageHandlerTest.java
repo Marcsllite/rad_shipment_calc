@@ -187,7 +187,7 @@ class StageHandlerTest {
     void testLoadViewNodeHierarchy_EmptyView() {
         FXMLView view = FXMLView.TEST;
 
-        doReturn(null).when(stageHandler).getSecondaryStage();
+        when(stageHandler.getSecondaryStage()).thenReturn(null);
         doNothing().when(primaryStage).close();
 
         RuntimeException exception = assertThrows(
