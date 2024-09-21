@@ -17,9 +17,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.testfx.api.FxAssert;
 import org.testfx.framework.junit5.Start;
-import org.testfx.matcher.base.NodeMatchers;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -166,13 +164,13 @@ class ReferencePaneControllerGUITest extends GUITest {
     protected void validateRefDataForSelectedRow(int index) {
         NuclideConstants isoConstants = tableViewSearch.getItems().get(index).getConstants();
 
-        assertEquals("Incorrect A1 for index " + index, isoConstants.getA1().toDisplayString(), txtFieldA1.getText());
-        assertEquals("Incorrect A2 for index " + index, isoConstants.getA2().toDisplayString(), txtFieldA2.getText());
-        assertEquals("Incorrect Decay Constant for index " + index, isoConstants.getDecayConstant().toDisplayString(), txtFieldDecayConst.getText());
-        assertEquals("Incorrect Exempt Concentration for index " + index, isoConstants.getExemptConcentration().toDisplayString(), txtFieldExemptCon.getText());
-        assertEquals("Incorrect Exempt Limit for index " + index, isoConstants.getExemptLimit().toDisplayString(), txtFieldExemptLim.getText());
-        assertEquals("Incorrect Half LIfe for index " + index, isoConstants.getHalfLife().toDisplayString(), txtFieldHalfLife.getText());
-        assertEquals("Incorrect Report Quantity (TBq) for index " + index, isoConstants.getTeraBqReportQuan().toDisplayString(), txtFieldReportQuan.getText());
+        assertEquals(isoConstants.getA1().toDisplayString(), txtFieldA1.getText(), "Incorrect A1 for index " + index);
+        assertEquals(isoConstants.getA2().toDisplayString(), txtFieldA2.getText(), "Incorrect A2 for index " + index);
+        assertEquals(isoConstants.getDecayConstant().toDisplayString(), txtFieldDecayConst.getText(), "Incorrect Decay Constant for index " + index);
+        assertEquals(isoConstants.getExemptConcentration().toDisplayString(), txtFieldExemptCon.getText(), "Incorrect Exempt Concentration for index " + index);
+        assertEquals(isoConstants.getExemptLimit().toDisplayString(), txtFieldExemptLim.getText(), "Incorrect Exempt Limit for index " + index);
+        assertEquals(isoConstants.getHalfLife().toDisplayString(), txtFieldHalfLife.getText(), "Incorrect Half LIfe for index " + index);
+        assertEquals(isoConstants.getTeraBqReportQuan().toDisplayString(), txtFieldReportQuan.getText(), "Incorrect Report Quantity (TBq) for index " + index);
     }
 
     protected void validateRefTextFields(TextField field, String promptTxt) {
