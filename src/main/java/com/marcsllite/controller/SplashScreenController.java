@@ -29,7 +29,7 @@ public class SplashScreenController {
 
     public SplashScreenController(PropHandler propHandler) throws IOException {
         this.propHandler = propHandler == null? new PropHandlerFactory().getPropHandler(null): propHandler;
-        this.dbService = new DBServiceImpl(this.propHandler);
+        this.dbService = new DBServiceImpl(getPropHandler());
     }
 
     @FXML

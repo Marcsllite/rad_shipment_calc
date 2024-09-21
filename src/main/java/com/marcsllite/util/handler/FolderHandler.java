@@ -21,8 +21,8 @@ public class FolderHandler {
     }
 
     public FolderHandler(PropHandler propHandler) throws IOException {
-        setPropHandler(propHandler == null? new PropHandlerFactory().getPropHandler(null) : propHandler);
-        setAppFolderPath(getPropHandler().getString("appFolderName"));
+        this.propHandler = propHandler == null? new PropHandlerFactory().getPropHandler(null) : propHandler;
+        appFolderPath = this.propHandler.getString("appFolderName");
     }
 
     /**

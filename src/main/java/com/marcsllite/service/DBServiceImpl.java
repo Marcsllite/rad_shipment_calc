@@ -50,7 +50,7 @@ public class DBServiceImpl implements DBService {
 
     public DBServiceImpl(PropHandler propHandler) {
         try {
-            setPropHandler(propHandler == null? new PropHandlerFactory().getPropHandler(null) : propHandler);
+            this.propHandler = propHandler == null? new PropHandlerFactory().getPropHandler(null) : propHandler;
         } catch (IOException e) {
             logr.catching(e);
         }

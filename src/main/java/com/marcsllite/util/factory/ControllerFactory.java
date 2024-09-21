@@ -27,7 +27,7 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
     }
 
     public ControllerFactory(DBService dbService) {
-        setDbService(dbService == null? new DBServiceImpl() : dbService);
+        this.dbService = dbService == null? new DBServiceImpl() : dbService;
     }
 
     public BaseController.Page getPage() {

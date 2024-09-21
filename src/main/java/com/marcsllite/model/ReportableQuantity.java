@@ -26,16 +26,16 @@ public class ReportableQuantity {
 
     public ReportableQuantity(NuclideModelId nuclideId, RadBigDecimal curie, RadBigDecimal teraBq) {
         try {
-            setPropHandler(new PropHandlerFactory().getPropHandler(null));
-            setDefaultVal(RadBigDecimal.valueOf(getPropHandler().getDouble("defaultNum")));
+            propHandler = new PropHandlerFactory().getPropHandler(null);
+            defaultVal = RadBigDecimal.valueOf(getPropHandler().getDouble("defaultNum"));
         } catch (IOException e) {
             logr.catching(e);
-            setDefaultVal(RadBigDecimal.NEG_INFINITY_OBJ);
+            defaultVal = RadBigDecimal.NEG_INFINITY_OBJ;
         }
 
-        setNuclideId(nuclideId);
-        setCurie(curie == null? defaultVal : curie);
-        setTeraBq(teraBq == null? defaultVal : teraBq);
+        this.nuclideId = nuclideId;
+        this.curie.set(curie == null? defaultVal : curie);
+        this.teraBq.set(teraBq == null? defaultVal : teraBq);
     }
 
     public PropHandler getPropHandler() {

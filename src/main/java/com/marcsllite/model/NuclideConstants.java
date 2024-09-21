@@ -28,19 +28,20 @@ public class NuclideConstants {
     private boolean isInit = false;
 
     public NuclideConstants() {
-        setDbService(new DBServiceImpl());
+        dbService = new DBServiceImpl();
 
-        setA1Str(NuclideConstants.DEFAULT_VAL_STR);
-        setA2Str(NuclideConstants.DEFAULT_VAL_STR);
-        setDecayConstantStr(NuclideConstants.DEFAULT_VAL_STR);
-        setExemptConcentrationStr(NuclideConstants.DEFAULT_VAL_STR);
-        setExemptLimitStr(NuclideConstants.DEFAULT_VAL_STR);
-        setHalfLifeStr(NuclideConstants.DEFAULT_VAL_STR);
-        setIaLimitedLimitStr(NuclideConstants.DEFAULT_VAL_STR);
-        setIaPackageLimitStr(NuclideConstants.DEFAULT_VAL_STR);
-        setLimitedLimitStr(NuclideConstants.DEFAULT_VAL_STR);
-        setCurieReportQuanStr(NuclideConstants.DEFAULT_VAL_STR);
-        setTeraBqReportQuanStr(NuclideConstants.DEFAULT_VAL_STR);
+        a1.set(NuclideConstants.DEFAULT_VAL_STR);
+        a2.set(NuclideConstants.DEFAULT_VAL_STR);
+        decayConstant.set(NuclideConstants.DEFAULT_VAL_STR);
+        exemptConcentration.set(NuclideConstants.DEFAULT_VAL_STR);
+        exemptLimit.set(NuclideConstants.DEFAULT_VAL_STR);
+        halfLife.set(NuclideConstants.DEFAULT_VAL_STR);
+        setDisplayHalfLife();
+        iaLimitedLimit.set(NuclideConstants.DEFAULT_VAL_STR);
+        iaPackageLimit.set(NuclideConstants.DEFAULT_VAL_STR);
+        limitedLimit.set(NuclideConstants.DEFAULT_VAL_STR);
+        curieReportQuan.set(NuclideConstants.DEFAULT_VAL_STR);
+        teraBqReportQuan.set(NuclideConstants.DEFAULT_VAL_STR);
     }
 
     public void dbInit(NuclideModelId nuclideId, LimitsModelId limitsId) {

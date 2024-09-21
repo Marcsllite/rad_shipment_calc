@@ -38,10 +38,10 @@ public class StageHandler {
 
     public StageHandler(Stage stage, PropHandler propHandler, ControllerFactory factory) throws IOException {
         primaryStage = stage == null? new Stage() : stage;
-        getPrimaryStage().setOnCloseRequest(e -> Platform.exit());
-        setPropHandler(propHandler == null? new PropHandlerFactory().getPropHandler(null) : propHandler);
-        setFactory(factory == null? new ControllerFactory() : factory);
-        setCurView(null);
+        primaryStage.setOnCloseRequest(e -> Platform.exit());
+        this.propHandler = propHandler == null? new PropHandlerFactory().getPropHandler(null) : propHandler;
+        this.factory = factory == null? new ControllerFactory() : factory;
+        curView = null;
     }
 
     public void setPrimaryStage(Stage primaryStage) {

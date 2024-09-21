@@ -11,10 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.notNull;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,7 +33,6 @@ class EntityManagerHandlerTest {
                 .thenReturn(factoryMock);
 
             assertEquals(factoryMock, handler.getFactory());
-            verify(handler).setFactory(notNull());
         }
     }
 
@@ -49,6 +46,5 @@ class EntityManagerHandlerTest {
         handler.setEntityManager(null);
 
         assertEquals(emMock, handler.getEntityManager());
-        verify(handler).setEntityManager(notNull());
     }
 }

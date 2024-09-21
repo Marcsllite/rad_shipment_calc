@@ -21,7 +21,7 @@ public class EntityManagerHandler {
 
     public EntityManagerFactory getFactory() {
         if(factory == null) {
-            setFactory(Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME));
+            factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
         }
 
         return factory;
@@ -33,7 +33,7 @@ public class EntityManagerHandler {
 
     public EntityManager getEntityManager() {
         if(em == null) {
-            setEntityManager(getFactory().createEntityManager());
+            em = getFactory().createEntityManager();
         }
 
         return em;
