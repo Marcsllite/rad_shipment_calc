@@ -160,13 +160,11 @@ public class ModifyController extends BaseController {
             setNuclides(getDbService().getAllNuclideModels());
 
             reset();
-            ModifyUtils.setupDropDownItems(comboBoxA0Prefix, Conversions.SIPrefix.getFxValues());
-            ModifyUtils.setupDropDownItems(choiceBoxA0RadUnit, Conversions.RadUnit.getFxValues());
-            ModifyUtils.setupDropDownItems(comboBoxMassPrefix, Conversions.SIPrefix.getFxValues());
-            ModifyUtils.setupDropDownItems(choiceBoxMassUnit, Conversions.MassUnit.getFxValues());
-            ModifyUtils.setupDropDownItems(choiceBoxNature, Nuclide.Nature.getFxValues());
-            ModifyUtils.setupDropDownItems(choiceBoxState, LimitsModelId.State.getFxValues());
-            ModifyUtils.setupDropDownItems(choiceBoxForm, LimitsModelId.Form.getFxValues());
+            if(!setupDropDowns()) {
+                RuntimeException rte = new RuntimeException("Failed to setup drop down items.");
+                logr.throwing(rte);
+                throw rte;
+            }
             ModifyUtils.setRadioBtnData(radioBtnShortLived, Nuclide.LifeSpan.SHORT.getAbbrVal());
             ModifyUtils.setRadioBtnData(radioBtnLongLived, Nuclide.LifeSpan.LONG.getAbbrVal());
             ModifyUtils.setRadioBtnData(radioBtnSlowLungAbs, Nuclide.LungAbsorption.SLOW.getAbbrVal());
@@ -291,14 +289,18 @@ public class ModifyController extends BaseController {
         resetSecondPage();
     }
 
-    public void resetFirstPage() {
+    public void resetFirstPage() throws RuntimeException {
         txtFieldNuclideName.setText(null);
         txtFieldA0.setText(null);
         setLifeSpanVisible(false);
         setLungAbsVisible(false);
         txtFirstPageStatus.setVisible(false);
         txtFirstPageStatus.setText(null);
-        selectDefaultDropDownFirstPage();
+        if(!selectDefaultDropDownFirstPage()) {
+            RuntimeException rte = new RuntimeException("Failed to select default drop downs on first page.");
+            logr.throwing(rte);
+            throw rte;
+        }
     }
 
     public void resetSecondPage() {
@@ -310,7 +312,11 @@ public class ModifyController extends BaseController {
         btnFinish.setText("Finish");
         txtSecondPageStatus.setVisible(false);
         txtSecondPageStatus.setText(null);
-        selectDefaultDropDownSecondPage();
+        if(!selectDefaultDropDownSecondPage()) {
+            RuntimeException rte = new RuntimeException("Failed to select default drop downs on second page.");
+            logr.throwing(rte);
+            throw rte;
+        }
     }
 
     public void setLifeSpanVisible(boolean isLifeSpan) {
@@ -331,16 +337,26 @@ public class ModifyController extends BaseController {
         separatorAddInfo.setVisible(isLungAbs || vBoxLifeSpan.isVisible());
     }
 
-    private void selectDefaultDropDownFirstPage() {
-        ModifyUtils.selectDropDownOption(comboBoxA0Prefix, Conversions.SIPrefix.BASE.getVal());
+    private boolean setupDropDowns() {
+        return ModifyUtils.setupDropDownItems(comboBoxA0Prefix, Conversions.SIPrefix.getFxValues()) &&
+        ModifyUtils.setupDropDownItems(choiceBoxA0RadUnit, Conversions.RadUnit.getFxValues()) &&
+        ModifyUtils.setupDropDownItems(comboBoxMassPrefix, Conversions.SIPrefix.getFxValues()) &&
+        ModifyUtils.setupDropDownItems(choiceBoxMassUnit, Conversions.MassUnit.getFxValues()) &&
+        ModifyUtils.setupDropDownItems(choiceBoxNature, Nuclide.Nature.getFxValues()) &&
+        ModifyUtils.setupDropDownItems(choiceBoxState, LimitsModelId.State.getFxValues()) &&
+        ModifyUtils.setupDropDownItems(choiceBoxForm, LimitsModelId.Form.getFxValues());
+    }
+
+    private boolean selectDefaultDropDownFirstPage() {
+        return ModifyUtils.selectDropDownOption(comboBoxA0Prefix, Conversions.SIPrefix.BASE.getVal()) &&
         ModifyUtils.selectDropDownOption(choiceBoxA0RadUnit, Conversions.RadUnit.CURIE.getVal());
     }
 
-    private void selectDefaultDropDownSecondPage() {
-        ModifyUtils.selectDropDownOption(comboBoxMassPrefix, Conversions.SIPrefix.BASE.getVal());
-        ModifyUtils.selectDropDownOption(choiceBoxMassUnit, Conversions.MassUnit.GRAMS.getVal());
-        ModifyUtils.selectDropDownOption(choiceBoxNature, Nuclide.Nature.REGULAR.getVal());
-        ModifyUtils.selectDropDownOption(choiceBoxState, LimitsModelId.State.SOLID.getVal());
+    private boolean selectDefaultDropDownSecondPage() {
+        return ModifyUtils.selectDropDownOption(comboBoxMassPrefix, Conversions.SIPrefix.BASE.getVal()) &&
+        ModifyUtils.selectDropDownOption(choiceBoxMassUnit, Conversions.MassUnit.GRAMS.getVal()) &&
+        ModifyUtils.selectDropDownOption(choiceBoxNature, Nuclide.Nature.REGULAR.getVal()) &&
+        ModifyUtils.selectDropDownOption(choiceBoxState, LimitsModelId.State.SOLID.getVal()) &&
         ModifyUtils.selectDropDownOption(choiceBoxForm, LimitsModelId.Form.NORMAL.getVal());
     }
 

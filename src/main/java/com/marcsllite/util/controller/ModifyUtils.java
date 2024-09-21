@@ -14,6 +14,8 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.util.List;
@@ -25,6 +27,8 @@ import static com.marcsllite.util.NuclideUtils.LIFE_SPAN_PATTERN;
 import static com.marcsllite.util.NuclideUtils.LUNG_ABS_PATTERN;
 
 public class ModifyUtils {
+    private static final Logger logr = LogManager.getLogger();
+
     private ModifyUtils() {}
 
     public static void bindManagedPropToVisibility(Node node) {
@@ -40,27 +44,35 @@ public class ModifyUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static void setupDropDownItems(Control control, ObservableList<String> items) {
-        if(control instanceof ComboBox) {
-            ComboBox<String> comboBox = (ComboBox<String>) control;
-            comboBox.setItems(items);
+    public static boolean setupDropDownItems(Control control, ObservableList<String> items) {
+        try {
+            if (control instanceof ComboBox<?> comboBox) {
+                ((ComboBox<String>) comboBox).setItems(items);
+            }
+            if (control instanceof ChoiceBox<?> choiceBox) {
+                ((ChoiceBox<String>) choiceBox).setItems(items);
+            }
+        } catch (Exception e) {
+            logr.catching(e);
+            return false;
         }
-        if(control instanceof ChoiceBox) {
-            ChoiceBox<String> choiceBox = (ChoiceBox<String>) control;
-            choiceBox.setItems(items);
-        }
+        return true;
     }
 
     @SuppressWarnings("unchecked")
-    public static void selectDropDownOption(Control control, String option) {
-        if(control instanceof ComboBox) {
-            ComboBox<String> comboBox = (ComboBox<String>) control;
-            comboBox.getSelectionModel().select(option);
+    public static boolean selectDropDownOption(Control control, String option) {
+        try {
+            if (control instanceof ComboBox<?> comboBox) {
+                ((ComboBox<String>) comboBox).getSelectionModel().select(option);
+            }
+            if (control instanceof ChoiceBox<?> choiceBox) {
+                ((ChoiceBox<String>) choiceBox).getSelectionModel().select(option);
+            }
+        } catch (Exception e) {
+            logr.catching(e);
+            return false;
         }
-        if(control instanceof ChoiceBox) {
-            ChoiceBox<String> choiceBox = (ChoiceBox<String>) control;
-            choiceBox.getSelectionModel().select(option);
-        }
+        return true;
     }
 
     public static void setupTextListener(TextField field, ChangeListener<String> listener) {
