@@ -24,7 +24,6 @@ import java.util.Set;
 public class PropHandler extends ResourceBundle {
     private static final Logger logr = LogManager.getLogger();
     public static final String PROP_NAME = "properties";
-    private String os;
     private Properties prop;
 
     public PropHandler() {
@@ -32,7 +31,6 @@ public class PropHandler extends ResourceBundle {
     }
 
     public PropHandler(InputStream stream) {
-        setOs(System.getProperty("os.name").toLowerCase());
         if(stream != null) {
             setProp(stream);
         }
@@ -85,13 +83,6 @@ public class PropHandler extends ResourceBundle {
         }
     }
 
-    /**
-     * Set the current operating system
-     * 
-     * @param os the current operating system
-     */
-    public void setOs(String os) { this.os = os; }
-
     /*/////////////////////////////////////////////////// GETTERS ////////////////////////////////////////////////////*/
     /**
      * Getter function to get the properties
@@ -99,15 +90,6 @@ public class PropHandler extends ResourceBundle {
      * @return properties object
      */
     public Properties getProp() { return prop; }
-
-    /**
-     * Getter function to get the current operating system
-     *
-     * @return the current operating system
-     */
-    public String getOS() { return os; }
-
-
 
     /**
      * @author Alvin Alexander <a href="https://alvinalexander.com/blog/post/java/read-text-file-from-jar-file">...</a>

@@ -3,6 +3,7 @@ package com.marcsllite.util;
 import org.codehaus.plexus.util.StringUtils;
 
 public class OSUtil {
+    public static final String OS_PROP_NAME = "os.name";
     /**
      * @author Mkyong.com <a href="https://www.mkyong.com/java/how-to-detect-os-in-java-systemgetpropertyosname/">...</a>
      * Convenience function to figure out the current operating system
@@ -18,7 +19,7 @@ public class OSUtil {
     }
 
     public static String getOperatingSystem() {
-        String name = System.getProperty("os.name");
+        String name = System.getProperty(OS_PROP_NAME);
         return StringUtils.isBlank(name)? "" : name;
     }
 

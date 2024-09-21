@@ -7,20 +7,20 @@ import org.junit.jupiter.params.provider.MethodSource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class OSUtilTest {
-    private static final String ACTUAL_OS = System.getProperty("os.name");
+    private static final String ACTUAL_OS = System.getProperty(OSUtil.OS_PROP_NAME);
 
     @AfterAll
     public static void afterAll() {
-        System.setProperty("os.name", ACTUAL_OS);
+        System.setProperty(OSUtil.OS_PROP_NAME, ACTUAL_OS);
     }
 
-    @ParameterizedTest(name = "os.name = {0}, getOs = {1}")
+    @ParameterizedTest(name = OSUtil.OS_PROP_NAME + " = {0}, getOs = {1}")
     @MethodSource("getOs_data")
     void testGetOS(String osName, OSUtil.OS expectedOs) {
         if(osName == null) {
-            System.clearProperty("os.name");
+            System.clearProperty(OSUtil.OS_PROP_NAME);
         } else {
-            System.setProperty("os.name", osName);
+            System.setProperty(OSUtil.OS_PROP_NAME, osName);
         }
         assertEquals(expectedOs, OSUtil.getOS());
     }
