@@ -223,7 +223,7 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <rerunFailingTestsCount>1</rerunFailingTestsCount>
+                    <skipAfterFailureCount>1</skipAfterFailureCount>
                     <argLine>@{surefire.jacoco.args}</argLine>
                     <excludes>
                         <exclude>**/*GUITest.java</exclude>
@@ -253,7 +253,7 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${surefire.version}</version>
                 <configuration>
-                    <rerunFailingTestsCount>1</rerunFailingTestsCount>
+                    <skipAfterFailureCount>1</skipAfterFailureCount>
                     <argLine>@{failsafe.jacoco.args}</argLine>
                     <trimStackTrace>false</trimStackTrace>
                     <includes>
