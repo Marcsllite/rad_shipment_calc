@@ -132,25 +132,22 @@ public class StageHandler {
 
         getFactory().setPage(page);
         Parent root = loadViewNodeHierarchy(view);
-        if(getSecondaryStage() == null) {
-            throw logAndThrowException("Secondary stage is null", new RuntimeException());
-        } else {
-            getSecondaryStage().initModality(Modality.WINDOW_MODAL);
-            getSecondaryStage().initOwner(getPrimaryStage());
-            getSecondaryStage().setScene(new Scene(root, view.getWidth(), view.getHeight()));
-            getSecondaryStage().setMinWidth(view.getWidth());
-            getSecondaryStage().setMinHeight(view.getHeight());
-            getSecondaryStage().setMaxWidth(view.getMaxWidth());
-            getSecondaryStage().setMaxHeight(view.getMaxHeight());
-            getSecondaryStage().setFullScreen(false);
-            getSecondaryStage().setMaximized(false);
-            getSecondaryStage().setResizable(false);
-            getSecondaryStage().setTitle(view.getTitle());
-            getSecondaryStage().getIcons().add(view.getIconImage());
-            getSecondaryStage().centerOnScreen();
+        setSecondaryStage(new Stage());
+        getSecondaryStage().initModality(Modality.WINDOW_MODAL);
+        getSecondaryStage().initOwner(getPrimaryStage());
+        getSecondaryStage().setScene(new Scene(root, view.getWidth(), view.getHeight()));
+        getSecondaryStage().setMinWidth(view.getWidth());
+        getSecondaryStage().setMinHeight(view.getHeight());
+        getSecondaryStage().setMaxWidth(view.getMaxWidth());
+        getSecondaryStage().setMaxHeight(view.getMaxHeight());
+        getSecondaryStage().setFullScreen(false);
+        getSecondaryStage().setMaximized(false);
+        getSecondaryStage().setResizable(false);
+        getSecondaryStage().setTitle(view.getTitle());
+        getSecondaryStage().getIcons().add(view.getIconImage());
+        getSecondaryStage().centerOnScreen();
 
-            setCurView(view);
-        }
+        setCurView(view);
     }
 
     public void showSplashScreen() throws RuntimeException {
@@ -221,25 +218,22 @@ public class StageHandler {
         try {
             switchSceneModal(view, page);
             BaseController controller = (BaseController) getController();
-            if(getSecondaryStage() == null) {
-                throw logAndThrowException("Secondary stage is null", new RuntimeException());
+
+            getSecondaryStage().setOnCloseRequest(e -> {
+                e.consume();
+                logr.debug("Closing the {}", view.getName());
+                closeSecondary();
+            });
+
+
+            if (controller.isInit()) {
+                getSecondaryStage().showAndWait();
+                logr.debug("Opening the {}", view.getName());
             } else {
-                getSecondaryStage().setOnCloseRequest(e -> {
-                    e.consume();
-                    logr.debug("Closing the {}", view.getName());
-                    closeSecondary();
-                });
-
-
-                if (controller.isInit()) {
-                    getSecondaryStage().showAndWait();
-                    logr.debug("Opening the {}", view.getName());
-                } else {
-                    String msg = String.format("Failed to initialize modal window %s", view.getName());
-                    InstantiationException ie = new InstantiationException(msg);
-                    logr.throwing(ie);
-                    throw ie;
-                }
+                String msg = String.format("Failed to initialize modal window %s", view.getName());
+                InstantiationException ie = new InstantiationException(msg);
+                logr.throwing(ie);
+                throw ie;
             }
         } catch (Exception exception) {
             logr.catching(Level.FATAL, exception);
