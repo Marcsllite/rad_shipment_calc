@@ -29,10 +29,10 @@ import java.io.IOException;
 public class App extends Application {
     private static final Logger logr = LogManager.getLogger();
     private static StageHandler stageHandler;
-    private FolderHandler folderHandler;
-    private DBService dbService;
-    private PropHandler propHandler;
-    private ControllerFactory controllerFactory;
+    private static FolderHandler folderHandler;
+    private static DBService dbService;
+    private static PropHandler propHandler;
+    private static ControllerFactory controllerFactory;
     private static FXMLView view;
     private boolean showSplash;
     private static BaseController.Page page = BaseController.Page.NONE;
@@ -59,12 +59,10 @@ public class App extends Application {
         }
     }
 
-    protected void init(StageHandler stageHandler, FXMLView view, PropHandler propHandler, FolderHandler folderHandler, DBService dbService, ControllerFactory controllerFactory) throws IOException {
-        setControllerFactory(controllerFactory);
-
-        setView(view == null?
+    protected static void init(StageHandler stageHandler, FXMLView view, PropHandler propHandler, FolderHandler folderHandler, DBService dbService, ControllerFactory controllerFactory) throws IOException {
+        App.view = view == null?
             FXMLView.MAIN:
-            view);
+            view;
 
         setPropHandler(propHandler == null?
             new PropHandlerFactory().getPropHandler(null):
@@ -78,6 +76,10 @@ public class App extends Application {
         setDbService(dbService == null?
             new DBServiceImpl():
             dbService);
+
+        setControllerFactory(controllerFactory == null?
+            new ControllerFactory(getDbService()) :
+            controllerFactory);
 
         setStageHandler(stageHandler == null?
             new StageHandler(null, getPropHandler(), getControllerFactory()) :
@@ -120,7 +122,7 @@ public class App extends Application {
      *
      * @return the database service
      */
-    public DBService getDbService() { return dbService; }
+    public static DBService getDbService() { return App.dbService; }
 
 
     /**
@@ -136,36 +138,36 @@ public class App extends Application {
         App.stageHandler = stageHandler;
     }
 
-    public FolderHandler getFolderHandler() {
-        return folderHandler;
+    public static FolderHandler getFolderHandler() {
+        return App.folderHandler;
     }
 
-    public void setFolderHandler(FolderHandler folderHandler) {
-        this.folderHandler = folderHandler;
+    public static void setFolderHandler(FolderHandler folderHandler) {
+        App.folderHandler = folderHandler;
     }
 
-    public void setDbService(DBService dbService) {
-        this.dbService = dbService;
+    public static void setDbService(DBService dbService) {
+        App.dbService = dbService;
     }
 
-    public PropHandler getPropHandler() {
-        return propHandler;
+    public static PropHandler getPropHandler() {
+        return App.propHandler;
     }
 
-    public void setPropHandler(PropHandler propHandler) {
-        this.propHandler = propHandler;
+    public static void setPropHandler(PropHandler propHandler) {
+        App.propHandler = propHandler;
     }
 
-    public ControllerFactory getControllerFactory() {
-        return controllerFactory;
+    public static ControllerFactory getControllerFactory() {
+        return App.controllerFactory;
     }
 
-    public void setControllerFactory(ControllerFactory controllerFactory) {
-        this.controllerFactory = controllerFactory;
+    public static void setControllerFactory(ControllerFactory controllerFactory) {
+        App.controllerFactory = controllerFactory;
     }
 
     public static FXMLView getView() {
-        return view;
+        return App.view;
     }
 
     public static void setView(FXMLView view) {

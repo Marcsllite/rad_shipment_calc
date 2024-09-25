@@ -84,7 +84,7 @@ public abstract class GUITest extends FxRobot {
         when(folderHandler.getDataFolderPath()).thenReturn(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
 
         stageHandler = spy(new StageHandler(stage, new PropHandlerTestObj(), getControllerFactory()));
-        app.init(stageHandler, view, new PropHandlerTestObj(), folderHandler, getDbService(), getControllerFactory());
+        App.init(stageHandler, view, new PropHandlerTestObj(), folderHandler, getDbService(), getControllerFactory());
         App.setPage(getPage());
 
         app.start(stage);
