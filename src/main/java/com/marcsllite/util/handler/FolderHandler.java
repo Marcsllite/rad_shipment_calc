@@ -11,9 +11,10 @@ import java.io.IOException;
 
 public class FolderHandler {
     private static final Logger logr = LogManager.getLogger();
+    private static final String APP_FOLDER_NAME = "UMass Lowell Radiation Safety";
+    private static final String DATA_FOLDER_NAME = "Shipment Calculator";
     private String appFolderPath;
     private String dataFolderPath;
-    private static final String DATA_FOLDER_NAME = "Shipment Calculator";
     private PropHandler propHandler;
 
     public FolderHandler() throws IOException {
@@ -22,19 +23,15 @@ public class FolderHandler {
 
     public FolderHandler(PropHandler propHandler) throws IOException {
         this.propHandler = propHandler == null? new PropHandlerFactory().getPropHandler(null) : propHandler;
-        appFolderPath = this.propHandler.getString("appFolderName");
+        setAppFolderPath();
     }
 
     /**
      * Set the location of the default directory
-     * 
-     * @param appFolderName the name of the default directory
+     *
      */
-
-    public void setAppFolderPath(String appFolderName) throws IOException {
-        if (appFolderName == null || appFolderName.isBlank()) appFolderName = getPropHandler().getString("appFolderName");
-        
-        String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + appFolderName;
+    public void setAppFolderPath() throws IOException {
+        String path = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + APP_FOLDER_NAME;
         var toBeCreated = createFolder(path);
         
         if (toBeCreated == null) {
