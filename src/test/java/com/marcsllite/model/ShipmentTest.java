@@ -3,7 +3,7 @@ package com.marcsllite.model;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.Conversions;
 import com.marcsllite.util.RadBigDecimal;
-import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,8 +16,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
@@ -106,7 +106,7 @@ class ShipmentTest {
     @Test
     void testSetNuclidesUnit() {
         Nuclide isotope = mock(Nuclide.class);
-        ObservableList<Nuclide> exp = new ObservableListWrapper<>(new ArrayList<>());
+        ObservableList<Nuclide> exp = FXCollections.observableList(new ArrayList<>());
         exp.add(isotope);
         shipment.setNuclides(exp);
         assertEquals(exp, shipment.getNuclides());
@@ -129,12 +129,12 @@ class ShipmentTest {
         assertEquals(shipmentA, shipmentB);
         assertEquals(shipmentA.hashCode(), shipmentB.hashCode());
 
-        shipmentA.setNuclides(new ObservableListWrapper<>(new ArrayList<>()));
+        shipmentA.setNuclides(FXCollections.observableList(new ArrayList<>()));
         assertEquals(shipmentA, shipmentB);
         assertEquals(shipmentA.hashCode(), shipmentB.hashCode());
 
         Nuclide isotope = mock(Nuclide.class);
-        shipmentA.setNuclides(new ObservableListWrapper<>(List.of(isotope)));
+        shipmentA.setNuclides(FXCollections.observableList(List.of(isotope)));
         assertNotEquals(shipmentA, shipmentB);
         assertNotEquals(shipmentA.hashCode(), shipmentB.hashCode());
 
