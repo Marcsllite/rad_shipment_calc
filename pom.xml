@@ -33,7 +33,8 @@
         <build-helper.version>3.6.0</build-helper.version>
         <lanch4j.version>2.5.1</lanch4j.version>
         <maven.assembly.version>3.7.1</maven.assembly.version>
-        <executable.jar.version>1.5.0</executable.jar.version>
+        <executable.jar.version>2.1.1</executable.jar.version>
+        <maven.jar.version>3.4.2</maven.jar.version>
         
         <!-- SonarQube -->
         <sonar.version>3.9.0.2155</sonar.version>
@@ -249,11 +250,24 @@
                 <version>${sonar.version}</version>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven.jar.version}</version>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.skife.maven</groupId>
                 <artifactId>really-executable-jar-maven-plugin</artifactId>
                 <version>${executable.jar.version}</version>
                 <configuration>
-                    <programFile>${project.artifactId}-${project.version}</programFile>
+                    <inputFile>target/${project.artifactId}-${project.version}-jar-with-dependencies.jar</inputFile>
+                    <programFile>${project.artifactId}</programFile>
+                    <scriptFile>src/packaging/jarToExecutable.sh</scriptFile>
                 </configuration>
                 <executions>
                     <execution>
@@ -275,7 +289,7 @@
                         <goals><goal>launch4j</goal></goals>
                         <configuration>
                             <headerType>gui</headerType>
-                            <jar>target/${project.artifactId}-${project.version}.jar</jar>
+                            <jar>target/${project.artifactId}-${project.version}-jar-with-dependencies.jar</jar>
                             <outfile>target/${project.artifactId}-${project.version}.exe</outfile>
                             <dontWrapJar>false</dontWrapJar>
                             <errTitle>${project.name}</errTitle>
@@ -324,6 +338,23 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>${maven.assembly.version}</version>
                 <executions>
+                    <execution>
+                        <id>executable-jar</id>
+                        <phase>prepare-package</phase>
+                        <goals><goal>single</goal></goals>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>
+                                        com.marcsllite.App
+                                    </mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>assembly</id>
                         <phase>package</phase>

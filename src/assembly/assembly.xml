@@ -9,7 +9,7 @@
   <files>
     <!--JAR executable -->
     <file>
-      <source>${project.build.directory}/${project.artifactId}-${project.version}.jar</source>
+      <source>${project.build.directory}/${project.artifactId}-${project.version}-jar-with-dependencies.jar</source>
       <outputDirectory>/</outputDirectory>
     </file>
     <!--EXE for Windows -->
@@ -19,7 +19,7 @@
     </file>
     <!--LINUX for MacOSX -->
     <file>
-      <source>${project.build.directory}/${project.artifactId}-${project.version}</source>
+      <source>${project.build.directory}/${project.artifactId}</source>
       <outputDirectory>/</outputDirectory>
     </file>
   </files>
