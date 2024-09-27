@@ -17,7 +17,7 @@ public class SummaryPaneController extends BaseController {
     @FXML TextArea txtAreaSummary;
     @FXML Button btnSaveSummary;
 
-    private static final Logger logr = LogManager.getLogger();
+    private static final Logger logr = LogManager.getLogger(SummaryPaneController.class);
 
     public SummaryPaneController() throws IOException {
         this(null);

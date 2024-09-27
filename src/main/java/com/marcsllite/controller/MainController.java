@@ -11,7 +11,7 @@ public class MainController {
     @FXML HomePaneController homePaneController;
     @FXML ReferencePaneController referencePaneController;
 
-    private static final Logger logr = LogManager.getLogger();
+    private static final Logger logr = LogManager.getLogger(MainController.class);
 
     private MainController() {}
 

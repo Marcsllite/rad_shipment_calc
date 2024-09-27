@@ -28,7 +28,7 @@ public class ShipmentDetailsController extends BaseController {
     @FXML ChoiceBox<String> choiceBoxFormShipDetails;
     @FXML Button btnSaveShipDetails;
 
-    private static final Logger logr = LogManager.getLogger();
+    private static final Logger logr = LogManager.getLogger(ShipmentDetailsController.class);
 
     public ShipmentDetailsController() throws IOException {
         this(null);

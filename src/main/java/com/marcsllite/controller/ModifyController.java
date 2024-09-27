@@ -38,7 +38,7 @@ import java.time.LocalDate;
 import java.util.stream.Collectors;
 
 public class ModifyController extends BaseController {
-    private static final Logger logr = LogManager.getLogger();
+    private static final Logger logr = LogManager.getLogger(ModifyController.class);
     @FXML StackPane modifyPane;
     // First Page
     @FXML VBox vBoxFirstPage;

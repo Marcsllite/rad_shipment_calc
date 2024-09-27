@@ -18,7 +18,7 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public abstract class AbstractDao<E extends Serializable, I> implements Dao<E, I> {
     private final Class<E> entityClass;
-    private static final Logger logr = LogManager.getLogger();
+    private static final Logger logr = LogManager.getLogger(AbstractDao.class);
     private static final String COUNT_ENTITIES_QUERY = "select count(a) from %s as a";
     private static final String QUERY_ALL = "select a from %s as a";
 

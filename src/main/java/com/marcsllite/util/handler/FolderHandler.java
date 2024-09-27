@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class FolderHandler {
-    private static final Logger logr = LogManager.getLogger();
+    private static final Logger logr = LogManager.getLogger(FolderHandler.class);
     private static final String APP_FOLDER_NAME = "UMass Lowell Radiation Safety";
     private static final String DATA_FOLDER_NAME = "Shipment Calculator";
     private String appFolderPath;

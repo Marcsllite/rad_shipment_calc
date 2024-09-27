@@ -27,7 +27,7 @@ import static com.marcsllite.util.NuclideUtils.LIFE_SPAN_PATTERN;
 import static com.marcsllite.util.NuclideUtils.LUNG_ABS_PATTERN;
 
 public class ModifyUtils {
-    private static final Logger logr = LogManager.getLogger();
+    private static final Logger logr = LogManager.getLogger(ModifyUtils.class);
 
     private ModifyUtils() {}
 

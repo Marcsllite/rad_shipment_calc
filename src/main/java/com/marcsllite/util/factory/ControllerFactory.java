@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 
 public class ControllerFactory implements Callback<Class<?>, Object> {
-    private static final Logger logr = LogManager.getLogger();
+    private static final Logger logr = LogManager.getLogger(ControllerFactory.class);
     private BaseController.Page page;
     protected DBService dbService;
 

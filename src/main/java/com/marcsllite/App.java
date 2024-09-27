@@ -27,7 +27,7 @@ import java.io.IOException;
  *  </a>
  */
 public class App extends Application {
-    private static final Logger logr = LogManager.getLogger();
+    private static final Logger logr = LogManager.getLogger(App.class);
     private static StageHandler stageHandler;
     private static FolderHandler folderHandler;
     private static DBService dbService;

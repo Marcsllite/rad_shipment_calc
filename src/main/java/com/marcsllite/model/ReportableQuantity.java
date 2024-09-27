@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 
 public class ReportableQuantity {
-    private static final Logger logr = LogManager.getLogger();
+    private static final Logger logr = LogManager.getLogger(ReportableQuantity.class);
     private PropHandler propHandler;
     private RadBigDecimal defaultVal;
     private NuclideModelId nuclideId;

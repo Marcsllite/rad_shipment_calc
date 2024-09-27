@@ -26,7 +26,7 @@ public class MenuPaneController extends BaseController {
     @FXML Button btnReference;
     @FXML ImageView imgViewReference;
 
-    private static final Logger logr = LogManager.getLogger();
+    private static final Logger logr = LogManager.getLogger(MenuPaneController.class);
     // color to make the button corresponding to the current page
     private static final ImageHandler.AppColor CURRENT_COLOR = ImageHandler.AppColor.UML_BLUE;
     // color to make idle buttons

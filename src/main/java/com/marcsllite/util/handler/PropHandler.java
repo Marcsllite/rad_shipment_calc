@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 public class PropHandler extends ResourceBundle {
-    private static final Logger logr = LogManager.getLogger();
+    private static final Logger logr = LogManager.getLogger(PropHandler.class);
     public static final String PROP_NAME = "properties";
     private Properties prop;
 

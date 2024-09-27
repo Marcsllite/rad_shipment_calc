@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 
 public class DBServiceImpl implements DBService {
-    private static final Logger logr = LogManager.getLogger();
+    private static final Logger logr = LogManager.getLogger(DBServiceImpl.class);
     protected static final String VALIDATION_QUERY = "select 1";
     private PropHandler propHandler;
     private final A1DaoImpl a1Dao;

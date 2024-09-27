@@ -16,7 +16,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class PropHandlerFactory extends ResourceBundle.Control {
-    private static final Logger logr = LogManager.getLogger();
+    private static final Logger logr = LogManager.getLogger(PropHandlerFactory.class);
     private static final String XML = "xml";
     private static final List<String> SINGLETON_LIST = Collections.singletonList(XML);
     private final Locale locale = new Locale("en", "US");

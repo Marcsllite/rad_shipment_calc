@@ -20,7 +20,7 @@ import java.security.InvalidParameterException;
 import java.util.Objects;
 
 public class StageHandler {
-    private static final Logger logr = LogManager.getLogger();
+    private static final Logger logr = LogManager.getLogger(StageHandler.class);
     private Stage primaryStage;
     private Stage secondaryStage;
     private FXMLLoader loader;

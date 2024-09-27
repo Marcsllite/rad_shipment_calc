@@ -23,7 +23,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class HomePaneController extends BaseController {
-    private static final Logger logr = LogManager.getLogger();
+    private static final Logger logr = LogManager.getLogger(HomePaneController.class);
     @FXML GridPane homePane;
     @FXML Button btnAdd;
     @FXML Button btnEdit;
