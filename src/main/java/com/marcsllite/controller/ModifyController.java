@@ -405,12 +405,14 @@ public class ModifyController extends BaseController {
      */
     @FXML protected void finishBtnHandler() {
         logr.debug("User clicked the Finish button on the {} pane", getPage());
+        Nuclide nuclide = buildNuclide();
+        nuclide.setName(getDbService().getNuclideNameNotation(nuclide.getNuclideId()));
         if(Page.ADD.equals(getPage())) {
             Shipment shipment = getMain().getHomePaneController().getShipment();
-            shipment.add(buildNuclide().initConstants());
+            shipment.add(nuclide.initConstants());
         }
         if(Page.EDIT.equals(getPage())) {
-            getMain().getHomePaneController().updateNuclide(buildNuclide());
+            getMain().getHomePaneController().updateNuclide(nuclide);
         }
         App.getStageHandler().closeSecondary();
     }
@@ -534,6 +536,7 @@ public class ModifyController extends BaseController {
 
     public Nuclide buildNuclideFromFirstPage() {
         Nuclide nuclide = new Nuclide();
+        nuclide.setNuclideId(NuclideUtils.parseNuclideId(txtFieldNuclideName.getText()));
         nuclide.setInitActivityStr(txtFieldA0.getText());
         nuclide.setInitActivityPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxA0Prefix.getValue()));
         nuclide.setInitActivityUnit(Conversions.RadUnit.toRadUnit(choiceBoxA0RadUnit.getValue()));
