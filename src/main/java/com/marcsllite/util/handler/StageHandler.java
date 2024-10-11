@@ -169,6 +169,7 @@ public class StageHandler {
             getSecondaryStage().getIcons().add(getCurrentView().getIconImage());
             getSecondaryStage().centerOnScreen();
 
+            logOpen();
             getSecondaryStage().show();
         } catch (Exception exception) {
             logr.catching(Level.FATAL, exception);
@@ -194,6 +195,7 @@ public class StageHandler {
             if(getPrimaryStage() == null) {
                 throw logAndThrowException("Primary stage is null", new RuntimeException());
             } else {
+                logOpen();
                 getPrimaryStage().show();
             }
         } catch (Exception exception) {
@@ -219,16 +221,9 @@ public class StageHandler {
             switchSceneModal(view, page);
             BaseController controller = (BaseController) getController();
 
-            getSecondaryStage().setOnCloseRequest(e -> {
-                e.consume();
-                logr.debug("Closing the {}", view.getName());
-                closeSecondary();
-            });
-
-
             if (controller.isInit()) {
+                logOpen();
                 getSecondaryStage().showAndWait();
-                logr.debug("Opening the {}", view.getName());
             } else {
                 String msg = String.format("Failed to initialize modal window %s", view.getName());
                 InstantiationException ie = new InstantiationException(msg);
@@ -254,14 +249,24 @@ public class StageHandler {
         closeSecondary();
     }
 
+    public void logOpen() {
+        logr.debug("Opening {}", getCurrentView().getName());
+    }
+
+    public void logClose() {
+        logr.debug("Closing {} page", getCurrentView().getName());
+    }
+
     public void closePrimary() {
         if(getPrimaryStage() != null) {
+            logClose();
             getPrimaryStage().close();
         }
     }
 
     public void closeSecondary() {
         if(getSecondaryStage() != null) {
+            logClose();
             getSecondaryStage().close();
         }
     }
