@@ -60,7 +60,7 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
+        launch(App.class, args);
     }
 
     protected static void init(StageHandler stageHandler, FXMLView view, PropHandler propHandler, FolderHandler folderHandler, DBService dbService, ControllerFactory controllerFactory) throws IOException {
