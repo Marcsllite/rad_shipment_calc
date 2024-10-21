@@ -37,7 +37,7 @@ public class ControllerFactoryTestObj extends ControllerFactory {
         try {
             PropHandler propHandler = new PropHandlerTestObj();
             if(name.equals(SplashScreenController.class.getName())) {
-                ret = new SplashScreenController(propHandler);
+                ret = new SplashScreenController(propHandler, false);
             } else if(name.equals(MainController.class.getName())) {
                 ret = mainController;
             } else if(name.equals(MenuPaneController.class.getName())) {

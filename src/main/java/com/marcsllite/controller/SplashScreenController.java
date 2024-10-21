@@ -22,14 +22,16 @@ public class SplashScreenController {
     private PropHandler propHandler;
     private DBService dbService;
     SplashScreenTask splashScreenTask = null;
+    private final boolean openMainApp;
 
     public SplashScreenController() throws IOException {
-        this(null);
+        this(null, false);
     }
 
-    public SplashScreenController(PropHandler propHandler) throws IOException {
+    public SplashScreenController(PropHandler propHandler, boolean openMainApp) throws IOException {
         this.propHandler = propHandler == null? new PropHandlerFactory().getPropHandler(null): propHandler;
         this.dbService = new DBServiceImpl(getPropHandler());
+        this.openMainApp = openMainApp;
     }
 
     @FXML
@@ -96,8 +98,10 @@ public class SplashScreenController {
 
             Platform.runLater(() -> {
                 App.getStageHandler().closeSecondary();
-                App.getStageHandler().setPrimaryStage(new Stage());
-                App.showPrimaryStage();
+                if(openMainApp) {
+                    App.getStageHandler().setPrimaryStage(new Stage());
+                    App.showPrimaryStage();
+                }
             });
 
             return null;
