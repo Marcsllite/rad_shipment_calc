@@ -1,6 +1,6 @@
 package com.marcsllite.util;
 
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class OSUtil {
     public static final String OS_PROP_NAME = "os.name";

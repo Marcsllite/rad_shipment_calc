@@ -2,7 +2,7 @@ package com.marcsllite.util;
 
 import com.marcsllite.model.Nuclide;
 import com.marcsllite.model.db.NuclideModelId;
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

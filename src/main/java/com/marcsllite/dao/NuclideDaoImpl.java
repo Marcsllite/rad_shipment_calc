@@ -5,7 +5,7 @@ import com.marcsllite.model.db.NuclideModelId;
 import jakarta.persistence.NoResultException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 

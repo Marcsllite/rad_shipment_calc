@@ -6,7 +6,7 @@ import com.marcsllite.model.db.NuclideModelId;
 import com.marcsllite.util.Conversions;
 import com.marcsllite.util.RadBigDecimal;
 import javafx.scene.control.TableView;
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
