@@ -63,7 +63,7 @@
         <jacoco.percentages.max.complex>0.81</jacoco.percentages.max.complex>
         <jacoco.percentages.min.method>0.89</jacoco.percentages.min.method>
         <jacoco.percentages.max.method>0.91</jacoco.percentages.max.method>
-        <jacoco.missed.count.class>1</jacoco.missed.count.class>
+        <jacoco.missed.count.class>0</jacoco.missed.count.class>
     </properties>
 
     <ciManagement>
