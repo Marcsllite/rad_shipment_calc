@@ -19,7 +19,7 @@
     </file>
     <!--LINUX for MacOSX -->
     <file>
-      <source>${project.build.directory}/${project.artifactId}</source>
+      <source>${project.build.directory}/${project.artifactId}-${project.version}</source>
       <outputDirectory>/</outputDirectory>
     </file>
   </files>
