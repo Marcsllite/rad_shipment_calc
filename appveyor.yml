@@ -90,7 +90,7 @@ for:
 
     on_success:
       - ps: $exePath = "$env:APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$env:APPVEYOR_BUILD_NUMBER.exe";
-          if(Test-Path -Path $exePath) { Push-AppveyorArtifact -FileName $exePath; } else {  Write-Host "Failed to locate $exePath"  }
+          if(Test-Path -Path $exePath) { Push-AppveyorArtifact $exePath; } else {  Write-Host "Failed to locate $exePath"  }
       - ps: try { `
           Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe;
           .\codecov.exe -t $CODECOV_TOKEN -f "$APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged/jacoco.xml" `
