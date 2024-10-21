@@ -172,4 +172,29 @@ class ShipmentTest {
         assertNotEquals(shipmentA, shipmentB);
         assertNotEquals(shipmentA.hashCode(), shipmentB.hashCode());
     }
+
+    @Test
+    void testEquals_WithNulls() {
+        Shipment shipmentA = new Shipment();
+        Shipment shipmentB = new Shipment();
+
+        assertEquals(shipmentA, shipmentB);
+        assertEquals(shipmentA.hashCode(), shipmentB.hashCode());
+
+        shipmentA.setRefDate(null);
+        shipmentA.setMassUnit(null);
+        shipmentA.setNature(null);
+        shipmentA.setLimitsId(null);
+        shipmentA.setLabel(null);
+        shipmentA.setNuclides(null);
+        assertNotEquals(shipmentA.hashCode(), shipmentB.hashCode());
+
+        shipmentB.setRefDate(null);
+        shipmentB.setMassUnit(null);
+        shipmentB.setNature(null);
+        shipmentB.setLimitsId(null);
+        shipmentB.setLabel(null);
+        shipmentB.setNuclides(null);
+        assertEquals(shipmentA.hashCode(), shipmentB.hashCode());
+    }
 }
