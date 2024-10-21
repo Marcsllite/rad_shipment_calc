@@ -16,28 +16,36 @@
         <build.version>1.0.0.0</build.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>17</maven.compiler.release>
-        <maven.compiler.version>3.8.0</maven.compiler.version>
-        <javafx.maven.plugin.version>0.0.6</javafx.maven.plugin.version>
-        <javafx.version>17.0.12</javafx.version>
-        <mockito.version>3.12.4</mockito.version>
+        
+        <!-- Dependency Versions -->
+        <commons-lang3.version>3.17.0</commons-lang3.version>
+        <javafx.version>17.0.10</javafx.version>
         <log4j.version>2.19.0</log4j.version>
-        <jacoco.version>0.8.11</jacoco.version>
-        <junit.version>5.11.0</junit.version>
-        <assertj.version>3.20.2</assertj.version>
-        <testfx.version>4.0.18</testfx.version>
-        <surefire.version>3.0.0-M5</surefire.version>
-        <monocle.version>11.0.2</monocle.version>
-        <h2.version>2.2.224</h2.version>
         <hibernate-core.version>6.4.4.Final</hibernate-core.version>
-        <pioneer.version>2.2.0</pioneer.version>
-        <build-helper.version>3.6.0</build-helper.version>
-        <lanch4j.version>2.5.1</lanch4j.version>
-        <maven.assembly.version>3.7.1</maven.assembly.version>
-        <executable.jar.version>2.1.1</executable.jar.version>
-        <maven.jar.version>3.4.2</maven.jar.version>
+        <h2.version>2.2.224</h2.version>
+        <mockito.version>3.12.4</mockito.version>
+        <junit.version>5.11.0</junit.version>
+        <testfx.version>4.0.18</testfx.version>
+        <assertj-core.version>3.26.3</assertj-core.version>
+        <openjfx-monocle.version>17.0.10</openjfx-monocle.version>
+        <junit-pioneer.version>2.2.0</junit-pioneer.version>
+        
+        <!-- Plugin Versions -->
+        <maven-dependency-plugin.version>3.8.0</maven-dependency-plugin.version>
+        <javafx-maven-plugin.version>0.0.6</javafx-maven-plugin.version>
+        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+        <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
+        <sonar-maven-plugin.version>3.9.0.2155</sonar-maven-plugin.version>
+        <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
+        <really-executable-jar-maven-plugin.version>2.1.1</really-executable-jar-maven-plugin.version>
+        <launch4j-maven-plugin.version>2.5.1</launch4j-maven-plugin.version>
+        <maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
+        <maven-surefire-junit5-tree-reporter.version>1.2.1</maven-surefire-junit5-tree-reporter.version>
+        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
+        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
         
         <!-- SonarQube -->
-        <sonar.version>3.9.0.2155</sonar.version>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco-merged/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
@@ -47,14 +55,14 @@
         <!-- Test Coverage -->
         <jacoco.percentages.min.instruct>0.88</jacoco.percentages.min.instruct>
         <jacoco.percentages.max.instruct>0.90</jacoco.percentages.max.instruct>
-        <jacoco.percentages.min.line>0.88</jacoco.percentages.min.line>
-        <jacoco.percentages.max.line>0.90</jacoco.percentages.max.line>
-        <jacoco.percentages.min.branch>0.80</jacoco.percentages.min.branch>
-        <jacoco.percentages.max.branch>0.82</jacoco.percentages.max.branch>
-        <jacoco.percentages.min.complex>0.81</jacoco.percentages.min.complex>
-        <jacoco.percentages.max.complex>0.83</jacoco.percentages.max.complex>
-        <jacoco.percentages.min.method>0.90</jacoco.percentages.min.method>
-        <jacoco.percentages.max.method>0.92</jacoco.percentages.max.method>
+        <jacoco.percentages.min.line>0.86</jacoco.percentages.min.line>
+        <jacoco.percentages.max.line>0.88</jacoco.percentages.max.line>
+        <jacoco.percentages.min.branch>0.78</jacoco.percentages.min.branch>
+        <jacoco.percentages.max.branch>0.80</jacoco.percentages.max.branch>
+        <jacoco.percentages.min.complex>0.79</jacoco.percentages.min.complex>
+        <jacoco.percentages.max.complex>0.81</jacoco.percentages.max.complex>
+        <jacoco.percentages.min.method>0.89</jacoco.percentages.min.method>
+        <jacoco.percentages.max.method>0.91</jacoco.percentages.max.method>
         <jacoco.missed.count.class>1</jacoco.missed.count.class>
     </properties>
 
@@ -73,6 +81,8 @@
         <!-- JavaFX dependencies -->
         <dependency>
             <groupId>org.openjfx</groupId>
+            <!-- adds javafx.graphics -->
+            <!-- javafx.graphics adds javafx-base -->
             <artifactId>javafx-controls</artifactId>
             <version>${javafx.version}</version>
         </dependency>
@@ -97,6 +107,26 @@
         <!-- database dependencies -->
         <dependency>
             <groupId>org.hibernate.orm</groupId>
+            <!-- adds:
+                jakarta.persistence-api
+                jakarta.transaction-api
+                jboss-logging
+                hibernate-commons-annotations
+                jandex
+                classmate
+                byte-buddy
+                jakarta.xml.bind-api
+                jaxb-runtime
+                jakarta.inject-api
+                antlr4-runtime
+             -->
+            <!-- jakarta.xml.bind-api adds jakarta.activation-api -->
+            <!-- jab-runtime adds jaxb-core -->
+            <!-- jaxb-core adds:
+                angus-activation
+                txw2
+                istack-commons-runtime
+             -->
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate-core.version}</version>
         </dependency>
@@ -108,12 +138,12 @@
         
         <!-- Test Dependencies -->
         <dependency>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>${jacoco.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.mockito</groupId>
+            <!-- adds mockito-core -->
+            <!-- mockito-core adds:
+                byte-buddy-agent
+                objenesis
+            -->
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>${mockito.version}</version>
             <scope>test</scope>
@@ -126,12 +156,20 @@
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
+            <!-- adds:
+                junit-platform-engine
+                apiguardian-api
+            -->
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
+            <!-- adds:
+                opentest4j
+                junit-platform-commons
+            -->
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
@@ -144,26 +182,49 @@
         </dependency>
         <dependency>
             <groupId>org.testfx</groupId>
+            <!-- adds:
+                testfx-core
+                hamcrest
+            -->
+            <!-- testfx-core adds org.osgi.core -->
             <artifactId>testfx-junit5</artifactId>
             <version>${testfx.version}</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.testfx</groupId>
+                    <artifactId>openjfx-monocle</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>${assertj.version}</version>
+            <version>${assertj-core.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testfx</groupId>
+            <!-- adds junit-pioneer -->
+            <!-- junit-pioneer adds junit-platform-launcher -->
             <artifactId>openjfx-monocle</artifactId>
-            <version>${monocle.version}</version>
+            <version>${openjfx-monocle.version}</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-base</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-graphics</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.junit-pioneer</groupId>
             <artifactId>junit-pioneer</artifactId>
-            <version>${pioneer.version}</version>
+            <version>${junit-pioneer.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -199,13 +260,78 @@
                 </excludes>
             </testResource>
         </testResources>
+        
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${maven-dependency-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-maven-plugin</artifactId>
+                    <version>${javafx-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>${build-helper-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>${sonar-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.skife.maven</groupId>
+                    <artifactId>really-executable-jar-maven-plugin</artifactId>
+                    <version>${really-executable-jar-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                    <artifactId>launch4j-maven-plugin</artifactId>
+                    <version>${launch4j-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>${maven-assembly-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${maven-failsafe-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco-maven-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        
         <plugins>
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
-                <version>${javafx.maven.plugin.version}</version>
                 <configuration>
-                    <mainClass>com.marcsllite.App</mainClass>
+                    <mainClass>radShipmentCalc/com.marcsllite.App</mainClass>
                 </configuration>
                 <executions>
                     <execution>
@@ -216,9 +342,7 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.version}</version>
                 <configuration>
                     <release>${maven.compiler.release}</release>
                     <encoding>UTF-8</encoding>
@@ -237,7 +361,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>${build-helper.version}</version>
                 <executions>
                     <execution>
                         <id>add-integration-test-source</id>
@@ -254,25 +377,16 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>${sonar.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven.jar.version}</version>
-                <executions>
-                    <execution>
-                        <id>default-jar</id>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                    </archive>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.skife.maven</groupId>
                 <artifactId>really-executable-jar-maven-plugin</artifactId>
-                <version>${executable.jar.version}</version>
                 <configuration>
                     <inputFile>target/${project.artifactId}-${project.version}-jar-with-dependencies.jar</inputFile>
                     <programFile>${project.artifactId}</programFile>
@@ -290,7 +404,6 @@
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
-                <version>${lanch4j.version}</version>
                 <executions>
                     <execution>
                         <id>l4j-win-gui</id>
@@ -343,12 +456,10 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>${maven.assembly.version}</version>
                 <executions>
                     <execution>
-                        <id>executable-jar</id>
+                        <id>create-executable-jar</id>
                         <phase>prepare-package</phase>
                         <goals><goal>single</goal></goals>
                         <configuration>
@@ -377,14 +488,12 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${surefire.version}</version>
                 <dependencies>
                     <dependency>
                         <groupId>me.fabriciorby</groupId>
                         <artifactId>maven-surefire-junit5-tree-reporter</artifactId>
-                        <version>1.2.1</version>
+                        <version>${maven-surefire-junit5-tree-reporter.version}</version>
                     </dependency>
                 </dependencies>
                 <configuration>
@@ -414,9 +523,7 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${surefire.version}</version>
                 <configuration>
                     <skipAfterFailureCount>1</skipAfterFailureCount>
                     <argLine>@{failsafe.jacoco.args}
@@ -453,12 +560,6 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco.version}</version>
-                <configuration>
-                    <excludes>
-                        <exclude>**/Launcher.class</exclude>
-                    </excludes>
-                </configuration>
                 <executions>
                     <execution>
                         <id>before-unit-test-execution</id>

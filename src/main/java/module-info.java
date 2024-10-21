@@ -1,12 +1,19 @@
 module radShipmentCalc {
-    requires javafx.fxml;
+    // javafx dependencies
     requires javafx.controls;
+    requires javafx.fxml;
 
+    // logging dependencies
     requires org.apache.logging.log4j;
-    requires java.desktop;
-    requires plexus.utils;
-    requires jakarta.persistence;
+
+    // database dependencies
     requires org.hibernate.orm.core;
+    requires jakarta.persistence;
+    requires com.h2database;
+
+    // other dependencies
+    requires java.desktop; // javax.swing.filechooser.FileSystemView
+    requires org.apache.commons.lang3; // org.apache.commons.lang3.StringUtils
 
     opens com.marcsllite;
     opens com.marcsllite.controller;

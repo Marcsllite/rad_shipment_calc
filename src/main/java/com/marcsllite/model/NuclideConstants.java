@@ -180,7 +180,7 @@ public class NuclideConstants {
 
     public void setDisplayHalfLife() {
         if(DEFAULT_VAL_STR.equals(getHalfLifeStr())) {
-            displayHalfLifeProperty().set(getHalfLifeStr());
+            displayHalfLifeProperty().set(DEFAULT_VAL_STR);
         } else {
             displayHalfLifeProperty().set(getHalfLifeStr() + HALF_LIFE_UNIT);
         }
