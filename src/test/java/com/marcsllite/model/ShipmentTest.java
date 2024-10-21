@@ -164,6 +164,10 @@ class ShipmentTest {
         assertNotEquals(shipmentA, shipmentB);
         assertNotEquals(shipmentA.hashCode(), shipmentB.hashCode());
 
+        shipmentA.setLabel(Shipment.Label.WHITE_1);
+        assertNotEquals(shipmentA, shipmentB);
+        assertNotEquals(shipmentA.hashCode(), shipmentB.hashCode());
+
         shipmentA.setId(-2L);
         assertNotEquals(shipmentA, shipmentB);
         assertNotEquals(shipmentA.hashCode(), shipmentB.hashCode());

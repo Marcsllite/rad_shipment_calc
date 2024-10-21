@@ -24,6 +24,7 @@ public class Shipment {
     private Conversions.MassUnit massUnit;
     private Nuclide.Nature nature;
     private LimitsModelId limitsId;
+    private Label label;
     private final SimpleListProperty<Nuclide> nuclides;
 
     public Shipment() {
@@ -34,6 +35,7 @@ public class Shipment {
         massStr = new SimpleStringProperty(RadBigDecimal.NEG_INFINITY_DISPLAY_STRING);
         nature = Nuclide.Nature.REGULAR;
         limitsId = new LimitsModelId(LimitsModelId.State.SOLID, LimitsModelId.Form.NORMAL);
+        label = Label.NONE;
         nuclides = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
 
@@ -134,6 +136,14 @@ public class Shipment {
         this.limitsId = limitsId;
     }
 
+    public Label getLabel() {
+        return label;
+    }
+
+    public void setLabel(Label label) {
+        this.label = label;
+    }
+
     public SimpleListProperty<Nuclide> nuclidesProperty() {
         return nuclides;
     }
@@ -180,6 +190,7 @@ public class Shipment {
     public int hashCode() {
         int hash = 57;
         hash = 7 * hash + (int) this.getId();
+        hash = 7 * hash + (this.getLabel() != null ? this.getLabel().getInfo().hashCode() : 0);
         hash = 7 * hash + (this.getRefDate() != null ? this.getRefDate().hashCode() : 0);
         hash = 7 * hash + this.getMass().intValue();
         hash = 7 * hash + (this.getMassUnit() != null ? this.getMassUnit().hashCode() : 0);
@@ -192,6 +203,7 @@ public class Shipment {
     @Override
     public String toString() {
         return "Shipment: { Id: " + getId() +
+            "\nLabel: " + getLabel().getInfo() +
             "\nReference Date: " + getRefDate() +
             "\nMass: " + getMass() + " " + getMassPrefix() + getMassUnit() +
             "\nNature: " + getNature() +
@@ -206,7 +218,8 @@ public class Shipment {
         YELLOW_1("Yellow 1",
             "Surface: Does not exceed 50 milli rems/hour, TI: Does not exceed 1 milli rem/hour"),
         YELLOW_2("Yellow 2",
-            "Surface: Exceeds 50 milli rems/hour, TI: Exceeds 1 milli rem/hour");
+            "Surface: Exceeds 50 milli rems/hour, TI: Exceeds 1 milli rem/hour"),
+        NONE("N/A", "No Label");
 
         private final String val;
         private final String info;
