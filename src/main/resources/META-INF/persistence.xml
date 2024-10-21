@@ -23,7 +23,7 @@
         <properties>
             <!-- Database connection settings -->
             <property name="jakarta.persistence.jdbc.driver" value="org.h2.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:h2:./db/ShipmentCalculatorDb" />
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:h2:./db/ShipmentCalculatorDb;IGNORECASE=TRUE" />
             <property name="jakarta.persistence.jdbc.user" value="admin" />
             <property name="jakarta.persistence.jdbc.password" value="root" />
 
