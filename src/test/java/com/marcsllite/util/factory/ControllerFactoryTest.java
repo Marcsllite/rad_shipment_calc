@@ -16,8 +16,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("rawtypes")
@@ -37,44 +37,44 @@ class ControllerFactoryTest {
         // Create new Controller
         Class clazz = SplashScreenController.class;
         Object ret = factory.call(clazz);
-        
-        assertTrue(ret instanceof SplashScreenController);
+
+        assertInstanceOf(SplashScreenController.class, ret);
 
         clazz = MainController.class;
         ret = factory.call(clazz);
 
-        assertTrue(ret instanceof MainController);
+        assertInstanceOf(MainController.class, ret);
 
         clazz = MenuPaneController.class;
         ret = factory.call(clazz);
 
-        assertTrue(ret instanceof MenuPaneController);
+        assertInstanceOf(MenuPaneController.class, ret);
 
         clazz = HomePaneController.class;
         ret = factory.call(clazz);
 
-        assertTrue(ret instanceof HomePaneController);
+        assertInstanceOf(HomePaneController.class, ret);
 
         clazz = ReferencePaneController.class;
         ret = factory.call(clazz);
 
-        assertTrue(ret instanceof ReferencePaneController);
+        assertInstanceOf(ReferencePaneController.class, ret);
 
         clazz = ModifyController.class;
         ret = factory.call(clazz);
 
-        assertTrue(ret instanceof ModifyController);
+        assertInstanceOf(ModifyController.class, ret);
         assertEquals(dbService, ((ModifyController) ret).getDbService());
 
         clazz = ShipmentDetailsController.class;
         ret = factory.call(clazz);
 
-        assertTrue(ret instanceof ShipmentDetailsController);
+        assertInstanceOf(ShipmentDetailsController.class, ret);
 
         clazz = SummaryPaneController.class;
         ret = factory.call(clazz);
 
-        assertTrue(ret instanceof SummaryPaneController);
+        assertInstanceOf(SummaryPaneController.class, ret);
 
         clazz = Conversions.class;
         assertNull(factory.call(clazz));
