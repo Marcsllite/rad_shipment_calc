@@ -68,31 +68,31 @@ public class App extends Application {
             FXMLView.MAIN:
             view;
 
-        setPropHandler(propHandler == null?
+        App.setPropHandler(propHandler == null?
             new PropHandlerFactory().getPropHandler(null):
             propHandler);
 
-        setFolderHandler(folderHandler == null?
+        App.setFolderHandler(folderHandler == null?
             new FolderHandler(getPropHandler()):
             folderHandler);
         System.setProperty("h2.baseDir", getFolderHandler().getDataFolderPath());
 
-        setDbService(dbService == null?
+        App.setDbService(dbService == null?
             new DBServiceImpl():
             dbService);
 
-        setControllerFactory(controllerFactory == null?
+        App.setControllerFactory(controllerFactory == null?
             new ControllerFactory(getDbService()) :
             controllerFactory);
 
-        setStageHandler(stageHandler == null?
+        App.setStageHandler(stageHandler == null?
             new StageHandler(null, getPropHandler(), getControllerFactory()) :
             stageHandler);
     }
 
     @Override
     public void start(Stage stage) throws IOException {
-        getStageHandler().setPrimaryStage(stage);
+        App.getStageHandler().setPrimaryStage(stage);
         if(isShowSplash()) {
             App.getStageHandler().showSplashScreen();
         } else {

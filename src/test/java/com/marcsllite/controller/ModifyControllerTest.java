@@ -118,6 +118,7 @@ class ModifyControllerTest {
 
         try(MockedStatic<App> staticApp = mockStatic(App.class)) {
             staticApp.when(App::getStageHandler).thenReturn(stageHandler);
+            doNothing().when(controller).updateNuclideName(nuclide);
             controller.finishBtnHandler();
         }
 
@@ -141,6 +142,7 @@ class ModifyControllerTest {
 
         try(MockedStatic<App> staticApp = mockStatic(App.class)) {
             staticApp.when(App::getStageHandler).thenReturn(stageHandler);
+            doNothing().when(controller).updateNuclideName(nuclide);
             controller.finishBtnHandler();
         }
 

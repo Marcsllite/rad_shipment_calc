@@ -14,6 +14,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.codehaus.plexus.util.StringUtils;
@@ -28,8 +29,25 @@ import static com.marcsllite.util.NuclideUtils.LUNG_ABS_PATTERN;
 
 public class ModifyUtils {
     private static final Logger logr = LogManager.getLogger(ModifyUtils.class);
+    private static final String VALID_REGION = "validRegion";
+    private static final String INVALID_REGION = "invalidRegion";
 
     private ModifyUtils() {}
+
+    public static void setInvalidRegion(Node node) {
+        node.getStyleClass().removeAll(VALID_REGION, INVALID_REGION);
+        node.getStyleClass().add(INVALID_REGION);
+    }
+
+    public static void setValidRegion(Node node) {
+        node.getStyleClass().removeAll(VALID_REGION, INVALID_REGION);
+        node.getStyleClass().add(VALID_REGION);
+    }
+
+    public static void setPageStatus(Text txt, String status) {
+        txt.setText(status);
+        txt.setVisible(StringUtils.isNotBlank(status));
+    }
 
     public static void bindManagedPropToVisibility(Node node) {
         node.managedProperty().unbind();

@@ -21,6 +21,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Nuclide {
+    public static final String DEFAULT_NAME = "XX";
+
     private DBService dbService;
     private NuclideConstants constants;
 
@@ -64,7 +66,7 @@ public class Nuclide {
 
         if(nuclide == null) {
             atomicNumber = new SimpleIntegerProperty(0);
-            name = new SimpleStringProperty("XX");
+            name = new SimpleStringProperty(DEFAULT_NAME);
             nature = Nature.REGULAR;
             refDate = new SimpleObjectProperty<>(LocalDate.now());
             nuclideClass = NuclideClass.TBD;

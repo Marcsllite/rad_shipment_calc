@@ -5,6 +5,7 @@ import com.marcsllite.model.Nuclide;
 import com.marcsllite.model.Shipment;
 import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.model.db.NuclideModel;
+import com.marcsllite.model.db.NuclideModelId;
 import com.marcsllite.util.Conversions;
 import com.marcsllite.util.NuclideUtils;
 import com.marcsllite.util.controller.ModifyUtils;
@@ -406,7 +407,8 @@ public class ModifyController extends BaseController {
     @FXML protected void finishBtnHandler() {
         logr.debug("User clicked the Finish button on the {} pane", getPage());
         Nuclide nuclide = buildNuclide();
-        nuclide.setName(getDbService().getNuclideNameNotation(nuclide.getNuclideId()));
+        updateNuclideName(nuclide);
+
         if(Page.ADD.equals(getPage())) {
             Shipment shipment = getMain().getHomePaneController().getShipment();
             shipment.add(nuclide.initConstants());
@@ -474,15 +476,12 @@ public class ModifyController extends BaseController {
     }
 
     public void setDuplicateNuclide(boolean isInvalid) {
-        txtFieldNuclideName.getStyleClass().removeAll("validRegion", "invalidRegion");
         if(isInvalid) {
-            txtFieldNuclideName.getStyleClass().add("invalidRegion");
-            txtFirstPageStatus.setVisible(true);
-            txtFirstPageStatus.setText("Nuclide already in the table.");
+            ModifyUtils.setInvalidRegion(txtFieldNuclideName);
+            ModifyUtils.setPageStatus(txtFirstPageStatus, "Nuclide already in the table.");
         } else {
-            txtFieldNuclideName.getStyleClass().add("validRegion");
-            txtFirstPageStatus.setVisible(false);
-            txtFirstPageStatus.setText(null);
+            ModifyUtils.setValidRegion(txtFieldNuclideName);
+            ModifyUtils.setPageStatus(txtFirstPageStatus, null);
         }
     }
 
@@ -535,14 +534,27 @@ public class ModifyController extends BaseController {
     }
 
     public Nuclide buildNuclideFromFirstPage() {
-        Nuclide nuclide = new Nuclide();
-        nuclide.setNuclideId(NuclideUtils.parseNuclideId(txtFieldNuclideName.getText()));
+        Nuclide nuclide = NuclideUtils.parseNuclideId(txtFieldNuclideName.getText());
         nuclide.setInitActivityStr(txtFieldA0.getText());
         nuclide.setInitActivityPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxA0Prefix.getValue()));
         nuclide.setInitActivityUnit(Conversions.RadUnit.toRadUnit(choiceBoxA0RadUnit.getValue()));
         ModifyUtils.setNuclideLifeSpan(nuclide, toggleGrpLifeSpan);
         ModifyUtils.setNuclideLungAbs(nuclide, toggleGrpLungAbs);
         return nuclide;
+    }
+
+    public void updateNuclideName(Nuclide nuclide) {
+        if(nuclide != null) {
+            if (!Nuclide.DEFAULT_NAME.equals(nuclide.getName())) {
+                nuclide.setName(getDbService().getNuclideName(nuclide.getNuclideId()));
+            } else if (nuclide.getNuclideId() != null &&
+                NuclideModelId.DEFAULT_SYMBOL.equals(nuclide.getNuclideId().getSymbol())) {
+                String symbol = getDbService().getNuclideSymbol(nuclide.getName(), nuclide.getMassNumber());
+                NuclideModelId updatedId = nuclide.getNuclideId();
+                updatedId.setSymbol(symbol);
+                nuclide.setNuclideId(updatedId);
+            }
+        }
     }
 
     public Nuclide buildNuclide() {
@@ -568,7 +580,11 @@ public class ModifyController extends BaseController {
             nuclide.getLimitsId().setState(LimitsModelId.State.toState(choiceBoxState.getValue()));
             nuclide.getLimitsId().setForm(LimitsModelId.Form.toForm(choiceBoxForm.getValue()));
         }
-        nuclide.getConstants().dbInit(nuclide.getNuclideId(), nuclide.getLimitsId());
+
+        if(nuclide.getNuclideId() != null &&
+            !NuclideModelId.DEFAULT_SYMBOL.equals(nuclide.getNuclideId().getSymbol())) {
+            nuclide.getConstants().dbInit(nuclide.getNuclideId(), nuclide.getLimitsId());
+        }
         return nuclide;
     }
 }

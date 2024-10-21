@@ -32,6 +32,10 @@ public interface DBService {
 
     NuclideModel getNuclide(NuclideModelId nuclideId);
 
+    String getNuclideSymbol(String name, String massNum);
+
+    String getNuclideName(NuclideModelId nuclideId);
+
     String getNuclideNameNotation(NuclideModelId nuclideId);
 
     String getNuclideAbbrNotation(NuclideModelId nuclideId);

@@ -179,6 +179,16 @@ public class DBServiceImpl implements DBService {
     }
 
     @Override
+    public String getNuclideSymbol(String name, String massNum) {
+        return getNuclideDao().getNuclideSymbol(name, massNum);
+    }
+
+    @Override
+    public String getNuclideName(NuclideModelId isoId) {
+        return getNuclideDao().getNuclideName(isoId);
+    }
+
+    @Override
     public String getNuclideNameNotation(NuclideModelId isoId) {
         return getNuclideDao().getNuclideNameNotation(isoId);
     }

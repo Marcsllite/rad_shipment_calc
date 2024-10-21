@@ -12,6 +12,7 @@ import java.util.Objects;
 public class NuclideModelId implements Serializable {
     @Serial
     private static final long serialVersionUID = 6598716598717598732L;
+    public static final String DEFAULT_SYMBOL = "XX";
 
     @Column(name = "Symbol", length = 2, nullable = false)
     private String symbol;
@@ -19,7 +20,7 @@ public class NuclideModelId implements Serializable {
     private String massNumber;
 
     public NuclideModelId() {
-        this("XX", "1");
+        this(DEFAULT_SYMBOL, "1");
     }
     public NuclideModelId(String symbol, String massNumber) {
         this.symbol = symbol == null? null : symbol.trim();

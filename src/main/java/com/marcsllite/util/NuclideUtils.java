@@ -15,6 +15,18 @@ public class NuclideUtils {
 
     private NuclideUtils() {}
 
+    public static String capitalizeFirstLetter(String str) {
+        if (StringUtils.isNotBlank(str)) {
+            return str.substring(0, 1).toUpperCase() + str.substring(1);
+        }
+        return str;
+    }
+
+    /**
+     * Get the {@link Nuclide.LifeSpan} from the nuclide's mass number
+     * @param massNumber the nuclide's mass number
+     * @return the {@link Nuclide.LifeSpan} associated with the nuclide
+     */
     public static Nuclide.LifeSpan parseLifeSpanFromMassNumber(String massNumber) {
         Nuclide.LifeSpan ret = Nuclide.LifeSpan.REGULAR;
         if(massNumber != null) {
@@ -28,6 +40,11 @@ public class NuclideUtils {
         return ret;
     }
 
+    /**
+     * Get the {@link Nuclide.LungAbsorption} from the nuclide's mass number
+     * @param massNumber the nuclide's mass number
+     * @return the {@link Nuclide.LungAbsorption} associated with the nuclide
+     */
     public static Nuclide.LungAbsorption parseLungAbsFromMassNumber(String massNumber) {
         Nuclide.LungAbsorption ret = Nuclide.LungAbsorption.NONE;
         if(massNumber != null) {
@@ -40,21 +57,37 @@ public class NuclideUtils {
         return ret;
     }
 
-    public static NuclideModelId parseNuclideId(String str) {
+    /**
+     * Generates a {@link Nuclide} from the nuclide notation
+     * @param nuclideNotation the nuclide notation<br>
+     *                        (Name-MassNumber or Symbol-MassNumber)
+     * @return A {@link Nuclide} with name and nuclideId populated
+     */
+    public static Nuclide parseNuclideId(String nuclideNotation) {
+        Nuclide nuclide = new Nuclide();
         NuclideModelId id = new NuclideModelId();
-        if(StringUtils.isNotBlank(str)) {
+        if(StringUtils.isNotBlank(nuclideNotation)) {
             Pattern symbolPattern = Pattern.compile(NuclideUtils.SYMBOL_PATTERN);
-            Matcher symbolMatch = symbolPattern.matcher(str);
+            Matcher symbolMatch = symbolPattern.matcher(nuclideNotation);
             if(symbolMatch.find()) {
-                id.setSymbol(StringUtils.capitalizeFirstLetter(symbolMatch.group(1).toLowerCase()));
+                String symbolStr = capitalizeFirstLetter(symbolMatch.group(1).toLowerCase());
+                if(symbolStr.length() > NuclideModelId.SYMBOL_MAX_LENGTH) {
+                    nuclide.setName(symbolStr);
+                } else {
+                    id.setSymbol(symbolStr);
+                }
             }
 
             Pattern massNumPattern = Pattern.compile(NuclideUtils.MASS_NUMBER_PATTERN);
-            Matcher massNumMatch = massNumPattern.matcher(str);
+            Matcher massNumMatch = massNumPattern.matcher(nuclideNotation);
             if(massNumMatch.find()) {
-                id.setMassNumber(massNumMatch.group(1));
+                String massNumStr = massNumMatch.group(1);
+                if(massNumStr.length() <= NuclideModelId.MASS_NUMBER_MAX_LENGTH) {
+                    id.setMassNumber(massNumStr);
+                }
             }
         }
-        return id;
+        nuclide.setNuclideId(id);
+        return nuclide;
     }
 }
