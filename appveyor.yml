@@ -83,12 +83,14 @@ for:
               $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path ".\target\failsafe-reports\$file")); }}
 
     on_failure:
-      - ps: if(Test-Path -Path "$env:APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged") { `
-          Push-AppveyorArtifact Resolve-Path "$env:APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged"; }
+      - ps: $mergedJacocoPath = Resolve-Path "$env:APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged";
+          if(Test-Path -Path $mergedJacocoPath) { `
+            [IO.Directory]::GetFiles($mergedJacocoPath.Path, '*.*', 'AllDirectories') |
+            % { Push-AppveyorArtifact $_ -FileName $_.Substring($root.Path.Length + 1) }
 
     on_success:
-      - ps: if(Test-Path -Path "$env:APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$env:APPVEYOR_BUILD_NUMBER.exe") { `
-          Push-AppveyorArtifact Resolve-Path "$env:APPVEYOR_BUILD_FOLDER/target/1.0.0.$env:APPVEYOR_BUILD_NUMBER.exe"; } else {  Write-Host "Failed to locate $env:APPVEYOR_BUILD_FOLDER/target/1.0.0.$env:APPVEYOR_BUILD_NUMBER.exe"  }
+      - ps: $exePath = "$env:APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$env:APPVEYOR_BUILD_NUMBER.exe";
+          if(Test-Path -Path $exePath) { Push-AppveyorArtifact -FileName $exePath; } else {  Write-Host "Failed to locate $exePath"  }
       - ps: try { `
           Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe;
           .\codecov.exe -t $CODECOV_TOKEN -f "$APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged/jacoco.xml" `
