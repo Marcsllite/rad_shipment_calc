@@ -250,11 +250,11 @@ public class StageHandler {
     }
 
     public void logOpen() {
-        logr.debug("Opening {}", getCurrentView().getName());
+        logr.debug("Opening {}", getCurrentView() == null? "null view": getCurrentView().getName());
     }
 
     public void logClose() {
-        logr.debug("Closing {} page", getCurrentView().getName());
+        logr.debug("Closing {}", getCurrentView() == null? "null view": getCurrentView().getName());
     }
 
     public void closePrimary() {
