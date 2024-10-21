@@ -76,21 +76,15 @@ for:
       - ps: $wc = New-Object 'System.Net.WebClient';
           if(Test-Path -Path "$env:APPVEYOR_BUILD_FOLDER/target/surefire-reports") { `
             foreach($file in get-childItem "$env:APPVEYOR_BUILD_FOLDER/target/surefire-reports" -include TEST-*.xml -name) { `
-              $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", Resolve-Path ".\target\surefire-reports\$file"); }}
+              $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path ".\target\surefire-reports\$file")); }}
       - ps: $wc = New-Object 'System.Net.WebClient';
           if(Test-Path -Path "$env:APPVEYOR_BUILD_FOLDER/target/failsafe-reports") { `
             foreach($file in get-childItem "$env:APPVEYOR_BUILD_FOLDER/target/failsafe-reports" -include TEST-*.xml -name) { `
-              $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", Resolve-Path ".\target\failsafe-reports\$file"); }}
+              $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID", (Resolve-Path ".\target\failsafe-reports\$file")); }}
 
     on_failure:
-      - ps: $wc = New-Object 'System.Net.WebClient';
-          if(Test-Path -Path "$env:APPVEYOR_BUILD_FOLDER/target/surefire-reports") { `
-            foreach($file in get-childItem "$env:APPVEYOR_BUILD_FOLDER/target/surefire-reports" -include *.txt -name) { `
-              Push-AppveyorArtifact (Resolve-Path ".\target\surefire-reports\$file"); }}
-      - ps: $wc = New-Object 'System.Net.WebClient';
-          if(Test-Path -Path "$env:APPVEYOR_BUILD_FOLDER/target/failsafe-reports") { `
-            foreach($file in get-childItem "$env:APPVEYOR_BUILD_FOLDER/target/failsafe-reports" -include *.txt -name) { `
-              Push-AppveyorArtifact (Resolve-Path ".\target\failsafe-reports\$file"); }}
+      - ps: if(Test-Path -Path "$env:APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged") { `
+          Push-AppveyorArtifact Resolve-Path "$env:APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged"; }
 
     on_success:
       - ps: if(Test-Path -Path "$env:APPVEYOR_BUILD_FOLDER/target/1.0.0.$env:APPVEYOR_BUILD_NUMBER.exe") { `
@@ -130,12 +124,10 @@ for:
 
     on_failure:
       - sh: |
-          if [ -d "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" ]; then find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name '*.txt' -print0 | xargs -0 -I '{}' appveyor PushArtifact -Path '{}'; fi
-      - sh: |
-          if [ -d "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" ]; then find "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" -type f -name '*.txt' -print0 | xargs -0 -I '{}' appveyor PushArtifact -Path '{}'; fi
+          if [ -d "$APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged" ]; then appveyor PushArtifact "$APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged"; fi
 
     on_success:
-      - sh: if [ -f "$APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER" ]; then appveyor PushArtifact "$APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER"
+      - sh: if [ -f "$APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER" ]; then appveyor PushArtifact "$APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER"; fi
       - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov &&
           chmod +x codecov &&
           ./codecov -t $CODECOV_TOKEN -f $APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged/jacoco.xml || echo "Failed to post Linux codecov"
@@ -169,12 +161,10 @@ for:
 
     on_failure:
       - sh: |
-          if [ -d "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" ]; then find "$APPVEYOR_BUILD_FOLDER/target/surefire-reports" -type f -name '*.txt' -print0 | xargs -0 -I '{}' appveyor PushArtifact -Path '{}'; fi
-      - sh: |
-          if [ -d "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" ]; then find "$APPVEYOR_BUILD_FOLDER/target/failsafe-reports" -type f -name '*.txt' -print0 | xargs -0 -I '{}' appveyor PushArtifact -Path '{}'; fi
+          if [ -d "$APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged" ]; then appveyor PushArtifact "$APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged"; fi
 
     on_success:
-      - sh: if [ -f "$APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER" ]; then appveyor PushArtifact "$APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER"
+      - sh: if [ -f "$APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER" ]; then appveyor PushArtifact "$APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER"; fi
       - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov &&
           chmod +x codecov &&
           ./codecov -t $CODECOV_TOKEN -f $APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged/jacoco.xml || echo "Failed to post Mac codecov"
