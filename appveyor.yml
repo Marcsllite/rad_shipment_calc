@@ -87,7 +87,7 @@ for:
           Push-AppveyorArtifact Resolve-Path "$env:APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged"; }
 
     on_success:
-      - ps: if(Test-Path -Path "$env:APPVEYOR_BUILD_FOLDER/target/1.0.0.$env:APPVEYOR_BUILD_NUMBER.exe") { `
+      - ps: if(Test-Path -Path "$env:APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$env:APPVEYOR_BUILD_NUMBER.exe") { `
           Push-AppveyorArtifact Resolve-Path "$env:APPVEYOR_BUILD_FOLDER/target/1.0.0.$env:APPVEYOR_BUILD_NUMBER.exe"; }
       - ps: try { `
           Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe;
