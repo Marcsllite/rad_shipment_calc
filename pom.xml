@@ -222,6 +222,16 @@
                 <configuration>
                     <release>${maven.compiler.release}</release>
                     <encoding>UTF-8</encoding>
+                    <compilerArgs>
+                        <arg>--add-opens</arg>
+                        <arg>javafx.base/com.sun.javafx.logging=ALL-UNNAMED</arg>
+                        <arg>--add-opens</arg>
+                        <arg>javafx.graphics/com.sun.glass.ui=ALL-UNNAMED</arg>
+                        <arg>--add-opens</arg>
+                        <arg>javafx.graphics/com.sun.javafx.util=ALL-UNNAMED</arg>
+                        <arg>--add-opens</arg>
+                        <arg>javafx.graphics/com.sun.javafx.application=ALL-UNNAMED</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
@@ -409,7 +419,23 @@
                 <version>${surefire.version}</version>
                 <configuration>
                     <skipAfterFailureCount>1</skipAfterFailureCount>
-                    <argLine>@{failsafe.jacoco.args}</argLine>
+                    <argLine>@{failsafe.jacoco.args}
+                        -Djava.awt.headless=true
+                        -Dglass.platform=Monocle
+                        -Dmonocle.platform=Headless
+                        -Dtestfx.robot=glass
+                        -Dtestfx.headless=true
+                        -Dprism.text=t2k
+                        -Dprism.order=sw
+                        --add-modules=javafx.controls,javafx.fxml
+                        --add-opens
+                        javafx.base/com.sun.javafx.logging=ALL-UNNAMED
+                        --add-opens
+                        javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
+                        --add-opens
+                        javafx.graphics/com.sun.javafx.util=ALL-UNNAMED
+                        --add-opens
+                        javafx.graphics/com.sun.javafx.application=ALL-UNNAMED</argLine>
                     <trimStackTrace>false</trimStackTrace>
                     <includes>
                         <include>**/*GUITest.java</include>
