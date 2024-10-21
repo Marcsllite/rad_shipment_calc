@@ -13,10 +13,12 @@ public class NuclideModelId implements Serializable {
     @Serial
     private static final long serialVersionUID = 6598716598717598732L;
     public static final String DEFAULT_SYMBOL = "XX";
+    public static final int SYMBOL_MAX_LENGTH = 2;
+    public static final int MASS_NUMBER_MAX_LENGTH = 15;
 
-    @Column(name = "Symbol", length = 2, nullable = false)
+    @Column(name = "Symbol", length = SYMBOL_MAX_LENGTH, nullable = false)
     private String symbol;
-    @Column(name = "Mass_Number", length = 15, nullable = false)
+    @Column(name = "Mass_Number", length = MASS_NUMBER_MAX_LENGTH, nullable = false)
     private String massNumber;
 
     public NuclideModelId() {
