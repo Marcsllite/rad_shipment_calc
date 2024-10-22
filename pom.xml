@@ -389,7 +389,7 @@
                 <artifactId>really-executable-jar-maven-plugin</artifactId>
                 <configuration>
                     <inputFile>target/${project.artifactId}-${project.version}-jar-with-dependencies.jar</inputFile>
-                    <programFile>${project.artifactId}-${project.version}</programFile>
+                    <programFile>${project.artifactId}-${project.version}.sh</programFile>
                     <scriptFile>src/packaging/jarToExecutable.sh</scriptFile>
                 </configuration>
                 <executions>
@@ -480,6 +480,8 @@
                         <phase>package</phase>
                         <goals><goal>single</goal></goals>
                         <configuration>
+                            <finalName>${project.name}</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
                             <descriptors>
                                 <descriptor>src/assembly/assembly.xml</descriptor>
                             </descriptors>

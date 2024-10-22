@@ -129,7 +129,7 @@ for:
           if [ -d "$APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged" ]; then appveyor PushArtifact "$APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged"; fi
 
     on_success:
-      - sh: if [ -f "$APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER" ]; then appveyor PushArtifact "$APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER"; else echo "Failed to locate $APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER"; fi
+      - sh: if [ -f "$APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER.sh" ]; then appveyor PushArtifact "$APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER.sh"; else echo "Failed to locate $APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER.sh"; fi
       - sh: curl -Os https://uploader.codecov.io/latest/linux/codecov &&
           chmod +x codecov &&
           ./codecov -t $CODECOV_TOKEN -f $APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged/jacoco.xml || echo "Failed to post Linux codecov"
@@ -166,7 +166,7 @@ for:
           if [ -d "$APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged" ]; then appveyor PushArtifact "$APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged"; fi
 
     on_success:
-      - sh: if [ -f "$APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER" ]; then appveyor PushArtifact "$APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER"; else echo "Failed to locate $APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER"; fi
+      - sh: if [ -f "$APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER.sh" ]; then appveyor PushArtifact "$APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER.sh"; else echo "Failed to locate $APPVEYOR_BUILD_FOLDER/target/rad_shipment_calc-1.0.0.$APPVEYOR_BUILD_NUMBER.sh"; fi
       - sh: curl -Os https://uploader.codecov.io/latest/macos/codecov &&
           chmod +x codecov &&
           ./codecov -t $CODECOV_TOKEN -f $APPVEYOR_BUILD_FOLDER/target/site/jacoco-merged/jacoco.xml || echo "Failed to post Mac codecov"
