@@ -41,6 +41,7 @@ is_at_least_java_17() {
 check_java_in_path() {
   javaCommand=$(command -v java)
   if [ -n "$javaCommand" ]; then
+    echo "Found Java in PATH: $javaCommand"
     if is_at_least_java_17 "$javaCommand"; then
       return 0
     fi
@@ -64,6 +65,7 @@ check_java_in_path() {
 #   check_java_home
 check_java_home() {
   if [ -n "$JAVA_HOME" ] && [ -x "$JAVA_HOME/bin/java" ]; then
+    echo "Found Java in JAVA_HOME environment variable: $JAVA_HOME/bin/java"
     if is_at_least_java_17 "$JAVA_HOME/bin/java"; then
       javaCommand=${javaCommand:-"$JAVA_HOME/bin/java"}
       return 0
@@ -75,21 +77,26 @@ check_java_home() {
 }
 
 check_javafx_version() {
-  local file="$JAVAFX_HOME/lib/javafx.properties"
+  if [ -n "$JAVAFX_HOME" ]; then
+    local file="$JAVAFX_HOME/lib/javafx.properties"
 
-  if [ -f "$file" ] && grep -q javafx.version "$file"; then
-    local fullVersion=$(grep javafx.version "$file" | cut -d'=' -f2 | tr -d ' ')
-    local majorVersion=$(echo "$fullVersion" | cut -d'.' -f1)
+    if [ -f "$file" ] && grep -q javafx.version "$file"; then
+      local fullVersion=$(grep javafx.version "$file" | cut -d'=' -f2 | tr -d ' ')
+      local majorVersion=$(echo "$fullVersion" | cut -d'.' -f1)
 
-    if [ "$majorVersion" -ge 17 ]; then
-      return 0
+      if [ "$majorVersion" -ge 17 ]; then
+        return 0
+      else
+        echo "The JavaFX SDK at '$JAVAFX_HOME' is version $fullVersion. The minimum version required is 17"
+        return 1
+      fi
     else
-      echo "The JavaFX SDK at '$JAVAFX_HOME' is version $fullVersion. The minimum version required is 17"
+      echo "JavaFX properties file not found"
       return 1
     fi
   else
-    echo "JavaFX properties file not found"
-    return 1
+    echo "JAVAFX_HOME is not set. Download JavaFX SDK version 17 and up from https://gluonhq.com/products/javafx/"
+          return 1
   fi
 }
 
