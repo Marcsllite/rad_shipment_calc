@@ -253,20 +253,26 @@ public class StageHandler {
         logr.debug("Opening {}", getCurrentView() == null? "null view": getCurrentView().getName());
     }
 
-    public void logClose() {
-        logr.debug("Closing {}", getCurrentView() == null? "null view": getCurrentView().getName());
+    public void logClose(boolean isPrimary) {
+        String message;
+        if(isPrimary) {
+            message = "Closing Primary stage: {}";
+        } else {
+            message = "Closing Secondary stage: {}";
+        }
+        logr.debug(message, getCurrentView() == null? "null view": getCurrentView().getName());
     }
 
     public void closePrimary() {
         if(getPrimaryStage() != null) {
-            logClose();
+            logClose(true);
             getPrimaryStage().close();
         }
     }
 
     public void closeSecondary() {
         if(getSecondaryStage() != null) {
-            logClose();
+            logClose(false);
             getSecondaryStage().close();
         }
     }

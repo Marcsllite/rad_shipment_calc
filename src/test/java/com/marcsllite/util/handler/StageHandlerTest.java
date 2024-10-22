@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -118,7 +119,7 @@ class StageHandlerTest {
     void testShow_EmptyView() {
         FXMLView view = FXMLView.TEST;
 
-        doNothing().when(stageHandler).logClose();
+        doNothing().when(stageHandler).logClose(any(Boolean.class));
         doNothing().when(primaryStage).close();
 
         stageHandler.show(view, null);
@@ -131,7 +132,7 @@ class StageHandlerTest {
         FXMLView view = FXMLView.TEST;
 
         doReturn(primaryStage).when(stageHandler).getSecondaryStage();
-        doNothing().when(stageHandler).logClose();
+        doNothing().when(stageHandler).logClose(any(Boolean.class));
         doNothing().when(primaryStage).close();
 
         try {
@@ -152,7 +153,7 @@ class StageHandlerTest {
         doNothing().when(stageHandler).switchSceneModal(view, page);
         doReturn(controller).when(stageHandler).getController();
         doReturn(primaryStage).when(stageHandler).getSecondaryStage();
-        doNothing().when(stageHandler).logClose();
+        doNothing().when(stageHandler).logClose(any(Boolean.class));
         doNothing().when(primaryStage).close();
 
         stageHandler.showModal(view, page);
@@ -191,7 +192,7 @@ class StageHandlerTest {
         FXMLView view = FXMLView.TEST;
 
         when(stageHandler.getSecondaryStage()).thenReturn(null);
-        doNothing().when(stageHandler).logClose();
+        doNothing().when(stageHandler).logClose(any(Boolean.class));
         doNothing().when(primaryStage).close();
 
         RuntimeException exception = assertThrows(
@@ -213,7 +214,7 @@ class StageHandlerTest {
         doReturn(loader).when(stageHandler).getLoader();
         when(loader.load()).thenReturn(null);
         doReturn(null).when(stageHandler).getSecondaryStage();
-        doNothing().when(stageHandler).logClose();
+        doNothing().when(stageHandler).logClose(any(Boolean.class));
         doNothing().when(primaryStage).close();
 
         assertThrows(RuntimeException.class, () -> stageHandler.loadViewNodeHierarchy(view));
@@ -230,7 +231,7 @@ class StageHandlerTest {
         doReturn(loader).when(stageHandler).getLoader();
         when(loader.load()).thenReturn(null);
         doReturn(primaryStage).when(stageHandler).getSecondaryStage();
-        doNothing().when(stageHandler).logClose();
+        doNothing().when(stageHandler).logClose(any(Boolean.class));
         doNothing().when(primaryStage).close();
 
         assertThrows(RuntimeException.class, () -> stageHandler.loadViewNodeHierarchy(view));
