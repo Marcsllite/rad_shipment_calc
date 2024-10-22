@@ -25,7 +25,7 @@ public class SplashScreenController {
     private final boolean openMainApp;
 
     public SplashScreenController() throws IOException {
-        this(null, false);
+        this(null, true);
     }
 
     public SplashScreenController(PropHandler propHandler, boolean openMainApp) throws IOException {
