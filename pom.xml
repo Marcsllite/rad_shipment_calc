@@ -529,13 +529,6 @@
                 <configuration>
                     <skipAfterFailureCount>1</skipAfterFailureCount>
                     <argLine>@{failsafe.jacoco.args}
-                        -Djava.awt.headless=true
-                        -Dglass.platform=Monocle
-                        -Dmonocle.platform=Headless
-                        -Dtestfx.robot=glass
-                        -Dtestfx.headless=true
-                        -Dprism.text=t2k
-                        -Dprism.order=sw
                         --add-modules=javafx.controls,javafx.fxml
                         --add-opens
                         javafx.base/com.sun.javafx.logging=ALL-UNNAMED

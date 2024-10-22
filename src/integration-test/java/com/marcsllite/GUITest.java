@@ -69,6 +69,8 @@ public abstract class GUITest extends FxRobot {
 
     @BeforeAll
     public void beforeAll() {
+        setHeadlessTesting(true);
+
         app = new App(false, false);
         setupMainController();
 
@@ -99,6 +101,21 @@ public abstract class GUITest extends FxRobot {
     public void beforeEach() {
         Assumptions.assumeTrue(FxToolkit.isFXApplicationThreadRunning());
         baseStageAssertions(getStageHandler().getPrimaryStage());
+    }
+
+    private void setHeadlessTesting(boolean isHeadless) {
+        if(isHeadless) {
+            System.setProperty("java.awt.headless", "true");
+            System.setProperty("glass.platform", "Monocle");
+            System.setProperty("monocle.platform", "Headless");
+            System.setProperty("testfx.robot", "glass");
+            System.setProperty("testfx.headless", "true");
+            System.setProperty("prism.text", "t2k");
+            System.setProperty("prism.order", "sw");
+        } else {
+            System.setProperty("java.awt.headless", "false");
+            System.setProperty("testfx.headless", "false");
+        }
     }
 
     private ControllerFactoryTestObj getControllerFactory() {
