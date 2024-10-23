@@ -407,7 +407,6 @@ public class ModifyController extends BaseController {
     @FXML protected void finishBtnHandler() {
         logr.debug("User clicked the Finish button on the {} pane", getPage());
         Nuclide nuclide = buildNuclide();
-        updateNuclideName(nuclide);
 
         if(Page.ADD.equals(getPage())) {
             Shipment shipment = getMain().getHomePaneController().getShipment();
@@ -534,27 +533,19 @@ public class ModifyController extends BaseController {
     }
 
     public Nuclide buildNuclideFromFirstPage() {
-        Nuclide nuclide = NuclideUtils.parseNuclideId(txtFieldNuclideName.getText());
+        Nuclide nuclide = new Nuclide();
+        Nuclide temp = getNuclide();
+        if(temp != null) {
+            nuclide.setAtomicNumber(temp.getAtomicNumber());
+            nuclide.setName(temp.getName());
+            nuclide.setNuclideId(temp.getNuclideId());
+        }
         nuclide.setInitActivityStr(txtFieldA0.getText());
         nuclide.setInitActivityPrefix(Conversions.SIPrefix.toSIPrefix(comboBoxA0Prefix.getValue()));
         nuclide.setInitActivityUnit(Conversions.RadUnit.toRadUnit(choiceBoxA0RadUnit.getValue()));
         ModifyUtils.setNuclideLifeSpan(nuclide, toggleGrpLifeSpan);
         ModifyUtils.setNuclideLungAbs(nuclide, toggleGrpLungAbs);
         return nuclide;
-    }
-
-    public void updateNuclideName(Nuclide nuclide) {
-        if(nuclide != null) {
-            if (!Nuclide.DEFAULT_NAME.equals(nuclide.getName())) {
-                nuclide.setName(getDbService().getNuclideName(nuclide.getNuclideId()));
-            } else if (nuclide.getNuclideId() != null &&
-                NuclideModelId.DEFAULT_SYMBOL.equals(nuclide.getNuclideId().getSymbol())) {
-                String symbol = getDbService().getNuclideSymbol(nuclide.getName(), nuclide.getMassNumber());
-                NuclideModelId updatedId = nuclide.getNuclideId();
-                updatedId.setSymbol(symbol);
-                nuclide.setNuclideId(updatedId);
-            }
-        }
     }
 
     public Nuclide buildNuclide() {

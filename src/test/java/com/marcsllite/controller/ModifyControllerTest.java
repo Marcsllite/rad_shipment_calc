@@ -112,13 +112,11 @@ class ModifyControllerTest {
         when(mainController.getHomePaneController()).thenReturn(homePaneController);
         when(homePaneController.getShipment()).thenReturn(shipment);
         doReturn(nuclide).when(controller).buildNuclide();
-        doReturn(nuclide).when(nuclide).initConstants();
         doNothing().when(shipment).add(nuclide);
         doNothing().when(stageHandler).closeSecondary();
 
         try(MockedStatic<App> staticApp = mockStatic(App.class)) {
             staticApp.when(App::getStageHandler).thenReturn(stageHandler);
-            doNothing().when(controller).updateNuclideName(nuclide);
             controller.finishBtnHandler();
         }
 
@@ -137,12 +135,10 @@ class ModifyControllerTest {
 
         when(mainController.getHomePaneController()).thenReturn(homePaneController);
         doReturn(nuclide).when(controller).buildNuclide();
-        doNothing().when(homePaneController).updateNuclide(nuclide);
         doNothing().when(stageHandler).closeSecondary();
 
         try(MockedStatic<App> staticApp = mockStatic(App.class)) {
             staticApp.when(App::getStageHandler).thenReturn(stageHandler);
-            doNothing().when(controller).updateNuclideName(nuclide);
             controller.finishBtnHandler();
         }
 

@@ -6,8 +6,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
@@ -17,17 +15,9 @@ import java.util.List;
 
 @Entity(name = "Nuclide")
 @Table(name = "NUCLIDE")
-@NamedQueries(
-    @NamedQuery(name = NuclideModel.FIND_SYMBOL_BY_NAME_AND_MASS_NUM,
-                query = "SELECT n.nuclideId.symbol " +
-                        "FROM Nuclide n " +
-                        "WHERE n.name = :name " +
-                        "AND n.nuclideId.massNumber = :massNumber")
-)
 public class NuclideModel extends BaseModel {
     @Serial
     private static final long serialVersionUID = -6610061947707574223L;
-    public static final String FIND_SYMBOL_BY_NAME_AND_MASS_NUM = "findSymbolByNameAndMassNum";
 
     @Column(name = "Atomic_Number", nullable = false)
     private int atomicNumber;
