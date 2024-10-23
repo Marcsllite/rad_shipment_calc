@@ -94,7 +94,7 @@ class MenuPaneControllerGUITest extends GUITest {
         assertTrue(ex.getMessage().contains("The color cannot be null"));
     }
 
-    @Disabled("failing on appveyor mac")
+    @Test
     void testMouseHover() {
         clickOn(btnShipment);
         assertEquals(MenuPaneController.Page.SHIPMENT, controller.getCurrentPage());
@@ -131,7 +131,7 @@ class MenuPaneControllerGUITest extends GUITest {
         assertEquals(imgUrl, view.getImage().getUrl());
     }
 
-    @Disabled("failing on appveyor mac")
+    @Test
     void testMenuPaneHandler_btnShipment() {
         String imgUrl = ImageHandler.getShipmentImage(CURRENT_COLOR).getUrl();
 
@@ -141,7 +141,7 @@ class MenuPaneControllerGUITest extends GUITest {
         assertButtonClick(btnShipment, MenuPaneController.Page.SHIPMENT, imgViewShipment, imgUrl);
     }
 
-    @Disabled("failing on appveyor mac")
+    @Test
     void testMenuPaneHandler_btnReference() {
         String imgUrl = ImageHandler.getReferenceImage(CURRENT_COLOR).getUrl();
 

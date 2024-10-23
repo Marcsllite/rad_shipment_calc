@@ -102,7 +102,7 @@ class HomePaneControllerGUITest extends GUITest {
         assertTrue(tableViewHome.getItems().isEmpty());
     }
 
-    @Disabled("failing on appveyor mac")
+    @Test
     void testRemoveBtnHandler() {
         clearNuclideTable();
         assertTrue(btnRemove.isDisabled());
