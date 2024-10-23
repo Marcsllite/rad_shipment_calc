@@ -2,6 +2,8 @@ package com.marcsllite.controller;
 
 import com.marcsllite.TestUtils;
 import com.marcsllite.model.Nuclide;
+import com.marcsllite.model.Shipment;
+import com.marcsllite.model.db.LimitsModelId;
 import com.marcsllite.util.Conversions;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -9,15 +11,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.ArgumentCaptor;
 import org.testfx.framework.junit5.Start;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
@@ -34,6 +41,7 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
     public void setUp() {
         clearFirstPageForm();
         clearSecondPageForm();
+        setNuclidesInTable(false);
         goToPage(1);
     }
 
@@ -46,11 +54,23 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
     void testAddInit() {
         interact(() -> controller.initAddPage());
 
+        assertNull(txtFieldNuclideName.getText());
+        assertNull(txtFieldA0.getText());
         assertEquals(Conversions.SIPrefix.BASE.getVal(), comboBoxA0Prefix.getSelectionModel().getSelectedItem());
         assertEquals(Conversions.RadUnit.CURIE.getVal(), choiceBoxA0RadUnit.getSelectionModel().getSelectedItem());
+        assertFalse(hBoxAddInfoTop.isVisible());
+        assertFalse(vBoxLungAbs.isVisible());
+        assertFalse(vBoxLifeSpan.isVisible());
+        assertTrue(btnNext.isDisabled());
+
+        assertEquals(LocalDate.now(), datePicker.getValue());
+        assertNull(txtFieldMass.getText());
         assertEquals(Conversions.SIPrefix.BASE.getVal(), comboBoxMassPrefix.getSelectionModel().getSelectedItem());
         assertEquals(Conversions.MassUnit.GRAMS.getVal(), choiceBoxMassUnit.getSelectionModel().getSelectedItem());
-        assertTrue(btnNext.isDisabled());
+        assertEquals(Nuclide.Nature.REGULAR.getVal(), choiceBoxNature.getSelectionModel().getSelectedItem());
+        assertEquals(LimitsModelId.State.SOLID.getVal(), choiceBoxState.getSelectionModel().getSelectedItem());
+        assertEquals(LimitsModelId.Form.NORMAL.getVal(), choiceBoxForm.getSelectionModel().getSelectedItem());
+        assertTrue(btnFinish.isDisabled());
     }
 
     @Test
@@ -309,5 +329,44 @@ class ModifyControllerAddGUITest extends ModifyControllerBaseGUITest {
 
         assertTrue(vBoxFirstPage.isVisible());
         assertFalse(vBoxSecondPage.isVisible());
+    }
+
+    @Test
+    void testModifyHandler_btnFinish() {
+        TestUtils.TestNuclide testNuclide = TestUtils.getRegularNuclide();
+        setNuclideName(testNuclide.getDisplaySymbolNotation());
+        assertSettingField(1, null, true);
+
+        String initActivity = "123";
+        setInitialActivity(initActivity);
+        assertSettingField(1, null, false);
+
+        clickOn(btnNext);
+
+        LocalDate date = LocalDate.now();
+        setDate(date);
+        String mass = "1";
+        setMass(mass);
+        assertFalse(btnFinish.isDisabled());
+
+        Shipment shipmentMock = mock(Shipment.class);
+        HomePaneController homePaneController = MainController.getInstance().getHomePaneController();
+        when(homePaneController.getShipment()).thenReturn(shipmentMock);
+
+        clickOn(btnFinish);
+
+        ArgumentCaptor<Nuclide> nuclideCaptor = ArgumentCaptor.forClass(Nuclide.class);
+        verify(shipmentMock).add(nuclideCaptor.capture());
+
+        Nuclide addedNuclide = nuclideCaptor.getValue();
+        assertEquals(testNuclide.getAtomicNumber(), addedNuclide.getAtomicNumber());
+        assertEquals(testNuclide.getName(), addedNuclide.getName());
+        assertEquals(testNuclide.getSymbol(), addedNuclide.getNuclideId().getSymbol());
+        assertEquals(testNuclide.getMassNumber(), addedNuclide.getMassNumber());
+        assertEquals(testNuclide.getLifeSpan(), addedNuclide.getLifeSpan());
+        assertEquals(testNuclide.getLungAbsorption(), addedNuclide.getLungAbsorption());
+        assertEquals(initActivity, addedNuclide.getInitActivity().toDisplayString());
+        assertEquals(mass, addedNuclide.getMass().toDisplayString());
+        assertEquals(date, addedNuclide.getRefDate());
     }
 }
