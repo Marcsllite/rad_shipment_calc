@@ -70,7 +70,7 @@ for:
 
     build_script:
       # - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-      - cmd: mvn clean verify -Dbuild.version=1.0.0.%APPVEYOR_BUILD_NUMBER%
+      - cmd: mvn clean verify -Dbuild.version=1.0.0.%APPVEYOR_BUILD_NUMBER% -DrscHeadless=true
       
     on_finish:
       - ps: $wc = New-Object 'System.Net.WebClient';
@@ -116,7 +116,7 @@ for:
 
     build_script:
       # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
-      - sh: mvn clean verify -Dbuild.version=1.0.0.$APPVEYOR_BUILD_NUMBER
+      - sh: mvn clean verify -Dbuild.version=1.0.0.$APPVEYOR_BUILD_NUMBER -DrscHeadless=true
 
     on_finish:
       - sh: |
@@ -153,7 +153,7 @@ for:
     build_script:
       # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-vnc.sh' | bash -e -
       # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
-      - sh: mvn clean verify -Dbuild.version=1.0.0.$APPVEYOR_BUILD_NUMBER
+      - sh: mvn clean verify -Dbuild.version=1.0.0.$APPVEYOR_BUILD_NUMBER -DrscHeadless=true
 
     on_finish:
       - sh: |

@@ -69,7 +69,7 @@ public abstract class GUITest extends FxRobot {
 
     @BeforeAll
     public void beforeAll() {
-        setHeadlessTesting(true);
+        setHeadlessTesting();
 
         app = new App(false, false);
         setupMainController();
@@ -103,8 +103,8 @@ public abstract class GUITest extends FxRobot {
         baseStageAssertions(getStageHandler().getPrimaryStage());
     }
 
-    private void setHeadlessTesting(boolean isHeadless) {
-        if(isHeadless) {
+    private void setHeadlessTesting() {
+        if(Boolean.parseBoolean(System.getenv("rscHeadless"))) {
             System.setProperty("java.awt.headless", "true");
             System.setProperty("glass.platform", "Monocle");
             System.setProperty("monocle.platform", "Headless");
@@ -112,10 +112,18 @@ public abstract class GUITest extends FxRobot {
             System.setProperty("testfx.headless", "true");
             System.setProperty("prism.text", "t2k");
             System.setProperty("prism.order", "sw");
+            System.out.println("Running GUI tests in Headless mode");
         } else {
-            System.setProperty("java.awt.headless", "false");
-            System.setProperty("testfx.headless", "false");
+            System.clearProperty("java.awt.headless");
+            System.clearProperty("glass.platform");
+            System.clearProperty("monocle.platform");
+            System.clearProperty("testfx.robot");
+            System.clearProperty("testfx.headless");
+            System.clearProperty("prism.text");
+            System.clearProperty("prism.order");
+            System.out.println("Running GUI tests using monitor");
         }
+        System.out.flush();
     }
 
     private ControllerFactoryTestObj getControllerFactory() {
