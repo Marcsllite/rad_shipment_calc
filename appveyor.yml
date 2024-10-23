@@ -67,10 +67,11 @@ for:
       # JAVA_HOME is used by Maven
       - set JAVA_HOME=%WIN_JDK%
       - set PATH=%JDK_HOME%\bin;%PATH%
+      - set rscHeadless=true
 
     build_script:
       # - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-      - cmd: mvn clean verify -Dbuild.version=1.0.0.%APPVEYOR_BUILD_NUMBER% -DrscHeadless=true
+      - cmd: mvn clean verify -Dbuild.version=1.0.0.%APPVEYOR_BUILD_NUMBER%
       
     on_finish:
       - ps: $wc = New-Object 'System.Net.WebClient';
@@ -113,10 +114,11 @@ for:
           sudo update-alternatives --install /usr/bin/mvn mvn /opt/apache-maven-3.6.3/bin/mvn 363
       - sh: Xvfb :99 &>/dev/null &
           export DISPLAY=:99
+      - sh: export rscHeadless=true
 
     build_script:
       # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
-      - sh: mvn clean verify -Dbuild.version=1.0.0.$APPVEYOR_BUILD_NUMBER -DrscHeadless=true
+      - sh: mvn clean verify -Dbuild.version=1.0.0.$APPVEYOR_BUILD_NUMBER
 
     on_finish:
       - sh: |
@@ -149,11 +151,12 @@ for:
       # mvnvm depends on JDK 21.0.2, need to revert default java to jdk 17
       - sh: brew install mvnvm
       - sh: export JAVA_HOME=`/usr/libexec/java_home -v17`
+      - sh: export rscHeadless=true
 
     build_script:
       # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-vnc.sh' | bash -e -
       # - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
-      - sh: mvn clean verify -Dbuild.version=1.0.0.$APPVEYOR_BUILD_NUMBER -DrscHeadless=true
+      - sh: mvn clean verify -Dbuild.version=1.0.0.$APPVEYOR_BUILD_NUMBER
 
     on_finish:
       - sh: |
