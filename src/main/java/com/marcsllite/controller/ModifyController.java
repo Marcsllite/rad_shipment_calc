@@ -410,7 +410,7 @@ public class ModifyController extends BaseController {
 
         if(Page.ADD.equals(getPage())) {
             Shipment shipment = getMain().getHomePaneController().getShipment();
-            shipment.add(nuclide.initConstants());
+            shipment.add(nuclide);
         }
         if(Page.EDIT.equals(getPage())) {
             getMain().getHomePaneController().updateNuclide(nuclide);
@@ -435,7 +435,7 @@ public class ModifyController extends BaseController {
         }
         setDuplicateNuclide(StringUtils.isNotBlank(str) && !isEditingNuclide && isNuclideInTable());
         btnNext.setDisable(
-                getNuclide() == null ||
+                nuclide == null ||
                 StringUtils.isBlank(txtFieldA0.getText()) ||
                 isAddInfoNotProvided() ||
                 StringUtils.isNotBlank(txtFirstPageStatus.getText())
